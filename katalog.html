@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Katalog Ban — Tiberman</title>
+<meta name="description" content="Telusuri katalog ban truk, mining truck, loader-grader, traktor, forklift, velg & tube Tiberman berdasarkan unit dan ukuran.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="catalog">
+
+<!-- ============================= NAVBAR ============================= -->
+<header class="nav nav--center">
+  <div class="nav__inner">
+    <a class="nav__logo" href="index.html"><img src="assets/img/logo-white.png" alt="Tiberman"></a>
+    <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
+    <nav class="nav__links">
+      <a href="katalog.html" class="is-active">Products</a>
+      <a href="index.html#news">News</a>
+      <a href="index.html#superarea">SuperArea</a>
+      <a href="index.html#contact">Contact Us</a>
+    </nav>
+  </div>
+</header>
+
+<div class="catalog__layout" data-catalog data-unit="truk-bus">
+
+  <!-- ============================= SIDEBAR ============================= -->
+  <aside class="catalog__sidebar">
+    <img class="logo" src="assets/img/logo-white.png" alt="Tiberman">
+
+    <p class="side-label">Lagi cari ban apa?</p>
+    <div class="search">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></svg>
+      <input type="search" placeholder="Search" aria-label="Cari ban" data-search>
+    </div>
+    <div class="side-divider"></div>
+
+    <p class="side-label">Telusuri berdasarkan unit</p>
+    <div class="unitlist">
+      <button type="button" class="is-active" data-unit="truk-bus">Truk &amp; Bus</button>
+      <button type="button" data-unit="mining-truck">Mining Truck</button>
+      <button type="button" data-unit="loader-grader">Loader-Grader</button>
+      <button type="button" data-unit="traktor">Traktor</button>
+      <button type="button" data-unit="forklift">Forklift</button>
+      <button type="button" data-unit="velg-tube">Velg &amp; Tube</button>
+    </div>
+
+    <a class="side-promo" href="#">
+      <strong>Temukan Produk Promo</strong>
+      <span>Klik untuk melihat produk promo kita</span>
+    </a>
+    <a class="side-promo" href="#">
+      <strong>Lihat Testimoni Video</strong>
+      <span>Klik untuk melihat testimoni video dari customer kita</span>
+    </a>
+  </aside>
+
+  <!-- ============================= MAIN ============================= -->
+  <main class="catalog__main">
+    <div class="catalog__banner">
+      <img src="assets/img/dumptruck.webp" alt="Dump truck di area tambang" fetchpriority="high">
+    </div>
+
+    <!-- chip ukuran dibangun otomatis dari unit yang aktif (assets/js/main.js) -->
+    <div class="chips" data-chips></div>
+
+    <div class="catalog__body" data-catalog-body></div>
+  </main>
+</div>
+
+<script src="assets/js/products.js"></script>
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
