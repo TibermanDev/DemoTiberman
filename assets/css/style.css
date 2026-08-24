@@ -136,6 +136,32 @@ ul{margin:0;padding:0;list-style:none}
 .pin svg{width:100%;height:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
 @keyframes pin-drop{from{opacity:0;transform:translate(-50%,-170%)}to{opacity:1;transform:translate(-50%,-100%)}}
 
+/* Peta SuperArea (Leaflet) */
+.superarea__globe.is-map::before{display:none}   /* gradient globe dimatikan biar peta nggak ketutup */
+.superarea__map{height:clamp(380px,64vh,660px);width:100%;background:#000;z-index:1}
+.superarea__map .leaflet-container{background:#000;font-family:inherit}
+.superarea__map .leaflet-control-attribution{background:rgba(0,0,0,.6);color:rgba(255,255,255,.6);font-size:10px}
+.superarea__map .leaflet-control-attribution a{color:rgba(255,255,255,.8)}
+.superarea__map .leaflet-bar a{background:rgba(20,20,22,.9);color:#fff;border-bottom-color:rgba(255,255,255,.16)}
+.superarea__map .leaflet-bar a:hover{background:rgba(40,40,44,.95);color:#fff}
+
+.sa-pin{display:block;width:24px;height:24px;animation:pin-drop-map .55s var(--ease) both}
+.sa-pin svg{width:100%;height:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,.65))}
+.sa-pin-wrap:hover .sa-pin{transform:scale(1.18);transition:transform .18s var(--ease)}
+@keyframes pin-drop-map{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+
+.superarea__map .leaflet-popup-content-wrapper{background:#141416;color:#fff;border-radius:var(--radius-s);box-shadow:0 12px 34px rgba(0,0,0,.55)}
+.superarea__map .leaflet-popup-tip{background:#141416}
+.superarea__map .leaflet-popup-content{margin:14px 16px;text-align:left;line-height:1.45}
+.superarea__map .leaflet-popup-close-button{color:rgba(255,255,255,.55)}
+.sa-pop__kode{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.sa-pop__name{display:block;margin:2px 0 6px;font-size:17px;font-weight:800;letter-spacing:-.02em}
+.sa-pop__addr{display:block;font-size:13px;color:rgba(255,255,255,.72)}
+.sa-pop__link{display:inline-block;margin-top:10px;font-size:13px;font-weight:600;color:var(--blue);text-decoration:none}
+.sa-pop__link:hover{text-decoration:underline}
+
+@media (max-width:640px){.superarea__map{height:clamp(300px,44vh,380px)}}
+
 /* Importir + kategori */
 .importir{position:relative;color:#fff;text-align:center;overflow:hidden;background:#000}
 .importir__bg{position:absolute;inset:0}
