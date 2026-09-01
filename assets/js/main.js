@@ -136,11 +136,22 @@
     var DATA = window.TIBERMAN_PRODUCTS || {};
     var grid = catalog.querySelector('[data-catalog-body]');
     var chipsWrap = catalog.querySelector('[data-chips]');
+    /* unit awal boleh ditentukan lewat ?unit= (dipakai dropdown Products) */
+    var wanted = (new URLSearchParams(location.search).get('unit') || '').trim();
+    if (!DATA[wanted]) wanted = '';
+
     var state = {
-      unit: catalog.dataset.unit || 'truk-bus',
+      unit: wanted || catalog.dataset.unit || 'truk-bus',
       size: 'all',
       q: ''
     };
+
+    if (wanted) {
+      catalog.dataset.unit = wanted;
+      catalog.querySelectorAll('[data-unit]').forEach(function (b) {
+        b.classList.toggle('is-active', b.dataset.unit === wanted);
+      });
+    }
 
     /* chip ukuran dibangun dari data unit yang aktif */
     var renderChips = function () {

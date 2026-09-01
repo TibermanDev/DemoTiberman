@@ -7,7 +7,7 @@
 <meta name="description" content="Tiberman, importir ban truk & alat berat terpercaya dengan 15 SuperArea di seluruh Indonesia, 2 Pusat Logistik Berikat, dan armada delivery sendiri.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -19,7 +19,17 @@
     <a class="nav__logo" href="index.html"><img src="assets/img/logo-white.png" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
-      <a href="katalog.html">Products</a>
+      <div class="nav__item">
+        <a href="katalog.html">Products</a>
+        <div class="nav__menu">
+          <a href="katalog.html?unit=truk-bus">Truk &amp; Bus</a>
+          <a href="katalog.html?unit=mining-truck">Mining Truck</a>
+          <a href="katalog.html?unit=loader-grader">Loader-Grader</a>
+          <a href="katalog.html?unit=traktor">Traktor</a>
+          <a href="katalog.html?unit=forklift">Forklift</a>
+          <a href="katalog.html?unit=velg-tube">Velg &amp; Tube</a>
+        </div>
+      </div>
       <a href="#news">News</a>
       <a href="#superarea">SuperArea</a>
       <a href="#contact">Contact Us</a>
@@ -32,7 +42,7 @@
   <!-- ============================= HERO ============================= -->
   <section class="hero">
     <div class="hero__media">
-      <img src="assets/img/hero-warehouse.webp" alt="Tim Tiberman di gudang ban" fetchpriority="high">
+      <img src="assets/img/hero-warehouse-2.webp" alt="Tim Tiberman di gudang ban" fetchpriority="high">
       <div class="hero__wordmark"><img src="assets/img/logo-white.png" alt="Tiberman"></div>
     </div>
   </section>
@@ -53,29 +63,25 @@
 
   <!-- ============================= IMPORTIR + KATEGORI ============================= -->
   <section class="importir" id="produk">
-    <div class="importir__bg"><img src="assets/img/warehouse-dark.webp" alt=""></div>
+    <img class="importir__bg" src="assets/img/category-section.webp" alt="Deretan ban truk dan alat berat Tiberman di gudang" loading="lazy" decoding="async">
     <div class="importir__inner">
       <h2 class="reveal">Importir Ban Truk &amp; Alat Berat<br>TERPERCAYA</h2>
       <div class="pills reveal" data-delay="120">
-        <a class="pill" href="katalog.html">Truck &amp; Bus</a>
-        <a class="pill" href="katalog.html">Mining Truck</a>
-        <a class="pill" href="katalog.html">Loader-Grader</a>
-        <a class="pill" href="katalog.html">Forklift</a>
-        <a class="pill" href="katalog.html">Tractor</a>
+        <a class="pill" href="katalog.html?unit=truk-bus">Truck &amp; Bus</a>
+        <a class="pill" href="katalog.html?unit=mining-truck">Mining Truck</a>
+        <a class="pill" href="katalog.html?unit=loader-grader">Loader-Grader</a>
+        <a class="pill" href="katalog.html?unit=forklift">Forklift</a>
+        <a class="pill" href="katalog.html?unit=traktor">Tractor</a>
       </div>
     </div>
   </section>
-
-  <div class="tirestrip">
-    <img src="assets/img/tires-strip.webp" alt="Deretan ban truk dan alat berat Tiberman" loading="lazy">
-  </div>
 
   <!-- ============================= AKSESORIS ============================= -->
   <section class="accessories">
     <div class="container">
       <div class="accessories__grid">
         <div class="accessories__art reveal">
-          <img src="assets/img/accessories.webp" alt="Ban, velg, dan aksesoris pendukung" loading="lazy">
+          <img src="assets/img/accessories-2.webp" alt="Ban, velg, dan aksesoris pendukung" loading="lazy">
         </div>
         <div class="accessories__copy reveal" data-delay="100">
           <h2 class="h2">Lengkapi kebutuhan<br>Anda di satu tempat.</h2>
@@ -90,14 +96,14 @@
     <div class="container">
       <div class="velg-cards">
         <article class="velg-card reveal">
-          <div class="velg-card__img"><img src="assets/img/velg-heavy.webp" alt="Velg heavy duty" loading="lazy"></div>
+          <div class="velg-card__img"><img src="assets/img/velg-heavy-2.webp" alt="Velg heavy duty" loading="lazy"></div>
           <div class="velg-card__body">
             <h3>VELG<span>Heavy-Duty</span></h3>
             <a class="btn btn--primary" href="katalog.html">Check it !</a>
           </div>
         </article>
         <article class="velg-card reveal" data-delay="100">
-          <div class="velg-card__img"><img src="assets/img/velg-light.webp" alt="Velg light truck" loading="lazy"></div>
+          <div class="velg-card__img"><img src="assets/img/velg-light-2.webp" alt="Velg light truck" loading="lazy"></div>
           <div class="velg-card__body">
             <h3>VELG<span>Light Truck</span></h3>
             <a class="btn btn--primary" href="katalog.html">Check it !</a>
@@ -109,9 +115,8 @@
 
   <!-- ============================= KENAPA HARUS TIBERMAN ============================= -->
   <section class="why-banner" id="kenapa">
-    <div class="why-banner__inner">
-      <h2>Kenapa Harus Tiberman ?</h2>
-    </div>
+    <img class="why-banner__bg" src="assets/img/banner-tyre.webp" alt="" aria-hidden="true" width="2880" height="684" loading="lazy" decoding="async">
+    <h2>Kenapa Harus Tiberman ?</h2>
   </section>
 
   <!-- Stok Aman -->
