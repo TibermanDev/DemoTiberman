@@ -9,6 +9,15 @@
   /* Ganti ke 'dark' kalau mau basemap gelap polos, bukan citra satelit. */
   var BASEMAP = 'satellite';
 
+  /* Zoom out tambahan setelah peta di-fit ke 15 pin, dalam level Leaflet.
+     Kelipatan 0.25 (lihat zoomSnap). 0 = pas pin, 0.25 = Kalimantan utuh, 0.5 = lebih lega. */
+  var ZOOM_OUT = 0.5;
+
+  /* Efek klik pin: peta terbang mendekat ke lokasi tersebut.
+     FOCUS_ZOOM = level zoom tujuan (maxZoom 12), FLY_DURATION = durasi animasi (detik). */
+  var FOCUS_ZOOM = 12
+  var FLY_DURATION = 0.9;
+
   var TILES = {
     satellite: {
       url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
@@ -77,6 +86,9 @@
     L.control.zoom({ position: 'bottomright' }).addTo(map);
 
     var bounds = [];
+    var home = null;   /* tampilan awal (seluruh Indonesia), buat balik setelah popup ditutup */
+    var open = 0;      /* jumlah popup yang lagi kebuka */
+
     AREAS.forEach(function (a, i) {
       var icon = L.divIcon({
         className: 'sa-pin-wrap',
@@ -86,15 +98,22 @@
         popupAnchor: [0, -22]
       });
 
-      L.marker([a.lat, a.lng], { icon: icon, title: a.name, riseOnHover: true })
+      var marker = L.marker([a.lat, a.lng], { icon: icon, title: a.name, riseOnHover: true })
         .addTo(map)
         .bindPopup(
           '<span class="sa-pop__kode">Area ' + esc(a.kode) + ' &middot; ' + esc(a.alias) + '</span>' +
           '<strong class="sa-pop__name">' + esc(a.name) + '</strong>' +
           '<span class="sa-pop__addr">' + esc(a.addr) + '</span>' +
           '<a class="sa-pop__link" target="_blank" rel="noopener"' +
-          ' href="https://www.google.com/maps/search/?api=1&query=' + a.lat + ',' + a.lng + '">Buka di Google Maps &rarr;</a>'
+          ' href="https://www.google.com/maps/search/?api=1&query=' + a.lat + ',' + a.lng + '">Buka di Google Maps &rarr;</a>',
+          { autoPan: false }   /* auto-pan dimatikan biar nggak tabrakan dengan flyTo di bawah */
         );
+
+      marker.on('click', function () {
+        /* klik kedua = nutup popup, biar handler popupclose yang bawa balik ke home */
+        if (!marker.isPopupOpen()) return;
+        map.flyTo([a.lat, a.lng], FOCUS_ZOOM, { duration: FLY_DURATION });
+      });
 
       bounds.push([a.lat, a.lng]);
     });
@@ -105,14 +124,29 @@
       /* padding ikut ukuran layar: di HP 50px itu seperempat lebar peta */
       var pad = L.point(Math.min(50, Math.round(s.x * 0.09)), Math.min(50, Math.round(s.y * 0.11)));
       map.fitBounds(bounds, { padding: pad, animate: false });
+      /* fitBounds cuma ngepas ke pin, ujung utara Kalimantan kepotong -> mundur sedikit */
+      if (ZOOM_OUT) map.setZoom(Math.max(map.getMinZoom(), map.getZoom() - ZOOM_OUT), { animate: false });
+      home = { center: map.getCenter(), zoom: map.getZoom() };
     }
     fit();
+
+    /* Popup ditutup (atau klik di luar pin) -> balik ke tampilan seluruh Indonesia.
+       Pindah antar pin tidak ikut balik: close + open jalan duluan sebelum timeout. */
+    map.on('popupopen', function () { open++; });
+    map.on('popupclose', function () {
+      open--;
+      setTimeout(function () {
+        if (open > 0 || !home) return;
+        open = 0;
+        map.flyTo(home.center, home.zoom, { duration: FLY_DURATION });
+      }, 30);
+    });
 
     map.setMaxBounds(L.latLngBounds(bounds).pad(1.2));   /* nggak bisa digeser sampai lepas dari Indonesia */
 
     /* Refit setiap ukuran berubah: resize window, rotate layar, atau kontainer berubah tinggi */
     var t;
-    function refit() { clearTimeout(t); t = setTimeout(fit, 150); }
+    function refit() { if (open > 0) return; clearTimeout(t); t = setTimeout(fit, 150); }
     window.addEventListener('resize', refit);
     window.addEventListener('orientationchange', refit);
     if ('ResizeObserver' in window) {

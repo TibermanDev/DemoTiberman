@@ -63,17 +63,29 @@
   if (flow) {
     var items = Array.prototype.slice.call(flow.querySelectorAll('.coverflow__item'));
     var dotsWrap = document.querySelector('[data-coverflow-dots]');
-    var current = 0;
+    /* mulai dari slide tengah supaya kipasnya simetris (2 slide di tiap sisi) */
+    var current = Math.floor(items.length / 2);
 
     var layout = function () {
       var narrow = window.innerWidth < 720;
-      var step = narrow ? 150 : 235;
+      /* Slide samping diputar 3D (rotateY) memakai perspective dari .coverflow__track,
+         jadi bentuknya trapesium mengipas seperti di Figma. Jaraknya dihitung dari
+         lebar semu slide yang sudah miring (W * cos angle) supaya tidak saling tumpuk. */
+      var angle = 55;                      /* sudut sama di semua ukuran -> faktor 1.28 di bawah tetap valid */
+      var gap = narrow ? 10 : 26;
+      var W = items[0].offsetWidth || 250;
+      var sideW = W * Math.cos(angle * Math.PI / 180);
+      /* slide yang makin jauh dari titik perspective ikut melar, jadi jarak antar
+         slide terluar dikasih faktor 1.28 biar tetap ada sela dan tidak saling tindih */
+      var stepOut = sideW * 1.28 + gap;
       items.forEach(function (item, i) {
         var d = i - current;
         var abs = Math.abs(d);
-        var scale = d === 0 ? 1 : Math.max(0.72, 1 - abs * 0.14);
+        var dir = d < 0 ? -1 : 1;
+        var x = d === 0 ? 0 : dir * (W / 2 + sideW / 2 + gap + (abs - 1) * stepOut);
+        var rot = d === 0 ? 0 : -dir * angle;
         item.style.transform =
-          'translate(-50%,-50%) translateX(' + (d * step) + 'px) scale(' + scale + ')';
+          'translate(-50%,-50%) translateX(' + x + 'px) rotateY(' + rot + 'deg)';
         item.style.opacity = abs > 2 ? 0 : 1;
         item.style.zIndex = String(20 - abs);
         item.style.filter = d === 0 ? 'none' : 'grayscale(1) brightness(.72)';
@@ -100,8 +112,8 @@
         dotsWrap.appendChild(b);
       });
     }
-    var prev = flow.parentNode.querySelector('.coverflow__nav--prev');
-    var next = flow.parentNode.querySelector('.coverflow__nav--next');
+    var prev = document.querySelector('.coverflow__nav--prev');
+    var next = document.querySelector('.coverflow__nav--next');
     if (prev) prev.addEventListener('click', function () { go(current - 1); });
     if (next) next.addEventListener('click', function () { go(current + 1); });
     items.forEach(function (item, i) {
@@ -136,11 +148,22 @@
     var DATA = window.TIBERMAN_PRODUCTS || {};
     var grid = catalog.querySelector('[data-catalog-body]');
     var chipsWrap = catalog.querySelector('[data-chips]');
+    /* unit awal boleh ditentukan lewat ?unit= (dipakai dropdown Products) */
+    var wanted = (new URLSearchParams(location.search).get('unit') || '').trim();
+    if (!DATA[wanted]) wanted = '';
+
     var state = {
-      unit: catalog.dataset.unit || 'truk-bus',
+      unit: wanted || catalog.dataset.unit || 'truk-bus',
       size: 'all',
       q: ''
     };
+
+    if (wanted) {
+      catalog.dataset.unit = wanted;
+      catalog.querySelectorAll('[data-unit]').forEach(function (b) {
+        b.classList.toggle('is-active', b.dataset.unit === wanted);
+      });
+    }
 
     /* chip ukuran dibangun dari data unit yang aktif */
     var renderChips = function () {
