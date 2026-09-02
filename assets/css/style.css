@@ -25,7 +25,7 @@
   --shopee:#ee4d2d;
   --tokped:#42b549;
 
-  --nav-h:64px;
+  --nav-h:45px;   /* = tinggi .nav; dipakai sticky sidebar katalog & offset hero */
   --container:1160px;
   --radius-s:10px;
   --radius:16px;
@@ -89,7 +89,7 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 .nav{
   position:sticky;top:0;z-index:80;
-  height:45px;
+  height:var(--nav-h);
   background:#1d1d1f;
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
@@ -442,13 +442,14 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 .catalog{background:var(--ink);color:#fff;min-height:100vh}
 .catalog .nav{background:#1d1d1f}
-.catalog__layout{display:grid;grid-template-columns:250px 1fr}
+/* header katalog full-bleed: logo sejajar sidebar, menu rata kanan layar */
+.catalog .nav__inner{max-width:none;padding-left:22px;padding-right:32px}
+.catalog__layout{display:grid;grid-template-columns:240px 1fr}
 .catalog__sidebar{
   background:var(--ink-2);border-right:1px solid rgba(255,255,255,.07);
   padding:28px 22px 40px;position:sticky;top:var(--nav-h);align-self:start;
   height:calc(100vh - var(--nav-h));overflow-y:auto;
 }
-.catalog__sidebar .logo{height:26px;margin-bottom:26px}
 .side-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px}
 .search{position:relative;margin-bottom:20px}
 .search input{width:100%;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;padding:0 12px 0 38px;font-size:14px}
@@ -459,38 +460,38 @@ ul{margin:0;padding:0;list-style:none}
 .unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
 .unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
 .unitlist button.is-active{background:var(--blue);color:#fff;font-weight:600}
-.side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:14px 16px;margin-bottom:14px;transition:border-color .25s var(--ease),background .25s var(--ease)}
+.side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:12px 14px;margin-bottom:12px;transition:border-color .25s var(--ease),background .25s var(--ease)}
 .side-promo:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
-.side-promo strong{display:block;font-size:16px;font-weight:800;letter-spacing:-.02em}
-.side-promo span{font-size:12px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
+.side-promo strong{display:block;font-size:13px;font-weight:800;letter-spacing:-.02em}
+.side-promo span{font-size:11px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
 
 .catalog__main{min-width:0}
 .catalog__banner{height:190px;overflow:hidden;position:relative}
 .catalog__banner img{width:100%;height:100%;object-fit:cover}
 .catalog__banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(29,29,31,.6))}
-.chips{display:flex;flex-wrap:wrap;gap:14px;padding:26px 32px 6px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;padding:22px 32px 4px}
 .chip{
-  height:38px;padding:0 26px;border-radius:8px;border:1px solid rgba(255,255,255,.16);
-  font-size:13px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.03);
+  height:36px;padding:0 18px;border-radius:8px;border:1px solid rgba(255,255,255,.16);
+  font-size:12.5px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.03);
   display:inline-flex;align-items:center;gap:8px;transition:background .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease);
 }
 .chip:hover{border-color:rgba(255,255,255,.42);color:#fff}
-.chip.is-active{background:var(--blue);border-color:var(--blue);color:#fff}
-.catalog__body{padding:22px 32px 80px}
-.size-group{margin-bottom:34px}
-.size-group h2{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px}
-.product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.chip.is-active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55);color:#fff}
+.catalog__body{padding:18px 32px 80px}
+.size-group{margin-bottom:38px}
+.size-group h2{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
+.product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px}
 .product-card{
   border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;background:#202024;
   display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
 }
 .product-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.26);box-shadow:0 16px 34px rgba(0,0,0,.42)}
-.product-card__img{background:#fff;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
+.product-card__img{background:#fff;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
 .product-card__img img{max-height:100%;max-width:100%;object-fit:contain;transition:transform .45s var(--ease)}
 .product-card:hover .product-card__img img{transform:scale(1.06)}
-.product-card__body{padding:12px 10px 14px;text-align:center}
-.product-card__body strong{display:block;font-size:13px;font-weight:700;letter-spacing:.01em}
-.product-card__body span{font-size:11px;color:rgba(255,255,255,.5)}
+.product-card__body{padding:13px 10px 10px;text-align:center}
+.product-card__body strong{display:block;margin-bottom:5px;font-size:14px;line-height:1.25;font-weight:700;letter-spacing:.01em}
+.product-card__body span{display:block;font-size:11px;line-height:1.3;color:rgba(255,255,255,.5)}
 .empty{padding:60px 0;text-align:center;color:rgba(255,255,255,.55)}
 
 /* varian top-nav (halaman 3 di PDF) */
@@ -651,7 +652,7 @@ ul{margin:0;padding:0;list-style:none}
   .hero__media{min-height:340px}
   .hero__wordmark{width:64%;top:30%}
   .importir__inner{padding:70px 20px 0}
-  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
   .chips,.catalog__body,.catalog--topnav .catalog__body,.catalog--topnav .chips{padding-inline:18px}
   .plb__foot{flex-direction:column;align-items:flex-start;gap:12px}
   .plb__stats{border-left:0;padding-left:0}
