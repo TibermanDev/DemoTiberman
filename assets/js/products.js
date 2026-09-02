@@ -4,8 +4,9 @@
    unit -> [ { size, items:[ {name, compat, img} ] } ]
    ============================================================= */
 window.TIBERMAN_PRODUCTS = (function () {
-  var W = 'assets/img/tire-white.webp';
-  var D = 'assets/img/tire-554.webp';
+  /* PNG berlatar transparan supaya kartu ikut tema terang/gelap */
+  var W = 'assets/img/tire-transparent-soft.png';
+  var D = 'assets/img/tire-transparent-soft.png';
 
   /* helper: bikin n kartu dengan nama & kompatibilitas yang sama */
   function row(n, name, compat, img) {
