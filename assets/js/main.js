@@ -172,7 +172,7 @@
       chipsWrap.innerHTML =
         '<button type="button" class="chip is-active" data-size="all">Jenis Unit</button>' +
         sizes.map(function (s) {
-          return '<button type="button" class="chip" data-size="' + s + '">Ukuran Ban ' + s + '</button>';
+          return '<button type="button" class="chip" data-size="' + s + '"><span>Ukuran Ban</span> ' + s + '</button>';
         }).join('');
     };
 
@@ -188,13 +188,14 @@
 
       if (!groups.length) {
         grid.innerHTML = '<p class="empty">Produk tidak ditemukan. Coba kata kunci atau filter lain.</p>';
+        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
         return;
       }
 
       grid.innerHTML = groups.map(function (g) {
         return '' +
           '<section class="size-group">' +
-            '<h2>Ukuran ' + g.size + '</h2>' +
+            '<h2><span>Ukuran</span> ' + g.size + '</h2>' +
             '<div class="product-grid">' +
               g.items.map(function (p) {
                 return '' +
@@ -202,7 +203,7 @@
                     '<span class="product-card__img"><img src="' + p.img + '" alt="' + p.name + ' ' + g.size + '" loading="lazy"></span>' +
                     '<span class="product-card__body">' +
                       '<strong>' + p.name + '</strong>' +
-                      '<span>compatible for : ' + p.compat + '</span>' +
+                      '<span><span>compatible for :</span> ' + p.compat + '</span>' +
                     '</span>' +
                   '</a>';
               }).join('') +
@@ -221,6 +222,7 @@
         state.size = 'all';
         renderChips();
         render();
+        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
       });
     });
 
@@ -234,6 +236,7 @@
         });
         state.size = btn.dataset.size;
         render();
+        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
       });
     }
 
@@ -242,11 +245,13 @@
       input.addEventListener('input', function () {
         state.q = input.value.trim().toLowerCase();
         render();
+        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
       });
     }
 
     renderChips();
     render();
+    if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
   }
 
   /* ---------- 7. Halaman produk: galeri + pilihan ukuran ---------- */

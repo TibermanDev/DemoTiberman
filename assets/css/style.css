@@ -25,7 +25,7 @@
   --shopee:#ee4d2d;
   --tokped:#42b549;
 
-  --nav-h:64px;
+  --nav-h:45px;   /* = tinggi .nav; dipakai sticky sidebar katalog & offset hero */
   --container:1160px;
   --radius-s:10px;
   --radius:16px;
@@ -34,6 +34,54 @@
   --shadow-s:0 1px 2px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
   --shadow:0 10px 40px rgba(0,0,0,.08);
   --ease:cubic-bezier(.22,.61,.36,1);
+
+  /* permukaan & teks yang dibalik saat tema gelap */
+  --bg:#fff;            /* latar halaman */
+  --surface:#fff;       /* kartu di atas latar terang */
+  --body-text:#3f3f46;  /* paragraf isi */
+  --card-img:#fff;      /* kotak foto produk di katalog */
+  --illus-bg:#f6f5f8;
+  --outline-strong:rgba(0,0,0,.45);
+}
+
+/* ==========================================================================
+   TEMA GELAP — hanya menimpa token; section yang memang sudah gelap
+   (hero, katalog, footer) tidak ikut berubah.
+   ========================================================================== */
+[data-theme="dark"]{
+  --text:#f2f2f5;
+  --muted:#a1a1aa;
+  --muted-2:#8b8b93;
+  --line:#2e2e35;
+  --grey-50:#151518;
+  --grey-100:#1c1c21;
+  --grey-200:#24242a;
+  --bg:#0e0e10;
+  --surface:#17171b;
+  --body-text:#c9c9d1;
+  --card-img:#202024;
+  --outline-strong:rgba(255,255,255,.5);
+  --spec:#9ea1bd;
+  --shadow-s:0 1px 2px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.35);
+  --shadow:0 10px 40px rgba(0,0,0,.55);
+  color-scheme:dark;
+}
+
+/* ilustrasi truk-nya sudah punya latar terang menyatu (truck-tiberman.webp),
+   jadi kartu ini tetap terang -> tokennya dikembalikan ke nilai terang. */
+/* panel biru pakai gradien versi gelap supaya tetap satu nuansa dengan halaman */
+[data-theme="dark"] .accessories{
+  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
+}
+[data-theme="dark"] .velg-card{
+  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
+}
+[data-theme="dark"] .feature-card--illus{
+  --text:#1d1d1f;
+  --muted:#6e6e73;
+  --muted-2:#86868b;
+  --body-text:#3f3f46;
+  color:#1d1d1f;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -42,7 +90,7 @@ body{
   margin:0;
   font-family:'Montserrat',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   color:var(--text);
-  background:#fff;
+  background:var(--bg);
   font-size:16px;
   line-height:1.6;
   -webkit-font-smoothing:antialiased;
@@ -89,7 +137,7 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 .nav{
   position:sticky;top:0;z-index:80;
-  height:45px;
+  height:var(--nav-h);
   background:#1d1d1f;
   backdrop-filter:saturate(180%) blur(20px);
   -webkit-backdrop-filter:saturate(180%) blur(20px);
@@ -134,6 +182,42 @@ ul{margin:0;padding:0;list-style:none}
   background:var(--blue);color:#fff;font-weight:600;
 }
 .nav--center .nav__links{margin-inline:auto;gap:44px}
+/* varian PDP: logo ikut jadi bagian grup yang ditengahkan (lihat figma) */
+.nav--grouped .nav__inner{justify-content:center;gap:46px}
+.nav--grouped .nav__links{margin-inline:0;gap:46px}
+/* --- kontrol tema & bahasa di navbar (navbar selalu gelap di kedua tema) --- */
+.nav__tools{display:flex;align-items:center;gap:8px;margin-left:20px}
+.tool-btn{
+  height:32px;min-width:32px;padding:0 9px;border-radius:9px;
+  border:1px solid rgba(255,255,255,.2);color:#fff;background:transparent;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-size:12px;font-weight:700;letter-spacing:.02em;
+  transition:background .2s var(--ease),border-color .2s var(--ease);
+}
+.tool-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45)}
+.tool-btn svg{width:16px;height:16px;flex:0 0 16px}
+.tool-btn .icon-sun{display:none}
+[data-theme="dark"] .tool-btn .icon-sun{display:block}
+[data-theme="dark"] .tool-btn .icon-moon{display:none}
+.lang{position:relative}
+.lang__caret{width:9px;height:9px;flex:0 0 9px;transition:transform .2s var(--ease)}
+.lang.is-open .lang__caret{transform:rotate(180deg)}
+.lang__menu{
+  position:absolute;right:0;top:calc(100% + 10px);z-index:95;min-width:158px;
+  display:flex;flex-direction:column;gap:2px;padding:6px;
+  background:#141416;border:1px solid rgba(255,255,255,.1);border-radius:14px;
+  box-shadow:0 24px 56px rgba(0,0,0,.6);
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(8px);
+  transition:opacity .2s var(--ease),transform .2s var(--ease),visibility .2s var(--ease);
+}
+.lang.is-open .lang__menu{opacity:1;visibility:visible;pointer-events:auto;transform:none}
+.lang__menu button{
+  text-align:left;padding:10px 14px;border-radius:10px;white-space:nowrap;
+  font-size:14px;font-weight:500;color:rgba(255,255,255,.66);
+  transition:background .2s var(--ease),color .2s var(--ease);
+}
+.lang__menu button:hover{background:rgba(255,255,255,.08);color:#fff}
+.lang__menu button.is-active{background:var(--blue);color:#fff;font-weight:600}
 .nav__burger{display:none;margin-left:auto;width:40px;height:40px;align-items:center;justify-content:center}
 .nav__burger span{display:block;width:20px;height:1.5px;background:#fff;position:relative}
 .nav__burger span::before,.nav__burger span::after{content:'';position:absolute;left:0;width:20px;height:1.5px;background:#fff;transition:transform .3s var(--ease)}
@@ -157,7 +241,7 @@ ul{margin:0;padding:0;list-style:none}
 .hero__wordmark img{filter:drop-shadow(0 12px 40px rgba(0,0,0,.45))}
 
 .superarea{background:#000;color:#fff;text-align:center;position:relative;overflow:hidden}
-.superarea__copy{padding:54px 24px 34px;position:relative;z-index:2}
+.superarea__copy{padding:150px 24px 150px;position:relative;z-index:2}
 .superarea__copy .eyebrow{color:rgba(255,255,255,.86)}
 .superarea__copy h2{margin:12px auto 26px;max-width:780px;font-size:clamp(30px,4.4vw,52px);font-weight:600;letter-spacing:-.03em;line-height:1.15}
 .superarea__globe{position:relative}
@@ -242,9 +326,9 @@ ul{margin:0;padding:0;list-style:none}
 }
 .accessories__grid{display:grid;grid-template-columns:1.16fr .84fr;gap:32px;align-items:start}   /* kolom kanan jangan di bawah ~450px, judulnya wrap */
 .accessories__copy h2{margin-top:0;margin-bottom:18px}
-.accessories__copy .lead{color:#4a4a51;max-width:430px;margin-bottom:26px}
+.accessories__copy .lead{color:var(--body-text);max-width:430px;margin-bottom:26px}
 
-.velg-wrap{background:#fff;padding:20px 0 200px}   /* jeda putih antar section, seperti di Figma */
+.velg-wrap{background:var(--bg);padding:20px 0 200px}   /* jeda putih antar section, seperti di Figma */
 .velg-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .velg-card{
   position:relative;display:flex;align-items:center;gap:16px;overflow:hidden;
@@ -268,7 +352,7 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 /* Banner full-bleed pakai banner-tyre.webp (bagian atas gambar transparan,
    jadi ban-nya kelihatan nongol di atas pita gelap seperti di Figma). */
-.why-banner{position:relative;background:#fff;overflow:hidden}
+.why-banner{position:relative;background:var(--bg);overflow:hidden}
 .why-banner__bg{width:100%;height:auto;display:block}
 .why-banner h2{
   position:absolute;left:0;right:0;top:63%;transform:translateY(-50%);
@@ -294,7 +378,7 @@ ul{margin:0;padding:0;list-style:none}
    sama persis dengan warna kartu — jadi gambarnya diperlakukan sebagai background
    kartu: setinggi kartu, ditempel ke kanan, lebarnya ikut rasio asli (tidak
    pernah kepotong). Sisi kirinya yang kosong boleh melimpah ke belakang teks. */
-.feature-card--illus{position:relative;background:#f6f5f8}  /* = warna background ilustrasi setelah encode webp, biar tepinya nggak kelihatan */
+.feature-card--illus{position:relative;background:var(--illus-bg)}  /* = warna background ilustrasi setelah encode webp, biar tepinya nggak kelihatan */
 .feature-card--illus .feature-card__body{position:relative;z-index:1}
 .feature-card--illus .feature-card__media{margin:0;border-radius:0;overflow:visible}
 .feature-card--illus .feature-card__media img{
@@ -391,7 +475,7 @@ ul{margin:0;padding:0;list-style:none}
 /* tiap berita dibungkus kartu putih supaya terpisah dari latar abu section */
 .news-card{
   display:flex;flex-direction:column;
-  background:#fff;border-radius:18px;padding:12px 12px 22px;
+  background:var(--surface);border-radius:18px;padding:12px 12px 22px;
   box-shadow:var(--shadow-s);
   transition:transform .35s var(--ease),box-shadow .35s var(--ease);
 }
@@ -404,7 +488,7 @@ ul{margin:0;padding:0;list-style:none}
 /* judul & ringkasan dibatasi barisnya supaya tinggi ketiga kartu tetap seragam */
 .news-card h3,.news-card p{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden}
 .news-card h3{-webkit-line-clamp:3}
-.news-card p{-webkit-line-clamp:4;margin-inline:8px;font-size:15px;font-weight:600;color:#3f3f46;line-height:1.6}
+.news-card p{-webkit-line-clamp:4;margin-inline:8px;font-size:15px;font-weight:600;color:var(--body-text);line-height:1.6}
 
 /* ---------- Footer ---------- */
 .footer{background:var(--ink);color:rgba(255,255,255,.72);padding:64px 0 26px}
@@ -436,19 +520,24 @@ ul{margin:0;padding:0;list-style:none}
 .market--tokped{color:var(--tokped)}
 .market--shopee{color:var(--shopee)}
 .footer__note{text-align:center;font-size:15px;color:rgba(255,255,255,.45);border-top:1px solid rgba(255,255,255,.1);padding-top:24px;margin-top:48px}
+/* varian ringkas: cuma baris copyright (halaman katalog). warnanya sama dengan
+   background halaman, jadi batasnya ditandai garis tipis */
+.footer--slim{padding:24px 0;border-top:1px solid rgba(255,255,255,.08)}
+.footer--slim .footer__note{margin-top:0;padding-top:0;border-top:0}
 
 /* ==========================================================================
    KATALOG
    ========================================================================== */
 .catalog{background:var(--ink);color:#fff;min-height:100vh}
 .catalog .nav{background:#1d1d1f}
-.catalog__layout{display:grid;grid-template-columns:250px 1fr}
+/* header katalog full-bleed: logo sejajar sidebar, menu rata kanan layar */
+.catalog .nav__inner{max-width:none;padding-left:22px;padding-right:32px}
+.catalog__layout{display:grid;grid-template-columns:240px 1fr}
 .catalog__sidebar{
   background:var(--ink-2);border-right:1px solid rgba(255,255,255,.07);
   padding:28px 22px 40px;position:sticky;top:var(--nav-h);align-self:start;
   height:calc(100vh - var(--nav-h));overflow-y:auto;
 }
-.catalog__sidebar .logo{height:26px;margin-bottom:26px}
 .side-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px}
 .search{position:relative;margin-bottom:20px}
 .search input{width:100%;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;padding:0 12px 0 38px;font-size:14px}
@@ -459,38 +548,38 @@ ul{margin:0;padding:0;list-style:none}
 .unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
 .unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
 .unitlist button.is-active{background:var(--blue);color:#fff;font-weight:600}
-.side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:14px 16px;margin-bottom:14px;transition:border-color .25s var(--ease),background .25s var(--ease)}
+.side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:12px 14px;margin-bottom:12px;transition:border-color .25s var(--ease),background .25s var(--ease)}
 .side-promo:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
-.side-promo strong{display:block;font-size:16px;font-weight:800;letter-spacing:-.02em}
-.side-promo span{font-size:12px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
+.side-promo strong{display:block;font-size:13px;font-weight:800;letter-spacing:-.02em}
+.side-promo span{font-size:11px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
 
 .catalog__main{min-width:0}
 .catalog__banner{height:190px;overflow:hidden;position:relative}
 .catalog__banner img{width:100%;height:100%;object-fit:cover}
 .catalog__banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(29,29,31,.6))}
-.chips{display:flex;flex-wrap:wrap;gap:14px;padding:26px 32px 6px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;padding:22px 32px 4px}
 .chip{
-  height:38px;padding:0 26px;border-radius:8px;border:1px solid rgba(255,255,255,.16);
-  font-size:13px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.03);
+  height:36px;padding:0 18px;border-radius:8px;border:1px solid rgba(255,255,255,.16);
+  font-size:12.5px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.03);
   display:inline-flex;align-items:center;gap:8px;transition:background .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease);
 }
 .chip:hover{border-color:rgba(255,255,255,.42);color:#fff}
-.chip.is-active{background:var(--blue);border-color:var(--blue);color:#fff}
-.catalog__body{padding:22px 32px 80px}
-.size-group{margin-bottom:34px}
-.size-group h2{font-size:19px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px}
-.product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:18px}
+.chip.is-active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55);color:#fff}
+.catalog__body{padding:18px 32px 80px}
+.size-group{margin-bottom:38px}
+.size-group h2{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
+.product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px}
 .product-card{
   border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;background:#202024;
   display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
 }
 .product-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.26);box-shadow:0 16px 34px rgba(0,0,0,.42)}
-.product-card__img{background:#fff;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
+.product-card__img{background:var(--card-img);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
 .product-card__img img{max-height:100%;max-width:100%;object-fit:contain;transition:transform .45s var(--ease)}
 .product-card:hover .product-card__img img{transform:scale(1.06)}
-.product-card__body{padding:12px 10px 14px;text-align:center}
-.product-card__body strong{display:block;font-size:13px;font-weight:700;letter-spacing:.01em}
-.product-card__body span{font-size:11px;color:rgba(255,255,255,.5)}
+.product-card__body{padding:13px 10px 10px;text-align:center}
+.product-card__body strong{display:block;margin-bottom:5px;font-size:14px;line-height:1.25;font-weight:700;letter-spacing:.01em}
+.product-card__body span{display:block;font-size:11px;line-height:1.3;color:rgba(255,255,255,.5)}
 .empty{padding:60px 0;text-align:center;color:rgba(255,255,255,.55)}
 
 /* varian top-nav (halaman 3 di PDF) */
@@ -502,30 +591,31 @@ ul{margin:0;padding:0;list-style:none}
    HALAMAN PRODUK (PDP)
    ========================================================================== */
 .pdp-hero{background:#000;color:#fff;position:relative;overflow:hidden}
-.pdp-hero__inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;max-width:1320px;margin-inline:auto;padding:70px 40px 96px}
+.pdp-hero__inner{display:grid;grid-template-columns:1fr 1.1fr;gap:20px;align-items:center;max-width:1840px;margin-inline:auto;padding:60px 40px 96px}
 .pdp-hero__img img{width:100%;filter:drop-shadow(0 40px 60px rgba(0,0,0,.85))}
-.wordmark{font-style:italic;font-weight:800;letter-spacing:-.03em;line-height:1;display:flex;align-items:baseline;gap:.12em;flex-wrap:wrap;text-transform:uppercase}
-.wordmark--xl{font-size:clamp(34px,5.2vw,62px)}
-.wordmark--md{font-size:clamp(26px,3.2vw,40px)}
-.wordmark__tiber{color:var(--red)}
-.wordmark__max{color:var(--red);font-size:1.14em;letter-spacing:-.045em}
-.wordmark__num{color:#fff;font-style:italic;font-size:1.02em}
-.pdp-hero p{margin-top:22px;font-size:18px;line-height:1.7;color:rgba(255,255,255,.82);max-width:520px}
+/* tulisan pada PNG-nya 1925 dari kanvas 2004 -> max-width dilebihkan tipis */
+.pdp-hero__logo img{width:100%;max-width:668px;height:auto}
+.pdp-hero p{margin-top:22px;font-size:20px;line-height:1.7;color:rgba(255,255,255,.82);max-width:680px}
 .pdp-hero p b{color:#fff;font-style:italic}
-.pdp-brand{font-size:14px;font-weight:800;letter-spacing:.22em;margin-bottom:6px}
 
-.pdp-why{background:#000;color:#fff;padding:88px 0 0}
-.pdp-why h2{text-align:center;font-size:clamp(28px,3.6vw,40px);margin-bottom:44px}
-.bento{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:1320px;margin:0 auto;padding:0 40px 22px}
-.bento:last-of-type{padding-bottom:90px}
+.pdp-why{background:#000;color:#fff;padding:120px 0 0;overflow:hidden}
+.pdp-why h2{text-align:center;font-size:clamp(28px,3.6vw,40px);margin-bottom:90px}
+/* kartu sengaja meluber keluar layar -> sudut terluarnya kepotong, bukan membulat */
+.bento{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:clamp(400px,29vw,560px);gap:28px;margin-inline:-48px;padding:0 0 28px}
+.bento:last-of-type{padding-bottom:110px}
 .bento__cell{
-  border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-xl);overflow:hidden;
-  min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px;
+  border:1px solid rgba(255,255,255,.9);border-radius:40px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:center;padding:48px 80px;
 }
-.bento__cell--img{padding:0;border-color:rgba(255,255,255,.14)}
-.bento__cell--img img{width:100%;height:100%;object-fit:cover;min-height:360px}
-.bento__cell h3{font-style:italic;font-size:clamp(30px,4vw,50px);letter-spacing:-.035em;line-height:1.05}
-.bento__cell p{margin-top:20px;color:rgba(255,255,255,.7);line-height:1.75;max-width:420px}
+/* teks selalu menghadap kartu gambar di sebelahnya (lihat figma) */
+.bento__cell:first-child{align-items:flex-end;text-align:right}
+.bento__cell:last-child{align-items:flex-start;text-align:left}
+.bento__cell--img{padding:0}
+.bento__cell--img img{width:100%;height:100%;object-fit:cover}
+/* foto produk (latar transparan) tidak dipenuhkan, tapi dimuat utuh & dikecilkan */
+.bento__cell--contain img{object-fit:contain;object-position:left bottom;padding:6.4% 3.2% 0 0}
+.bento__cell h3{font-style:italic;font-size:clamp(30px,5vw,96px);letter-spacing:-.035em;line-height:1.18}
+.bento__cell p{margin-top:26px;font-size:19px;color:rgba(255,255,255,.7);line-height:1.75;max-width:500px}
 
 .pdp-pair{background:#0d0d0f;color:#fff;padding:84px 0 100px;text-align:center}
 .pdp-pair h2{font-size:clamp(26px,3.4vw,38px);margin-bottom:40px}
@@ -536,41 +626,48 @@ ul{margin:0;padding:0;list-style:none}
 .pair-card:hover img{filter:brightness(1)}
 .pair-card strong{display:block;margin-top:20px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.02em}
 
-.pdp-detail{position:relative;background:#fff;padding:130px 0 110px;overflow:hidden}
+.pdp-detail{position:relative;background:var(--bg);padding:250px 0 110px;overflow:hidden}
 .pdp-detail::before{
   content:'';position:absolute;left:-14%;right:-14%;top:-190px;height:300px;background:#0d0d0f;
   border-radius:0 0 50% 50%/0 0 100% 100%;
 }
-.pdp-detail__grid{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:start}
-.gallery__main{background:var(--grey-100);border-radius:var(--radius-l);display:flex;align-items:center;justify-content:center;padding:26px;height:420px;overflow:hidden}
+.pdp-detail__grid{position:relative;display:grid;grid-template-columns:1fr 1.12fr;gap:68px;align-items:start}
+.gallery__main{background:var(--grey-100);border-radius:var(--radius-l);display:flex;align-items:center;justify-content:center;padding:26px;aspect-ratio:1.075;overflow:hidden}
 .gallery__main img{max-height:100%;max-width:100%;object-fit:contain}
-.gallery__thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
-.gallery__thumbs button{background:var(--grey-100);border-radius:var(--radius);padding:12px;height:150px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid transparent;transition:border-color .25s var(--ease)}
-.gallery__thumbs button.is-active{border-color:var(--blue)}
+.gallery__thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
+.gallery__thumbs button{background:var(--grey-100);border-radius:var(--radius);padding:12px;aspect-ratio:1.14;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid transparent;transition:border-color .25s var(--ease)}
+.gallery__thumbs button.is-active{border-color:var(--outline-strong)}
 .gallery__thumbs img{max-height:100%;max-width:100%;object-fit:contain}
 .doc-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
-.doc-btns a{height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:#3f3f46;transition:border-color .25s var(--ease),color .25s var(--ease)}
+.doc-btns a{height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:var(--body-text);transition:border-color .25s var(--ease),color .25s var(--ease)}
 .doc-btns a:hover{border-color:var(--blue);color:var(--blue)}
 
-.pdp-info .pdp-brand{color:var(--ink);letter-spacing:.2em;font-size:15px}
-.pdp-info .wordmark__num{color:var(--ink)}
-.pdp-info>p{margin-top:20px;font-size:17px;line-height:1.75;color:#3f3f46}
-.pdp-info>p b{color:var(--ink);font-style:italic}
-.subhead{margin:34px 0 14px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;color:var(--spec)}
-.spec-table{width:100%;border-collapse:collapse;font-size:15px}
-.spec-table td{padding:11px 4px;border-bottom:1px solid var(--line);vertical-align:top}
-.spec-table td:nth-child(1),.spec-table td:nth-child(3){font-weight:700;width:26%}
-.spec-table td:nth-child(3){border-left:1px solid var(--line);padding-left:22px}
-.size-chips{display:flex;flex-wrap:wrap;gap:12px}
-.size-chip{height:40px;padding:0 20px;border:1px solid var(--line);border-radius:10px;display:inline-flex;align-items:center;font-size:15px;transition:border-color .22s var(--ease),color .22s var(--ease),box-shadow .22s var(--ease)}
-.size-chip.is-active,.size-chip:hover{border-color:var(--blue);color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
-.contact-btns{display:flex;flex-wrap:wrap;gap:16px}
-.contact-btn{display:inline-flex;align-items:center;gap:12px;height:58px;padding:0 26px;border-radius:12px;font-size:clamp(16px,1.6vw,18px);font-weight:800;letter-spacing:-.02em;background:var(--grey-100);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+/* lockup TiberMAX dipakai sebagai gambar (assets/img/tibermax-logo.png) */
+/* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x.
+   Versi -ondark dipakai saat tema gelap karena UNINEST & 800 di file asli berwarna gelap. */
+.pdp-logo{display:block;width:100%;max-width:520px}
+.pdp-logo img{display:block;width:100%;height:auto}
+.pdp-logo img.pdp-logo__b{display:none}
+[data-theme="dark"] .pdp-logo img.pdp-logo__a{display:none}
+[data-theme="dark"] .pdp-logo img.pdp-logo__b{display:block}
+.pdp-info>p{margin-top:18px;font-size:15px;line-height:1.75;color:var(--body-text)}
+.pdp-info>p b{color:var(--text);font-style:italic}
+.subhead{margin:28px 0 12px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;color:var(--spec)}
+.spec-table{width:auto;border-collapse:collapse;font-size:13px;line-height:1.5}
+.spec-table td{padding:6px 5px;border-bottom:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+.spec-table tr:first-child td{border-top:1px solid var(--line)}
+.spec-table td:nth-child(1),.spec-table td:nth-child(3){font-weight:700}
+.spec-table td:nth-child(3){border-left:1px solid var(--line);padding-left:14px}
+.size-chips{display:flex;flex-wrap:wrap;gap:10px}
+.size-chip{height:30px;padding:0 14px;border:1px solid var(--line);border-radius:8px;display:inline-flex;align-items:center;font-size:13px;transition:border-color .22s var(--ease),color .22s var(--ease),box-shadow .22s var(--ease)}
+.size-chip.is-active,.size-chip:hover{border-color:var(--outline-strong);color:var(--text);box-shadow:inset 0 0 0 1px var(--outline-strong)}
+.contact-btns{display:flex;flex-wrap:wrap;gap:14px}
+.contact-btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 18px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:-.02em;background:var(--grey-100);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
 .contact-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-s)}
-.contact-btn svg{width:26px;height:26px;flex:0 0 26px}
+.contact-btn svg{width:22px;height:22px;flex:0 0 22px}
+.contact-btn img{height:24px;width:auto;flex:0 0 auto;object-fit:contain}
 .contact-btn--wa{background:var(--wa);color:#fff}
-.contact-btn--shopee{color:var(--ink)}
-.contact-btn--tokped{color:var(--ink)}
+.contact-btn--shopee,.contact-btn--tokped{color:var(--text);background:var(--surface);border:1px solid var(--line)}
 
 /* ---------- Reveal on scroll ---------- */
 .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
@@ -589,6 +686,8 @@ ul{margin:0;padding:0;list-style:none}
 @media (max-width:1024px){
   .nav__inner{padding-inline:24px}
   .nav__links{display:none}
+  .nav__burger{order:3}
+  .nav__tools{order:2;margin-left:auto}
   .nav__burger{display:flex}
   .nav.is-open{height:auto}
   .nav.is-open .nav__inner{flex-wrap:wrap;height:auto;padding-block:14px}
@@ -602,6 +701,9 @@ ul{margin:0;padding:0;list-style:none}
   }
   .nav__menu::before{display:none}
   .accessories__grid,.feature-card,.faq__grid,.pdp-hero__inner,.pdp-detail__grid,.bento{grid-template-columns:1fr}
+  /* kartu bento ditumpuk -> tingginya ikut isi, bukan tinggi baris tetap */
+  .bento{grid-auto-rows:auto}
+  .bento__cell{min-height:360px}
   /* kartu velg makin sempit di tablet -> kolom gambar dikecilkan supaya judulnya
      tidak pecah 3 baris; jeda putih 200px juga kebanyakan di layar kecil */
   .velg-wrap{padding-bottom:110px}
@@ -629,7 +731,7 @@ ul{margin:0;padding:0;list-style:none}
   .plb__stats{border-left:0;padding-left:0}
   .pdp-detail::before{display:none}
   .pdp-detail{padding-top:70px}
-  .bento__cell--img img{min-height:280px}
+  .bento__cell--img{min-height:0;width:100%;aspect-ratio:16/10}
 }
 @media (max-width:720px){
   .section{padding:64px 0}
@@ -651,7 +753,7 @@ ul{margin:0;padding:0;list-style:none}
   .hero__media{min-height:340px}
   .hero__wordmark{width:64%;top:30%}
   .importir__inner{padding:70px 20px 0}
-  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
   .chips,.catalog__body,.catalog--topnav .catalog__body,.catalog--topnav .chips{padding-inline:18px}
   .plb__foot{flex-direction:column;align-items:flex-start;gap:12px}
   .plb__stats{border-left:0;padding-left:0}
@@ -669,5 +771,6 @@ ul{margin:0;padding:0;list-style:none}
   .spec-table td:nth-child(3){padding-left:12px}
   .footer__grid{grid-template-columns:1fr}
   .pdp-hero__inner{padding:50px 22px 70px}
-  .bento{padding-inline:22px}
+  .bento{margin-inline:0;padding-inline:22px}
+  .bento__cell{padding:40px 32px}
 }
