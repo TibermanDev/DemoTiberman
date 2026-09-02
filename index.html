@@ -8,7 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script>(function(){try{if(localStorage.getItem('tbm-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
 <link rel="stylesheet" href="assets/css/style.css">
 </head>
@@ -72,10 +71,9 @@
       <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
       <a class="btn btn--primary reveal" data-delay="160" href="#contact">Check it !</a>
     </div>
-    <div class="superarea__globe">
-      <!-- Fallback: dipakai kalau Leaflet/tile gagal dimuat (offline) -->
-      <img class="superarea__fallback" src="assets/img/earth.webp" loading="lazy" decoding="async" alt="Peta sebaran SuperArea Tiberman di Indonesia">
-      <div id="superareaMap" class="superarea__map" hidden></div>
+    <div class="superarea__globe" data-superarea>
+      <!-- pin sudah tercetak di gambar; tombolnya dibuat assets/js/superarea-spots.js -->
+      <img class="superarea__earth" src="assets/img/earth-location.webp" width="2880" height="1172" loading="lazy" decoding="async" alt="Peta sebaran SuperArea Tiberman di Indonesia">
     </div>
   </section>
 
@@ -446,8 +444,7 @@
   </div>
 </footer>
 
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
-<script src="assets/js/superarea-map.js" defer></script>
+<script src="assets/js/superarea-spots.js" defer></script>
 <script src="assets/js/i18n.js" defer></script>
 <script src="assets/js/main.js" defer></script>
 </body>

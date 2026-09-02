@@ -241,10 +241,55 @@ ul{margin:0;padding:0;list-style:none}
 .hero__wordmark img{filter:drop-shadow(0 12px 40px rgba(0,0,0,.45))}
 
 .superarea{background:#000;color:#fff;text-align:center;position:relative;overflow:hidden}
-.superarea__copy{padding:150px 24px 150px;position:relative;z-index:2}
+.superarea__copy{padding:150px 24px 0;position:relative;z-index:2}
 .superarea__copy .eyebrow{color:rgba(255,255,255,.86)}
 .superarea__copy h2{margin:12px auto 26px;max-width:780px;font-size:clamp(30px,4.4vw,52px);font-weight:600;letter-spacing:-.03em;line-height:1.15}
 .superarea__globe{position:relative}
+.superarea__earth{display:block;width:100%;height:auto}
+/* Pin sudah tercetak di gambar, jadi tombolnya transparan dan cuma
+   memberi lingkaran sorot. Posisinya persen -> ikut skala gambar. */
+.sa-spots{position:absolute;inset:0;z-index:3}
+.sa-spot{
+  position:absolute;translate:-50% -50%;
+  width:calc(clamp(30px,3vw,48px) * var(--w,1));
+  height:calc(clamp(30px,3vw,48px) * var(--h,1));
+  border-radius:999px;background:transparent;cursor:pointer;
+  transition:background .2s var(--ease),box-shadow .2s var(--ease);
+}
+.sa-spot::after{
+  content:'';position:absolute;inset:-6px;border-radius:inherit;
+  border:2px solid rgba(255,255,255,.55);opacity:0;
+  transition:opacity .2s var(--ease),transform .2s var(--ease);
+  transform:scale(.8);
+}
+.sa-spot:hover::after,.sa-spot:focus-visible::after,.sa-spot.is-on::after{opacity:1;transform:scale(1)}
+.sa-spot:hover,.sa-spot.is-on{background:rgba(239,57,54,.22)}
+
+.sa-pop{
+  position:absolute;z-index:6;width:max(240px,min(310px,72vw));
+  max-height:calc(100% - 16px);overflow-y:auto;overscroll-behavior:contain;
+  padding:16px 18px;border-radius:16px;text-align:left;
+  background:#141416;border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 26px 60px rgba(0,0,0,.65);
+  animation:sa-pop-in .18s var(--ease);
+}
+@keyframes sa-pop-in{from{opacity:0;transform-origin:50% 100%}to{opacity:1}}
+.sa-pop__x{
+  position:absolute;top:8px;right:10px;width:26px;height:26px;border-radius:8px;
+  font-size:19px;line-height:1;color:rgba(255,255,255,.5);
+}
+.sa-pop__x:hover{background:rgba(255,255,255,.1);color:#fff}
+.sa-pop__item + .sa-pop__item{margin-top:16px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)}
+.sa-pop__kode{display:block;font-size:11px;font-weight:700;letter-spacing:.16em;color:var(--red)}
+.sa-pop__nama{display:block;margin:3px 0 6px;font-size:17px;font-weight:800;letter-spacing:-.02em;color:#fff}
+.sa-pop__addr{display:block;font-size:13px;line-height:1.55;color:rgba(255,255,255,.62)}
+.sa-pop__maps{display:inline-block;margin-top:9px;font-size:13px;font-weight:700;color:var(--blue)}
+.sa-pop__maps:hover{text-decoration:underline}
+@media (prefers-reduced-motion:reduce){
+  .sa-spot,.sa-spot::after{transition:none}
+  .sa-pop{animation:none}
+}
+
 .superarea__globe img{width:100%;object-fit:cover}
 .superarea__globe::before{
   content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
