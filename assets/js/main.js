@@ -279,4 +279,256 @@
       });
     });
   });
+
+  /* ---------- 8. Intro: video pembuka + serah-terima ke hero ----------
+     data-intro di <html> sudah dipasang script inline di <head>.
+
+     Ada dua sumber video dengan sifat yang berbeda, jadi jadwalnya juga beda:
+
+     - animation-transparent.webm (Chrome/Edge/Firefox) beralpha dan TIDAK
+       memuat adegan gudang. Karena itu tirai hitamnya boleh diangkat selagi
+       logonya masih beranimasi: halaman aslinya muncul di belakang logo yang
+       masih hidup, jadi tidak ada momen "video selesai lalu web muncul".
+     - animation-black.mp4 (Safari/iOS) adegan gudangnya ikut terbakar di
+       video. Tirainya baru boleh diangkat SETELAH videonya disembunyikan,
+       sebab gudang versi video dan gudang asli tampil pada skala yang beda
+       (video di-cover seluruh viewport, .hero__media cuma pita rasio 2.314) —
+       kalau keduanya sempat terlihat bersamaan hasilnya bayangan ganda.
+
+     Angka waktunya diukur dari channel alpha animation-transparent.mov:
+     logo memuncak di 2,6s, menyusut, lalu berhenti di 4,4s. Pusatnya selalu
+     di tengah frame (cx 0,499 / cy 0,498). Kalau videonya diganti, ukur ulang.
+
+     WM_* dipakai hanya kalau pengukuran runtime gagal (mis. canvas ditolak). */
+  var ALPHA = { reveal: 2.6, handoff: 3.4 };   /* tirai naik selagi logo hidup */
+  var BLACK = { reveal: 3.2, handoff: 3.2 };   /* tirai naik setelah video hilang */
+  var TRAVEL_MS = 900;               /* lama tulisan berjalan ke posisi hero */
+  var WM_CX = 0.4990, WM_CY = 0.4981, WM_W = 0.3271;
+
+  var intro = document.querySelector('[data-intro-root]');
+  if (intro && document.documentElement.hasAttribute('data-intro')) {
+    var video = intro.querySelector('[data-intro-video]');
+    var wordmark = document.querySelector('.hero__wordmark');
+    var closed = false;
+    var cut;
+
+    var finish = function () {
+      /* Wordmark hero dipulihkan di sini, bukan cuma di jalur serah-terima:
+         lift() menyembunyikannya, jadi kalau intro dilewati setelah tirai naik
+         tulisannya akan hilang permanen. Dipulihkan sebelum overlay dibuang
+         supaya tidak ada frame tanpa tulisan sama sekali. */
+      if (wordmark) wordmark.style.opacity = '';
+      document.documentElement.removeAttribute('data-intro');
+      intro.remove();
+    };
+
+    /* dipakai kalau intro dilewati, videonya gagal, atau geometri tidak
+       terhitung: overlay-nya sekadar memudar tanpa serah-terima tulisan */
+    var closeIntro = function () {
+      if (closed) return;
+      closed = true;
+      intro.classList.add('is-out');
+      clearTimeout(window.__tbmIntroBail);
+      clearTimeout(cut);
+      if (video) { try { video.pause(); } catch (e) {} }
+      intro.addEventListener('transitionend', finish, { once: true });
+      setTimeout(finish, 900);   /* kalau transisi tidak pernah jalan */
+    };
+
+    intro.querySelector('[data-intro-skip]').addEventListener('click', closeIntro);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') closeIntro();
+    });
+
+    if (video) {
+      var bar = intro.querySelector('[data-intro-bar]');
+      var fill = intro.querySelector('[data-intro-bar-fill]');
+      var ghost = intro.querySelector('[data-intro-wordmark]');
+      var skipBtn = intro.querySelector('[data-intro-skip]');
+
+      /* selagi buffering, garisnya ikut seberapa banyak video yang sudah siap */
+      var showBuffer = function () {
+        if (!fill || !video.duration || !video.buffered.length) return;
+        var pct = Math.min(video.buffered.end(video.buffered.length - 1) / video.duration, 1);
+        fill.style.width = (pct * 100) + '%';
+      };
+      video.addEventListener('progress', showBuffer);
+      video.addEventListener('loadedmetadata', showBuffer);
+
+      /* Ukur kotak tulisan putih pada frame video yang SEDANG tampil, supaya
+         serah-terimanya tetap pas walau potongannya meleset beberapa frame
+         (dan tidak perlu diukur ulang manual kalau videonya diganti). Kalau
+         hasilnya tidak masuk akal atau canvas-nya gagal, pakai WM_* di atas. */
+      var measureWordmark = function () {
+        try {
+          var cv = document.createElement('canvas');
+          cv.width = 320; cv.height = 180;
+          var g = cv.getContext('2d', { willReadFrequently: true });
+          g.drawImage(video, 0, 0, cv.width, cv.height);
+          var d = g.getImageData(0, 0, cv.width, cv.height).data;
+          var x0 = 1e9, y0 = 1e9, x1 = -1, y1 = -1;
+          for (var i = 0; i < d.length; i += 4) {
+            /* alpha ikut diperiksa: di WebM beralpha, tepi logo separuh
+               transparan dan tidak boleh ikut menggeser kotaknya */
+            if (d[i + 3] > 128 && d[i] > 210 && d[i + 1] > 210 && d[i + 2] > 210) {
+              var n = i / 4, px = n % cv.width, py = (n - px) / cv.width;
+              if (px < x0) x0 = px;
+              if (px > x1) x1 = px;
+              if (py < y0) y0 = py;
+              if (py > y1) y1 = py;
+            }
+          }
+          var w = (x1 - x0) / cv.width;
+          if (w < 0.15 || w > 0.6) return null;   /* kemungkinan bukan tulisan */
+          return { cx: (x0 + x1) / 2 / cv.width, cy: (y0 + y1) / 2 / cv.height, w: w };
+        } catch (e) {
+          return null;    /* canvas bisa gagal, mis. kalau videonya beda origin */
+        }
+      };
+
+      /* Posisi tulisan video dalam koordinat layar. Ikut object-fit dan
+         transform elemennya, jadi tetap benar di layar potret (contain+scale). */
+      var videoWordmark = function () {
+        var cs = getComputedStyle(video);
+        var w = video.clientWidth, h = video.clientHeight;
+        var nw = video.videoWidth, nh = video.videoHeight;
+        if (!w || !h || !nw || !nh) return null;
+        var fit = cs.objectFit === 'contain'
+          ? Math.min(w / nw, h / nh)
+          : Math.max(w / nw, h / nh);
+        var k = 1;
+        try { k = new DOMMatrixReadOnly(cs.transform).a || 1; } catch (e) {}
+        var m = measureWordmark() || { cx: WM_CX, cy: WM_CY, w: WM_W };
+        var r = video.getBoundingClientRect();   /* skala terpusat: titik tengah tetap */
+        return {
+          cx: r.left + r.width / 2 + (m.cx - 0.5) * nw * fit * k,
+          cy: r.top + r.height / 2 + (m.cy - 0.5) * nh * fit * k,
+          w: m.w * nw * fit * k
+        };
+      };
+
+      var handoff = function () {
+        if (closed) return;
+        var from = wordmark && ghost && videoWordmark();
+        var rest = wordmark && wordmark.getBoundingClientRect();
+        if (!from || !rest || !rest.width) { closeIntro(); return; }
+
+        closed = true;
+        clearTimeout(window.__tbmIntroBail);
+        clearTimeout(cut);
+        try { video.pause(); } catch (e) {}
+
+        /* Videonya langsung disembunyikan, bukan ikut memudar. Gudang di video
+           dan di hero tampil pada skala yang berbeda (video di-cover seluruh
+           viewport, .hero__media cuma pita rasio 2.314), jadi kalau keduanya
+           sempat terlihat bersamaan hasilnya bayangan ganda. Di detik potong
+           frame-nya tinggal ~4% terang, jadi menyembunyikannya tidak kelihatan
+           dan yang tersisa cuma tirai hitam polos. */
+        video.style.visibility = 'hidden';
+        if (bar) bar.hidden = true;
+        if (skipBtn) skipBtn.hidden = true;
+        lift();                              /* di jalur alpha biasanya sudah naik */
+        intro.style.pointerEvents = 'none';  /* klik lolos ke halaman selama travel */
+
+        /* ghost ditaruh di tujuan (posisi istirahat wordmark hero), lalu
+           dilempar balik ke posisi tulisan terakhir di video */
+        ghost.style.left = rest.left + 'px';
+        ghost.style.top = rest.top + 'px';
+        ghost.style.width = rest.width + 'px';
+        ghost.style.transform =
+          'translate(' + (from.cx - (rest.left + rest.width / 2)) + 'px,' +
+          (from.cy - (rest.top + rest.height / 2)) + 'px) ' +
+          'scale(' + (from.w / rest.width) + ')';
+        ghost.style.opacity = '1';
+
+        void ghost.offsetWidth;              /* pastikan posisi awal terpasang dulu */
+        ghost.style.transition = 'transform ' + TRAVEL_MS + 'ms var(--ease)';
+        ghost.style.transform = 'none';
+
+        /* finish() menukar ghost ke wordmark asli; posisinya sudah sama persis */
+        setTimeout(finish, TRAVEL_MS);
+      };
+
+      /* Jadwalnya ditentukan sumber mana yang benar-benar dipilih browser.
+         currentSrc baru terisi setelah <source> diresolusi, jadi dibaca malas. */
+      var T = null;
+      var timings = function () {
+        if (!T) T = /\.webm(\?|$)/i.test(video.currentSrc || '') ? ALPHA : BLACK;
+        return T;
+      };
+
+      var lifted = false;
+      var lift = function () {
+        if (lifted) return;
+        lifted = true;
+        /* Wordmark hero WAJIB disembunyikan bersamaan tirainya, bukan nanti
+           saat serah-terima: begitu tirai hilang halamannya terlihat, dan
+           wordmark hero akan tampil berbarengan dengan logo video yang masih
+           jalan -- dua tulisan sekaligus di layar. */
+        if (wordmark) wordmark.style.opacity = '0';
+        intro.classList.add('is-lifting');   /* tirai hitamnya memudar */
+      };
+
+      var started = false;
+      var onStart = function () {
+        if (started || closed) return;
+        started = true;
+        if (bar) bar.classList.add('is-done');
+        /* buffering sudah lewat: timer kasar di <head> diganti jaring pengaman
+           yang mengikuti jam video, jadi koneksi lambat tidak memotong animasi */
+        clearTimeout(window.__tbmIntroBail);
+        cut = setTimeout(handoff, (timings().handoff - video.currentTime + 2) * 1000);
+      };
+
+      /* Potongnya dipatok ke jam videonya sendiri, bukan jam dinding: kalau
+         playback tersendat, cut-nya ikut mundur dan tidak memotong animasi di
+         tengah. requestVideoFrameCallback akurat per frame; timeupdate dipakai
+         kalau browsernya belum punya (mis. Firefox).
+
+         Sengaja TIDAK cuma bersandar pada event 'playing': videonya autoplay
+         sedangkan main.js dimuat defer, jadi playback sering sudah mulai
+         sebelum baris ini jalan (paling sering saat dibuka lewat file://).
+         Kalau begitu 'playing' sudah lewat, potongannya tidak pernah
+         terjadwal, dan videonya jalan sampai habis. */
+      var reached = function () {
+        if (closed) return true;
+        if (video.currentTime <= 0) return false;
+        onStart();
+        var t = timings();
+        if (video.currentTime >= t.reveal) lift();
+        if (video.currentTime >= t.handoff) { handoff(); return true; }
+        return false;
+      };
+      video.addEventListener('playing', onStart);
+      if (video.requestVideoFrameCallback) {
+        var tick = function () {
+          if (!reached()) video.requestVideoFrameCallback(tick);
+        };
+        video.requestVideoFrameCallback(tick);
+      } else {
+        video.addEventListener('timeupdate', reached);
+      }
+      reached();                    /* kalau videonya sudah keburu jalan */
+
+      /* handoff, bukan closeIntro: kalau videonya keburu habis sebelum cut
+         (mis. file dipangkas lebih pendek), tulisannya tetap menyeberang.
+         handoff sendiri jatuh ke closeIntro kalau geometrinya tak terhitung. */
+      video.addEventListener('ended', handoff);
+      video.addEventListener('error', closeIntro);
+      /* Autoplay bisa ditolak — daripada layar diam, intro dibuka. Tapi
+         penolakannya TIDAK boleh langsung menutup: videonya tanpa track audio,
+         dan Chrome menghentikan media video-only kalau halamannya dianggap
+         background ("paused to save power"), jadi play() ditolak sekali
+         padahal begitu tab-nya dilihat playback-nya tetap jalan. Karena itu
+         diberi tenggang; menyerah hanya kalau benar-benar tidak ada yang jalan. */
+      var play = video.play();
+      if (play && play.catch) {
+        play.catch(function () {
+          setTimeout(function () { if (!started) closeIntro(); }, 1500);
+        });
+      }
+    } else {
+      closeIntro();
+    }
+  }
 })();

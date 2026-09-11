@@ -18,6 +18,7 @@ window.TIBERMAN_I18N = (function () {
     'Traktor': 'Tractor',
     'Loader-Grader': 'Loader & Grader',
     'Buka menu': 'Open menu',
+    'Lewati': 'Skip',
 
     /* --- hero & beranda --- */
     'siap melayani Anda lebih dekat dengan': 'ready to serve you closer through',
@@ -151,6 +152,7 @@ window.TIBERMAN_I18N = (function () {
     'SuperArea': '服务网点',
     'Contact Us': '联系我们',
     'Buka menu': '打开菜单',
+    'Lewati': '跳过',
 
     /* --- hero & beranda --- */
     'siap melayani Anda lebih dekat dengan': '为您提供更贴近的服务',

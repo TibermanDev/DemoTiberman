@@ -9,9 +9,42 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <script>(function(){try{if(localStorage.getItem('tbm-theme')==='dark')document.documentElement.setAttribute('data-theme','dark');var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
-<link rel="stylesheet" href="assets/css/style.css?v=20260902a">
+<!-- Intro diputar tiap kali halaman dibuka/di-refresh. Keputusannya diambil
+     sebelum paint pertama supaya halaman tidak sempat berkedip duluan.
+     Timer di bawah jaring pengaman kalau main.js gagal dimuat; main.js akan
+     mengambil alih dan membatalkannya begitu video benar-benar mulai jalan. -->
+<script>(function(){var d=document.documentElement;
+try{if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){}
+d.setAttribute('data-intro','on');
+window.__tbmIntroBail=setTimeout(function(){
+  d.removeAttribute('data-intro');
+  var i=document.querySelector('[data-intro-root]');
+  if(i)i.remove();
+},12000);})();</script>
+<link rel="stylesheet" href="assets/css/style.css?v=20260907a">
 </head>
 <body>
+
+<!-- ============================= INTRO ============================= -->
+<div class="intro" data-intro-root>
+  <video class="intro__video" data-intro-video
+         autoplay muted playsinline preload="auto" disablepictureinpicture>
+    <!-- WebM beralpha (Chrome/Edge/Firefox): latarnya transparan dan tidak
+         memuat adegan gudang sama sekali, jadi halaman aslinya bisa muncul
+         selagi logonya masih beranimasi. -->
+    <source src="assets/img/animation-transparent.webm" type="video/webm">
+    <!-- Safari/iOS tidak bisa memutar WebM sama sekali, jadi otomatis jatuh
+         ke sini: versi latar hitam, gudangnya ikut terbakar di videonya. -->
+    <source src="assets/img/animation-black.mp4" type="video/mp4">
+  </video>
+  <img class="intro__wordmark" data-intro-wordmark src="assets/img/logo-white.png" alt="" aria-hidden="true">
+  <div class="intro__bar" data-intro-bar><span data-intro-bar-fill></span></div>
+  <button class="intro__skip" type="button" data-intro-skip>Lewati</button>
+</div>
+<noscript><style>.intro{display:none!important}</style></noscript>
+<!-- Kalau intronya tidak jadi diputar, elemennya langsung dibuang di sini juga
+     — video 6 MB itu tetap diunduh browser walau CSS-nya display:none. -->
+<script>if(!document.documentElement.hasAttribute('data-intro')){var i=document.querySelector('[data-intro-root]');if(i)i.remove();}</script>
 
 <!-- ============================= NAVBAR ============================= -->
 <header class="nav">
@@ -444,8 +477,8 @@
   </div>
 </footer>
 
-<script src="assets/js/superarea-spots.js?v=20260902a" defer></script>
-<script src="assets/js/i18n.js?v=20260902a" defer></script>
-<script src="assets/js/main.js?v=20260902a" defer></script>
+<script src="assets/js/superarea-spots.js?v=20260907a" defer></script>
+<script src="assets/js/i18n.js?v=20260907a" defer></script>
+<script src="assets/js/main.js?v=20260907a" defer></script>
 </body>
 </html>
