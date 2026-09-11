@@ -819,3 +819,119 @@ ul{margin:0;padding:0;list-style:none}
   .bento{margin-inline:0;padding-inline:22px}
   .bento__cell{padding:40px 32px}
 }
+
+/* ==========================================================================
+   INTRO — animasi pembuka yang menutupi halaman sampai videonya selesai.
+   Dinyalakan lewat data-intro di <html> (dipasang script inline di <head>),
+   jadi kalau intro dilewati overlay-nya tidak pernah ikut dirender.
+   ========================================================================== */
+.intro{display:none}
+
+html[data-intro] ,
+html[data-intro] body{overflow:hidden}
+
+html[data-intro] .intro{
+  display:block;
+  position:fixed;
+  inset:0;
+  z-index:200;              /* di atas .nav (80) dan semua dropdown (95) */
+  background:#000;
+  opacity:1;
+  /* opacity dipakai saat intro dilewati; background-color dipakai saat
+     serah-terima ke hero -- tirai hitamnya memudar sendiri sementara tulisan
+     di dalam overlay tetap kelihatan penuh. */
+  transition:opacity .4s var(--ease),background-color .75s var(--ease);
+}
+html[data-intro] .intro.is-out{opacity:0;pointer-events:none}
+/* Cuma tirainya yang memudar. pointer-events sengaja TIDAK dimatikan di sini:
+   di jalur WebM tirai naik 0,8 detik sebelum serah-terima, dan tombol Lewati
+   harus tetap bisa diklik selama jeda itu (dimatikan di main.js saat handoff). */
+html[data-intro] .intro.is-lifting{background-color:transparent}
+
+.intro__video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+/* Garis loading selagi videonya di-buffer — hilang begitu playback jalan.
+   Tanpa ini refresh di koneksi lambat cuma menampilkan layar hitam diam. */
+.intro__bar{
+  position:absolute;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  width:min(180px,40vw);
+  height:2px;
+  border-radius:2px;
+  background:rgba(255,255,255,.18);
+  overflow:hidden;
+  opacity:0;
+  transition:opacity .35s var(--ease);
+}
+/* baru ditampilkan kalau buffering-nya memang terasa (>.4s), biar load cepat
+   tidak kedipan garis sekilas */
+html[data-intro] .intro__bar{animation:intro-skip-in .3s var(--ease) .4s forwards}
+.intro__bar.is-done{animation:none;opacity:0}
+.intro__bar span{
+  display:block;
+  width:0;
+  height:100%;
+  border-radius:2px;
+  background:var(--red);
+  transition:width .25s var(--ease);
+}
+
+/* Tulisan yang menyeberang dari video ke hero. Sengaja milik overlay, bukan
+   memakai .hero__wordmark: .hero__media punya overflow:hidden dan tingginya
+   dikunci 420px di layar sempit, jadi titik awal di tengah viewport jatuh di
+   luar pita hero dan tulisannya akan terpotong di layar tinggi. */
+.intro__wordmark{
+  position:absolute;
+  left:0;
+  top:0;
+  opacity:0;
+  pointer-events:none;
+  filter:drop-shadow(0 12px 40px rgba(0,0,0,.45));   /* samakan dgn .hero__wordmark img */
+}
+
+.intro__skip{
+  position:absolute;
+  right:24px;
+  bottom:24px;
+  padding:9px 20px;
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:999px;
+  background:rgba(0,0,0,.35);
+  color:#fff;
+  font:500 13px/1 'Montserrat',system-ui,sans-serif;
+  letter-spacing:.02em;
+  cursor:pointer;
+  opacity:0;
+  transition:opacity .4s var(--ease),background .2s var(--ease),border-color .2s var(--ease);
+}
+/* tombolnya baru muncul setelah sedetik biar tidak mengganggu awal animasi */
+html[data-intro] .intro__skip{animation:intro-skip-in .4s var(--ease) 1.2s forwards}
+.intro__skip:hover{background:rgba(0,0,0,.6);border-color:#fff}
+.intro__skip:focus-visible{outline:2px solid #fff;outline-offset:3px}
+
+@keyframes intro-skip-in{to{opacity:1}}
+
+/* Layar potret: videonya 16:9, kalau di-crop logonya ikut terpotong. Jadi
+   dimuat utuh lalu diperbesar — latar videonya hitam pekat sama seperti
+   overlay-nya, jadi bagian yang meluber tidak kelihatan. */
+@media (max-aspect-ratio:1/1){
+  .intro{overflow:hidden}
+  .intro__video{object-fit:contain;transform:scale(1.5)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .intro{display:none!important}
+}
+
+@media (max-width:640px){
+  /* di layar sempit bar-nya naik ke atas tombol Lewati biar tidak berdempetan */
+  .intro__bar{bottom:62px}
+  .intro__skip{right:16px;bottom:16px;padding:8px 16px;font-size:12px}
+}
