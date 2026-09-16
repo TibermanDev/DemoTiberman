@@ -89,30 +89,84 @@ window.__tbmIntroBail=setTimeout(function(){
 
 <main>
 
-  <!-- ============================= HERO ============================= -->
-  <section class="hero">
-    <div class="hero__media">
-      <img src="assets/img/hero-warehouse-2.webp" alt="Tim Tiberman di gudang ban" fetchpriority="high">
-      <div class="hero__wordmark"><img src="assets/img/logo-white.png" alt="Tiberman"></div>
-    </div>
-  </section>
+  <!-- hero dipaku (position:sticky) sampai .superarea lewat; SuperArea yang
+       opaque itulah yang naik menutupinya, jadi TIDAK ada jarak scroll tambahan. -->
+  <div class="hero-stack">
+    <!-- ============================= HERO ============================= -->
+    <section class="hero">
+      <div class="hero__stage">
+        <div class="hero__media">
+          <img src="assets/img/hero-warehouse-2.webp" alt="Tim Tiberman di gudang ban" fetchpriority="high">
+          <div class="hero__wordmark"><img src="assets/img/logo-white.png" alt="Tiberman"></div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ============================= 15 SUPERAREA ============================= -->
-  <section class="superarea" id="superarea">
-    <div class="superarea__copy">
-      <p class="eyebrow reveal">siap melayani Anda lebih dekat dengan</p>
-      <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
-      <a class="btn btn--primary reveal" data-delay="160" href="#contact">Check it !</a>
+    <!-- Tutup lengkung: menjiplak lengkung yang sudah tercetak di
+         hero-warehouse-2.webp (parabola puncak 13,94% tinggi gambar di tengah,
+         3,71% di pinggir). Waktu belum discroll dia bertindih PERSIS di atas
+         lengkung cetakan itu — hitam di atas hitam, jadi tidak kelihatan; begitu
+         SuperArea naik, tepi yang menutupi gambar jadi melengkung, bukan lurus.
+
+         Ditaruh di pembungkus, bukan di dalam .superarea, karena section itu
+         overflow:hidden — elemen yang menjorok ke atas tepinya bakal kepotong.
+
+         margin-bottom:-1px BUKAN kosmetik: tepi bawah SVG dan tepi atas section
+         jatuh di baris piksel pecahan yang sama, dua-duanya di-antialias ~72%
+         hitam dan tumpukannya cuma ~92% — muncul garis tipis selebar layar.
+         Ditindihkan 1px supaya baris itu ketutup hitam penuh. -->
+    <div class="sa-cover">
+      <svg class="sa-cover__cap" viewBox="0 0 1000 61.3" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 45 Q500 -45 1000 45 L1000 61.3 L0 61.3 Z"/>
+      </svg>
+      <!-- ============================= 15 SUPERAREA ============================= -->
+      <!-- Sorot ditaruh di LUAR .superarea dan paling akhir: (a) section itu
+           overflow:hidden, jadi kalau di dalam, ekor yang naik ke gambar hero
+           bakal kepotong rata di tepi lengkung; (b) ditaruh paling akhir supaya
+           tercetak di atas tutup lengkung dan gambar hero, sehingga
+           mix-blend-mode:screen-nya benar-benar mencampur cahaya dengan
+           gambarnya — bukan berhenti mendadak di batas section. -->
+      <section class="superarea" id="superarea">
+        <div class="superarea__copy">
+          <p class="eyebrow reveal">siap melayani Anda lebih dekat dengan</p>
+          <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
+          <a class="btn btn--primary reveal" data-delay="160" href="#contact">Check it !</a>
+        </div>
+      </section>
+      <div class="superarea__glow" aria-hidden="true"></div>
+      <!-- Bumi sengaja di LUAR <section> dan sesudah sorot: yang terakhir di DOM
+           tercetak paling atas, jadi bumi menutupi tepi bawah sorot. Potongan
+           PNG sorot yang mentok di sudut itu jadi tersembunyi di balik bumi,
+           bukan berhenti sebagai garis lurus di tengah angkasa. -->
+      <div class="superarea__globe" data-superarea>
+        <!-- pin sudah tercetak di gambar; tombolnya dibuat assets/js/superarea-spots.js -->
+        <img class="superarea__earth" src="assets/img/earth-location.webp" width="2880" height="1172" loading="lazy" decoding="async" alt="Peta sebaran SuperArea Tiberman di Indonesia">
+      </div>
     </div>
-    <div class="superarea__globe" data-superarea>
-      <!-- pin sudah tercetak di gambar; tombolnya dibuat assets/js/superarea-spots.js -->
-      <img class="superarea__earth" src="assets/img/earth-location.webp" width="2880" height="1172" loading="lazy" decoding="async" alt="Peta sebaran SuperArea Tiberman di Indonesia">
-    </div>
-  </section>
+  </div>
 
   <!-- ============================= IMPORTIR + KATEGORI ============================= -->
   <section class="importir" id="produk">
-    <img class="importir__bg" src="assets/img/category-section.webp" alt="Deretan ban truk dan alat berat Tiberman di gudang" loading="lazy" decoding="async">
+    <!-- Latar section ini video. Posternya diambil dari frame pertama video
+         itu sendiri (bukan category-section.webp yang bannya sudah terlanjur
+         di depan), supaya tidak ada lompatan gambar waktu playback mulai —
+         dan tetap jadi latar kalau videonya gagal dimuat.
+
+         Dua sumber, sama seperti video intro: AV1/WebM dulu (jauh lebih kecil,
+         didukung Chrome/Edge/Firefox dan Safari 17+ di perangkat yang mampu),
+         sisanya otomatis jatuh ke H.264/MP4.
+
+         Sengaja TANPA atribut autoplay: atribut itu bikin Chrome tetap
+         mengunduh videonya walau preload="none", jadi pemutarannya dipicu
+         dari main.js begitu sectionnya masuk viewport. -->
+    <video class="importir__bg" data-bg-video
+           muted playsinline preload="none"
+           poster="assets/img/tires-moving-poster.webp"
+           aria-hidden="true" tabindex="-1" disablepictureinpicture>
+      <source src="assets/img/tires-moving.webm" type="video/webm">
+      <source src="assets/img/tires-moving.mp4" type="video/mp4">
+    </video>
+    <div class="importir__scrim" aria-hidden="true"></div>
     <div class="importir__inner">
       <h2 class="reveal">Importir Ban Truk &amp; Alat Berat<br>TERPERCAYA</h2>
       <div class="pills reveal" data-delay="120">
@@ -127,7 +181,26 @@ window.__tbmIntroBail=setTimeout(function(){
 
   <!-- ============================= AKSESORIS ============================= -->
   <section class="accessories">
-    <div class="container">
+    <!-- Tutup lengkung yang menindih bagian bawah section video di atasnya.
+         DUA path dengan bentuk identik, yang kedua digeser 12 satuan ke bawah:
+         yang putih tercetak duluan, yang abu menimpanya, jadi yang tersisa di
+         antara keduanya adalah pita putih setebal 12/80 tinggi kotak yang
+         mengikuti lengkungnya persis.
+
+         Titik ujung (a) dan titik kendali (c) tiap path simetris: puncak = (a+c)/2
+         dan kedalaman busur = (a-c)/2. Sekarang 22/-22 (puncak 0) dan 40/-4
+         (puncak 18) — kedalaman 22 satuan, pita putih 18 satuan. Puncak path
+         putih HARUS >= 0; kalau negatif, bagian tengahnya terpotong tepi viewBox
+         dan pita putihnya menipis di tengah sementara tetap tebal di pinggir. -->
+    <svg class="accessories__cap" viewBox="0 0 1000 80" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path class="accessories__cap-gap" d="M0 30 Q500 -30 1000 30 L1000 80 L0 80 Z"/>
+      <path d="M0 48 Q500 -12 1000 48 L1000 80 L0 80 Z"/>
+    </svg>
+    <!-- Sengaja BUKAN .container: kelas itu dipakai hampir semua section dan
+         mengunci lebar ke 1160px. Section ini perlu melebar sampai mepet tepi
+         layar, jadi pembungkusnya sendiri supaya section lain tidak ikut
+         berubah. -->
+    <div class="accessories__wrap">
       <div class="accessories__grid">
         <div class="accessories__art reveal">
           <img src="assets/img/accessories-2.webp" alt="Ban, velg, dan aksesoris pendukung" loading="lazy">
@@ -141,24 +214,40 @@ window.__tbmIntroBail=setTimeout(function(){
     </div>
   </section>
 
+  <!-- Rel kartu kategori. Sengaja di luar .container supaya bisa full-bleed:
+       kartu di ujung kiri/kanan memang boleh terpotong tepi layar, itu yang
+       memberi sinyal "masih ada lanjutannya". Gerak otomatisnya dipasang
+       main.js lewat data-velg-rail. -->
   <div class="velg-wrap">
-    <div class="container">
-      <div class="velg-cards">
-        <article class="velg-card reveal">
-          <div class="velg-card__img"><img src="assets/img/velg-heavy-2.webp" alt="Velg heavy duty" loading="lazy"></div>
-          <div class="velg-card__body">
-            <h3>VELG<span>Heavy-Duty</span></h3>
-            <a class="btn btn--primary" href="katalog.html">Check it !</a>
-          </div>
-        </article>
-        <article class="velg-card reveal" data-delay="100">
-          <div class="velg-card__img"><img src="assets/img/velg-light-2.webp" alt="Velg light truck" loading="lazy"></div>
-          <div class="velg-card__body">
-            <h3>VELG<span>Light Truck</span></h3>
-            <a class="btn btn--primary" href="katalog.html">Check it !</a>
-          </div>
-        </article>
-      </div>
+    <div class="velg-cards" data-velg-rail>
+      <article class="velg-card reveal" style="--ar:1203/999">
+        <div class="velg-card__img"><img src="assets/img/velg-heavy-2.webp" alt="Velg heavy duty" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>VELG<span>Heavy-Duty</span></h3>
+          <a class="btn btn--primary" href="katalog.html">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card reveal" data-delay="100" style="--ar:1234/919">
+        <div class="velg-card__img"><img src="assets/img/velg-light-2.webp" alt="Velg light truck" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>VELG<span>Light Truck</span></h3>
+          <a class="btn btn--primary" href="katalog.html">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card velg-card--tyre reveal" data-delay="200" style="--ar:1720/952">
+        <div class="velg-card__img"><img src="assets/img/otr-tyre.png" alt="Ban OTR untuk alat berat" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>OTR TYRE<span>(Off The Road)</span></h3>
+          <a class="btn btn--primary" href="katalog.html?unit=mining-truck">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card velg-card--tyre reveal" data-delay="300" style="--ar:1348/920">
+        <div class="velg-card__img"><img src="assets/img/tbr-tyre.png" alt="Ban TBR untuk truk dan bus" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>TBR TYRE<span>(Truck Bus)</span></h3>
+          <a class="btn btn--primary" href="katalog.html?unit=truk-bus">Check it !</a>
+        </div>
+      </article>
     </div>
   </div>
 
