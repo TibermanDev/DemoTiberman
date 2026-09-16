@@ -280,7 +280,184 @@
     });
   });
 
-  /* ---------- 8. Intro: video pembuka + serah-terima ke hero ----------
+  /* ---------- 8. Video latar section (Importir) ----------
+     Videonya preload="none" dan baru dimuat + diputar begitu sectionnya masuk
+     viewport — supaya kunjungan yang tidak pernah scroll sampai sini tidak ikut
+     mengunduh videonya. Sampai itu terjadi yang tampil adalah poster-nya, yaitu
+     frame pertama video itu sendiri, jadi mulainya playback tidak kelihatan
+     melompat.
+
+     TIDAK looping (durasinya 6 detik): sekali jalan lalu <video> menahan frame
+     terakhir sebagai latar diam. Yang memulai ulang adalah KEDATANGAN pengguna —
+     tiap kali section ini masuk layar lagi, videonya di-rewind ke 0 dan diputar
+     dari awal. */
+  var bgVideos = document.querySelectorAll('[data-bg-video]');
+  if (bgVideos.length) {
+    var noMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var startBg = function (v) {
+      if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+      var pr = v.play();
+      if (pr && pr.catch) { pr.catch(function () {}); }
+    };
+    if (noMotion) {
+      /* Hemat gerak: cukup posternya, videonya tidak diunduh sama sekali. */
+    } else if (!('IntersectionObserver' in window)) {
+      bgVideos.forEach(startBg);
+    } else {
+      /* Ambangnya rasio, bukan rootMargin: dengan rootMargin videonya mulai
+         200px SEBELUM sectionnya kelihatan, dan karena durasinya cuma 6 detik,
+         pada scroll pelan dia bisa habis sebelum sectionnya benar-benar terlihat.
+         PLAY_AT 0.35 = baru diputar ketika sepertiga section sudah di layar. */
+      var PLAY_AT = 0.35;
+      var bgOn = new WeakSet();   /* videonya sedang "dikunjungi" atau belum */
+
+      var bgIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          var v = e.target;
+          if (e.intersectionRatio >= PLAY_AT) {
+            /* Hanya sekali tiap kedatangan: tanpa penjaga ini, setiap entry baru
+               (mis. saat rasio naik-turun di ambang) akan me-rewind videonya di
+               tengah jalan. */
+            if (bgOn.has(v)) return;
+            bgOn.add(v);
+            v.currentTime = 0;
+            startBg(v);
+          } else if (!e.isIntersecting) {
+            /* Sudah keluar layar sepenuhnya -> "kunjungan" dianggap selesai,
+               jadi kedatangan berikutnya memutar ulang dari awal. */
+            bgOn.delete(v);
+            if (!v.paused) v.pause();
+          }
+        });
+      }, { threshold: [0, PLAY_AT] });
+      bgVideos.forEach(function (v) { bgIO.observe(v); });
+
+      /* Chrome menjeda sendiri media video-only (video ini tanpa track audio)
+         waktu tab-nya dianggap latar belakang. Karena status IntersectionObserver
+         tidak berubah saat pindah tab, tanpa ini videonya diam selamanya begitu
+         pengguna kembali — inilah yang bikin terasa "kadang jalan kadang tidak".
+         Dilanjutkan dari posisi terakhir, bukan diulang, supaya tidak menyentak. */
+      document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState !== 'visible') return;
+        bgVideos.forEach(function (v) {
+          if (bgOn.has(v) && v.paused && !v.ended) startBg(v);
+        });
+      });
+    }
+  }
+
+  /* ---------- 9. Rel kartu kategori: carousel otomatis ----------
+     Bukan geseran halus terus-menerus, tapi per KARTU: diam sebentar, lompat
+     satu kartu dengan animasi pendek, diam lagi. Begitu kartu terakhir sudah
+     mentok kanan, arahnya dibalik ke kiri, dan seterusnya (ping-pong).
+
+     Perpindahannya dianimasikan sendiri per frame, bukan lewat
+     scrollTo({behavior:'smooth'}): durasi smooth bawaan browser tidak bisa
+     diatur dan beda-beda antar mesin, sedangkan ritme carousel butuh durasi
+     yang pasti.
+
+     Yang menghentikan sementara: kursor/jari di atas rel, ada elemen di dalamnya
+     yang dapat fokus keyboard, dan rel sedang di luar layar. Kalau pengguna
+     minta hemat gerak, seluruh fiturnya tidak dipasang — relnya tetap bisa
+     digeser manual. */
+  var rail = document.querySelector('[data-velg-rail]');
+  if (rail && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    var RAIL_WAIT = 2200;   /* diam di tiap kartu, ms */
+    var RAIL_MOVE = 620;    /* lama perpindahan satu kartu, ms */
+    var railDir = 1, railIdx = 0, railPaused = false, railSeen = true;
+    var railAnim = null, railTimer = 0;
+
+    var railMax = function () { return rail.scrollWidth - rail.clientWidth; };
+
+    /* Posisi scroll supaya kartu ke-i rata kiri. offsetLeft dihitung dari tepi
+       dalam rel (sudah termasuk padding), jadi paddingnya dikurangi lagi biar
+       kartunya benar-benar sejajar tepi kiri area yang terlihat. */
+    var railTarget = function (i) {
+      var card = rail.children[i];
+      if (!card) return null;
+      var pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
+      return Math.min(Math.max(card.offsetLeft - pad, 0), railMax());
+    };
+
+    var easeInOut = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
+
+    var railGlide = function (to) {
+      var from = rail.scrollLeft, delta = to - from, t0 = 0;
+      if (Math.abs(delta) < 1) { railQueue(); return; }
+      var frame = function (now) {
+        if (!t0) t0 = now;
+        var p = Math.min((now - t0) / RAIL_MOVE, 1);
+        rail.scrollLeft = from + delta * easeInOut(p);
+        if (p < 1) railAnim = requestAnimationFrame(frame);
+        else { railAnim = null; railQueue(); }
+      };
+      railAnim = requestAnimationFrame(frame);
+    };
+
+    /* Kartu berikutnya searah railDir. Kalau kartu itu tidak ada, atau posisinya
+       sama saja dengan sekarang (kartu-kartu terakhir sudah muat semua di layar),
+       berarti sudah mentok: arah dibalik. */
+    var railNext = function () {
+      if (railPaused || !railSeen || railMax() <= 1) { railQueue(); return; }
+      var to = railTarget(railIdx + railDir);
+      var now = rail.scrollLeft;
+      if (to === null || (railDir > 0 && to <= now + 1)) {
+        railDir = -railDir;
+        railIdx = railDir > 0 ? 0 : rail.children.length - 1;
+        to = railTarget(railIdx);
+        if (to === null || Math.abs(to - now) < 1) { railQueue(); return; }
+      } else {
+        railIdx += railDir;
+      }
+      railGlide(to);
+    };
+
+    function railQueue() {
+      clearTimeout(railTimer);
+      railTimer = setTimeout(railNext, RAIL_WAIT);
+    }
+
+    /* Geseran manual (jari/trackpad) menghentikan animasi yang sedang jalan dan
+       menyamakan railIdx dengan kartu terdekat, supaya lompatan berikutnya
+       berangkat dari tempat pengguna berhenti. */
+    var railSync = function () {
+      var best = 0, bestD = Infinity;
+      for (var i = 0; i < rail.children.length; i++) {
+        var t = railTarget(i);
+        if (t === null) continue;
+        var d = Math.abs(t - rail.scrollLeft);
+        if (d < bestD) { bestD = d; best = i; }
+      }
+      railIdx = best;
+      if (rail.scrollLeft >= railMax() - 1) railDir = -1;
+      else if (rail.scrollLeft <= 1) railDir = 1;
+    };
+
+    var railPause = function () {
+      railPaused = true;
+      if (railAnim) { cancelAnimationFrame(railAnim); railAnim = null; }
+    };
+    var railResume = function () { railPaused = false; railSync(); railQueue(); };
+
+    rail.addEventListener('pointerenter', railPause);
+    rail.addEventListener('pointerleave', railResume);
+    rail.addEventListener('pointerdown', railPause);
+    rail.addEventListener('pointercancel', railResume);
+    rail.addEventListener('touchstart', railPause, { passive: true });
+    rail.addEventListener('touchend', railResume, { passive: true });
+    rail.addEventListener('focusin', railPause);
+    rail.addEventListener('focusout', railResume);
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        railSeen = entries[0].isIntersecting;
+      }, { threshold: 0 }).observe(rail);
+    }
+
+    railQueue();
+  }
+
+  /* ---------- 10. Intro: video pembuka + serah-terima ke hero ----------
      data-intro di <html> sudah dipasang script inline di <head>.
 
      Ada dua sumber video dengan sifat yang berbeda, jadi jadwalnya juga beda:
