@@ -251,10 +251,56 @@ window.__tbmIntroBail=setTimeout(function(){
     </div>
   </div>
 
-  <!-- ============================= KENAPA HARUS TIBERMAN ============================= -->
-  <section class="why-banner" id="kenapa">
-    <img class="why-banner__bg" src="assets/img/banner-tyre.webp" alt="" aria-hidden="true" width="2880" height="684" loading="lazy" decoding="async">
-    <h2>Kenapa Harus Tiberman ?</h2>
+  <!-- ============================= KENAPA HARUS TIBERMAN =============================
+       Video gudang yang menyusut jadi isi tulisan, digerakkan oleh scroll.
+
+       .why__track yang tinggi itu jarak scroll animasinya; .why__stage dipaku
+       sticky setinggi layar selama track itu lewat. main.js cuma menghitung
+       kemajuan scroll jadi tiga custom property; seluruh geraknya transform +
+       opacity, jadi tidak ada layout ulang per frame.
+
+       Teksnya HTML biasa (bukan <text> SVG) supaya bisa wrap dan ikut clamp()
+       di layar sempit. Efek "video di dalam huruf" datang dari mix-blend-mode:
+       lapisan .why__mask berwarna latar halaman menutupi video, dan huruf
+       hitamnya jadi lubang — screen dengan putih = putih (menutup), screen
+       dengan hitam = biarkan backdrop (video tembus). Di mode gelap dibalik:
+       lapisan hitam + huruf putih + multiply. -->
+  <section class="why" id="kenapa" data-why>
+    <div class="why__track">
+      <div class="why__stage">
+        <video class="why__video" data-bg-video
+               muted playsinline loop preload="none"
+               poster="assets/img/warehouse-dark.webp"
+               aria-hidden="true" tabindex="-1" disablepictureinpicture>
+          <!-- versi web: 1920x1080 CRF 30, 8 MB (aslinya 2560x1440 / 28,4 MB).
+               1440p sempat dicoba dan hasilnya pecah: di layar 1920 dia harus
+               di-upscale 1,33x, artefak kompresinya jadi kelihatan. -->
+          <source src="assets/img/warehouse-loop-web.mp4?v=1920b" type="video/mp4">
+        </video>
+        <!-- Kedua lapisan isinya SAMA PERSIS, termasuk baris kecil di atas judul.
+             Di lapisan penutup baris itu diberi warna latar (jadi tak terlihat
+             dan tidak ikut jadi lubang), tapi tetap memakan ruang — kalau cuma
+             ada di salah satu lapisan, posisi judulnya bergeser dan pergantian
+             ke teks merah terlihat meloncat. -->
+        <div class="why__mask" aria-hidden="true">
+          <div class="why__inner">
+            <p>Dari sekian banyak supplier lain</p>
+            <span>Kenapa Harus Tiberman ?</span>
+          </div>
+        </div>
+        <!-- Salinan tulisan yang sama, berwarna merah, dimunculkan di ujung
+             animasi. Jadi hurufnya berisi video selama menyusut, lalu berubah
+             jadi merah begitu sampai ukuran akhir — pola yang sama dipakai
+             halaman MacBook Pro (video di dalam huruf -> teks biru muda). -->
+        <div class="why__tint" aria-hidden="true">
+          <div class="why__inner">
+            <p>Dari sekian banyak supplier lain</p>
+            <span>Kenapa Harus Tiberman ?</span>
+          </div>
+        </div>
+        <h2 class="sr-only">Kenapa Harus Tiberman ?</h2>
+      </div>
+    </div>
   </section>
 
   <!-- Stok Aman -->

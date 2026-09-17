@@ -457,7 +457,183 @@
     railQueue();
   }
 
-  /* ---------- 10. Intro: video pembuka + serah-terima ke hero ----------
+  /* ---------- 10. "Kenapa Harus Tiberman": video menyusut jadi isi tulisan ----------
+     Digerakkan scroll, bukan waktu: posisi .why__track terhadap layar diubah
+     jadi angka 0..1, lalu angka itu dipetakan ke tiga custom property yang
+     dipakai CSS. Yang bergerak cuma transform + opacity — tidak ada properti
+     yang memicu layout, jadi aman dijalankan tiap frame.
+
+     Pembacaan (getBoundingClientRect) dan penulisan (style.setProperty) sengaja
+     dikumpulkan di satu callback requestAnimationFrame: kalau dikerjakan
+     langsung di handler scroll, baca-tulis bergantian memaksa browser
+     menghitung ulang layout berkali-kali dalam satu frame. */
+  var why = document.querySelector('[data-why]');
+  if (why) {
+    var whyTrack = why.querySelector('.why__track');
+    var whyStage = why.querySelector('.why__stage');
+    var whyCalm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var whySpan = why.querySelector('.why__mask span');
+    var whyInner = why.querySelector('.why__mask .why__inner');
+
+    /* Skala awal tulisan DIHITUNG, bukan dipatok. Syaratnya cuma satu: pada skala
+       itu batang huruf jangkarnya harus lebih lebar dari layar, supaya di awal
+       yang terlihat murni video. Angka tetap selalu salah di salah satu kondisi —
+       210 cukup untuk batang "T" (~0,13em) tapi kurang untuk "a" (~0,09em), dan
+       lebar layar sendiri berubah-ubah. Dihitung ulang tiap kali jangkarnya
+       diukur (resize, font selesai dimuat). */
+    var WHY_MARGIN = 1.25;    /* dilebihkan 25% biar tepinya tidak mepet layar */
+    var WHY_TEXT_S = 210;     /* nilai awal; dihitung ulang oleh whyAnchor() */
+    var WHY_VIDEO_S = 1.05;   /* video ikut menyusut sedikit, biar terasa "mundur" */
+    var WHY_TINT_AT = 0.72;   /* teks merah mulai muncul di 72% perjalanan */
+    var whyP = -1, whyTick = false;
+
+    /* Mencari titik TERBAIK di dalam satu huruf untuk dijadikan pusat zoom, dan
+       sekaligus skala minimum yang dibutuhkan — dengan MENGUKUR piksel glyph-nya,
+       bukan menebak.
+
+       Kenapa tidak boleh ditebak: tiap huruf beda bentuk. Batang "T" lewat tengah
+       kotak glyph, "a" tidak — tengahnya justru lubang, dan sisi kanannya (yang
+       sempat saya pakai, 0,84 lebar) ternyata cuma menyisakan 2px tinta ke kanan
+       sehingga sebagian layar tetap putih. Yang dicari di sini: untuk tiap deretan
+       tinta mendatar, ambil titik tengahnya, ukur juga tinta menurun di kolom itu,
+       lalu pilih titik yang menuntut skala paling kecil untuk menutupi layar.
+       Hasilnya: pecahan posisi (ax, ay) di dalam kotak tinta + skala minimumnya. */
+    var whyInk = function (fontStr, ch, fpx, vw, vh) {
+      var N = 120, c = document.createElement('canvas'), x = c.getContext('2d');
+      var probe = fontStr.replace(/\d+(\.\d+)?px/, N + 'px');
+      x.font = probe;
+      var m = x.measureText(ch);
+      var adv = Math.ceil(m.width);
+      var asc = Math.ceil(m.actualBoundingBoxAscent), desc = Math.ceil(m.actualBoundingBoxDescent);
+      if (!adv || !(asc + desc)) return null;
+      c.width = adv + 4; c.height = asc + desc + 4;
+      x.font = probe; x.textBaseline = 'alphabetic'; x.fillStyle = '#000';
+      x.fillText(ch, 2, asc + 2);
+      var d = x.getImageData(0, 0, c.width, c.height).data;
+      var ink = function (px, py) {
+        return px >= 0 && py >= 0 && px < c.width && py < c.height && d[(py * c.width + px) * 4 + 3] > 128;
+      };
+      var k = fpx / N;          /* 1 satuan canvas = k piksel di layar */
+      var best = null, y, xx, x0, mid, half, up, dn, i, halfV, perlu;
+      for (y = 1; y < c.height - 1; y += 2) {
+        x0 = null;
+        for (xx = 0; xx <= c.width; xx++) {
+          if (xx < c.width && ink(xx, y)) { if (x0 === null) x0 = xx; continue; }
+          if (x0 === null) continue;
+          mid = Math.round((x0 + xx - 1) / 2);
+          half = (xx - x0) / 2;
+          up = 0; dn = 0;
+          for (i = y - 1; ink(mid, i); i--) up++;
+          for (i = y + 1; ink(mid, i); i++) dn++;
+          halfV = Math.min(up, dn);
+          if (half > 0 && halfV > 0) {
+            /* Skala minimum: tinta harus mencapai setengah layar ke tiap arah. */
+            perlu = Math.max(vw / (2 * half * k), vh / (2 * halfV * k));
+            if (!best || perlu < best.perlu) {
+              best = { perlu: perlu, ax: (mid - 2) / adv, ay: (y - 2) / (asc + desc) };
+            }
+          }
+          x0 = null;
+        }
+      }
+      return best;
+    };
+
+    /* Titik pusat zoom diukur dari posisi huruf "a" TERAKHIR pada "Kenapa".
+       Range dipakai karena itu satu-satunya cara mengukur letak satu glyph di
+       dalam teks yang mengalir — ukurannya ikut clamp() dan wrap-nya beda per
+       lebar layar.
+
+       Skalanya dinolkan dulu sebelum mengukur: getBoundingClientRect memberi
+       kotak SETELAH transform, jadi kalau diukur saat teks masih membesar,
+       hasilnya ikut terkali skala itu. */
+    var whyAnchor = function () {
+      var node = whySpan.firstChild;
+      if (!node) return;
+      /* +5 = huruf "a" terakhir pada "Kenapa" (K-e-n-a-p-a). */
+      var i = whySpan.textContent.indexOf('Kenapa');
+      if (i < 0) return;
+      i += 5;
+      var keep = why.style.getPropertyValue('--why-ts');
+      why.style.setProperty('--why-ts', '1');
+
+      var rng = document.createRange();
+      rng.setStart(node, i);
+      rng.setEnd(node, i + 1);
+      /* Kotaknya diukur terhadap .why__inner, bukan <span>, karena yang
+         diskalakan sekarang elemen itu — transform-origin harus berada di ruang
+         koordinat elemen yang ditransform. */
+      var g = rng.getBoundingClientRect(), box = whyInner.getBoundingClientRect();
+
+      if (g.width) {
+        var cs = getComputedStyle(whySpan);
+        var fpx = parseFloat(cs.fontSize);
+        var font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        var spot = whyInk(font, whySpan.textContent.charAt(i), fpx, window.innerWidth, window.innerHeight);
+
+        /* Kotak Range itu tinggi BARIS, bukan tinggi huruf. Posisi garis alas
+           dihitung dari metrik font supaya pecahan vertikal hasil pemindaian
+           bisa dipetakan ke tempat yang benar. */
+        var cv = document.createElement('canvas').getContext('2d');
+        cv.font = font;
+        var mm = cv.measureText(whySpan.textContent.charAt(i));
+        var fbA = mm.fontBoundingBoxAscent || mm.actualBoundingBoxAscent;
+        var fbD = mm.fontBoundingBoxDescent || mm.actualBoundingBoxDescent;
+        var alas = (g.height - (fbA + fbD)) / 2 + fbA;          /* relatif g.top */
+        var tintaAtas = alas - mm.actualBoundingBoxAscent;
+        var tintaTinggi = mm.actualBoundingBoxAscent + mm.actualBoundingBoxDescent;
+
+        var ax = spot ? spot.ax : 0.5, ay = spot ? spot.ay : 0.5;
+        why.style.setProperty('--why-ox', (g.left - box.left + g.width * ax).toFixed(1) + 'px');
+        why.style.setProperty('--why-oy', (g.top - box.top + tintaAtas + tintaTinggi * ay).toFixed(1) + 'px');
+        if (spot) WHY_TEXT_S = Math.max(40, Math.min(spot.perlu * WHY_MARGIN, 600));
+      }
+      if (keep) why.style.setProperty('--why-ts', keep);
+    };
+
+    var whyApply = function () {
+      whyTick = false;
+      var travel = whyTrack.offsetHeight - whyStage.offsetHeight;
+      var p = travel > 0 ? (-whyTrack.getBoundingClientRect().top) / travel : 1;
+      p = p < 0 ? 0 : p > 1 ? 1 : p;
+      if (p === whyP) return;
+      whyP = p;
+
+      /* smoothstep: mulai dan berhenti pelan, tengahnya cepat. */
+      var e = p * p * (3 - 2 * p);
+
+      /* Skalanya diinterpolasi EKSPONENSIAL (26^(1-e)), bukan linear. Mata
+         menilai perubahan ukuran secara rasio, bukan selisih: dengan linear,
+         separuh perjalanan masih di skala 13x lalu sisanya terjun ke 1x — itu
+         yang terasa patah. Eksponensial membuat tiap langkah scroll mengecilkan
+         dengan faktor yang sama, jadi lajunya terbaca rata. */
+      why.style.setProperty('--why-ts', Math.pow(WHY_TEXT_S, 1 - e).toFixed(3));
+      why.style.setProperty('--why-vs', (WHY_VIDEO_S - e * (WHY_VIDEO_S - 1)).toFixed(4));
+      /* Teks merah menyusul di ujung, waktu ukurannya sudah hampir final. */
+      why.style.setProperty('--why-t', Math.max(0, Math.min((p - WHY_TINT_AT) / (1 - WHY_TINT_AT), 1)).toFixed(3));
+    };
+
+    var whyOnScroll = function () {
+      if (!whyTick) { whyTick = true; requestAnimationFrame(whyApply); }
+    };
+
+    if (whyCalm) {
+      /* Hemat gerak: langsung keadaan akhir, tanpa listener sama sekali. */
+      why.style.setProperty('--why-ts', '1');
+      why.style.setProperty('--why-vs', '1');
+      why.style.setProperty('--why-t', '1');
+    } else {
+      whyAnchor();
+      window.addEventListener('scroll', whyOnScroll, { passive: true });
+      window.addEventListener('resize', function () { whyAnchor(); whyApply(); });
+      /* Font web baru mengubah lebar glyph setelah dimuat — titik pusatnya
+         diukur ulang begitu font siap. */
+      if (document.fonts && document.fonts.ready) { document.fonts.ready.then(whyAnchor); }
+      whyApply();
+    }
+  }
+
+  /* ---------- 11. Intro: video pembuka + serah-terima ke hero ----------
      data-intro di <html> sudah dipasang script inline di <head>.
 
      Ada dua sumber video dengan sifat yang berbeda, jadi jadwalnya juga beda:

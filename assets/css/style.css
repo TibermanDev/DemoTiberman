@@ -631,15 +631,89 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 /* Banner full-bleed pakai banner-tyre.webp (bagian atas gambar transparan,
    jadi ban-nya kelihatan nongol di atas pita gelap seperti di Figma). */
-.why-banner{position:relative;background:var(--bg);overflow:hidden}
-.why-banner__bg{width:100%;height:auto;display:block}
-.why-banner h2{
-  position:absolute;left:0;right:0;top:63%;transform:translateY(-50%);
-  z-index:2;text-align:center;color:#fff;padding-inline:24px;
-  font-size:clamp(18px,2.8vw,40px);
+/* Nilai awal = keadaan AKHIR animasi (teks ukuran normal, lapisan penuh).
+   Kalau JS mati atau belum jalan, yang tampil kondisi diam yang masuk akal,
+   bukan teks raksasa. */
+.why{background:var(--bg);--why-ts:1;--why-vs:1;--why-t:1;--why-ox:50%;--why-oy:50%}
+/* Tinggi track = jarak scroll animasinya. 100vh pertama dipakai stage yang
+   dipaku, sisanya (180vh) yang jadi "durasi" animasi. */
+.why__track{position:relative;height:280vh}
+/* isolation:isolate mengurung mix-blend-mode .why__mask supaya cuma mencampur
+   dengan videonya, bukan dengan section lain di belakangnya. */
+.why__stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
+.why__video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform:scale(var(--why-vs));will-change:transform;
+}
+.why__mask,.why__tint{
+  position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  padding-inline:24px;
+}
+/* Selubungnya SELALU pekat. Versi sebelumnya memudarkan opacity-nya di awal
+   supaya video terlihat penuh — hasilnya yang bertransisi malah lapisan putih
+   di seluruh layar, bukan hurufnya. Sekarang video penuh di awal dicapai murni
+   dari skala huruf (lihat --why-ox/--why-oy di bawah). */
+.why__mask{background:var(--bg);mix-blend-mode:screen}
+
+/* Lapisan merah cuma dimunculkan di ujung animasi. */
+.why__tint{opacity:var(--why-t)}
+/* Tipografi kedua lapisan WAJIB identik — posisi, ukuran, dan skalanya harus
+   bertumpuk tepat, kalau meleset sedikit saja pergantiannya terlihat bergeser. */
+.why__inner{
+  text-align:center;
+  /* Titik pusat zoom BUKAN tengah blok teks — tengah blok itu justru celah
+     antar baris, jadi waktu diperbesar yang menutupi layar malah ruang kosong
+     (putih). main.js mengukur posisi batang huruf "T" pada "Tiberman" dan
+     menaruh titik pusatnya di situ, sehingga pada skala maksimum yang mengisi
+     layar adalah tinta hurufnya — video terlihat penuh tanpa perlu akal-akalan
+     opacity. */
+  transform-origin:var(--why-ox) var(--why-oy);
+  transform:scale(var(--why-ts));
+  /* TANPA will-change:transform — sengaja. will-change mempromosikan teks ini
+     jadi lapisan komposit tersendiri yang diraster sekali pada skala saat itu;
+     pada skala ratusan kali, ukuran lapisannya melewati batas tekstur browser
+     dan sebagian ubinnya tidak ikut digambar — itulah huruf yang terlihat
+     terpotong rata. Tanpa promosi, teksnya digambar di lapisan utama dan
+     dipotong sebatas layar, jadi tidak ada tekstur raksasa yang dibuat. */
+}
+.why__inner p{
+  margin:0 0 .7em;font-size:clamp(12px,1.18vw,17px);font-weight:700;
+  letter-spacing:-.01em;line-height:1.3;
+}
+/* Angkanya persis dari panel Typography di Figma: Montserrat Bold (700),
+   ukuran 75, line height 85 (= 85/75), letter spacing 0. Sebelumnya saya pakai
+   800 / -0.03em / 1.08 — itu yang bikin terlihat lebih rapat dan lebih tebal
+   dari desainnya. Diminta sedikit lebih besar dari angka Figma: 5.9vw = 85px
+   pada frame 1440px (naik ~13%), baris kecil di atasnya ikut naik seimbang. */
+.why__inner span{
+  display:block;margin-inline:auto;
+  font-weight:700;letter-spacing:0;line-height:1.1333;
+  font-size:clamp(32px,5.9vw,85px);max-width:14ch;
+}
+/* Lapisan penutup: judul hitam = lubang tempat video terlihat; baris kecilnya
+   diberi warna latar supaya tidak ikut jadi lubang. */
+.why__mask span{color:#000}
+.why__mask p{color:var(--bg)}
+[data-theme="dark"] .why__mask p{color:#000}
+/* Gradasi mendatar gelap -> merah, mengikuti mock: awal kalimat nyaris hitam,
+   makin ke kanan makin merah. background-clip:text = gradasinya dipotong
+   mengikuti bentuk huruf. */
+.why__tint p{color:var(--text)}
+.why__tint span{
+  background:linear-gradient(90deg,#141414 0%,#5e0c0a 22%,#a81c18 45%,#d42f2c 68%,#ef3936 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+/* Mode gelap: kebalikannya — lapisan hitam yang menutup, huruf putih yang jadi
+   lubang, dengan multiply (hitam x apa pun = hitam; putih x backdrop = backdrop). */
+[data-theme="dark"] .why__mask{background:#000;mix-blend-mode:multiply}
+[data-theme="dark"] .why__mask span{color:#fff}
+[data-theme="dark"] .why__tint p{color:#f5f5f7}
+/* Hemat gerak: tidak ada animasi scroll sama sekali, cukup satu layar diam. */
+@media (prefers-reduced-motion:reduce){
+  .why__track{height:100vh}
 }
 
-.pilar{padding:200px 0 150px}
+.pilar{padding:30px 0 150px}
 .pilar__title{text-align:center;font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.025em;margin-bottom:34px}
 .feature-card{display:grid;grid-template-columns:1.15fr 1fr;overflow:hidden;background:var(--grey-50);border-radius:20px}
 .feature-card__body{padding:58px 62px;align-self:center}
@@ -1042,8 +1116,8 @@ ul{margin:0;padding:0;list-style:none}
   .faq__panel{padding:32px 22px}
   /* banner "Kenapa Harus Tiberman" terlalu landscape buat layar sempit —
      tinggi dikunci lalu gambarnya di-crop kiri-kanan biar teks tetap kebaca */
-  .why-banner__bg{height:180px;object-fit:cover;object-position:50% 100%}
-  .why-banner h2{top:60%;font-size:22px}
+  /* Di ponsel jarak scroll animasinya dipendekkan biar tidak terasa panjang. */
+  .why__track{height:220vh}
   .coverflow{height:330px}
   .coverflow__item{width:160px;height:275px}
   .coverflow__nav{width:42px;height:42px}
