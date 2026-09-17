@@ -7,7 +7,11 @@
   /* Warna diambil langsung dari file desain */
   --blue:#0071e3;
   --blue-dark:#0062c4;
+  /* Merah brand dipakai untuk semua kontrol interaktif: tombol utama, isian
+     hover/aktif di menu, dan pill kategori. --red-dark cuma dipakai sebagai
+     state :hover-nya (sama pola dengan --blue/--blue-dark dulu). */
   --red:#ef3936;
+  --red-dark:#cf2a27;
   --ink:#1d1d1f;
   --ink-2:#121214;
   --text:#1d1d1f;
@@ -35,53 +39,13 @@
   --shadow:0 10px 40px rgba(0,0,0,.08);
   --ease:cubic-bezier(.22,.61,.36,1);
 
-  /* permukaan & teks yang dibalik saat tema gelap */
+  /* permukaan & warna teks halaman */
   --bg:#fff;            /* latar halaman */
   --surface:#fff;       /* kartu di atas latar terang */
   --body-text:#3f3f46;  /* paragraf isi */
   --card-img:#fff;      /* kotak foto produk di katalog */
   --illus-bg:#f6f5f8;
   --outline-strong:rgba(0,0,0,.45);
-}
-
-/* ==========================================================================
-   TEMA GELAP — hanya menimpa token; section yang memang sudah gelap
-   (hero, katalog, footer) tidak ikut berubah.
-   ========================================================================== */
-[data-theme="dark"]{
-  --text:#f2f2f5;
-  --muted:#a1a1aa;
-  --muted-2:#8b8b93;
-  --line:#2e2e35;
-  --grey-50:#151518;
-  --grey-100:#1c1c21;
-  --grey-200:#24242a;
-  --bg:#0e0e10;
-  --surface:#17171b;
-  --body-text:#c9c9d1;
-  --card-img:#202024;
-  --outline-strong:rgba(255,255,255,.5);
-  --spec:#9ea1bd;
-  --shadow-s:0 1px 2px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.35);
-  --shadow:0 10px 40px rgba(0,0,0,.55);
-  color-scheme:dark;
-}
-
-/* ilustrasi truk-nya sudah punya latar terang menyatu (truck-tiberman.webp),
-   jadi kartu ini tetap terang -> tokennya dikembalikan ke nilai terang. */
-/* panel biru pakai gradien versi gelap supaya tetap satu nuansa dengan halaman */
-[data-theme="dark"] .accessories{
-  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
-}
-[data-theme="dark"] .velg-card{
-  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
-}
-[data-theme="dark"] .feature-card--illus{
-  --text:#1d1d1f;
-  --muted:#6e6e73;
-  --muted-2:#86868b;
-  --body-text:#3f3f46;
-  color:#1d1d1f;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -126,8 +90,8 @@ ul{margin:0;padding:0;list-style:none}
 }
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0)}
-.btn--primary{background:var(--blue);color:#fff;box-shadow:0 6px 18px rgba(0,113,227,.28)}
-.btn--primary:hover{background:var(--blue-dark)}
+.btn--primary{background:var(--red);color:#fff}
+.btn--primary:hover{background:var(--red-dark)}
 .btn--ghost{background:var(--grey-100);color:var(--text)}
 .btn--ghost:hover{background:var(--grey-200)}
 .btn--lg{height:40px;padding:0 28px;font-size:15px}
@@ -179,7 +143,7 @@ ul{margin:0;padding:0;list-style:none}
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .nav__menu a:hover,.nav__menu a:focus-visible,.nav__menu a.is-active{
-  background:var(--blue);color:#fff;font-weight:600;
+  background:var(--red);color:#fff;font-weight:600;
 }
 .nav--center .nav__links{margin-inline:auto;gap:44px}
 /* varian PDP: logo ikut jadi bagian grup yang ditengahkan (lihat figma) */
@@ -196,9 +160,6 @@ ul{margin:0;padding:0;list-style:none}
 }
 .tool-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45)}
 .tool-btn svg{width:16px;height:16px;flex:0 0 16px}
-.tool-btn .icon-sun{display:none}
-[data-theme="dark"] .tool-btn .icon-sun{display:block}
-[data-theme="dark"] .tool-btn .icon-moon{display:none}
 .lang{position:relative}
 .lang__caret{width:9px;height:9px;flex:0 0 9px;transition:transform .2s var(--ease)}
 .lang.is-open .lang__caret{transform:rotate(180deg)}
@@ -217,7 +178,7 @@ ul{margin:0;padding:0;list-style:none}
   transition:background .2s var(--ease),color .2s var(--ease);
 }
 .lang__menu button:hover{background:rgba(255,255,255,.08);color:#fff}
-.lang__menu button.is-active{background:var(--blue);color:#fff;font-weight:600}
+.lang__menu button.is-active{background:var(--red);color:#fff;font-weight:600}
 .nav__burger{display:none;margin-left:auto;width:40px;height:40px;align-items:center;justify-content:center}
 .nav__burger span{display:block;width:20px;height:1.5px;background:#fff;position:relative}
 .nav__burger span::before,.nav__burger span::after{content:'';position:absolute;left:0;width:20px;height:1.5px;background:#fff;transition:transform .3s var(--ease)}
@@ -227,7 +188,21 @@ ul{margin:0;padding:0;list-style:none}
 /* ==========================================================================
    HOME — HERO + SUPERAREA
    ========================================================================== */
-.hero{position:relative;background:#000;color:#fff;overflow:hidden;margin-top:calc(var(--nav-h) * -1)}
+/* Hero dipaku, TAPI tanpa jarak scroll buatan: .hero-stack cuma sekedar batas
+   (tinggi hero + SuperArea) supaya pakunya lepas setelah SuperArea lewat.
+   Yang naik menutupi hero adalah .superarea sungguhan, bukan tirai palsu di
+   atas spacer kosong — jadi tidak ada hitam yang seolah melebar, dan jarak
+   scroll totalnya sama persis dengan halaman tanpa efek.
+
+   top-nya minus tinggi nav, bukan 0: hero memang sengaja menyelip di bawah nav
+   lewat margin-top negatif, jadi kalau dipaku di 0 dia malah turun 64px waktu
+   mulai discroll. */
+.hero-stack{position:relative}
+.hero{
+  position:sticky;top:calc(var(--nav-h) * -1);z-index:0;
+  background:#000;color:#fff;margin-top:calc(var(--nav-h) * -1);
+}
+.hero__stage{position:relative;overflow:hidden}
 /* Lengkung hitam di bawah sudah jadi bagian dari gambar (hero-warehouse-2),
    jadi tinggi hero ngikut rasio gambar biar lengkungnya tidak kepotong. */
 .hero__media{position:relative;aspect-ratio:2400 / 1037;overflow:hidden}
@@ -240,8 +215,102 @@ ul{margin:0;padding:0;list-style:none}
 .hero__wordmark{position:absolute;top:30%;left:50%;transform:translate(-50%,-50%);width:min(52%,520px);z-index:2}
 .hero__wordmark img{filter:drop-shadow(0 12px 40px rgba(0,0,0,.45))}
 
-.superarea{background:#000;color:#fff;text-align:center;position:relative;overflow:hidden}
-.superarea__copy{padding:150px 24px 0;position:relative;z-index:2}
+/* isolation:isolate mengurung mix-blend-mode .superarea__glow di dalam section
+   ini saja, jadi warnanya tidak ikut mencampur ke apa pun di belakangnya. */
+/* TANPA z-index (sengaja): elemen positioned ber-z-index auto dicetak di tahap
+   yang sama dengan yang ber-z-index 0 dan urutannya ikut urutan DOM, jadi
+   pembungkus ini tetap menang tumpuk atas .hero yang dipaku (z-index:0).
+   Kalau diberi z-index sendiri, dia jadi stacking context — dan stacking context
+   itu "isolated group": mix-blend-mode .superarea__glow di dalamnya tidak akan
+   bisa mencampur cahaya dengan gambar hero di belakangnya. */
+/* background hitam pindah ke sini juga: bumi sekarang di luar <section>, jadi
+   area di bawah teks tidak lagi dilatari .superarea. */
+.sa-cover{position:relative;background:#000}
+.sa-cover__cap{position:absolute;left:0;right:0;bottom:100%;margin-bottom:-1px;display:block;width:100%;height:6.128vw}
+.sa-cover__cap path{fill:#000}
+/* Di bawah 972px .hero__media tingginya dikunci 420px, jadi lengkungnya tidak
+   lagi ikut vw: 13,94% x 420px. */
+@media (max-width:972px){ .sa-cover__cap{height:58.6px} }
+.superarea{background:#000;color:#fff;text-align:center;position:relative;overflow:hidden;isolation:isolate}
+/* Sorot merah-biru di pinggir kiri & kanan. Dulu dua radial-gradient; sekarang
+   pakai aset asli dari desain — blur-red.png (inti di sudut KIRI-bawah) dan
+   blur-blue.png (inti di sudut KANAN-bawah), dua-duanya PNG transparan. Bentuk
+   sebarannya jadi persis seperti di desain, yang tidak pernah bisa ditiru betul
+   oleh gradien CSS.
+
+   Kedua PNG itu sorot SEPEREMPAT: alfanya menanjak sampai piksel pojok dan tidak
+   pernah turun lagi, karena memang dirancang mentok di tepi frame. Jadi satu-
+   satunya tempat potongnya tidak kelihatan adalah tepi frame itu sendiri —
+   dijangkar ke sudut bawah section, persis seperti di file desainnya. Kanvasnya
+   sengaja jangkung (3148x3536 dan 3528x3492) supaya ekor ke atasnya panjang
+   sampai melewati teks, tanpa perlu akal-akalan cermin.
+
+   mix-blend-mode:screen tetap dipakai: warnanya cuma MENAMBAH cahaya, jadi di
+   atas hitam dia muncul, di atas gambar hero dan bumi yang sudah terang nyaris
+   tak berefek — sorotnya menyatu, bukan menempel seperti stiker. */
+.superarea__glow{
+  position:absolute;left:0;right:0;pointer-events:none;mix-blend-mode:screen;
+  /* Tinggi gambar bumi = 1172/2880 x LEBAR SECTION. Ditulis sebagai persen,
+     bukan vw: vw ikut lebar viewport termasuk scrollbar, jadi di desktop
+     ber-scrollbar hasilnya meleset ~5px ke atas dan garis potongnya menyembul di
+     atas lengkung bumi. Persen pada padding dihitung dari lebar containing
+     block (tanpa scrollbar), jadi selalu pas. */
+  --sa-globe-h:40.694%;
+  /* earth-location.webp sekarang punya ALPHA sungguhan (dikonversi dari
+     earth-location.png): angkasa di atas planetnya transparan dengan tepi
+     atmosfer yang ter-feather, bukan lagi hitam pekat. Jadi sorot yang dicetak
+     di BELAKANG bumi tembus sampai ke tepi planetnya dan berbaur lewat feather
+     itu — tidak ada lagi strip hitam maupun garis potong.
+
+     --sa-glow-cut: seberapa dalam tepi bawah sorot (yang sekaligus titik paling
+     terangnya, karena PNG-nya mentok di sudut) ditenggelamkan ke balik planet,
+     dihitung dari dasar section sebagai pecahan tinggi gambar bumi. 0.62 = 38%
+     tinggi gambar dari atas; alfa planetnya baru benar-benar pekat di 21% (tengah),
+     31% (kiri) dan 37% (kanan — planetnya miring), jadi 42% aman tertutup. */
+  --sa-glow-cut:.62;
+  /* Trik padding: tepi bawah CONTENT BOX-lah yang jadi garis jangkar, dan
+     jaraknya ke dasar section = 20% tinggi bumi, dihitung dari lebar section
+     lewat persen padding. Diukur dari DASAR section (= dasar bumi), jadi
+     jaraknya 80% tinggi bumi, bukan 20%. background-origin/clip:content-box
+     bikin kedua PNG ikut content box itu, bukan kotak luarnya. */
+  bottom:0;
+  box-sizing:content-box;
+  padding-bottom:calc(var(--sa-globe-h) * var(--sa-glow-cut));
+  background-origin:content-box;
+  background-clip:content-box;
+  /* Ukuran sesuai layer di Figma (frame 1440): merah 787x884, biru 882x873 —
+     persis ukuran PNG-nya dibagi 4 (ekspor @4x). Ditulis sebagai persen lebar
+     section (787/1440, 882/1440) supaya proporsinya sama di lebar berapa pun;
+     tingginya auto biar rasio aslinya tidak berubah. */
+  --sa-red-w:54.65%;
+  --sa-blue-w:61.25%;
+  /* Kotaknya cuma perlu setinggi PNG yang paling jangkung (884/1440 = 61.4vw);
+     dilebihkan sedikit supaya ujung atasnya yang sudah transparan tidak ikut
+     kepotong. Tinggi tidak bisa pakai persen (persen tinggi dihitung dari tinggi
+     induk, bukan lebar), tapi di sini ketepatannya memang tidak penting — yang
+     penting cuma "cukup tinggi". */
+  height:64vw;
+  background-image:url(../img/blur-red.png),url(../img/blur-blue.png);
+  background-repeat:no-repeat,no-repeat;
+  /* Merah menempel tepi KIRI, biru tepi KANAN, dua-duanya rata bawah — sama
+     seperti posisi layer-nya di Figma. */
+  background-position:left bottom,right bottom;
+  background-size:var(--sa-red-w) auto,var(--sa-blue-w) auto;
+}
+/* Di layar sempit dua sorot seukuran desktop akan ketemu di tengah dan
+   campurannya jadi ungu di belakang teks. Lebarnya dipatok ke persen section
+   dan didorong lebih jauh ke luar supaya bagian tengahnya tetap hitam. */
+@media (max-width:720px){
+  .superarea__glow{
+    /* Di layar sempit 55-61vw tinggal ~220px — terlalu kecil untuk mengisi
+       tinggi teks yang justru memanjang jadi 3-4 baris. Jadi skalanya dinaikkan
+       ke ~satu layar penuh, dan kotaknya ikut ditinggikan. */
+    --sa-red-w:86%;
+    --sa-blue-w:96%;
+    height:100vw;
+  }
+}
+.superarea__copy{padding:clamp(56px,6vw,84px) 24px 0;position:relative;z-index:4}
 .superarea__copy .eyebrow{color:rgba(255,255,255,.86)}
 .superarea__copy h2{margin:12px auto 26px;max-width:780px;font-size:clamp(30px,4.4vw,52px);font-weight:600;letter-spacing:-.03em;line-height:1.15}
 .superarea__globe{position:relative}
@@ -291,17 +360,21 @@ ul{margin:0;padding:0;list-style:none}
 }
 
 .superarea__globe img{width:100%;object-fit:cover}
-.superarea__globe::before{
-  content:'';position:absolute;inset:0;z-index:1;pointer-events:none;
-  background:linear-gradient(180deg,#000 0%,rgba(0,0,0,0) 26%),radial-gradient(120% 100% at 50% 130%,rgba(0,0,0,0) 45%,rgba(0,0,0,.55) 100%);
-}
+/* .superarea__globe::before DIHAPUS. Isinya dua lapis hitam yang dulu dipakai
+   menyamarkan pita angkasa pada gambar bumi versi lama:
+     1) linear-gradient hitam pekat di 26% teratas kotak, dan
+     2) vignette radial berpusat di 50% 130% — karena pusatnya di BAWAH kotak,
+        pita atas kotak sudah lewat radiusnya dan kebagian nilai stop terakhir,
+        rgba(0,0,0,.55); jadi bukan cuma menggelapkan tepi planet, dia memasang
+        kerudung 55% hitam di seluruh pita atas.
+   Gambar bumi sekarang sudah beralpha, jadi dua-duanya tidak diperlukan — dan
+   dua-duanya menimpa .superarea__glow yang justru dicetak di belakang bumi. */
 .pin{position:absolute;width:22px;height:22px;z-index:3;transform:translate(-50%,-100%);opacity:0}
 .pin.is-in{animation:pin-drop .55s var(--ease) both}
 .pin svg{width:100%;height:100%;filter:drop-shadow(0 3px 6px rgba(0,0,0,.5))}
 @keyframes pin-drop{from{opacity:0;transform:translate(-50%,-170%)}to{opacity:1;transform:translate(-50%,-100%)}}
 
 /* Peta SuperArea (Leaflet) */
-.superarea__globe.is-map::before{display:none}   /* gradient globe dimatikan biar peta nggak ketutup */
 .superarea__map{height:clamp(380px,64vh,660px);width:100%;background:#000;z-index:1}
 .superarea__map .leaflet-container{background:#000;font-family:inherit}
 .superarea__map .leaflet-control-attribution{background:rgba(0,0,0,.6);color:rgba(255,255,255,.6);font-size:10px}
@@ -326,18 +399,57 @@ ul{margin:0;padding:0;list-style:none}
 
 @media (max-width:640px){.superarea__map{height:clamp(300px,44vh,380px)}}
 
-/* Importir + kategori — pakai assets/img/category-section.webp:
-   PNG/WebP ber-alpha yang memudar jadi transparan di atas, jadi cukup ditumpuk
-   di atas background hitam. Baris ban sudah termasuk di dalam gambar. */
+/* Importir + kategori — latarnya video assets/img/tires-moving.{webm,mp4}
+   dengan poster assets/img/tires-moving-poster.webp. Videonya frame penuh
+   (tidak ber-alpha seperti category-section.webp yang dulu dipakai), jadi
+   gradasi gelapnya dibuat ulang lewat .importir__scrim supaya judul & pill
+   tetap terbaca. */
 .importir{
+  /* isolation:isolate WAJIB. .importir__scrim (z-index:1) dan .importir__inner
+     (z-index:2) ada di dalamnya, tapi position:relative dengan z-index:auto TIDAK
+     membuat stacking context — jadi kedua anak itu ikut ditumpuk di stacking
+     context ROOT dan tercetak DI ATAS section aksesoris berikutnya (z-index auto).
+     Akibatnya ujung bawah scrim (hitam 18%) menodai tutup lengkung dan pita atas
+     section aksesoris: itulah pita abu yang warnanya beda dari #f5f5f7 padahal
+     kode warnanya sama. isolation mengurung keduanya di dalam section ini. */
+  isolation:isolate;
   position:relative;color:#fff;text-align:center;overflow:hidden;background:#000;
-  aspect-ratio:5760 / 3400;   /* tinggi section ngikut rasio gambar */
+  /* Rasio section = rasio VIDEO (1920x1080), bukan lagi 5760/3400 milik
+     category-section.webp yang dulu jadi latar. Dengan object-fit:cover, kotak
+     yang rasionya persis sama artinya video tampil utuh tanpa dipotong dan
+     tanpa diperbesar — sebelumnya 1.694 vs 1.778 bikin video diskalakan ~1,05x
+     dan terpotong ~5% di kiri-kanan, yang terbaca sebagai "ke-zoom". */
+  aspect-ratio:16 / 9;
 }
 /* min-height DIHAPUS: digabung aspect-ratio, lebar section malah dihitung ulang
    dari tinggi -> di layar 375px section jadi 949px dan halaman bisa digeser ke
    samping. Di bawah 949px tingginya dikunci manual. */
-@media (max-width:949px){ .importir{aspect-ratio:auto;height:560px} }
-.importir__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
+
+.importir__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%;border:0;pointer-events:none}
+/* Di layar sempit rasio 16/9 cuma menghasilkan tinggi ~210px — tidak muat untuk
+   judul + 5 pill yang menumpuk, jadi tingginya dikunci manual. Konsekuensinya
+   kotaknya jauh lebih jangkung dari videonya, dan dengan object-fit:cover itu
+   berarti ~60% lebar video terpotong alias ban-nya ikut membesar. Maka di sini
+   videonya dipasang contain: tampil utuh sebagai pita di dasar section, sisanya
+   hitam — skala ban-nya sama persis seperti di file videonya.
+
+   Blok ini WAJIB berada setelah aturan .importir__bg di atas: media query tidak
+   menambah specificity, jadi kalau ditaruh sebelumnya, object-fit:cover yang
+   belakangan itu yang menang. */
+@media (max-width:949px){
+  .importir{aspect-ratio:auto;height:560px}
+  .importir__bg{object-fit:contain}
+}
+/* Gradasi hitam: agak gelap di atas (di belakang teks) lalu memudar ke bawah
+   supaya deretan bannya tetap kelihatan.
+
+   Nilainya diturunkan banyak dari versi awal (.88/.72/.38/.15/.35): video
+   tires-moving sendiri sudah gelap, jadi scrim setebal itu menumpuk dua kali
+   dan gudangnya nyaris hilang jadi hitam polos. Sekarang scrim-nya cuma
+   menambah kontras secukupnya buat judul & pill. Kalau videonya suatu saat
+   diganti yang lebih terang, angka inilah yang disetel. */
+.importir__scrim{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,rgba(0,0,0,.34) 0%,rgba(0,0,0,.24) 28%,rgba(0,0,0,.1) 55%,rgba(0,0,0,.03) 80%,rgba(0,0,0,.18) 100%)}
 .importir__inner{position:absolute;inset:0;z-index:2;padding:13% 24px 0}
 .importir h2{max-width:840px;margin:0 auto 40px;font-size:clamp(30px,4.4vw,52px);font-weight:700;letter-spacing:-.03em;line-height:1.15}
 /* Ukuran & style pill ngikut Figma: 215x42, radius 21, fill #B7B7B7 20%,
@@ -357,37 +469,116 @@ ul{margin:0;padding:0;list-style:none}
   box-shadow:1px 3px 14px -5px #5e574d,inset 0 1px 0 rgba(255,255,255,.22);
   font-size:16px;font-weight:500;color:#fff;
   backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  transition:background .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease);
+  transition:background .25s var(--ease),border-color .25s var(--ease),box-shadow .25s var(--ease),transform .25s var(--ease);
 }
-.pill:hover{background:rgba(183,183,183,.34);border-color:rgba(255,255,255,.5);transform:translateY(-2px)}
+/* Hover pill: isian merah penuh, tanpa pendar. */
+.pill:hover{
+  background:var(--red);
+  border-color:var(--red);
+  /* Tanpa pendar merah; yang tersisa cuma drop shadow + rim kaca bawaan .pill
+     (spesifikasi Figma), supaya hover dan diam tetap satu bahasa. */
+  transform:translateY(-2px);
+}
 
-/* ---------- Aksesoris (biru muda) ---------- */
-/* Bagian atas section aksesoris pakai background-blue.webp (gradien #D4EAF7 -> #F5F5F7).
-   background-size 100% 100% -> gradiennya di-stretch pas setinggi section, tanpa crop. */
+/* ---------- Aksesoris ---------- */
+/* Latar birunya (background-blue.webp) diganti WARNA RATA #f5f5f7 (var(--grey-50)),
+   bukan gradasi. Rel kartu di bawahnya tetap putih, jadi batas antara keduanya
+   yang memberi jeda putih itu. Pakai token, jadi mode gelap ikut terbalik. */
 .accessories{
-  background:url(../img/background-blue.webp) 50% 0 / 100% 100% no-repeat,var(--sky-1);
+  position:relative;
+  background:var(--grey-50);
   padding:104px 0 84px;
-  margin-top: 10px;
+  /* Rapat ke section video di atasnya; lengkungnya yang menindih ke atas. */
+  margin-top:0;
 }
-.accessories__grid{display:grid;grid-template-columns:1.16fr .84fr;gap:32px;align-items:start}   /* kolom kanan jangan di bawah ~450px, judulnya wrap */
+/* Lengkung penutup di atas section, menindih bagian bawah section video.
+   bottom:100% menaruhnya tepat di atas tepi section; margin-bottom -1px supaya
+   baris piksel pecahan di sambungannya tidak menyisakan garis tipis (trik yang
+   sama dipakai lengkung hero). */
+/* Path-nya sengaja "bersayap tebal" (M0 10 ... , bukan M0 45): dengan titik
+   ujung di y=10 dari viewBox 61.3, isiannya menutup ~84% tinggi kotak di tepi
+   kiri-kanan, bukan cuma 27% seperti lengkung hero. Itu perlu di sini karena
+   yang ada di belakangnya bukan hitam polos melainkan frame video — sayap yang
+   tipis membuat isi video mengintip di bawah garis lengkung dan terbaca sebagai
+   pita abu yang warnanya beda. */
+.accessories__cap{
+  position:absolute;left:0;right:0;bottom:100%;margin-bottom:-1px;
+  display:block;width:100%;height:clamp(56px,6.8vw,124px);
+}
+/* Warna tutup lengkung WAJIB sama dengan latar section; kalau beda sedikit
+   saja, sambungannya terbaca sebagai garis lurus selebar layar. */
+.accessories__cap path{fill:var(--grey-50)}
+/* Path pertama: pita pemisah putih antara gambar dan lengkung abu. Pakai
+   var(--bg), bukan #fff, supaya di mode gelap ikut jadi gelap. */
+.accessories__cap .accessories__cap-gap{fill:var(--bg)}
+/* Pembungkus khusus section ini: lebarnya penuh, cuma disisakan napas tipis di
+   tepi layar. Tidak memakai .container supaya lebar section lain tidak ikut
+   berubah. max-width 1800px cuma rem di layar ultra-lebar. */
+.accessories__wrap{width:100%;max-width:1800px;margin-inline:auto;padding-inline:clamp(24px,5.2vw,104px)}   /* 24px di ponsel = sama seperti .container, biar tidak lebih sempit dari section lain */
+.accessories__grid{display:grid;grid-template-columns:1.16fr .84fr;gap:clamp(32px,5vw,90px);align-items:center}
 .accessories__copy h2{margin-top:0;margin-bottom:18px}
 .accessories__copy .lead{color:var(--body-text);max-width:430px;margin-bottom:26px}
 
 .velg-wrap{background:var(--bg);padding:20px 0 200px}   /* jeda putih antar section, seperti di Figma */
-.velg-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+/* Rel horizontal, bukan grid 2 kolom lagi: kartunya ada 4 dan digeser otomatis
+   oleh main.js. scroll-behavior:auto WAJIB — html{scroll-behavior:smooth} bikin
+   setiap penulisan scrollLeft dianimasikan browser, dan animasi itu bertabrakan
+   dengan animasi per-frame kita (hasilnya gerakannya tersendat).
+   overscroll-behavior-x:contain menahan gestur geser supaya tidak merembet jadi
+   "back" di browser. */
+.velg-cards{
+  display:flex;gap:14px;
+  overflow-x:auto;overflow-y:hidden;
+  scroll-behavior:auto;overscroll-behavior-x:contain;
+  padding-inline:24px;
+  scrollbar-width:none;-ms-overflow-style:none;
+}
+.velg-cards::-webkit-scrollbar{display:none}
 .velg-card{
   position:relative;display:flex;align-items:center;gap:16px;overflow:hidden;
-  background:url(../img/background-blue.webp) 50% 0 / 100% 100% no-repeat,var(--sky-card);
+  /* Lebar minimum 520px bukan angka selera: kartu terlebar (OTR, rasio 1.807)
+     butuh kolom foto 347px + gap 16 + blok teks ~127 + padding 28 = 518px. Kalau
+     kartunya lebih sempit dari itu, kolom fotonya terpaksa menyusut dan ruang
+     atas 60px-nya ikut melar. */
+  flex:0 0 clamp(520px,44vw,600px);
+  /* Warna rata #f5f5f7, sama dengan section aksesoris di atasnya — bukan
+     gradasi putih->abu lagi. */
+  background:var(--grey-50);
   border-radius:var(--radius-s);height:254px;padding:0 28px 0 0;
   transition:transform .35s var(--ease),box-shadow .35s var(--ease);
 }
 .velg-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
-/* velg-*-2 sudah di-crop rapat: ditampilkan utuh (contain), tanpa zoom/potong. */
-.velg-card__img{flex:0 0 58%;align-self:stretch;overflow:hidden}   /* lebar kolom = ukuran velg; contain-nya pas ke lebar */
-.velg-card__img img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}   /* rata bawah */
+/* Semua foto ditampilkan UTUH (contain), tanpa potong, dan rata dasar kartu.
+   Yang dikunci di sini TINGGINYA, bukan lebar kolomnya: tinggi kolom =
+   tinggi kartu - 60px, jadi ruang kosong di atas foto persis 60px di setiap
+   kartu berapa pun rasio fotonya. Lebar kolomnya justru yang mengikuti
+   (width:auto pada foto -> lebar = tinggi x rasio), sehingga foto yang lebih
+   lebar otomatis memakan ruang lebih banyak dan blok teksnya bergeser ke kanan.
+
+   flex:0 1 auto (boleh menyusut): di layar sempit kartu tidak muat menampung
+   foto selebar itu; daripada meluber, kolomnya menyusut dan max-width:100% pada
+   foto membuatnya ikut mengecil — utuh, tetap rata bawah, hanya ruang atasnya
+   yang bertambah. */
+.velg-card__img{
+  flex:0 1 auto;align-self:flex-end;min-width:0;
+  height:calc(100% - 30px);
+  /* --ar = rasio piksel asli fotonya, ditulis di tiap <article> (mis. 1720/952).
+     Dipasangkan dengan height yang sudah pasti, aspect-ratio memberi lebar kolom
+     = tinggi x rasio tanpa perlu membaca lebar gambarnya. Cara lain (width:auto
+     + max-width:100% pada <img>) TIDAK bisa dipakai: lebar kolom ditentukan
+     isinya sementara max-width-nya mengacu ke kolom itu juga — melingkar, dan
+     browser menyelesaikannya dengan mengolapskan kolom jadi 0. */
+  aspect-ratio:var(--ar,1.2);
+}
+.velg-card__img img{width:100%;height:100%;object-fit:contain;object-position:50% 100%}
 /* body-nya content-sized; auto margin bikin sisa ruang kebagi rata kiri-kanan,
    jadi blok teks ke-center dan nggak nyisain space menganga di kanan kartu. */
 .velg-card__body{margin-inline:auto}
+/* Baris kedua judul kartu ban dibuat lebih kecil + nowrap supaya muat di sisa
+   ruang yang tersedia setelah kolom fotonya melebar. */
+.velg-card--tyre .velg-card__body h3 span{
+  font-size:.66em;font-weight:600;color:var(--muted);white-space:nowrap;
+}
 .velg-card__body h3{font-size:clamp(22px,2.4vw,27px);line-height:1.15}
 .velg-card__body h3 span{display:block;font-weight:700}
 .velg-card__body .btn{margin-top:18px}
@@ -397,15 +588,83 @@ ul{margin:0;padding:0;list-style:none}
    ========================================================================== */
 /* Banner full-bleed pakai banner-tyre.webp (bagian atas gambar transparan,
    jadi ban-nya kelihatan nongol di atas pita gelap seperti di Figma). */
-.why-banner{position:relative;background:var(--bg);overflow:hidden}
-.why-banner__bg{width:100%;height:auto;display:block}
-.why-banner h2{
-  position:absolute;left:0;right:0;top:63%;transform:translateY(-50%);
-  z-index:2;text-align:center;color:#fff;padding-inline:24px;
-  font-size:clamp(18px,2.8vw,40px);
+/* Nilai awal = keadaan AKHIR animasi (teks ukuran normal, lapisan penuh).
+   Kalau JS mati atau belum jalan, yang tampil kondisi diam yang masuk akal,
+   bukan teks raksasa. */
+.why{background:var(--bg);--why-ts:1;--why-vs:1;--why-t:1;--why-ox:50%;--why-oy:50%}
+/* Tinggi track = jarak scroll animasinya. 100vh pertama dipakai stage yang
+   dipaku, sisanya (180vh) yang jadi "durasi" animasi. */
+.why__track{position:relative;height:280vh}
+/* isolation:isolate mengurung mix-blend-mode .why__mask supaya cuma mencampur
+   dengan videonya, bukan dengan section lain di belakangnya. */
+.why__stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
+.why__video{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transform:scale(var(--why-vs));will-change:transform;
+}
+.why__mask,.why__tint{
+  position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;
+  padding-inline:24px;
+}
+/* Selubungnya SELALU pekat. Versi sebelumnya memudarkan opacity-nya di awal
+   supaya video terlihat penuh — hasilnya yang bertransisi malah lapisan putih
+   di seluruh layar, bukan hurufnya. Sekarang video penuh di awal dicapai murni
+   dari skala huruf (lihat --why-ox/--why-oy di bawah). */
+.why__mask{background:var(--bg);mix-blend-mode:screen}
+
+/* Lapisan merah cuma dimunculkan di ujung animasi. */
+.why__tint{opacity:var(--why-t)}
+/* Tipografi kedua lapisan WAJIB identik — posisi, ukuran, dan skalanya harus
+   bertumpuk tepat, kalau meleset sedikit saja pergantiannya terlihat bergeser. */
+.why__inner{
+  text-align:center;
+  /* Titik pusat zoom BUKAN tengah blok teks — tengah blok itu justru celah
+     antar baris, jadi waktu diperbesar yang menutupi layar malah ruang kosong
+     (putih). main.js mengukur posisi batang huruf "T" pada "Tiberman" dan
+     menaruh titik pusatnya di situ, sehingga pada skala maksimum yang mengisi
+     layar adalah tinta hurufnya — video terlihat penuh tanpa perlu akal-akalan
+     opacity. */
+  transform-origin:var(--why-ox) var(--why-oy);
+  transform:scale(var(--why-ts));
+  /* TANPA will-change:transform — sengaja. will-change mempromosikan teks ini
+     jadi lapisan komposit tersendiri yang diraster sekali pada skala saat itu;
+     pada skala ratusan kali, ukuran lapisannya melewati batas tekstur browser
+     dan sebagian ubinnya tidak ikut digambar — itulah huruf yang terlihat
+     terpotong rata. Tanpa promosi, teksnya digambar di lapisan utama dan
+     dipotong sebatas layar, jadi tidak ada tekstur raksasa yang dibuat. */
+}
+.why__inner p{
+  margin:0 0 .7em;font-size:clamp(12px,1.18vw,17px);font-weight:700;
+  letter-spacing:-.01em;line-height:1.3;
+}
+/* Angkanya persis dari panel Typography di Figma: Montserrat Bold (700),
+   ukuran 75, line height 85 (= 85/75), letter spacing 0. Sebelumnya saya pakai
+   800 / -0.03em / 1.08 — itu yang bikin terlihat lebih rapat dan lebih tebal
+   dari desainnya. Diminta sedikit lebih besar dari angka Figma: 5.9vw = 85px
+   pada frame 1440px (naik ~13%), baris kecil di atasnya ikut naik seimbang. */
+.why__inner span{
+  display:block;margin-inline:auto;
+  font-weight:700;letter-spacing:0;line-height:1.1333;
+  font-size:clamp(32px,5.9vw,85px);max-width:14ch;
+}
+/* Lapisan penutup: judul hitam = lubang tempat video terlihat; baris kecilnya
+   diberi warna latar supaya tidak ikut jadi lubang. */
+.why__mask span{color:#000}
+.why__mask p{color:var(--bg)}
+/* Gradasi mendatar gelap -> merah, mengikuti mock: awal kalimat nyaris hitam,
+   makin ke kanan makin merah. background-clip:text = gradasinya dipotong
+   mengikuti bentuk huruf. */
+.why__tint p{color:var(--text)}
+.why__tint span{
+  background:linear-gradient(90deg,#141414 0%,#5e0c0a 22%,#a81c18 45%,#d42f2c 68%,#ef3936 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+/* Hemat gerak: tidak ada animasi scroll sama sekali, cukup satu layar diam. */
+@media (prefers-reduced-motion:reduce){
+  .why__track{height:100vh}
 }
 
-.pilar{padding:200px 0 150px}
+.pilar{padding:30px 0 150px}
 .pilar__title{text-align:center;font-size:clamp(26px,3.4vw,38px);font-weight:800;letter-spacing:-.025em;margin-bottom:34px}
 .feature-card{display:grid;grid-template-columns:1.15fr 1fr;overflow:hidden;background:var(--grey-50);border-radius:20px}
 .feature-card__body{padding:58px 62px;align-self:center}
@@ -466,6 +725,14 @@ ul{margin:0;padding:0;list-style:none}
 .dots button{width:8px;height:8px;border-radius:999px;background:#c9c9cf;transition:width .3s var(--ease),background .3s var(--ease)}
 .dots button.is-active{width:22px;background:var(--ink)}
 
+/* Caption di bawah kipas ikut berganti mengikuti slide tengah. "Tiberman"
+   selalu di baris sendiri seperti desain lama, nama layanannya di baris kedua. */
+.aftersales__caption h3 span{display:block}
+/* Hemat gerak: putarannya dimatikan main.js, pindah slide pun tanpa animasi. */
+@media (prefers-reduced-motion: reduce){
+  .coverflow__item{transition:none}
+}
+
 /* ---------- Testimoni ---------- */
 .testi{background:var(--grey-50);padding:64px 0;overflow:hidden;margin: 150px 0;}
 .testi__grid{
@@ -478,10 +745,26 @@ ul{margin:0;padding:0;list-style:none}
 }
 .testi__intro h2{margin-bottom:16px}
 .testi__intro p{color:var(--muted);font-size:20px;line-height:1.6}
-.testi__rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 24px 20px 0;scrollbar-width:none;cursor:grab}
+/* --testi-per = berapa kartu UTUH yang muat dalam satu layar rel. Lebar kartu
+   dihitung dari angka itu, bukan dipatok 346px: dengan lebar tetap, tepi rel
+   hampir tidak pernah jatuh pas di batas kartu, jadi selalu ada kartu yang
+   tersisa separuh di pinggir dan kelihatan seperti terpotong. */
+.testi__rail{
+  --testi-per:3;
+  --testi-gap:24px;
+  display:flex;gap:var(--testi-gap);overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:8px var(--testi-gap) 20px 0;scrollbar-width:none;cursor:grab;
+}
 .testi__rail::-webkit-scrollbar{display:none}
 .testi__rail.is-dragging{cursor:grabbing;scroll-snap-type:none}
-.testi-card{flex:0 0 346px;scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:22px;position:relative}
+/* Dipasang main.js waktu carousel otomatis aktif. Snap mandatory menarik
+   balik posisi tiap frame, jadi geseran yang digerakkan skrip tidak pernah
+   sampai. Tanpa JS / saat hemat gerak kelas ini tidak ada dan snap tetap
+   berlaku untuk geseran manual. */
+.testi__rail.is-auto{scroll-snap-type:none}
+/* 100% di sini = lebar isi rel (sudah dikurangi padding), jadi
+   --testi-per kartu + selanya persis mengisi satu layar rel. */
+.testi-card{flex:0 0 calc((100% - (var(--testi-per) - 1) * var(--testi-gap)) / var(--testi-per));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:22px;position:relative}
 .testi-card__quote{font-size:60px;line-height:.6;color:#a1a1a8;font-weight:800}
 .testi-card__avatar{position:absolute;top:22px;right:22px;width:88px;height:88px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(140deg,#c2410c,#7c1d0c);color:#fff;font-weight:800;font-size:26px}
 .testi-card__avatar img{width:100%;height:100%;object-fit:cover}
@@ -510,10 +793,14 @@ ul{margin:0;padding:0;list-style:none}
 .acc__a p{padding:0 0 20px;font-size:15px;color:#4b4b52;max-width:640px}
 .faq__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:18px;margin-top:20px;padding-top:24px;border-top:1px solid #e2e2e5}  /* wrap: di layar <=360px teks + tombol tidak muat sebaris */
 .faq__foot span{color:var(--muted)}
-.btn--connect{background:var(--blue);color:#fff;text-transform:uppercase;font-weight:700;letter-spacing:.04em;height:44px}
+.btn--connect{background:var(--red);color:#fff;text-transform:uppercase;font-weight:700;letter-spacing:.04em;height:44px}
 
 /* ---------- News ---------- */
 .news{background:var(--grey-50);padding:80px 0 96px;margin-top: 150px;}
+/* margin-top itu jarak ke section di ATASNYA waktu News masih ikut beranda.
+   Di halaman News sendiri tidak ada yang di atasnya selain navbar, jadi
+   jaraknya jadi ruang kosong yang menganggur. */
+.subpage .news{margin-top:0}
 .news__head h2{font-size:clamp(34px,4.4vw,52px);letter-spacing:-.035em}
 .news__head p{font-weight:700;margin-top:6px}
 .news__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:36px}
@@ -592,40 +879,43 @@ ul{margin:0;padding:0;list-style:none}
 .unitlist{display:flex;flex-direction:column;gap:4px;margin-bottom:26px}
 .unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
 .unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
-.unitlist button.is-active{background:var(--blue);color:#fff;font-weight:600}
+.unitlist button.is-active{background:var(--red);color:#fff;font-weight:600}
 .side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:12px 14px;margin-bottom:12px;transition:border-color .25s var(--ease),background .25s var(--ease)}
 .side-promo:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
 .side-promo strong{display:block;font-size:13px;font-weight:800;letter-spacing:-.02em}
 .side-promo span{font-size:11px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
 
-.catalog__main{min-width:0}
+/* Kolom isi katalog berlatar abu terang (bukan putih, supaya tidak menyilaukan
+   di sebelah sidebar yang hitam). Navbar, sidebar, banner, dan footer tetap
+   gelap. Kartunya putih supaya terangkat dari latar abu ini. */
+.catalog__main{min-width:0;background:var(--grey-200);color:var(--text)}
 .catalog__banner{height:190px;overflow:hidden;position:relative}
 .catalog__banner img{width:100%;height:100%;object-fit:cover}
 .catalog__banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(29,29,31,.6))}
 .chips{display:flex;flex-wrap:wrap;gap:10px;padding:22px 32px 4px}
 .chip{
-  height:36px;padding:0 18px;border-radius:8px;border:1px solid rgba(255,255,255,.16);
-  font-size:12.5px;font-weight:600;color:rgba(255,255,255,.85);background:rgba(255,255,255,.03);
+  height:36px;padding:0 18px;border-radius:8px;border:1px solid var(--line);
+  font-size:12.5px;font-weight:600;color:var(--body-text);background:var(--surface);
   display:inline-flex;align-items:center;gap:8px;transition:background .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease);
 }
-.chip:hover{border-color:rgba(255,255,255,.42);color:#fff}
-.chip.is-active{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.55);color:#fff}
+.chip:hover{border-color:rgba(0,0,0,.35);color:var(--text)}
+.chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
 .catalog__body{padding:18px 32px 80px}
 .size-group{margin-bottom:38px}
 .size-group h2{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
 .product-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:32px}
 .product-card{
-  border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;background:#202024;
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);
   display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
 }
-.product-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.26);box-shadow:0 16px 34px rgba(0,0,0,.42)}
+.product-card:hover{transform:translateY(-4px);border-color:rgba(0,0,0,.26);box-shadow:0 16px 34px rgba(0,0,0,.14)}
 .product-card__img{background:var(--card-img);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
 .product-card__img img{max-height:100%;max-width:100%;object-fit:contain;transition:transform .45s var(--ease)}
 .product-card:hover .product-card__img img{transform:scale(1.06)}
 .product-card__body{padding:13px 10px 10px;text-align:center}
 .product-card__body strong{display:block;margin-bottom:5px;font-size:14px;line-height:1.25;font-weight:700;letter-spacing:.01em}
-.product-card__body span{display:block;font-size:11px;line-height:1.3;color:rgba(255,255,255,.5)}
-.empty{padding:60px 0;text-align:center;color:rgba(255,255,255,.55)}
+.product-card__body span{display:block;font-size:11px;line-height:1.3;color:var(--muted)}
+.empty{padding:60px 0;text-align:center;color:var(--muted)}
 
 /* varian top-nav (halaman 3 di PDF) */
 .catalog--topnav .catalog__banner{height:215px}
@@ -685,16 +975,12 @@ ul{margin:0;padding:0;list-style:none}
 .gallery__thumbs img{max-height:100%;max-width:100%;object-fit:contain}
 .doc-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
 .doc-btns a{height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:var(--body-text);transition:border-color .25s var(--ease),color .25s var(--ease)}
-.doc-btns a:hover{border-color:var(--blue);color:var(--blue)}
+.doc-btns a:hover{border-color:var(--red);color:var(--red)}
 
 /* lockup TiberMAX dipakai sebagai gambar (assets/img/tibermax-logo.png) */
-/* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x.
-   Versi -ondark dipakai saat tema gelap karena UNINEST & 800 di file asli berwarna gelap. */
+/* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x. */
 .pdp-logo{display:block;width:100%;max-width:520px}
 .pdp-logo img{display:block;width:100%;height:auto}
-.pdp-logo img.pdp-logo__b{display:none}
-[data-theme="dark"] .pdp-logo img.pdp-logo__a{display:none}
-[data-theme="dark"] .pdp-logo img.pdp-logo__b{display:block}
 .pdp-info>p{margin-top:18px;font-size:15px;line-height:1.75;color:var(--body-text)}
 .pdp-info>p b{color:var(--text);font-style:italic}
 .subhead{margin:28px 0 12px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;color:var(--spec)}
@@ -708,7 +994,7 @@ ul{margin:0;padding:0;list-style:none}
 .size-chip.is-active,.size-chip:hover{border-color:var(--outline-strong);color:var(--text);box-shadow:inset 0 0 0 1px var(--outline-strong)}
 .contact-btns{display:flex;flex-wrap:wrap;gap:14px}
 .contact-btn{display:inline-flex;align-items:center;gap:10px;height:46px;padding:0 18px;border-radius:10px;font-size:15px;font-weight:800;letter-spacing:-.02em;background:var(--grey-100);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
-.contact-btn:hover{transform:translateY(-2px);box-shadow:var(--shadow-s)}
+.contact-btn:hover{transform:translateY(-2px)}
 .contact-btn svg{width:22px;height:22px;flex:0 0 22px}
 .contact-btn img{height:24px;width:auto;flex:0 0 auto;object-fit:contain}
 .contact-btn--wa{background:var(--wa);color:#fff}
@@ -720,6 +1006,68 @@ ul{margin:0;padding:0;list-style:none}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important}
+}
+
+/* ---------- Masuknya pilar "Stok Aman" & "Pengiriman Aman" ----------
+   Menumpang pemicu yang sudah ada: IntersectionObserver di main.js yang
+   menempelkan .is-in, CSS di sini yang mengatur urutan dan gayanya. Ditulis
+   sebagai aturan khusus .pilar, bukan dengan mengubah .reveal, supaya section
+   lain di situs tidak ikut berubah.
+
+   Isi kartu pakai @keyframes, bukan transition-delay. Alasannya .btn ikut
+   terbawa: transition-delay yang dipasang untuk giliran masuk akan tetap
+   menempel setelah animasinya selesai, jadi hover tombolnya jadi telat
+   setengah detik. animation-fill-mode:backwards menahan keadaan awal selama
+   jedanya, lalu melepas elemennya kembali ke keadaan normal begitu selesai —
+   transition milik tombol tidak tersentuh sama sekali. */
+@keyframes pilarRise{from{opacity:0;transform:translateY(18px)}}
+@keyframes pilarZoom{from{opacity:0;transform:scale(1.09)}}
+@keyframes pilarDrive{from{opacity:0;transform:translateX(16%)}}
+
+/* Judul: naik sedikit lebih jauh dari .reveal biasa, sambil menutup dari
+   ukuran yang agak mengecil supaya terasa "mendarat", bukan sekadar muncul. */
+.pilar__title.reveal{transform:translateY(28px) scale(.97);transition-duration:.8s}
+.pilar__title.reveal.is-in{transform:none}
+
+/* Pelat kartunya mendarat duluan; isinya menyusul satu per satu di atasnya.
+   Selama jeda itu isinya ditahan transparan, jadi yang terlihat kartu kosong
+   yang memudar masuk lalu terisi — bukan semuanya nongol berbarengan. */
+.pilar .feature-card.reveal{transform:translateY(34px);transition-duration:.75s}
+/* Wajib ditulis ulang di sini: .pilar .feature-card.reveal (0-3-0) mengalahkan
+   .reveal.is-in (0-2-0), jadi tanpa baris ini kartunya tidak pernah kembali
+   ke posisi semula — dia mentok 34px di bawah tempatnya. */
+.pilar .feature-card.reveal.is-in{transform:none}
+.pilar .feature-card.is-in .feature-card__body > *{animation:pilarRise .6s var(--ease) backwards}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(1){animation-delay:.16s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(2){animation-delay:.26s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(3){animation-delay:.36s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(4){animation-delay:.46s}
+
+/* Foto menutup pelan dari sedikit lebih besar — aman karena .feature-card__media
+   memang overflow:hidden, jadi kelebihannya terpotong rapi. */
+.pilar .feature-card.is-in .feature-card__media img{animation:pilarZoom 1.2s var(--ease) .1s backwards}
+
+/* Varian ilustrasi (Pengiriman Aman): media-nya overflow:visible dan gambarnya
+   ditempel ke kanan, jadi zoom malah menggeser truknya keluar kartu. Diganti
+   masuk dari kanan — kebetulan pas juga dengan isinya: truk yang datang. */
+.pilar .feature-card--illus.is-in .feature-card__media img{animation:pilarDrive 1.1s var(--ease) .2s backwards}
+
+/* Kartu PLB dan sepasang foto di bawahnya: sama seperti judul, naik sambil
+   menutup dari ukuran yang sedikit mengecil biar segaris gayanya. */
+.pilar .plb.reveal,.pilar .photo-duo img.reveal{transform:translateY(30px) scale(.97);transition-duration:.75s}
+.pilar .plb.reveal.is-in,.pilar .photo-duo img.reveal.is-in{transform:none}
+
+/* Hemat gerak. Harus ditulis terpisah di sini, tidak cukup menumpang blok
+   .reveal di atas: selector pilar (0-3-0) mengalahkan .reveal (0-1-0), jadi
+   tanpa penawar ini kartunya tetap terparkir 30-34px di bawah tempatnya dan
+   tidak akan pernah naik karena transisinya memang dimatikan. */
+@media (prefers-reduced-motion:reduce){
+  .pilar__title.reveal,
+  .pilar .feature-card.reveal,
+  .pilar .plb.reveal,
+  .pilar .photo-duo img.reveal{transform:none;transition:none}
+  .pilar .feature-card__body > *,
+  .pilar .feature-card__media img{animation:none}
 }
 
 /* ==========================================================================
@@ -752,7 +1100,6 @@ ul{margin:0;padding:0;list-style:none}
   /* kartu velg makin sempit di tablet -> kolom gambar dikecilkan supaya judulnya
      tidak pecah 3 baris; jeda putih 200px juga kebanyakan di layar kecil */
   .velg-wrap{padding-bottom:110px}
-  .velg-card__img{flex:0 0 50%}
   .velg-card__body h3{font-size:21px}
   /* jarak antar section 150-200px kekecilan layarnya di tablet -> dipendekkan */
   .pilar{padding:110px 0 90px}
@@ -769,6 +1116,8 @@ ul{margin:0;padding:0;list-style:none}
   .news__grid,.pair-grid{grid-template-columns:1fr 1fr}
   .footer__grid{grid-template-columns:1fr 1fr;gap:36px}
   .testi__grid{grid-template-columns:1fr;padding-left:24px}
+  /* tiga kartu di tablet jadi terlalu kurus untuk kutipan sepanjang ini */
+  .testi__rail{--testi-per:2}
   .catalog__layout{grid-template-columns:1fr}
   .catalog__sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.07)}
   .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -788,10 +1137,15 @@ ul{margin:0;padding:0;list-style:none}
   .pilar{padding:72px 0 60px}
   .aftersales{padding:56px 0 60px}
   .testi{margin:60px 0}
+  .testi__rail{--testi-per:1;--testi-gap:16px}
   .faq{padding:56px 0 60px}
   .news{margin-top:60px}
-  .velg-card{height:210px;padding-right:18px}
-  .velg-card__img{flex:0 0 46%}
+  /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
+     layar) dan lebih pendek. Di lebar segini kolom foto pasti menyusut, jadi
+     ruang atas antar kartu tidak lagi sama persis — konsekuensi yang tak
+     terhindarkan selama fotonya tidak boleh dipotong. */
+  .velg-card{flex-basis:calc(100vw - 48px);height:210px;padding-right:18px}
+  .velg-card__img{height:calc(100% - 40px)}
   .velg-card__body h3{font-size:20px}
   /* gambar hero landscape banget (2400x1110) — di layar sempit dibiarkan lebih
      pendek supaya crop kiri-kanannya nggak kelewat banyak */
@@ -805,8 +1159,8 @@ ul{margin:0;padding:0;list-style:none}
   .faq__panel{padding:32px 22px}
   /* banner "Kenapa Harus Tiberman" terlalu landscape buat layar sempit —
      tinggi dikunci lalu gambarnya di-crop kiri-kanan biar teks tetap kebaca */
-  .why-banner__bg{height:180px;object-fit:cover;object-position:50% 100%}
-  .why-banner h2{top:60%;font-size:22px}
+  /* Di ponsel jarak scroll animasinya dipendekkan biar tidak terasa panjang. */
+  .why__track{height:220vh}
   .coverflow{height:330px}
   .coverflow__item{width:160px;height:275px}
   .coverflow__nav{width:42px;height:42px}
@@ -843,9 +1197,9 @@ html[data-intro] .intro{
   transition:opacity .4s var(--ease),background-color .75s var(--ease);
 }
 html[data-intro] .intro.is-out{opacity:0;pointer-events:none}
-/* Cuma tirainya yang memudar. pointer-events sengaja TIDAK dimatikan di sini:
-   di jalur WebM tirai naik 0,8 detik sebelum serah-terima, dan tombol Lewati
-   harus tetap bisa diklik selama jeda itu (dimatikan di main.js saat handoff). */
+/* Cuma tirainya yang memudar. pointer-events sengaja TIDAK dimatikan di sini;
+   yang mematikannya main.js saat serah-terima, supaya klik baru lolos ke
+   halaman setelah tulisannya selesai berpindah. */
 html[data-intro] .intro.is-lifting{background-color:transparent}
 
 .intro__video{
@@ -872,7 +1226,7 @@ html[data-intro] .intro.is-lifting{background-color:transparent}
 }
 /* baru ditampilkan kalau buffering-nya memang terasa (>.4s), biar load cepat
    tidak kedipan garis sekilas */
-html[data-intro] .intro__bar{animation:intro-skip-in .3s var(--ease) .4s forwards}
+html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forwards}
 .intro__bar.is-done{animation:none;opacity:0}
 .intro__bar span{
   display:block;
@@ -896,27 +1250,7 @@ html[data-intro] .intro__bar{animation:intro-skip-in .3s var(--ease) .4s forward
   filter:drop-shadow(0 12px 40px rgba(0,0,0,.45));   /* samakan dgn .hero__wordmark img */
 }
 
-.intro__skip{
-  position:absolute;
-  right:24px;
-  bottom:24px;
-  padding:9px 20px;
-  border:1px solid rgba(255,255,255,.45);
-  border-radius:999px;
-  background:rgba(0,0,0,.35);
-  color:#fff;
-  font:500 13px/1 'Montserrat',system-ui,sans-serif;
-  letter-spacing:.02em;
-  cursor:pointer;
-  opacity:0;
-  transition:opacity .4s var(--ease),background .2s var(--ease),border-color .2s var(--ease);
-}
-/* tombolnya baru muncul setelah sedetik biar tidak mengganggu awal animasi */
-html[data-intro] .intro__skip{animation:intro-skip-in .4s var(--ease) 1.2s forwards}
-.intro__skip:hover{background:rgba(0,0,0,.6);border-color:#fff}
-.intro__skip:focus-visible{outline:2px solid #fff;outline-offset:3px}
-
-@keyframes intro-skip-in{to{opacity:1}}
+@keyframes intro-fade-in{to{opacity:1}}
 
 /* Layar potret: videonya 16:9, kalau di-crop logonya ikut terpotong. Jadi
    dimuat utuh lalu diperbesar — latar videonya hitam pekat sama seperti
@@ -930,8 +1264,3 @@ html[data-intro] .intro__skip{animation:intro-skip-in .4s var(--ease) 1.2s forwa
   .intro{display:none!important}
 }
 
-@media (max-width:640px){
-  /* di layar sempit bar-nya naik ke atas tombol Lewati biar tidak berdempetan */
-  .intro__bar{bottom:62px}
-  .intro__skip{right:16px;bottom:16px;padding:8px 16px;font-size:12px}
-}

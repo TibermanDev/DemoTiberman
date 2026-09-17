@@ -1,5 +1,5 @@
 /* =============================================================
-   Tiberman — tema (terang/gelap) + alih bahasa ID / EN / ZH.
+   Tiberman — alih bahasa ID / EN / ZH.
 
    Kamus dikunci memakai teks Indonesia yang ada di HTML, jadi
    markup tidak perlu ditandai satu per satu. String yang tidak
@@ -9,7 +9,6 @@ window.TIBERMAN_I18N = (function () {
   'use strict';
 
   var STORE_LANG = 'tbm-lang';
-  var STORE_THEME = 'tbm-theme';
 
   var EN = {
     /* --- navigasi --- */
@@ -18,7 +17,6 @@ window.TIBERMAN_I18N = (function () {
     'Traktor': 'Tractor',
     'Loader-Grader': 'Loader & Grader',
     'Buka menu': 'Open menu',
-    'Lewati': 'Skip',
 
     /* --- hero & beranda --- */
     'siap melayani Anda lebih dekat dengan': 'ready to serve you closer through',
@@ -152,7 +150,6 @@ window.TIBERMAN_I18N = (function () {
     'SuperArea': '服务网点',
     'Contact Us': '联系我们',
     'Buka menu': '打开菜单',
-    'Lewati': '跳过',
 
     /* --- hero & beranda --- */
     'siap melayani Anda lebih dekat dengan': '为您提供更贴近的服务',
@@ -386,33 +383,10 @@ window.TIBERMAN_I18N = (function () {
     syncControls();
   }
 
-  /* ---------- tema ---------- */
-  function currentTheme() {
-    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
-  }
-
-  function setTheme(next) {
-    if (next === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
-    else document.documentElement.removeAttribute('data-theme');
-    try { localStorage.setItem(STORE_THEME, next); } catch (e) {}
-    syncControls();
-  }
-
   /* ---------- kontrol di navbar ---------- */
   var LABEL = { id: 'ID', en: 'EN', zh: '中文' };
-  var TIP = {
-    id: { dark: 'Aktifkan tema gelap', light: 'Aktifkan tema terang' },
-    en: { dark: 'Switch to dark theme', light: 'Switch to light theme' },
-    zh: { dark: '切换到深色主题', light: '切换到浅色主题' }
-  };
 
   function syncControls() {
-    var t = currentTheme();
-    var tip = TIP[lang] || TIP.id;
-    Array.prototype.forEach.call(document.querySelectorAll('[data-theme-toggle]'), function (b) {
-      b.setAttribute('aria-pressed', t === 'dark' ? 'true' : 'false');
-      b.setAttribute('aria-label', t === 'dark' ? tip.light : tip.dark);
-    });
     Array.prototype.forEach.call(document.querySelectorAll('[data-lang-label]'), function (s) {
       s.textContent = LABEL[lang];
     });
@@ -434,8 +408,6 @@ window.TIBERMAN_I18N = (function () {
   function wire() {
     document.addEventListener('click', function (e) {
       var t = e.target;
-      var toggle = t.closest && t.closest('[data-theme-toggle]');
-      if (toggle) { setTheme(currentTheme() === 'dark' ? 'light' : 'dark'); return; }
 
       var choice = t.closest && t.closest('[data-lang]');
       if (choice) { setLang(choice.getAttribute('data-lang')); closeMenus(); return; }
@@ -471,7 +443,6 @@ window.TIBERMAN_I18N = (function () {
     apply: apply,
     refresh: refresh,
     setLang: setLang,
-    setTheme: setTheme,
     getLang: function () { return lang; }
   };
 })();
