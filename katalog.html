@@ -80,14 +80,19 @@
     <div class="chips" data-chips></div>
 
     <div class="catalog__body" data-catalog-body></div>
-
-    <footer class="footer footer--slim">
-      <div class="container">
-        <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
-      </div>
-    </footer>
   </main>
 </div>
+
+<!-- Footer sengaja di LUAR .catalog__layout, sama seperti katalog-topnav.html.
+     Waktu masih di dalam .catalog__main dia cuma selebar kolom isi, dan kalau
+     produknya sedikit kolom itu tetap diregangkan setinggi sidebar — sisa
+     regangannya muncul sebagai pita kosong di bawah footer, jadi footernya
+     kelihatan melayang. -->
+<footer class="footer footer--slim">
+  <div class="container">
+    <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
+  </div>
+</footer>
 
 <script src="assets/js/products.js?v=20260907a"></script>
 <script src="assets/js/i18n.js?v=20260907a" defer></script>
