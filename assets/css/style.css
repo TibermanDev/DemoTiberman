@@ -39,53 +39,13 @@
   --shadow:0 10px 40px rgba(0,0,0,.08);
   --ease:cubic-bezier(.22,.61,.36,1);
 
-  /* permukaan & teks yang dibalik saat tema gelap */
+  /* permukaan & warna teks halaman */
   --bg:#fff;            /* latar halaman */
   --surface:#fff;       /* kartu di atas latar terang */
   --body-text:#3f3f46;  /* paragraf isi */
   --card-img:#fff;      /* kotak foto produk di katalog */
   --illus-bg:#f6f5f8;
   --outline-strong:rgba(0,0,0,.45);
-}
-
-/* ==========================================================================
-   TEMA GELAP — hanya menimpa token; section yang memang sudah gelap
-   (hero, katalog, footer) tidak ikut berubah.
-   ========================================================================== */
-[data-theme="dark"]{
-  --text:#f2f2f5;
-  --muted:#a1a1aa;
-  --muted-2:#8b8b93;
-  --line:#2e2e35;
-  --grey-50:#151518;
-  --grey-100:#1c1c21;
-  --grey-200:#24242a;
-  --bg:#0e0e10;
-  --surface:#17171b;
-  --body-text:#c9c9d1;
-  --card-img:#202024;
-  --outline-strong:rgba(255,255,255,.5);
-  --spec:#9ea1bd;
-  --shadow-s:0 1px 2px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.35);
-  --shadow:0 10px 40px rgba(0,0,0,.55);
-  color-scheme:dark;
-}
-
-/* ilustrasi truk-nya sudah punya latar terang menyatu (truck-tiberman.webp),
-   jadi kartu ini tetap terang -> tokennya dikembalikan ke nilai terang. */
-/* panel biru pakai gradien versi gelap supaya tetap satu nuansa dengan halaman */
-[data-theme="dark"] .accessories{
-  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
-}
-[data-theme="dark"] .velg-card{
-  background:url(../img/background-blue-dark.webp) 50% 0 / 100% 100% no-repeat,#141c26;
-}
-[data-theme="dark"] .feature-card--illus{
-  --text:#1d1d1f;
-  --muted:#6e6e73;
-  --muted-2:#86868b;
-  --body-text:#3f3f46;
-  color:#1d1d1f;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -200,9 +160,6 @@ ul{margin:0;padding:0;list-style:none}
 }
 .tool-btn:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.45)}
 .tool-btn svg{width:16px;height:16px;flex:0 0 16px}
-.tool-btn .icon-sun{display:none}
-[data-theme="dark"] .tool-btn .icon-sun{display:block}
-[data-theme="dark"] .tool-btn .icon-moon{display:none}
 .lang{position:relative}
 .lang__caret{width:9px;height:9px;flex:0 0 9px;transition:transform .2s var(--ease)}
 .lang.is-open .lang__caret{transform:rotate(180deg)}
@@ -694,7 +651,6 @@ ul{margin:0;padding:0;list-style:none}
    diberi warna latar supaya tidak ikut jadi lubang. */
 .why__mask span{color:#000}
 .why__mask p{color:var(--bg)}
-[data-theme="dark"] .why__mask p{color:#000}
 /* Gradasi mendatar gelap -> merah, mengikuti mock: awal kalimat nyaris hitam,
    makin ke kanan makin merah. background-clip:text = gradasinya dipotong
    mengikuti bentuk huruf. */
@@ -703,11 +659,6 @@ ul{margin:0;padding:0;list-style:none}
   background:linear-gradient(90deg,#141414 0%,#5e0c0a 22%,#a81c18 45%,#d42f2c 68%,#ef3936 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-/* Mode gelap: kebalikannya — lapisan hitam yang menutup, huruf putih yang jadi
-   lubang, dengan multiply (hitam x apa pun = hitam; putih x backdrop = backdrop). */
-[data-theme="dark"] .why__mask{background:#000;mix-blend-mode:multiply}
-[data-theme="dark"] .why__mask span{color:#fff}
-[data-theme="dark"] .why__tint p{color:#f5f5f7}
 /* Hemat gerak: tidak ada animasi scroll sama sekali, cukup satu layar diam. */
 @media (prefers-reduced-motion:reduce){
   .why__track{height:100vh}
@@ -774,6 +725,14 @@ ul{margin:0;padding:0;list-style:none}
 .dots button{width:8px;height:8px;border-radius:999px;background:#c9c9cf;transition:width .3s var(--ease),background .3s var(--ease)}
 .dots button.is-active{width:22px;background:var(--ink)}
 
+/* Caption di bawah kipas ikut berganti mengikuti slide tengah. "Tiberman"
+   selalu di baris sendiri seperti desain lama, nama layanannya di baris kedua. */
+.aftersales__caption h3 span{display:block}
+/* Hemat gerak: putarannya dimatikan main.js, pindah slide pun tanpa animasi. */
+@media (prefers-reduced-motion: reduce){
+  .coverflow__item{transition:none}
+}
+
 /* ---------- Testimoni ---------- */
 .testi{background:var(--grey-50);padding:64px 0;overflow:hidden;margin: 150px 0;}
 .testi__grid{
@@ -786,10 +745,26 @@ ul{margin:0;padding:0;list-style:none}
 }
 .testi__intro h2{margin-bottom:16px}
 .testi__intro p{color:var(--muted);font-size:20px;line-height:1.6}
-.testi__rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 24px 20px 0;scrollbar-width:none;cursor:grab}
+/* --testi-per = berapa kartu UTUH yang muat dalam satu layar rel. Lebar kartu
+   dihitung dari angka itu, bukan dipatok 346px: dengan lebar tetap, tepi rel
+   hampir tidak pernah jatuh pas di batas kartu, jadi selalu ada kartu yang
+   tersisa separuh di pinggir dan kelihatan seperti terpotong. */
+.testi__rail{
+  --testi-per:3;
+  --testi-gap:24px;
+  display:flex;gap:var(--testi-gap);overflow-x:auto;scroll-snap-type:x mandatory;
+  padding:8px var(--testi-gap) 20px 0;scrollbar-width:none;cursor:grab;
+}
 .testi__rail::-webkit-scrollbar{display:none}
 .testi__rail.is-dragging{cursor:grabbing;scroll-snap-type:none}
-.testi-card{flex:0 0 346px;scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:22px;position:relative}
+/* Dipasang main.js waktu carousel otomatis aktif. Snap mandatory menarik
+   balik posisi tiap frame, jadi geseran yang digerakkan skrip tidak pernah
+   sampai. Tanpa JS / saat hemat gerak kelas ini tidak ada dan snap tetap
+   berlaku untuk geseran manual. */
+.testi__rail.is-auto{scroll-snap-type:none}
+/* 100% di sini = lebar isi rel (sudah dikurangi padding), jadi
+   --testi-per kartu + selanya persis mengisi satu layar rel. */
+.testi-card{flex:0 0 calc((100% - (var(--testi-per) - 1) * var(--testi-gap)) / var(--testi-per));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:22px;position:relative}
 .testi-card__quote{font-size:60px;line-height:.6;color:#a1a1a8;font-weight:800}
 .testi-card__avatar{position:absolute;top:22px;right:22px;width:88px;height:88px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(140deg,#c2410c,#7c1d0c);color:#fff;font-weight:800;font-size:26px}
 .testi-card__avatar img{width:100%;height:100%;object-fit:cover}
@@ -822,6 +797,10 @@ ul{margin:0;padding:0;list-style:none}
 
 /* ---------- News ---------- */
 .news{background:var(--grey-50);padding:80px 0 96px;margin-top: 150px;}
+/* margin-top itu jarak ke section di ATASNYA waktu News masih ikut beranda.
+   Di halaman News sendiri tidak ada yang di atasnya selain navbar, jadi
+   jaraknya jadi ruang kosong yang menganggur. */
+.subpage .news{margin-top:0}
 .news__head h2{font-size:clamp(34px,4.4vw,52px);letter-spacing:-.035em}
 .news__head p{font-weight:700;margin-top:6px}
 .news__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:36px}
@@ -996,13 +975,9 @@ ul{margin:0;padding:0;list-style:none}
 .doc-btns a:hover{border-color:var(--red);color:var(--red)}
 
 /* lockup TiberMAX dipakai sebagai gambar (assets/img/tibermax-logo.png) */
-/* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x.
-   Versi -ondark dipakai saat tema gelap karena UNINEST & 800 di file asli berwarna gelap. */
+/* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x. */
 .pdp-logo{display:block;width:100%;max-width:520px}
 .pdp-logo img{display:block;width:100%;height:auto}
-.pdp-logo img.pdp-logo__b{display:none}
-[data-theme="dark"] .pdp-logo img.pdp-logo__a{display:none}
-[data-theme="dark"] .pdp-logo img.pdp-logo__b{display:block}
 .pdp-info>p{margin-top:18px;font-size:15px;line-height:1.75;color:var(--body-text)}
 .pdp-info>p b{color:var(--text);font-style:italic}
 .subhead{margin:28px 0 12px;font-size:clamp(20px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;color:var(--spec)}
@@ -1028,6 +1003,68 @@ ul{margin:0;padding:0;list-style:none}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
   *{animation-duration:.001ms !important;animation-iteration-count:1 !important}
+}
+
+/* ---------- Masuknya pilar "Stok Aman" & "Pengiriman Aman" ----------
+   Menumpang pemicu yang sudah ada: IntersectionObserver di main.js yang
+   menempelkan .is-in, CSS di sini yang mengatur urutan dan gayanya. Ditulis
+   sebagai aturan khusus .pilar, bukan dengan mengubah .reveal, supaya section
+   lain di situs tidak ikut berubah.
+
+   Isi kartu pakai @keyframes, bukan transition-delay. Alasannya .btn ikut
+   terbawa: transition-delay yang dipasang untuk giliran masuk akan tetap
+   menempel setelah animasinya selesai, jadi hover tombolnya jadi telat
+   setengah detik. animation-fill-mode:backwards menahan keadaan awal selama
+   jedanya, lalu melepas elemennya kembali ke keadaan normal begitu selesai —
+   transition milik tombol tidak tersentuh sama sekali. */
+@keyframes pilarRise{from{opacity:0;transform:translateY(18px)}}
+@keyframes pilarZoom{from{opacity:0;transform:scale(1.09)}}
+@keyframes pilarDrive{from{opacity:0;transform:translateX(16%)}}
+
+/* Judul: naik sedikit lebih jauh dari .reveal biasa, sambil menutup dari
+   ukuran yang agak mengecil supaya terasa "mendarat", bukan sekadar muncul. */
+.pilar__title.reveal{transform:translateY(28px) scale(.97);transition-duration:.8s}
+.pilar__title.reveal.is-in{transform:none}
+
+/* Pelat kartunya mendarat duluan; isinya menyusul satu per satu di atasnya.
+   Selama jeda itu isinya ditahan transparan, jadi yang terlihat kartu kosong
+   yang memudar masuk lalu terisi — bukan semuanya nongol berbarengan. */
+.pilar .feature-card.reveal{transform:translateY(34px);transition-duration:.75s}
+/* Wajib ditulis ulang di sini: .pilar .feature-card.reveal (0-3-0) mengalahkan
+   .reveal.is-in (0-2-0), jadi tanpa baris ini kartunya tidak pernah kembali
+   ke posisi semula — dia mentok 34px di bawah tempatnya. */
+.pilar .feature-card.reveal.is-in{transform:none}
+.pilar .feature-card.is-in .feature-card__body > *{animation:pilarRise .6s var(--ease) backwards}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(1){animation-delay:.16s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(2){animation-delay:.26s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(3){animation-delay:.36s}
+.pilar .feature-card.is-in .feature-card__body > *:nth-child(4){animation-delay:.46s}
+
+/* Foto menutup pelan dari sedikit lebih besar — aman karena .feature-card__media
+   memang overflow:hidden, jadi kelebihannya terpotong rapi. */
+.pilar .feature-card.is-in .feature-card__media img{animation:pilarZoom 1.2s var(--ease) .1s backwards}
+
+/* Varian ilustrasi (Pengiriman Aman): media-nya overflow:visible dan gambarnya
+   ditempel ke kanan, jadi zoom malah menggeser truknya keluar kartu. Diganti
+   masuk dari kanan — kebetulan pas juga dengan isinya: truk yang datang. */
+.pilar .feature-card--illus.is-in .feature-card__media img{animation:pilarDrive 1.1s var(--ease) .2s backwards}
+
+/* Kartu PLB dan sepasang foto di bawahnya: sama seperti judul, naik sambil
+   menutup dari ukuran yang sedikit mengecil biar segaris gayanya. */
+.pilar .plb.reveal,.pilar .photo-duo img.reveal{transform:translateY(30px) scale(.97);transition-duration:.75s}
+.pilar .plb.reveal.is-in,.pilar .photo-duo img.reveal.is-in{transform:none}
+
+/* Hemat gerak. Harus ditulis terpisah di sini, tidak cukup menumpang blok
+   .reveal di atas: selector pilar (0-3-0) mengalahkan .reveal (0-1-0), jadi
+   tanpa penawar ini kartunya tetap terparkir 30-34px di bawah tempatnya dan
+   tidak akan pernah naik karena transisinya memang dimatikan. */
+@media (prefers-reduced-motion:reduce){
+  .pilar__title.reveal,
+  .pilar .feature-card.reveal,
+  .pilar .plb.reveal,
+  .pilar .photo-duo img.reveal{transform:none;transition:none}
+  .pilar .feature-card__body > *,
+  .pilar .feature-card__media img{animation:none}
 }
 
 /* ==========================================================================
@@ -1076,6 +1113,8 @@ ul{margin:0;padding:0;list-style:none}
   .news__grid,.pair-grid{grid-template-columns:1fr 1fr}
   .footer__grid{grid-template-columns:1fr 1fr;gap:36px}
   .testi__grid{grid-template-columns:1fr;padding-left:24px}
+  /* tiga kartu di tablet jadi terlalu kurus untuk kutipan sepanjang ini */
+  .testi__rail{--testi-per:2}
   .catalog__layout{grid-template-columns:1fr}
   .catalog__sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid rgba(255,255,255,.07)}
   .product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -1095,6 +1134,7 @@ ul{margin:0;padding:0;list-style:none}
   .pilar{padding:72px 0 60px}
   .aftersales{padding:56px 0 60px}
   .testi{margin:60px 0}
+  .testi__rail{--testi-per:1;--testi-gap:16px}
   .faq{padding:56px 0 60px}
   .news{margin-top:60px}
   /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
@@ -1154,9 +1194,9 @@ html[data-intro] .intro{
   transition:opacity .4s var(--ease),background-color .75s var(--ease);
 }
 html[data-intro] .intro.is-out{opacity:0;pointer-events:none}
-/* Cuma tirainya yang memudar. pointer-events sengaja TIDAK dimatikan di sini:
-   di jalur WebM tirai naik 0,8 detik sebelum serah-terima, dan tombol Lewati
-   harus tetap bisa diklik selama jeda itu (dimatikan di main.js saat handoff). */
+/* Cuma tirainya yang memudar. pointer-events sengaja TIDAK dimatikan di sini;
+   yang mematikannya main.js saat serah-terima, supaya klik baru lolos ke
+   halaman setelah tulisannya selesai berpindah. */
 html[data-intro] .intro.is-lifting{background-color:transparent}
 
 .intro__video{
@@ -1183,7 +1223,7 @@ html[data-intro] .intro.is-lifting{background-color:transparent}
 }
 /* baru ditampilkan kalau buffering-nya memang terasa (>.4s), biar load cepat
    tidak kedipan garis sekilas */
-html[data-intro] .intro__bar{animation:intro-skip-in .3s var(--ease) .4s forwards}
+html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forwards}
 .intro__bar.is-done{animation:none;opacity:0}
 .intro__bar span{
   display:block;
@@ -1207,27 +1247,7 @@ html[data-intro] .intro__bar{animation:intro-skip-in .3s var(--ease) .4s forward
   filter:drop-shadow(0 12px 40px rgba(0,0,0,.45));   /* samakan dgn .hero__wordmark img */
 }
 
-.intro__skip{
-  position:absolute;
-  right:24px;
-  bottom:24px;
-  padding:9px 20px;
-  border:1px solid rgba(255,255,255,.45);
-  border-radius:999px;
-  background:rgba(0,0,0,.35);
-  color:#fff;
-  font:500 13px/1 'Montserrat',system-ui,sans-serif;
-  letter-spacing:.02em;
-  cursor:pointer;
-  opacity:0;
-  transition:opacity .4s var(--ease),background .2s var(--ease),border-color .2s var(--ease);
-}
-/* tombolnya baru muncul setelah sedetik biar tidak mengganggu awal animasi */
-html[data-intro] .intro__skip{animation:intro-skip-in .4s var(--ease) 1.2s forwards}
-.intro__skip:hover{background:rgba(0,0,0,.6);border-color:#fff}
-.intro__skip:focus-visible{outline:2px solid #fff;outline-offset:3px}
-
-@keyframes intro-skip-in{to{opacity:1}}
+@keyframes intro-fade-in{to{opacity:1}}
 
 /* Layar potret: videonya 16:9, kalau di-crop logonya ikut terpotong. Jadi
    dimuat utuh lalu diperbesar — latar videonya hitam pekat sama seperti
@@ -1241,8 +1261,3 @@ html[data-intro] .intro__skip{animation:intro-skip-in .4s var(--ease) 1.2s forwa
   .intro{display:none!important}
 }
 
-@media (max-width:640px){
-  /* di layar sempit bar-nya naik ke atas tombol Lewati biar tidak berdempetan */
-  .intro__bar{bottom:62px}
-  .intro__skip{right:16px;bottom:16px;padding:8px 16px;font-size:12px}
-}

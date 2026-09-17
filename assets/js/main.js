@@ -58,13 +58,43 @@
     });
   });
 
-  /* ---------- 4. Coverflow "After Sales" ---------- */
+  /* ---------- 4. Coverflow "After Sales" ----------
+     Kipas 3D: satu slide di tengah, dua di kiri, dua di kanan. Berputar
+     sendiri tiap 3 detik dan TIDAK pernah menyisakan sisi kosong.
+
+     Supaya kedua sisi selalu terisi dua, jarak slide ke tengah dihitung
+     MELINGKAR: selisih indeks dibungkus ke rentang -n/2..n/2, jadi slide
+     yang keluar di satu ujung otomatis dianggap masuk di ujung seberangnya.
+
+     Daftar slide juga DIGANDAKAN. Tanpa itu, dengan lima slide untuk lima
+     posisi, tiap langkah ada satu slide yang harus lompat dari ujung kanan
+     ke ujung kiri — dan karena kelimanya kelihatan, lompatan itu ikut
+     terlihat sebagai kartu yang melesat menyeberang. Dengan sepuluh slide,
+     yang melompat selalu slide di posisi jauh yang opacity-nya sudah 0, jadi
+     penyeberangannya terjadi di luar pandangan. */
   var flow = document.querySelector('[data-coverflow]');
   if (flow) {
-    var items = Array.prototype.slice.call(flow.querySelectorAll('.coverflow__item'));
+    var track = flow.querySelector('.coverflow__track');
+    var real = Array.prototype.slice.call(track.querySelectorAll('.coverflow__item'));
+    var nReal = real.length;
+
+    /* Salinan hanya untuk mata: aria-hidden supaya daftar layanannya tidak
+       dibacakan dua kali oleh pembaca layar. */
+    real.forEach(function (el) {
+      var c = el.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      track.appendChild(c);
+    });
+
+    var items = Array.prototype.slice.call(track.querySelectorAll('.coverflow__item'));
+    var half = Math.floor(items.length / 2);
     var dotsWrap = document.querySelector('[data-coverflow-dots]');
+    var capTitle = document.querySelector('[data-coverflow-title]');
+    var capDesc = document.querySelector('[data-coverflow-desc]');
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     /* mulai dari slide tengah supaya kipasnya simetris (2 slide di tiap sisi) */
-    var current = Math.floor(items.length / 2);
+    var current = Math.floor(nReal / 2);
+    var flowTimer = null;
 
     var layout = function () {
       var narrow = window.innerWidth < 720;
@@ -79,7 +109,10 @@
          slide terluar dikasih faktor 1.28 biar tetap ada sela dan tidak saling tindih */
       var stepOut = sideW * 1.28 + gap;
       items.forEach(function (item, i) {
-        var d = i - current;
+        /* jarak melingkar: -half..half, bukan sekadar i - current */
+        var d = (i - current) % items.length;
+        if (d < -half) d += items.length;
+        if (d > half) d -= items.length;
         var abs = Math.abs(d);
         var dir = d < 0 ? -1 : 1;
         var x = d === 0 ? 0 : dir * (W / 2 + sideW / 2 + gap + (abs - 1) * stepOut);
@@ -91,11 +124,16 @@
         item.style.filter = d === 0 ? 'none' : 'grayscale(1) brightness(.72)';
         item.setAttribute('aria-hidden', d === 0 ? 'false' : 'true');
       });
+      /* Titik penanda tetap lima: slide ke-6..10 cuma salinan slide ke-1..5. */
+      var active = current % nReal;
       if (dotsWrap) {
         dotsWrap.querySelectorAll('button').forEach(function (b, i) {
-          b.classList.toggle('is-active', i === current);
+          b.classList.toggle('is-active', i === active);
         });
       }
+      var src = items[current];
+      if (capTitle && src.dataset.title) capTitle.textContent = src.dataset.title;
+      if (capDesc && src.dataset.desc) capDesc.textContent = src.dataset.desc;
     };
 
     var go = function (n) {
@@ -103,24 +141,58 @@
       layout();
     };
 
+    var flowStop = function () { if (flowTimer) { clearInterval(flowTimer); flowTimer = null; } };
+    var flowPlay = function () {
+      flowStop();
+      if (calm) return;                     /* hemat gerak: diam saja */
+      /* current - 1 = isinya bergeser ke KANAN, slide paling kanan yang
+         berpindah mengisi sisi kiri. */
+      flowTimer = setInterval(function () { go(current - 1); }, 3000);
+    };
+
+    /* Ditahan selama disentuh/di-hover atau ada fokus keyboard di dalamnya —
+       kalau tidak, layanan yang sedang dibaca keburu berganti sendiri. */
+    /* Dipasang di seluruh section, bukan cuma di kipasnya: caption dan panah
+       di bawah ikut bagian yang dibaca/dipakai orang. */
+    var flowZone = document.querySelector('.aftersales') || flow;
+    ['mouseenter', 'focusin', 'touchstart'].forEach(function (ev) {
+      flowZone.addEventListener(ev, flowStop, { passive: true });
+    });
+    ['mouseleave', 'focusout', 'touchend'].forEach(function (ev) {
+      flowZone.addEventListener(ev, flowPlay, { passive: true });
+    });
+    /* Tab yang tidak terlihat tidak perlu diputar. */
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) flowStop(); else flowPlay();
+    });
+
     if (dotsWrap) {
-      items.forEach(function (_, i) {
+      real.forEach(function (_, i) {
         var b = document.createElement('button');
         b.type = 'button';
         b.setAttribute('aria-label', 'Slide ' + (i + 1));
-        b.addEventListener('click', function () { go(i); });
+        /* Dipilih dari dua slide berjudul sama yang jaraknya paling dekat,
+           supaya kipasnya bergeser seperlunya, bukan memutar setengah lingkaran. */
+        b.addEventListener('click', function () {
+          var a = i, bIdx = i + nReal;
+          var da = Math.abs(((a - current + half) % items.length + items.length) % items.length - half);
+          var db = Math.abs(((bIdx - current + half) % items.length + items.length) % items.length - half);
+          go(da <= db ? a : bIdx);
+          flowPlay();
+        });
         dotsWrap.appendChild(b);
       });
     }
     var prev = document.querySelector('.coverflow__nav--prev');
     var next = document.querySelector('.coverflow__nav--next');
-    if (prev) prev.addEventListener('click', function () { go(current - 1); });
-    if (next) next.addEventListener('click', function () { go(current + 1); });
+    if (prev) prev.addEventListener('click', function () { go(current - 1); flowPlay(); });
+    if (next) next.addEventListener('click', function () { go(current + 1); flowPlay(); });
     items.forEach(function (item, i) {
-      item.addEventListener('click', function () { go(i); });
+      item.addEventListener('click', function () { go(i); flowPlay(); });
     });
     window.addEventListener('resize', layout);
     layout();
+    flowPlay();
   }
 
   /* ---------- 5. Testimoni: drag to scroll ---------- */
@@ -346,7 +418,14 @@
     }
   }
 
-  /* ---------- 9. Rel kartu kategori: carousel otomatis ----------
+  /* ---------- 9. Rel kartu: carousel otomatis ----------
+     Dipakai dua tempat: rel kategori (velg/ban) dan rel testimoni. Karena
+     perilakunya sama persis, kodenya satu dan elemennya dioper lewat
+     parameter — sekalian membereskan bentrok nama: dulu `var rail` di sini
+     memakai binding yang sama dengan `var rail` milik drag testimoni di
+     bagian 5, jadi begitu bagian ini jalan, drag testimoni ikut menggeser
+     rel kategori.
+
      Bukan geseran halus terus-menerus, tapi per KARTU: diam sebentar, lompat
      satu kartu dengan animasi pendek, diam lagi. Begitu kartu terakhir sudah
      mentok kanan, arahnya dibalik ke kiri, dan seterusnya (ping-pong).
@@ -360,23 +439,37 @@
      yang dapat fokus keyboard, dan rel sedang di luar layar. Kalau pengguna
      minta hemat gerak, seluruh fiturnya tidak dipasang — relnya tetap bisa
      digeser manual. */
-  var rail = document.querySelector('[data-velg-rail]');
-  if (rail && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
-    var RAIL_WAIT = 2200;   /* diam di tiap kartu, ms */
-    var RAIL_MOVE = 620;    /* lama perpindahan satu kartu, ms */
+  var autoRail = function (rail, period) {
+    if (!rail) return;
+    var RAIL_MOVE = 620;                        /* lama perpindahan satu kartu, ms */
+    /* period = jarak antar geseran, dihitung dari AWAL satu geseran ke awal
+       geseran berikutnya. Waktu diamnya sisa periode setelah dikurangi lama
+       animasi, jadi "geser tiap 3 detik" benar-benar 3 detik, bukan 3 detik
+       diam + 0,62 detik bergerak. */
+    var RAIL_WAIT = Math.max(period - RAIL_MOVE, 300);
     var railDir = 1, railIdx = 0, railPaused = false, railSeen = true;
     var railAnim = null, railTimer = 0;
 
     var railMax = function () { return rail.scrollWidth - rail.clientWidth; };
 
-    /* Posisi scroll supaya kartu ke-i rata kiri. offsetLeft dihitung dari tepi
-       dalam rel (sudah termasuk padding), jadi paddingnya dikurangi lagi biar
-       kartunya benar-benar sejajar tepi kiri area yang terlihat. */
+    /* Posisi scroll supaya kartu ke-i rata kiri.
+
+       Dulu dipakai offsetLeft, dan itu keliru: offsetLeft dihitung dari
+       offsetParent, sedangkan rel-nya tidak position:relative — jadi angkanya
+       ikut membawa posisi rel di dalam halaman. Di rel kategori kebetulan
+       tidak kelihatan karena relnya full-bleed (posisinya ~0), tapi rel
+       testimoni menjorok 24px+ ke kanan, sehingga SEMUA targetnya meleset
+       sebesar itu: posisi paling kiri tidak pernah kembali ke 0 dan kartu
+       pertama tinggal terpotong sedikit di tepi.
+
+       Diukur langsung dari selisih rect kartu terhadap rect rel, ditambah
+       geseran yang sudah terjadi — angka ini benar berapa pun letak relnya. */
     var railTarget = function (i) {
       var card = rail.children[i];
       if (!card) return null;
       var pad = parseFloat(getComputedStyle(rail).paddingLeft) || 0;
-      return Math.min(Math.max(card.offsetLeft - pad, 0), railMax());
+      var x = card.getBoundingClientRect().left - rail.getBoundingClientRect().left + rail.scrollLeft;
+      return Math.min(Math.max(x - pad, 0), railMax());
     };
 
     var easeInOut = function (t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; };
@@ -399,16 +492,18 @@
        berarti sudah mentok: arah dibalik. */
     var railNext = function () {
       if (railPaused || !railSeen || railMax() <= 1) { railQueue(); return; }
-      var to = railTarget(railIdx + railDir);
       var now = rail.scrollLeft;
-      if (to === null || (railDir > 0 && to <= now + 1)) {
+      var to = railTarget(railIdx + railDir);
+      if (to === null || (railDir > 0 && to <= now + 1) || (railDir < 0 && to >= now - 1)) {
+        /* Sudah mentok. Dulu di sini arahnya dibalik, railIdx dilempar ke ujung
+           seberang, lalu targetnya ternyata sama dengan posisi sekarang — satu
+           siklus penuh habis untuk diam di tempat sebelum benar-benar bergerak
+           balik. Sekarang langsung melangkah satu kartu ke arah baru. */
         railDir = -railDir;
-        railIdx = railDir > 0 ? 0 : rail.children.length - 1;
-        to = railTarget(railIdx);
+        to = railTarget(railIdx + railDir);
         if (to === null || Math.abs(to - now) < 1) { railQueue(); return; }
-      } else {
-        railIdx += railDir;
       }
+      railIdx += railDir;
       railGlide(to);
     };
 
@@ -454,7 +549,17 @@
       }, { threshold: 0 }).observe(rail);
     }
 
+    /* scroll-snap x mandatory berkelahi dengan scrollLeft yang digerakkan
+       per frame: tiap frame browser menarik posisinya balik ke titik snap
+       terdekat. Selama carousel-nya aktif, snap dimatikan lewat kelas ini —
+       rel tetap punya snap kalau JS mati atau pengguna minta hemat gerak. */
+    rail.classList.add('is-auto');
     railQueue();
+  };
+
+  if (!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+    autoRail(document.querySelector('[data-velg-rail]'), 2820);
+    autoRail(document.querySelector('[data-drag-rail]'), 3000);
   }
 
   /* ---------- 10. "Kenapa Harus Tiberman": video menyusut jadi isi tulisan ----------
@@ -494,12 +599,25 @@
        Kenapa tidak boleh ditebak: tiap huruf beda bentuk. Batang "T" lewat tengah
        kotak glyph, "a" tidak — tengahnya justru lubang, dan sisi kanannya (yang
        sempat saya pakai, 0,84 lebar) ternyata cuma menyisakan 2px tinta ke kanan
-       sehingga sebagian layar tetap putih. Yang dicari di sini: untuk tiap deretan
-       tinta mendatar, ambil titik tengahnya, ukur juga tinta menurun di kolom itu,
-       lalu pilih titik yang menuntut skala paling kecil untuk menutupi layar.
-       Hasilnya: pecahan posisi (ax, ay) di dalam kotak tinta + skala minimumnya. */
+       sehingga sebagian layar tetap putih.
+
+       Yang dicari: kotak TERBESAR yang seluruh isinya tinta, seukuran rasio
+       layar, berpusat di satu titik. Kalau layar diperbesar S kali dengan pusat
+       di titik itu, yang mengisi layar persis bayangan balik kotak tersebut —
+       jadi kotak yang utuh tinta = layar yang utuh video.
+
+       Versi sebelumnya cuma mengukur DUA GARIS lewat titik itu: panjang tinta
+       mendatar dan menurun. Dua garis boleh melewati layar sementara sudut-sudut
+       di antaranya jatuh di luar goresan huruf — dan memang itu yang terjadi:
+       terukur 13,9% bidang layar tidak tertutup tinta, muncul sebagai bidang
+       putih di kiri-atas dan pita putih di tepi kanan.
+
+       Pemeriksaan "seluruh kotak ini tinta?" dibuat O(1) memakai tabel jumlah
+       kumulatif (summed-area table): sebuah kotak utuh tinta kalau jumlah
+       pikselnya sama dengan luasnya. Tanpa itu, memeriksa tiap titik untuk tiap
+       calon pusat terlalu mahal. Seluruh pencarian ~3 ms. */
     var whyInk = function (fontStr, ch, fpx, vw, vh) {
-      var N = 120, c = document.createElement('canvas'), x = c.getContext('2d');
+      var N = 120, c = document.createElement('canvas'), x = c.getContext('2d', { willReadFrequently: true });
       var probe = fontStr.replace(/\d+(\.\d+)?px/, N + 'px');
       x.font = probe;
       var m = x.measureText(ch);
@@ -509,31 +627,46 @@
       c.width = adv + 4; c.height = asc + desc + 4;
       x.font = probe; x.textBaseline = 'alphabetic'; x.fillStyle = '#000';
       x.fillText(ch, 2, asc + 2);
-      var d = x.getImageData(0, 0, c.width, c.height).data;
-      var ink = function (px, py) {
-        return px >= 0 && py >= 0 && px < c.width && py < c.height && d[(py * c.width + px) * 4 + 3] > 128;
+      var W = c.width, H = c.height;
+      var d = x.getImageData(0, 0, W, H).data;
+
+      /* I[y][x] = jumlah piksel tinta di seluruh kotak dari pojok kiri-atas
+         sampai (x-1, y-1). Disimpan dengan satu baris & kolom nol di depan
+         supaya rumus empat-sudut di bawah tidak perlu menjaga batas. */
+      var I = new Int32Array((W + 1) * (H + 1));
+      var px, py;
+      for (py = 0; py < H; py++) {
+        for (px = 0; px < W; px++) {
+          I[(py + 1) * (W + 1) + px + 1] = (d[(py * W + px) * 4 + 3] > 128 ? 1 : 0)
+            + I[py * (W + 1) + px + 1] + I[(py + 1) * (W + 1) + px] - I[py * (W + 1) + px];
+        }
+      }
+      var solid = function (x0, y0, x1, y1) {
+        if (x0 < 0 || y0 < 0 || x1 >= W || y1 >= H) return false;
+        var n = I[(y1 + 1) * (W + 1) + x1 + 1] - I[y0 * (W + 1) + x1 + 1]
+              - I[(y1 + 1) * (W + 1) + x0] + I[y0 * (W + 1) + x0];
+        return n === (x1 - x0 + 1) * (y1 - y0 + 1);
       };
+
       var k = fpx / N;          /* 1 satuan canvas = k piksel di layar */
-      var best = null, y, xx, x0, mid, half, up, dn, i, halfV, perlu;
-      for (y = 1; y < c.height - 1; y += 2) {
-        x0 = null;
-        for (xx = 0; xx <= c.width; xx++) {
-          if (xx < c.width && ink(xx, y)) { if (x0 === null) x0 = xx; continue; }
-          if (x0 === null) continue;
-          mid = Math.round((x0 + xx - 1) / 2);
-          half = (xx - x0) / 2;
-          up = 0; dn = 0;
-          for (i = y - 1; ink(mid, i); i--) up++;
-          for (i = y + 1; ink(mid, i); i++) dn++;
-          halfV = Math.min(up, dn);
-          if (half > 0 && halfV > 0) {
-            /* Skala minimum: tinta harus mencapai setengah layar ke tiap arah. */
-            perlu = Math.max(vw / (2 * half * k), vh / (2 * halfV * k));
-            if (!best || perlu < best.perlu) {
-              best = { perlu: perlu, ax: (mid - 2) / adv, ay: (y - 2) / (asc + desc) };
-            }
+      var r = vw / vh;          /* kotaknya harus serasio layar: skalanya seragam */
+      var best = null, cx, cy, hw, hh, nw, nh, perlu;
+      for (cy = 0; cy < H; cy++) {
+        for (cx = 0; cx < W; cx++) {
+          if (!solid(cx, cy, cx, cy)) continue;       /* pusatnya sendiri harus tinta */
+          hw = 0;
+          for (;;) {
+            nw = hw + 1; nh = Math.max(1, Math.round(nw / r));
+            if (!solid(cx - nw, cy - nh, cx + nw, cy + nh)) break;
+            hw = nw;
           }
-          x0 = null;
+          if (!hw) continue;
+          hh = Math.max(1, Math.round(hw / r));
+          /* Skala minimum: separuh layar harus muat di separuh kotak. */
+          perlu = Math.max(vw / (2 * hw * k), vh / (2 * hh * k));
+          if (!best || perlu < best.perlu) {
+            best = { perlu: perlu, ax: (cx - 2) / adv, ay: (cy - 2) / (asc + desc) };
+          }
         }
       }
       return best;
@@ -688,7 +821,9 @@
       setTimeout(finish, 900);   /* kalau transisi tidak pernah jalan */
     };
 
-    intro.querySelector('[data-intro-skip]').addEventListener('click', closeIntro);
+    /* Tombol "Lewati" sudah dibuang; Escape dipertahankan sebagai jalan
+       keluar — overlay selayar penuh yang sama sekali tidak bisa ditutup itu
+       menjebak orang kalau videonya macet. */
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') closeIntro();
     });
@@ -697,7 +832,6 @@
       var bar = intro.querySelector('[data-intro-bar]');
       var fill = intro.querySelector('[data-intro-bar-fill]');
       var ghost = intro.querySelector('[data-intro-wordmark]');
-      var skipBtn = intro.querySelector('[data-intro-skip]');
 
       /* selagi buffering, garisnya ikut seberapa banyak video yang sudah siap */
       var showBuffer = function () {
@@ -779,7 +913,6 @@
            dan yang tersisa cuma tirai hitam polos. */
         video.style.visibility = 'hidden';
         if (bar) bar.hidden = true;
-        if (skipBtn) skipBtn.hidden = true;
         lift();                              /* di jalur alpha biasanya sudah naik */
         intro.style.pointerEvents = 'none';  /* klik lolos ke halaman selama travel */
 
