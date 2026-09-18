@@ -798,13 +798,9 @@ ul{margin:0;padding:0;list-style:none}
 .btn--connect{background:var(--red);color:#fff;text-transform:uppercase;font-weight:700;letter-spacing:.04em;height:44px}
 
 /* ---------- News ---------- */
-.news{background:var(--grey-50);padding:80px 0 96px;margin-top: 150px;}
 /* margin-top itu jarak ke section di ATASNYA waktu News masih ikut beranda.
    Di halaman News sendiri tidak ada yang di atasnya selain navbar, jadi
    jaraknya jadi ruang kosong yang menganggur. */
-.subpage .news{margin-top:0}
-.news__head h2{font-size:clamp(34px,4.4vw,52px);letter-spacing:-.035em}
-.news__head p{font-weight:700;margin-top:6px}
 .news__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:36px}
 /* tiap berita dibungkus kartu putih supaya terpisah dari latar abu section */
 .news-card{
@@ -1285,7 +1281,6 @@ ul{margin:0;padding:0;list-style:none}
   .aftersales{padding-bottom:90px}
   .testi{margin:90px 0}
   .faq{padding-bottom:90px}
-  .news{margin-top:90px}
   .feature-card__body{padding:40px 28px}
   .feature-card__media{min-height:260px}
   /* kartu jadi 1 kolom: ilustrasi mengalir di bawah teks selebar kartu, kotaknya
@@ -1318,7 +1313,6 @@ ul{margin:0;padding:0;list-style:none}
   .testi{margin:60px 0}
   .testi__rail{--testi-per:1;--testi-gap:16px}
   .faq{padding:56px 0 60px}
-  .news{margin-top:60px}
   /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
      layar) dan lebih pendek. Di lebar segini kolom foto pasti menyusut, jadi
      ruang atas antar kartu tidak lagi sama persis — konsekuensi yang tak
@@ -1527,4 +1521,208 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   /* Di layar sempit gambarnya jadi jauh lebih pendek daripada isinya, jadi
      diperbesar melewati lebar layar supaya bumi & bannya tetap terbaca. */
   .sa__bg,.sa__pins{left:-40%;right:-40%}
+}
+
+/* ==========================================================================
+   HALAMAN NEWS (news.html)
+   Banner utuh di atas, deretan tab kategori, lalu sorotan + "Latest Post",
+   dan section per kategori yang latarnya berselang-seling.
+   ========================================================================== */
+.nwp{background:#fff}
+/* Banner: tinggi bandnya dipatok sendiri (tidak lagi ikut rasio gambar),
+   lalu tiap lapis diposisikan di dalamnya. Ini yang membuat lockup tetap
+   terbaca di layar sempit sekaligus tidak jadi raksasa di layar lebar. */
+.nwp__banner{
+  position:relative;display:grid;place-items:center;overflow:hidden;
+  height:clamp(104px,11.5vw,168px);background:#fff;
+}
+.nwp__banner img{display:block}
+/* tekstur gudang: lapis paling bawah, menutup seluruh band */
+.nwp__banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+/* ban kiri-kanan: setinggi band, lebarnya ikut rasio, sisanya terpotong
+   tepi banner */
+.nwp__banner-tyre{position:absolute;top:0;height:100%;width:auto;pointer-events:none}
+.nwp__banner-tyre--l{left:0}
+.nwp__banner-tyre--r{right:0}
+/* lockup: relative supaya duduk di atas ketiga lapis di belakangnya */
+.nwp__banner-logo{position:relative;width:min(430px,42%);height:auto}
+
+.nwp__tabs{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:34px;
+  padding:22px 24px 0;border-bottom:1px solid var(--line);
+}
+.nwp-tab{
+  position:relative;padding:0 2px 14px;background:transparent;
+  font-size:14.5px;font-weight:700;letter-spacing:-.01em;color:var(--muted);
+  transition:color .2s var(--ease);
+}
+.nwp-tab:hover{color:var(--text)}
+/* garis bawah tab aktif ditarik 1px ke bawah supaya menindih garis
+   .nwp__tabs, bukan duduk di atasnya */
+.nwp-tab.is-active{color:var(--text)}
+.nwp-tab.is-active::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--red);
+}
+
+.nwp-top{padding:40px 0 10px}
+.nwp-top[hidden]{display:none}
+.nwp-top__grid{display:grid;grid-template-columns:1.9fr 1fr;gap:26px;align-items:start}
+
+.nwp-feature{background:var(--grey-50);border:1px solid var(--line);border-radius:14px;padding:16px 16px 22px}
+.nwp-feature__thumb{display:block;aspect-ratio:16/8;border-radius:10px;overflow:hidden;background:var(--grey-200)}
+.nwp-feature__thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.nwp-feature__thumb:hover img{transform:scale(1.03)}
+.nwp-feature__date{display:block;margin:18px 4px 0;font-size:13px;font-weight:700;color:var(--red)}
+.nwp-feature h2{margin:8px 4px 0;font-size:clamp(22px,2.4vw,28px);line-height:1.25;letter-spacing:-.025em}
+.nwp-feature h2 a{color:inherit}
+.nwp-feature h2 a:hover{color:var(--red)}
+.nwp-feature p{margin:12px 4px 0;font-size:15px;line-height:1.65;color:var(--body-text)}
+
+.nwp-latest{background:var(--grey-50);border:1px solid var(--line);border-radius:14px;padding:18px}
+.nwp-latest__head{font-size:17px;letter-spacing:-.02em;margin-bottom:14px}
+.nwp-mini{display:flex;gap:12px;padding:10px;border-radius:10px;transition:background .2s var(--ease)}
+.nwp-mini:hover{background:#fff}
+.nwp-mini__thumb{flex:0 0 74px;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--grey-200)}
+.nwp-mini__thumb img{width:100%;height:100%;object-fit:cover}
+.nwp-mini__body{min-width:0}
+.nwp-mini__body strong{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+  font-size:13px;line-height:1.4;font-weight:700;letter-spacing:-.01em;color:var(--text);
+}
+.nwp-mini__body em{display:block;margin-top:6px;font-style:normal;font-size:11.5px;font-weight:700;color:var(--red)}
+
+/* Latar berselang-seling, dimulai dari abu muda. nth-of-type menghitung
+   SEMUA <section> sekandung — .nwp-top ikut terhitung sebagai yang pertama,
+   jadi kategori pertama jatuh di urutan genap. */
+.nwp-cat{padding:44px 0 48px}
+.nwp-cat[hidden]{display:none}
+.nwp-cat:nth-of-type(even){background:var(--grey-50)}
+.nwp-cat__head{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.03em;margin-bottom:22px}
+
+/* --- headline utama tiap kategori ---
+   Disembunyikan secara bawaan dan cuma dibuka lewat .is-solo, yaitu waktu
+   kategorinya jadi satu-satunya yang tampil. Di tab Home judul section-nya
+   yang dipakai, karena di sana sudah ada kartu sorotan sendiri. */
+.nwp-hero{display:none}
+.nwp-cat.is-solo{padding-top:26px}
+.nwp-cat.is-solo .nwp-cat__head{display:none}
+.nwp-cat.is-solo .nwp-hero{
+  display:block;position:relative;overflow:hidden;
+  border-radius:14px;aspect-ratio:16/6;margin-bottom:28px;background:var(--ink-2);
+}
+.nwp-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.nwp-hero:hover img{transform:scale(1.03)}
+/* lapis gelap supaya judul putihnya tetap terbaca di atas foto apa pun */
+.nwp-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.74))}
+.nwp-hero__body{
+  position:relative;z-index:1;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  text-align:center;padding:26px 8%;
+}
+.nwp-hero__kicker{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.nwp-hero__body strong{
+  max-width:900px;font-size:clamp(20px,3vw,38px);line-height:1.2;
+  letter-spacing:-.03em;font-weight:800;color:#fff;
+}
+.nwp-hero__cta{
+  height:38px;padding:0 20px;border-radius:999px;display:inline-flex;align-items:center;
+  font-size:13.5px;font-weight:700;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
+  transition:background .22s var(--ease)
+}
+.nwp-hero:hover .nwp-hero__cta{background:var(--red);border-color:var(--red)}
+/* .news__grid & .news-card dipakai ulang dari komponen yang sudah ada,
+   cuma judulnya dikecilkan karena di sini kartunya lebih rapat. */
+.nwp-cat .news__grid{margin-top:0}
+.nwp-cat .news-card h3{font-size:18px}
+.nwp-cat .news-card p{font-size:14px;font-weight:500}
+
+@media (max-width:1024px){
+  .nwp__tabs{gap:22px}
+  .nwp-top__grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .nwp__tabs{gap:16px;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  .nwp__tabs::-webkit-scrollbar{display:none}
+  .nwp-tab{white-space:nowrap;font-size:13.5px}
+  /* Di bawah ~520px ban setinggi band sudah memakan 2/3 lebar layar dan
+     menabrak lockup. Jadi ukurannya dibalik: lebarnya yang dipatok (27%
+     tiap sisi), tingginya ikut rasio, dan didudukkan di dasar band. */
+  .nwp__banner{height:92px}
+  .nwp__banner-tyre{top:auto;bottom:0;height:auto;width:27%}
+  .nwp__banner-logo{width:44%}
+  .nwp-top{padding-top:26px}
+  .nwp-cat{padding:32px 0 34px}
+  /* 16/6 di lebar ponsel tinggal ~120px — tidak cukup untuk judul dua baris
+     plus tombol, jadi dibuat lebih jangkung. */
+  .nwp-cat.is-solo .nwp-hero{aspect-ratio:16/11;margin-bottom:20px}
+  .nwp-hero__body{gap:10px;padding:20px 22px}
+}
+
+/* ==========================================================================
+   HALAMAN DETAIL BERITA (news-detail.html)
+   Isi artikel di kiri + panel "Populer Bulan Ini" yang menempel di kanan.
+   Banner, tab, kartu "Artikel Terkait", dan panel sampingnya memakai ulang
+   komponen dari news.html supaya kedua halaman terasa satu kesatuan.
+   ========================================================================== */
+.nwp-art{padding:34px 0 10px}
+.nwp-art__grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:44px;align-items:start}
+/* top = tinggi .nav (45px) + jeda, karena navbarnya sticky */
+.nwp-art__side{position:sticky;top:calc(var(--nav-h) + 18px)}
+
+.art__crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.art__crumb a{color:var(--red)}
+.art__crumb a:hover{text-decoration:underline}
+.art h1{margin-top:14px;font-size:clamp(26px,3.6vw,42px);line-height:1.18;letter-spacing:-.035em}
+.art__meta{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:14px;font-size:13px;color:var(--muted)}
+.art__meta .art__author{font-weight:700;color:var(--red)}
+
+.art__figure{margin-top:24px}
+.art__figure img{display:block;width:100%;height:auto;border-radius:14px;background:var(--grey-200)}
+.art__figure figcaption{margin-top:10px;font-size:12.5px;line-height:1.5;color:var(--muted-2)}
+/* gambar di tengah tulisan dibuat lebih kecil daripada gambar utama */
+.art__figure--inline{margin:30px 0}
+.art__figure--inline img{border-radius:12px}
+
+/* Ukuran teks isi artikel dipatok agak besar (17px / line-height 1.8) karena
+   ini satu-satunya halaman yang memang untuk dibaca panjang. */
+.art__body{margin-top:26px;font-size:17px;line-height:1.8;color:var(--body-text)}
+.art__body > * + *{margin-top:20px}
+.art__lead{font-size:19px;line-height:1.7;font-weight:600;color:var(--text)}
+.art__body h2{
+  margin-top:38px;font-size:clamp(20px,2.4vw,26px);line-height:1.3;
+  letter-spacing:-.025em;color:var(--text);
+}
+.art__body strong{color:var(--text)}
+.art__body ul,.art__body ol{padding-left:24px}
+.art__body li + li{margin-top:10px}
+.art__body ul{list-style:disc}
+.art__body ol{list-style:decimal}
+.art__body ol li::marker{font-weight:800;color:var(--red)}
+.art__body blockquote{
+  margin:32px 0;padding:4px 0 4px 22px;border-left:3px solid var(--red);
+  font-size:19px;line-height:1.6;font-weight:700;letter-spacing:-.02em;color:var(--text);
+}
+
+.art__tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:38px;padding-top:26px;border-top:1px solid var(--line)}
+.art__tags a{
+  height:32px;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;
+  font-size:12.5px;font-weight:700;color:var(--body-text);
+  background:var(--grey-50);border:1px solid var(--line);
+  transition:border-color .22s var(--ease),color .22s var(--ease);
+}
+.art__tags a:hover{border-color:var(--red);color:var(--red)}
+.art__foot{margin-top:28px}
+
+@media (max-width:1024px){
+  .nwp-art__grid{grid-template-columns:minmax(0,1fr);gap:30px}
+  /* sticky dimatikan: di satu kolom panelnya ada DI BAWAH artikel, jadi kalau
+     tetap sticky dia ikut menggantung sampai footer */
+  .nwp-art__side{position:static}
+}
+@media (max-width:620px){
+  .nwp-art{padding-top:22px}
+  .art__body{font-size:16px}
+  .art__lead{font-size:17px}
+  .art__body blockquote{margin:26px 0;font-size:17px}
 }
