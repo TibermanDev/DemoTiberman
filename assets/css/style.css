@@ -776,15 +776,58 @@ ul{margin:0;padding:0;list-style:none}
 .testi-card__who span{font-size:18px;color:var(--muted-2)}
 
 /* ---------- FAQ ---------- */
-.faq{padding:80px 0 150px}
-.faq__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:end}
+/* Halaman contact: pita abu di bawah section form. Sosok di kirinya sengaja
+   lebih tinggi daripada pitanya — kepalanya menonjol ke atas, kakinya
+   terpotong tepi bawah.
+   clip-path (bukan overflow:hidden) yang memotong bagian bawah: inset dengan
+   nilai atas negatif membiarkan kepalanya tetap terlihat di luar section,
+   sementara tepi bawah dan sampingnya tetap dipotong rapi.
+   overflow-x:clip untuk limpahan ke kiri, supaya tidak memunculkan scrollbar
+   mendatar — clip-path sendiri cuma soal tampilan, tidak menahan scroll. */
+/* padding atas memberi jarak antara tepi atas pita abu dan kartu FAQ.
+   Ingat dua-duanya ikut mengubah komposisi sosok di kiri: padding ATAS
+   mengurangi tonjolan kepalanya (gambar ikut turun), padding BAWAH
+   mengurangi dalamnya potongan kaki. */
+.faq{background:var(--grey-50);padding:clamp(40px,4vw,64px) 0 clamp(20px,2vw,36px);overflow-x:clip;clip-path:inset(-700px 0 0 0)}
+.faq__grid{display:grid;grid-template-columns:.58fr 1fr;gap:28px;align-items:end}
 /* Gambar dibesarkan dengan cara melimpah ke ruang kosong di kiri container,
    bukan dengan mengambil lebar panel FAQ (panel sudah mepet: pertanyaan
    terpanjang cuma sisa ~6px sebelum pecah dua baris). Limpahannya dibatasi
    140px dan otomatis 0 kalau layar tidak punya ruang kosong. */
-.faq__art{margin-left:calc(-1 * clamp(0px, calc((100vw - var(--container))/2 - 24px), 140px))}
-.faq__art img{width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.14))}
-.faq__panel{background:var(--grey-100);border-radius:var(--radius-xl);padding:34px 28px}
+/* Sosoknya sekarang utuh dari helm sampai sepatu (3408x5556, rasio 0,61),
+   jadi ukurannya dipatok lewat TINGGI dan lebarnya ikut — kalau dipatok lewat
+   lebar kolom seperti dulu, tingginya membengkak sampai menabrak section di
+   atasnya. margin-top negatif yang membuat helmnya keluar dari pita abu. */
+.faq__art{
+  /* min-width:0 — kolom grid `fr` secara bawaan tidak boleh lebih sempit
+     daripada isinya, jadi begitu gambarnya lebih lebar dari jatahnya,
+     kolomnya ikut melebar dan kartu FAQ yang terdesak. Ini yang menahannya
+     tetap selebar jatah, dan kelebihan gambar melimpah ke kiri. */
+  display:flex;justify-content:flex-end;align-items:flex-end;min-width:0;
+  margin-left:calc(-1 * clamp(20px, 5vw, 150px));
+  /* Dua margin negatif ini memperpendek KOTAKNYA, bukan menggeser gambarnya.
+     Dengan align-items:end: margin-bottom menurunkan gambar melewati dasar
+     baris (kaki terpotong), margin-top memperkecil sumbangannya ke tinggi
+     baris sehingga kepalanya naik melewati batas section. Seberapa jauh
+     menonjolnya = tinggi gambar - |margin-bottom| - tinggi baris, jadi
+     gambarnya memang harus jauh lebih tinggi daripada kartu FAQ. */
+  margin-top:clamp(-360px,-20vw,-130px);
+  margin-bottom:clamp(-300px,-15vw,-110px);
+}
+/* justify-content:flex-end — kelebihan lebarnya melimpah ke KIRI (ruang
+   kosong / tepi layar), bukan ke kanan tempat kartu FAQ berada. */
+/* flex:none — tanpa ini gambar diperlakukan sebagai flex item yang boleh
+   menyusut, dan karena lebarnya melebihi kolom, lebarnya dipepetkan.
+   aspect-ratio + object-fit:contain mengunci proporsinya: dengan width:auto
+   saja, algoritma flex sempat memberi lebar yang tidak sesuai rasio aslinya
+   dan sosoknya kelihatan gepeng. */
+/* max-width:none WAJIB: reset global `img{max-width:100%}` di atas memotong
+   lebar gambar ini sebatas kolomnya, sementara tingginya tetap — itu yang
+   membuat sosoknya kelihatan gepeng. Sosok ini memang sengaja lebih lebar
+   daripada kolomnya dan melimpah ke kiri.
+   flex:none supaya tidak ikut disusutkan algoritma flex. */
+.faq__art img{display:block;flex:none;width:auto;max-width:none;height:clamp(620px,88vw,1340px);aspect-ratio:774/1467}
+.faq__panel{background:var(--surface);border-radius:var(--radius-xl);padding:34px 30px;box-shadow:var(--shadow-s);margin-bottom:34px}
 .faq__panel h2{font-size:clamp(24px,2.8vw,34px);margin-bottom:14px}
 .acc__item{border-bottom:1px solid #e2e2e5}
 .acc__item:last-of-type{border-bottom:0}
@@ -1280,7 +1323,7 @@ ul{margin:0;padding:0;list-style:none}
   .pilar{padding:110px 0 90px}
   .aftersales{padding-bottom:90px}
   .testi{margin:90px 0}
-  .faq{padding-bottom:90px}
+  .faq{padding-bottom:60px}
   .feature-card__body{padding:40px 28px}
   .feature-card__media{min-height:260px}
   /* kartu jadi 1 kolom: ilustrasi mengalir di bawah teks selebar kartu, kotaknya
@@ -1312,7 +1355,10 @@ ul{margin:0;padding:0;list-style:none}
   .aftersales{padding:56px 0 60px}
   .testi{margin:60px 0}
   .testi__rail{--testi-per:1;--testi-gap:16px}
-  .faq{padding:56px 0 60px}
+  .faq{padding:0 0 46px}
+  /* satu kolom: sosoknya tidak perlu lagi menjorok naik sejauh itu */
+  .faq__art{margin-top:-30px;margin-bottom:-70px;margin-inline:auto;justify-content:center}
+  .faq__art img{height:clamp(340px,96vw,460px);aspect-ratio:774/1467;max-width:100%}
   /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
      layar) dan lebih pendek. Di lebar segini kolom foto pasti menyusut, jadi
      ruang atas antar kartu tidak lagi sama persis — konsekuensi yang tak
@@ -1725,4 +1771,88 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   .art__body{font-size:16px}
   .art__lead{font-size:17px}
   .art__body blockquote{margin:26px 0;font-size:17px}
+}
+
+/* ==========================================================================
+   HALAMAN CONTACT US (contact.html)
+   Section atas: judul di tengah, form di kiri, kumpulan produk di kanan.
+   Section bawah memakai ulang blok .faq yang sudah ada.
+   ========================================================================== */
+/* padding bawah = ruang putih tempat kepala sosok di section berikutnya
+   menonjol, supaya helmnya tidak menempel kartu form. */
+.ctc-partner{padding:66px 0 clamp(76px,8.5vw,150px)}
+/* Kedua section halaman ini memakai container yang lebih lebar daripada
+   --container (1160px) supaya isinya lebih mepet ke tepi layar. */
+.ctc-partner > .container,.faq > .container{max-width:1440px;padding-inline:40px}
+.ctc-partner__head{text-align:center;max-width:960px;margin:0 auto clamp(56px,6.5vw,104px)}
+.ctc-eyebrow{font-size:clamp(17px,2.1vw,25px);font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.ctc-partner__head h1{margin-top:10px;font-size:clamp(34px,5.4vw,62px);line-height:1.15;letter-spacing:-.04em}
+/* align-items:center, bukan stretch: kumpulan produknya lebih pendek daripada
+   form, jadi kalau diregangkan dia mengambang di atas. */
+.ctc-partner__grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:end}
+
+/* --- form --- */
+/* Kartu dan isian sengaja dibedakan satu tingkat: kartu --grey-50 (#f5f5f7),
+   isian #e8e8ec. Sebelumnya isian memakai --grey-100 (#f2f2f2) yang cuma beda
+   3 poin dari kartunya, jadi kotak isiannya nyaris tidak kelihatan. */
+.ctc-form{background:var(--grey-50);border-radius:var(--radius-l);padding:30px 28px 32px}
+.ctc-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ctc-form__row,.ctc-form > .ctc-field{margin-bottom:16px}
+.ctc-field{display:block}
+.ctc-field > span{display:block;margin-bottom:7px;font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+/* satu aturan untuk ketiga jenis isian supaya tinggi & radiusnya tidak
+   berbeda-beda antar browser */
+.ctc-field input,.ctc-field select,.ctc-field textarea{
+  width:100%;background:#e8e8ec;border:1px solid transparent;border-radius:10px;
+  padding:0 14px;height:46px;font:inherit;font-size:14px;color:var(--text);
+  transition:border-color .22s var(--ease),background .22s var(--ease);
+}
+.ctc-field textarea{height:auto;padding:12px 14px;line-height:1.55;resize:vertical;min-height:96px}
+.ctc-field input::placeholder,.ctc-field textarea::placeholder{color:var(--muted-2)}
+.ctc-field input:focus,.ctc-field select:focus,.ctc-field textarea:focus{
+  outline:none;background:#fff;border-color:var(--outline-strong);
+}
+/* select bawaan berbeda jauh antar platform, jadi panahnya digambar sendiri */
+.ctc-field select{
+  appearance:none;color:var(--muted-2);cursor:pointer;padding-right:38px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%236e6e73' stroke-width='1.6'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:12px;
+}
+.ctc-field select:valid{color:var(--text)}
+.ctc-form__foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.ctc-form__note{font-size:13px;font-weight:700;color:var(--wa);opacity:0;transition:opacity .25s var(--ease)}
+.ctc-form__note.is-on{opacity:1}
+
+/* --- kumpulan produk: satu gambar accessories ---
+   margin-inline:auto dulu menengahkannya di kolom, jadi ada ruang kosong
+   lebar antara form dan gambar. Sekarang dirapatkan ke tepi kiri kolom.
+   margin-right negatif membiarkannya melebar ke padding kanan container,
+   jadi gambarnya bisa lebih besar tanpa mengambil lebar form. */
+/* BUKAN width:100% + justify-self:start — dengan itu lebarnya terkunci di
+   lebar kolom dan margin negatifnya tidak menambah apa pun. Dibiarkan
+   meregang mengisi kolom, lalu margin kanan negatif menariknya melewati
+   padding container. */
+/* Tarikannya dibatasi 36px — padding container di sini 40px, jadi gambar
+   berhenti tepat sebelum tepi isi dan tidak memicu scroll mendatar. */
+.ctc-stack{max-width:800px;margin-right:calc(-1 * clamp(0px,2.6vw,36px))}
+.ctc-stack img{display:block;width:100%;height:auto}
+
+@media (max-width:1024px){
+  .ctc-partner{padding-top:48px}
+  .ctc-partner__grid{grid-template-columns:minmax(0,1fr);gap:26px}
+  /* di satu kolom kumpulan produknya pindah ke ATAS form, mengikuti urutan
+     baca desain (gambar dulu baru isian) tidak lagi relevan — form yang
+     lebih penting, jadi dia tetap di atas dan gambarnya menyusut */
+  .ctc-stack{max-width:480px;justify-self:center;margin-right:0}
+}
+@media (max-width:620px){
+  .ctc-partner{padding-top:34px}
+  /* padding-inline 40px itu untuk layar lebar; di ponsel dia malah memakan
+     lebar isi, jadi dikembalikan ke 24px seperti .container biasa */
+  .ctc-partner > .container,.faq > .container{padding-inline:24px}
+  .ctc-partner__head{margin-bottom:28px}
+  .ctc-form{padding:20px 18px 24px}
+  /* dua kolom isian terlalu sempit di ponsel */
+  .ctc-form__row{grid-template-columns:minmax(0,1fr)}
+  .ctc-stack{max-width:360px;justify-self:center;margin-right:0}
 }
