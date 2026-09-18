@@ -28,8 +28,13 @@
   };
 
   /* x/y = posisi pusat pin dalam persen gambar.
-     lebar = pengali ukuran tombol, dipakai untuk pin yang menumpuk. */
-  var SPOTS = [
+     lebar = pengali ukuran tombol, dipakai untuk pin yang menumpuk.
+
+     Dua tabel karena dua gambar: earth-location.webp di beranda dan
+     earth-superarea.webp di superarea.html memakai bingkai bumi yang berbeda,
+     jadi pin yang sama jatuh di persen yang berbeda pula. Dipilih lewat
+     nilai atribut data-superarea. */
+  var SPOTS_GLOBE = [
     { x: 19.99, y: 64.27, kota: ['PALEMBANG'] },
     { x: 24.63, y: 74.37, kota: ['JAKARTA'] },
     { x: 31.14, y: 54.27, kota: ['PONTIANAK'] },
@@ -41,6 +46,25 @@
     { x: 56.22, y: 60.75, kota: ['KENDARI'] },
     { x: 59.76, y: 44.88, kota: ['MANADO'] },
     { x: 66.82, y: 44.57, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
+  ];
+
+  /* earth-superarea.webp (halaman SuperArea). Koordinatnya hasil deteksi blob
+     merah pada gambarnya, bukan kira-kira — sama caranya dengan tabel di atas.
+     CATATAN: gambar ini punya SATU pin lagi di Papua barat (~77,5% / 78,4%)
+     yang tidak punya pasangan di daftar 15 SuperArea, jadi pin itu dibiarkan
+     sebagai bagian gambar saja dan tidak dibuatkan tombol. */
+  var SPOTS_PAGE = [
+    { x: 21.48, y: 83.79, kota: ['PALEMBANG'] },
+    { x: 26.10, y: 88.39, kota: ['JAKARTA'] },
+    { x: 32.61, y: 79.26, kota: ['PONTIANAK'] },
+    { x: 37.33, y: 88.81, lebar: 1.8, kota: ['SURABAYA', 'GRESIK', 'MOJOKERTO'] },
+    { x: 40.05, y: 81.57, kota: ['BANJARBARU'] },
+    { x: 45.74, y: 78.17, kota: ['BALIKPAPAN'] },
+    { x: 55.82, y: 79.91, kota: ['MOROWALI'] },
+    { x: 57.31, y: 78.16, kota: ['LUWUK'] },
+    { x: 57.71, y: 82.22, kota: ['KENDARI'] },
+    { x: 61.25, y: 75.01, kota: ['MANADO'] },
+    { x: 68.30, y: 74.84, tinggi: 1.4, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
   ];
 
   var LABEL = {
@@ -62,6 +86,8 @@
 
   var wrap = document.querySelector('[data-superarea]');
   if (!wrap) return;
+
+  var SPOTS = wrap.getAttribute('data-superarea') === 'page' ? SPOTS_PAGE : SPOTS_GLOBE;
 
   var spotsBox = document.createElement('div');
   spotsBox.className = 'sa-spots';
@@ -111,7 +137,14 @@
     var left = cx - pw / 2;
     var top = cy - ph - 22;                 /* default: di atas pin */
     if (top < 8) top = cy + 26;             /* mepet atas -> pindah ke bawah pin */
-    left = Math.max(8, Math.min(left, w.width - pw - 8));
+
+    /* Dijepit DUA kali: di dalam kotak gambar dan di dalam layar. Di
+       superarea.html kotak gambarnya sengaja dilebarkan melewati tepi layar
+       waktu di ponsel, jadi jepitan ke kotak saja masih menyisakan popup yang
+       separuhnya di luar layar. */
+    var minL = Math.max(8, 8 - w.left);
+    var maxL = Math.min(w.width - pw - 8, window.innerWidth - 8 - w.left - pw);
+    left = maxL < minL ? minL : Math.max(minL, Math.min(left, maxL));
     top = Math.max(8, Math.min(top, w.height - ph - 8));
 
     pop.style.left = Math.round(left) + 'px';
