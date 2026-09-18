@@ -227,6 +227,7 @@
     var state = {
       unit: wanted || catalog.dataset.unit || 'truk-bus',
       size: 'all',
+      brand: 'all',
       q: ''
     };
 
@@ -242,9 +243,9 @@
       if (!chipsWrap) return;
       var sizes = (DATA[state.unit] || []).map(function (g) { return g.size; });
       chipsWrap.innerHTML =
-        '<button type="button" class="chip is-active" data-size="all">Jenis Unit</button>' +
+        '<button type="button" class="chip is-active" data-size="all">All Size</button>' +
         sizes.map(function (s) {
-          return '<button type="button" class="chip" data-size="' + s + '"><span>Ukuran Ban</span> ' + s + '</button>';
+          return '<button type="button" class="chip" data-size="' + s + '">' + s + '</button>';
         }).join('');
     };
 
@@ -252,8 +253,11 @@
       var groups = (DATA[state.unit] || []).map(function (g) {
         var items = g.items.filter(function (p) {
           var matchSize = state.size === 'all' || g.size === state.size;
+          /* Merk = bagian nama sebelum " - " ("UNINEST - TIBERMAX 554"). */
+          var matchBrand = state.brand === 'all'
+            || p.name.toLowerCase().split(' - ')[0].trim() === state.brand;
           var hay = (p.name + ' ' + p.compat + ' ' + g.size).toLowerCase();
-          return matchSize && hay.indexOf(state.q) > -1;
+          return matchSize && matchBrand && hay.indexOf(state.q) > -1;
         });
         return { size: g.size, items: items };
       }).filter(function (g) { return g.items.length; });
@@ -292,7 +296,23 @@
         });
         state.unit = btn.dataset.unit;
         state.size = 'all';
+        state.brand = 'all';
+        catalog.querySelectorAll('[data-brand]').forEach(function (b) { b.classList.remove('is-active'); });
         renderChips();
+        render();
+        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+      });
+    });
+
+    /* Daftar merk. Tidak ada tombol "semua merk" di desainnya, jadi cara
+       melepas saringannya lewat klik ulang pada merk yang sedang aktif. */
+    catalog.querySelectorAll('[data-brand]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var lepas = btn.classList.contains('is-active');
+        catalog.querySelectorAll('[data-brand]').forEach(function (b) {
+          b.classList.toggle('is-active', !lepas && b === btn);
+        });
+        state.brand = lepas ? 'all' : btn.dataset.brand;
         render();
         if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
       });
@@ -324,6 +344,89 @@
     renderChips();
     render();
     if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+  }
+
+  /* ---------- 6b. Modal detail produk ----------
+     Kartu katalog tetap <a href="produk.html"> supaya tanpa JS, klik kanan,
+     atau klik tengah tetap membuka halaman produk. Klik biasa dicegat di sini
+     dan dialihkan ke modal.
+
+     Semua slide memakai permukaan terang, jadi modalnya tidak punya varian
+     warna — fotonya PNG beralpha dan logonya versi untuk latar terang. */
+  var pmodal = document.querySelector('[data-pmodal]');
+  if (pmodal) {
+    var pmTrack = pmodal.querySelector('[data-pmodal-track]');
+    var pmSlides = Array.prototype.slice.call(pmTrack.children);
+    var pmDots = pmodal.querySelector('[data-pmodal-dots]');
+    var pmIdx = 0, pmPemanggil = null;
+
+    var pmShow = function (i) {
+      pmIdx = (i + pmSlides.length) % pmSlides.length;
+      pmTrack.style.transform = 'translateX(' + (-pmIdx * 100) + '%)';
+      if (pmDots) {
+        pmDots.querySelectorAll('button').forEach(function (b, n) {
+          b.classList.toggle('is-active', n === pmIdx);
+        });
+      }
+      /* Slide yang tidak tampil disembunyikan dari pembaca layar dan dari
+         urutan Tab — kalau tidak, Tab "menghilang" ke slide di luar layar. */
+      pmSlides.forEach(function (sl, n) {
+        sl.setAttribute('aria-hidden', n === pmIdx ? 'false' : 'true');
+        sl.querySelectorAll('a,button').forEach(function (el) { el.tabIndex = n === pmIdx ? 0 : -1; });
+      });
+    };
+
+    if (pmDots) {
+      pmSlides.forEach(function (_, i) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Slide ' + (i + 1));
+        b.addEventListener('click', function () { pmShow(i); });
+        pmDots.appendChild(b);
+      });
+    }
+
+    var pmClose = function () {
+      pmodal.hidden = true;
+      document.body.style.overflow = '';
+      /* fokus dikembalikan ke kartu yang membukanya */
+      if (pmPemanggil) { pmPemanggil.focus(); pmPemanggil = null; }
+    };
+
+    var pmOpen = function (pemanggil) {
+      pmPemanggil = pemanggil || null;
+      pmodal.hidden = false;
+      /* halaman di belakang dikunci supaya scroll tidak bocor ke katalog */
+      document.body.style.overflow = 'hidden';
+      pmShow(0);
+      var tutup = pmodal.querySelector('[data-pmodal-close]');
+      if (tutup) tutup.focus();
+    };
+
+    pmodal.querySelectorAll('[data-pmodal-close]').forEach(function (el) {
+      el.addEventListener('click', pmClose);
+    });
+    var pmNext = pmodal.querySelector('[data-pmodal-next]');
+    if (pmNext) pmNext.addEventListener('click', function () { pmShow(pmIdx + 1); });
+
+    document.addEventListener('keydown', function (e) {
+      if (pmodal.hidden) return;
+      if (e.key === 'Escape') pmClose();
+      else if (e.key === 'ArrowRight') pmShow(pmIdx + 1);
+      else if (e.key === 'ArrowLeft') pmShow(pmIdx - 1);
+    });
+
+    /* Delegasi: kartu dibangun ulang tiap ganti unit/filter. */
+    document.addEventListener('click', function (e) {
+      var kartu = e.target.closest && e.target.closest('.product-card');
+      if (!kartu) return;
+      /* klik tengah / ctrl-klik dibiarkan membuka tab baru seperti biasa */
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      e.preventDefault();
+      pmOpen(kartu);
+    });
+
+    pmShow(0);
   }
 
   /* ---------- 7. Halaman produk: galeri + pilihan ukuran ---------- */
