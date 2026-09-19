@@ -442,6 +442,96 @@
         main.alt = btn.querySelector('img').alt;
       });
     });
+
+    /* --- klik gambar utama -> tampilan penuh ---------------------------
+       Kotaknya dibuat di sini, bukan ditulis di HTML, karena galerinya muncul
+       di tiga halaman (produk.html + modal di katalog.html & katalog-topnav.html)
+       dan markup yang sama tidak perlu diulang tiga kali.
+
+       z-index-nya di ATAS .pmodal (200), sebab di katalog galerinya sendiri
+       berada di dalam modal itu. Latarnya panel terang, bukan gelap: keempat
+       PNG ban itu berlatar TRANSPARAN, jadi di atas kain gelap ban yang
+       memang hitam nyaris tidak kelihatan. */
+    var lb = document.createElement('div');
+    lb.className = 'lbox';
+    lb.hidden = true;
+    lb.setAttribute('role', 'dialog');
+    lb.setAttribute('aria-modal', 'true');
+    lb.innerHTML =
+      '<div class="lbox__scrim" data-lbox-close></div>' +
+      '<div class="lbox__panel">' +
+        '<button type="button" class="lbox__close" data-lbox-close aria-label="Tutup">' +
+          '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">' +
+          '<path d="M1 1l12 12M13 1L1 13"/></svg>' +
+        '</button>' +
+        '<img class="lbox__img" alt="">' +
+      '</div>';
+    document.body.appendChild(lb);
+
+    var lbImg = lb.querySelector('.lbox__img');
+    var lbTutup = lb.querySelector('.lbox__close');
+    var lbOverflowLama = '';
+
+    function lbBuka() {
+      lbImg.src = main.currentSrc || main.src;
+      lbImg.alt = main.alt || '';
+      /* Batas lebar dipasang dari ukuran ASLI gambarnya: tyre-preview.png cuma
+         592px, kalau dipaksa memenuhi layar hasilnya pecah. 1,5x masih terlihat
+         bersih, dan 1040px menahan tyre-90.png (2192px) supaya tidak raksasa. */
+      var pasangBatas = function () {
+        var n = lbImg.naturalWidth || 0;
+        lbImg.style.setProperty('--lbox-max', (n ? Math.round(Math.min(n * 1.5, 1040)) : 1040) + 'px');
+      };
+      if (lbImg.complete && lbImg.naturalWidth) pasangBatas();
+      else lbImg.addEventListener('load', pasangBatas, { once: true });
+
+      /* Nilai lama disimpan, bukan dikosongkan waktu menutup: di katalog,
+         .pmodal sudah lebih dulu mengunci scroll halaman — kalau dikosongkan,
+         menutup tampilan penuh ini ikut membuka kunci katalog di belakang
+         modal yang masih terbuka. */
+      lbOverflowLama = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      lb.hidden = false;
+      lbTutup.focus();
+    }
+
+    function lbTutupkan() {
+      lb.hidden = true;
+      lbImg.removeAttribute('src');
+      document.body.style.overflow = lbOverflowLama;
+      main.focus();
+    }
+
+    lb.querySelectorAll('[data-lbox-close]').forEach(function (el) {
+      el.addEventListener('click', lbTutupkan);
+    });
+
+    /* Gambar <img> bukan elemen yang bisa difokus, jadi perannya dipasang di
+       sini — bukan di HTML — supaya tanpa JS dia tetap gambar biasa dan tidak
+       menawarkan tombol yang tidak berfungsi. */
+    main.setAttribute('role', 'button');
+    main.setAttribute('tabindex', '0');
+    main.setAttribute('aria-label', 'Lihat gambar ukuran penuh');
+    main.classList.add('is-zoomable');
+    if (main.parentElement) main.parentElement.classList.add('has-zoom');
+    main.addEventListener('click', lbBuka);
+    main.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        lbBuka();
+      }
+    });
+
+    /* Fase CAPTURE + stopPropagation: penangan .pmodal juga memasang keydown
+       di document (fase bubble) dan menutup modal begitu Escape ditekan.
+       Tanpa ini, satu Escape menutup tampilan penuh DAN modal di belakangnya
+       sekaligus. Panah kiri/kanan ikut ditahan supaya slide modal di balik
+       kain tidak diam-diam bergeser. */
+    document.addEventListener('keydown', function (e) {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') { e.stopPropagation(); lbTutupkan(); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') e.stopPropagation();
+    }, true);
   }
 
   document.querySelectorAll('[data-size-chips]').forEach(function (wrap) {

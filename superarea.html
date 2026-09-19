@@ -51,26 +51,32 @@
 </header>
 
 <!-- ============================= SUPERAREA =============================
-     Latar bumi + ban kiri/kanan datang dari SATU gambar komposit
-     (earth-superarea). Gambarnya dipaku ke DASAR halaman dan selebar
-     layar, isinya mengambang di atasnya. -->
+     Latar bumi (maps-superarea): pita cakrawala yang dipaku ke DASAR
+     halaman dan selebar layar, isinya mengambang di atasnya.
+     CATATAN: gambar lama (earth-superarea) adalah komposit yang sekaligus
+     memuat ban kiri-kanan dan 16 pin merah yang tercetak. maps-superarea
+     tidak punya keduanya — cuma bumi — jadi ban dan pin itu hilang dari
+     halaman ini. -->
 <main class="sa">
   <!-- Sorot merah di tepi atas: aset top-shadow (PNG beralpha), bukan
        radial-gradient buatan CSS. -->
   <img class="sa__glow" src="assets/img/top-shadow.webp" width="1920" height="1181" alt="" aria-hidden="true">
   <div class="sa__bg" aria-hidden="true">
-    <!-- webp langsung, sama seperti earth-location di index.html: PNG aslinya
-         13 MB, jadi dia disimpan sebagai file sumber saja dan tidak dirujuk
-         dari markup. -->
-    <img src="assets/img/earth-superarea.webp" width="2880" height="2580" alt="" fetchpriority="high">
+    <!-- webp langsung, sama seperti maps-new di index.html: PNG aslinya
+         disimpan sebagai file sumber saja dan tidak dirujuk dari markup. -->
+    <img src="assets/img/maps-superarea.webp" width="2880" height="412" alt="" fetchpriority="high">
   </div>
-  <!-- Lapisan titik yang bisa diklik (assets/js/superarea-spots.js). Sengaja
-       elemen TERPISAH dari .sa__bg, bukan di dalamnya: .sa__bg harus tetap di
-       belakang kartu (z-index 0) sedangkan popup lokasinya harus di depan,
-       dan keduanya tidak bisa dipisah kalau berada di satu stacking context.
-       Kotaknya dibuat sebangun dengan gambarnya lewat aspect-ratio, jadi
-       koordinat persen tiap pin tetap jatuh pas. -->
-  <div class="sa__pins" data-superarea="page"></div>
+  <!-- Lapisan titik yang bisa diklik (assets/js/superarea-spots.js) DIMATIKAN
+       sementara: pin-nya dulu tercetak di earth-superarea.webp, dan
+       maps-superarea.webp tidak punya pin sama sekali — di pita cakrawala yang
+       cuma setinggi 412px itu Indonesia tinggal sesobek tipis di tepi bawah,
+       jadi tombolnya akan menyorot laut kosong.
+
+       Kalau nanti ada gambar bumi bertepi pin lagi, hidupkan kembali dengan
+       mengganti data-superarea-off menjadi data-superarea (tabel koordinat
+       SPOTS_PAGE-nya masih utuh di assets/js/superarea-spots.js) dan
+       kembalikan aspect-ratio .sa__pins ke rasio gambar yang dipakai. -->
+  <div class="sa__pins" data-superarea-off="page"></div>
 
   <div class="sa__inner">
     <div class="sa__head">

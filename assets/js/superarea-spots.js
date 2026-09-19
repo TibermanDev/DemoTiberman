@@ -1,10 +1,10 @@
 /* =============================================================
-   SuperArea — peta statis (earth-location.webp) + titik yang bisa diklik.
+   SuperArea — peta statis (maps-new.webp) + titik yang bisa diklik.
 
    Pin-nya sudah tercetak di gambar, jadi tombolnya transparan dan
    diposisikan dalam persen supaya tetap pas saat gambar diperbesar
    atau diperkecil. Koordinat persen diambil dari deteksi blob merah
-   pada gambar aslinya (5760x2344), bukan dikira-kira.
+   pada gambarnya, bukan dikira-kira.
    ============================================================= */
 (function () {
   'use strict';
@@ -28,29 +28,46 @@
   };
 
   /* x/y = posisi pusat pin dalam persen gambar.
-     lebar = pengali ukuran tombol, dipakai untuk pin yang menumpuk.
+     lebar/tinggi = pengali ukuran tombol, dipakai untuk pin yang menumpuk.
 
-     Dua tabel karena dua gambar: earth-location.webp di beranda dan
-     earth-superarea.webp di superarea.html memakai bingkai bumi yang berbeda,
-     jadi pin yang sama jatuh di persen yang berbeda pula. Dipilih lewat
-     nilai atribut data-superarea. */
+     Dua tabel karena dua gambar yang bingkai buminya berbeda, jadi pin yang
+     sama jatuh di persen yang berbeda pula. Dipilih lewat nilai atribut
+     data-superarea. */
+
+  /* maps-new.webp (beranda). Bingkainya lebih zoom daripada earth-location.webp
+     yang lama: planetnya naik, jadi semua y bergeser ~4-5% ke atas dan pin-nya
+     tercetak lebih kecil. Angka di bawah hasil deteksi blob merah pada
+     maps-new.webp (2880x1171).
+     CATATAN: gambar ini cuma punya DUA pin di Sulawesi — Morowali dan Kendari.
+     Pin LUWUK yang ada di gambar lama tidak ikut tercetak di maps-new, jadi
+     tombolnya tidak dibuat di beranda (datanya tetap dipakai SPOTS_PAGE di
+     superarea.html). Kalau pin Luwuk ditambahkan lagi ke gambarnya, posisinya
+     jatuh di sekitar x 55.84 / y 47.39.
+     Sama seperti gambar lama, ada satu pin di Papua barat (~76.6% / 48.8%) yang
+     tidak punya pasangan di daftar 15 SuperArea — dibiarkan jadi bagian gambar
+     saja, tanpa tombol. */
   var SPOTS_GLOBE = [
-    { x: 19.99, y: 64.27, kota: ['PALEMBANG'] },
-    { x: 24.63, y: 74.37, kota: ['JAKARTA'] },
-    { x: 31.14, y: 54.27, kota: ['PONTIANAK'] },
-    { x: 35.81, y: 75.29, lebar: 1.7, kota: ['SURABAYA', 'GRESIK', 'MOJOKERTO'] },
-    { x: 38.57, y: 59.32, kota: ['BANJARBARU'] },
-    { x: 44.28, y: 51.81, kota: ['BALIKPAPAN'] },
-    { x: 54.33, y: 55.77, kota: ['MOROWALI'] },
-    { x: 55.82, y: 51.81, kota: ['LUWUK'] },
-    { x: 56.22, y: 60.75, kota: ['KENDARI'] },
-    { x: 59.76, y: 44.88, kota: ['MANADO'] },
-    { x: 66.82, y: 44.57, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
+    { x: 18.41, y: 55.62, kota: ['PALEMBANG'] },
+    { x: 23.90, y: 70.70, kota: ['JAKARTA'] },
+    { x: 31.89, y: 48.33, kota: ['PONTIANAK'] },
+    { x: 36.26, y: 71.79, lebar: 1.8, kota: ['SURABAYA', 'GRESIK', 'MOJOKERTO'] },
+    { x: 36.75, y: 54.62, kota: ['BANJARBARU'] },
+    { x: 43.98, y: 46.96, kota: ['BALIKPAPAN'] },
+    { x: 54.90, y: 51.84, kota: ['MOROWALI'] },
+    { x: 56.43, y: 54.62, kota: ['KENDARI'] },
+    { x: 60.61, y: 40.11, kota: ['MANADO'] },
+    { x: 66.45, y: 40.69, lebar: 1.3, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
   ];
 
-  /* earth-superarea.webp (halaman SuperArea). Koordinatnya hasil deteksi blob
-     merah pada gambarnya, bukan kira-kira — sama caranya dengan tabel di atas.
-     CATATAN: gambar ini punya SATU pin lagi di Papua barat (~77,5% / 78,4%)
+  /* TIDAK DIPAKAI untuk sementara. Tabel ini milik earth-superarea.webp, dan
+     superarea.html sekarang memakai maps-superarea.webp yang TIDAK punya pin
+     tercetak sama sekali — lapisan titiknya dimatikan di sana (atributnya
+     diubah jadi data-superarea-off). Tabelnya sengaja ditahan, bukan dihapus,
+     supaya tinggal dihidupkan lagi kalau ada gambar bumi bertepi pin.
+
+     Koordinatnya hasil deteksi blob merah pada earth-superarea.webp, bukan
+     kira-kira — sama caranya dengan tabel di atas.
+     CATATAN: gambar itu punya SATU pin lagi di Papua barat (~77,5% / 78,4%)
      yang tidak punya pasangan di daftar 15 SuperArea, jadi pin itu dibiarkan
      sebagai bagian gambar saja dan tidak dibuatkan tombol. */
   var SPOTS_PAGE = [
