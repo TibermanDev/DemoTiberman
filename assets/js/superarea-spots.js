@@ -30,10 +30,9 @@
   /* x/y = posisi pusat pin dalam persen gambar.
      lebar/tinggi = pengali ukuran tombol, dipakai untuk pin yang menumpuk.
 
-     Dua tabel karena dua gambar: maps-new.webp di beranda dan
-     earth-superarea.webp di superarea.html memakai bingkai bumi yang berbeda,
-     jadi pin yang sama jatuh di persen yang berbeda pula. Dipilih lewat
-     nilai atribut data-superarea. */
+     Dua tabel karena dua gambar yang bingkai buminya berbeda, jadi pin yang
+     sama jatuh di persen yang berbeda pula. Dipilih lewat nilai atribut
+     data-superarea. */
 
   /* maps-new.webp (beranda). Bingkainya lebih zoom daripada earth-location.webp
      yang lama: planetnya naik, jadi semua y bergeser ~4-5% ke atas dan pin-nya
@@ -60,9 +59,15 @@
     { x: 66.45, y: 40.69, lebar: 1.3, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
   ];
 
-  /* earth-superarea.webp (halaman SuperArea). Koordinatnya hasil deteksi blob
-     merah pada gambarnya, bukan kira-kira — sama caranya dengan tabel di atas.
-     CATATAN: gambar ini punya SATU pin lagi di Papua barat (~77,5% / 78,4%)
+  /* TIDAK DIPAKAI untuk sementara. Tabel ini milik earth-superarea.webp, dan
+     superarea.html sekarang memakai maps-superarea.webp yang TIDAK punya pin
+     tercetak sama sekali — lapisan titiknya dimatikan di sana (atributnya
+     diubah jadi data-superarea-off). Tabelnya sengaja ditahan, bukan dihapus,
+     supaya tinggal dihidupkan lagi kalau ada gambar bumi bertepi pin.
+
+     Koordinatnya hasil deteksi blob merah pada earth-superarea.webp, bukan
+     kira-kira — sama caranya dengan tabel di atas.
+     CATATAN: gambar itu punya SATU pin lagi di Papua barat (~77,5% / 78,4%)
      yang tidak punya pasangan di daftar 15 SuperArea, jadi pin itu dibiarkan
      sebagai bagian gambar saja dan tidak dibuatkan tombol. */
   var SPOTS_PAGE = [

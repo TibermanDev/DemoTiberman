@@ -810,10 +810,21 @@ ul{margin:0;padding:0;list-style:none}
    bukan dengan mengambil lebar panel FAQ (panel sudah mepet: pertanyaan
    terpanjang cuma sisa ~6px sebelum pecah dua baris). Limpahannya dibatasi
    140px dan otomatis 0 kalau layar tidak punya ruang kosong. */
-/* Sosoknya sekarang utuh dari helm sampai sepatu (3408x5556, rasio 0,61),
-   jadi ukurannya dipatok lewat TINGGI dan lebarnya ikut — kalau dipatok lewat
-   lebar kolom seperti dulu, tingginya membengkak sampai menabrak section di
-   atasnya. margin-top negatif yang membuat helmnya keluar dari pita abu. */
+/* Sosoknya utuh dari helm sampai sepatu, jadi ukurannya dipatok lewat TINGGI
+   dan lebarnya ikut — kalau dipatok lewat lebar kolom seperti dulu, tingginya
+   membengkak sampai menabrak section di atasnya. margin-top negatif yang
+   membuat helmnya keluar dari pita abu.
+
+   PENTING kalau burhan.webp diganti: semua margin negatif di bawah ditala
+   terhadap BINGKAI gambarnya, bukan cuma rasionya. Bingkai yang berlaku pada
+   kanvas 774x1467 adalah: sosok setinggi 1169px (79,7% tinggi kanvas), tepi
+   atas helm di y=209 (14,3%), dan sisa ruang 22px di kanan sosok (2,8% lebar
+   kanvas) — sisi kanan yang menentukan posisi mendatarnya karena .faq__art
+   memakai justify-content:flex-end. burhan.webp yang sekarang dibuat dari
+   burhan.png (potongan rapat 3764x6688) dengan cara disusun ulang ke bingkai
+   itu; kalau gambar baru dipasang mentah dengan bingkai berbeda, sosoknya
+   akan berubah ukuran dan posisinya, dan margin-margin di bawah ikut harus
+   ditala ulang. */
 .faq__art{
   /* min-width:0 — kolom grid `fr` secara bawaan tidak boleh lebih sempit
      daripada isinya, jadi begitu gambarnya lebih lebar dari jatahnya,
@@ -996,11 +1007,15 @@ ul{margin:0;padding:0;list-style:none}
 .pmodal[hidden]{display:none}
 .pmodal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
 .pmodal__dialog{
-  position:relative;width:min(900px,100%);
+  position:relative;width:min(1180px,100%);
   /* Tinggi dipatok, bukan ikut isi: keempat slide punya panjang isi yang beda
      jauh (hero pendek, spesifikasi panjang) — kalau dibiarkan auto, kotaknya
-     melompat-lompat tiap ganti slide. */
-  height:min(86vh,580px);
+     melompat-lompat tiap ganti slide.
+     Tingginya ikut naik bersama lebarnya: foto ban di slide hero dan sidewall
+     di slide 2 dipatok TINGGI (object-fit:contain), jadi kalau cuma lebarnya
+     yang ditambah, fotonya tidak ikut membesar — cuma dapat ruang kosong kiri
+     kanan. 88vh menjaga modalnya tetap muat di layar pendek. */
+  height:min(88vh,720px);
   background:var(--surface);color:var(--text);
   border-radius:var(--radius-xl);overflow:hidden;
   box-shadow:0 40px 90px rgba(0,0,0,.45);
@@ -1012,7 +1027,7 @@ ul{margin:0;padding:0;list-style:none}
   color:var(--text);background:transparent;transition:background .2s var(--ease);
 }
 .pmodal__close:hover{background:rgba(128,128,128,.22)}
-.pmodal__close svg{width:15px;height:15px}
+.pmodal__close svg{width:25px;height:25px}
 
 /* Viewport mengisi SELURUH tinggi dialog. Dulu nav mengambil barisnya
    sendiri di bawah viewport, jadi area isi terpotong ~70px dan slide yang
@@ -1036,14 +1051,14 @@ ul{margin:0;padding:0;list-style:none}
    dengan paragraf di bawahnya — bukan kanvas transparannya. Tidak perlu lagi
    margin negatif untuk menambal selisih itu. */
 .pmodal__slide--hero .pmodal__logo{width:100%}
-.pmodal__copy p{margin-top:22px;font-size:16px;line-height:1.7;color:var(--muted);text-align:justify}
+.pmodal__copy p{margin-top:24px;font-size:18px;line-height:1.7;color:var(--muted);text-align:justify}
 .pmodal__copy p b{color:var(--text);font-weight:700}
 /* nama produk di awal paragraf miring, mengikuti gaya yang sama di produk.html */
 .pmodal__copy p b:first-child{font-style:italic}
 
 /* --- slide 2: judul di tengah, teks rata kanan, foto melimpah ke tepi kanan --- */
 .pmodal__slide--why{display:grid;grid-template-columns:.8fr 1fr;grid-template-rows:auto 1fr;gap:0 20px;align-items:center}
-.pmodal__head{font-size:clamp(19px,2.2vw,26px);font-weight:800;letter-spacing:-.025em}
+.pmodal__head{font-size:clamp(21px,2.4vw,30px);font-weight:800;letter-spacing:-.025em}
 /* Judul mengambil satu baris penuh di atas kedua kolom, ditengahkan terhadap
    modal — bukan terhadap kolom teksnya saja. */
 /* z-index: fotonya sekarang ditarik sampai tepi atas modal dan menindih baris
@@ -1052,7 +1067,7 @@ ul{margin:0;padding:0;list-style:none}
 .pmodal__slide--why > .pmodal__head{grid-column:1/-1;text-align:center;margin-bottom:6px;font-size:clamp(24px,3vw,34px);position:relative;z-index:1}
 .pmodal__slide--why .pmodal__copy{text-align:right}
 .pmodal__slide--why .pmodal__copy p{text-align:right}
-.pmodal__slide--why h3{font-style:italic;font-size:clamp(40px,5.4vw,64px);letter-spacing:-.035em;line-height:1.08}
+.pmodal__slide--why h3{font-style:italic;font-size:clamp(40px,5.4vw,72px);letter-spacing:-.035em;line-height:1.08}
 /* Paragrafnya sebelumnya --muted (abu) dan kelihatan pudar di sebelah judul
    sebesar ini; disamakan dengan paragraf isi halaman produk. */
 .pmodal__slide--why .pmodal__copy p{margin-top:18px;color:var(--body-text)}
@@ -1074,12 +1089,21 @@ ul{margin:0;padding:0;list-style:none}
 /* +34px di bawah: padding dasar slide sekarang 40px, sedangkan nav yang
    melayang memakan ~58px dari dasar modal. */
 .pmodal__slide--pair{text-align:center;display:flex;flex-direction:column;justify-content:center;padding-bottom:74px}
-.pmodal__slide--pair .pair-grid{margin-top:26px;gap:20px}
+/* Dipaksa 3 kolom: .pair-grid global jatuh ke 2 kolom di bawah 1024px dan ke
+   1 kolom di bawah 720px — di dalam modal itu bikin kartunya turun ke baris
+   kedua dan isinya melewati tinggi modal. Di bawah 860px aturan di media
+   query bagian bawah yang mengambil alih (3 kolom, gap lebih rapat). */
+.pmodal__slide--pair .pair-grid{margin-top:26px;gap:20px;grid-template-columns:repeat(3,1fr)}
 .pmodal__slide--pair .pair-card img{height:auto;aspect-ratio:.86;border-radius:var(--radius);filter:none}
-.pmodal__slide--pair .pair-card strong{margin-top:14px;font-size:17px;color:var(--text)}
+.pmodal__slide--pair .pair-card strong{margin-top:15px;font-size:19px;color:var(--text)}
 
 /* --- slide 4: galeri + spesifikasi --- */
-.pmodal__slide--spec{display:grid;grid-template-columns:.8fr 1fr;gap:28px;align-items:start;padding-bottom:74px}
+/* Kolom galeri dipersempit dari .8fr waktu modalnya dilebarkan: tinggi
+   .gallery__main ikut LEBAR kolomnya (aspect-ratio:.97), jadi modal yang
+   melebar bikin kolom kiri memanjang ke bawah dan isinya melewati tinggi
+   modal. .7fr menahan tingginya sekaligus memberi kolom spesifikasi ruang
+   lebih. */
+.pmodal__slide--spec{display:grid;grid-template-columns:.7fr 1fr;gap:28px;align-items:start;padding-bottom:74px}
 .pmodal__slide--spec .gallery__main{aspect-ratio:.97;padding:16px;border-radius:var(--radius)}
 .pmodal__slide--spec .gallery__thumbs{grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px}
 .pmodal__slide--spec .gallery__thumbs button{padding:7px;border-radius:9px;aspect-ratio:1}
@@ -1089,20 +1113,20 @@ ul{margin:0;padding:0;list-style:none}
    .doc-btns jadi satu kolom, sedangkan di modal dua tombol ini tetap muat
    bersebelahan di bawah thumbnail. */
 .pmodal__slide--spec .doc-btns{grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.pmodal__slide--spec .doc-btns a{height:42px;font-size:13.5px;border-radius:10px}
-.pmodal__info .pmodal__logo{max-width:335px}
+.pmodal__slide--spec .doc-btns a{height:48px;font-size:14.5px;border-radius:10px}
+.pmodal__info .pmodal__logo{max-width:400px}
 /* Subjudulnya samakan dengan produk.html: abu gelap (--spec), bukan merah. */
-.pmodal__info .subhead{margin:20px 0 14px;font-size:16px;color:var(--spec)}
-.pmodal__info .spec-table{font-size:12.5px;width:100%}
-.pmodal__info .spec-table td{padding:10px 5px}
-.pmodal__info .size-chips{gap:9px}
-.pmodal__info .size-chip{height:33px}
+.pmodal__info .subhead{margin:22px 0 15px;font-size:17px;color:var(--spec)}
+.pmodal__info .spec-table{font-size:14px;width:100%}
+.pmodal__info .spec-table td{padding:12px 6px}
+.pmodal__info .size-chips{gap:10px}
+.pmodal__info .size-chip{height:37px}
 /* Kolom kanan modal lebih sempit daripada di produk.html, jadi tombolnya
    dikecilkan supaya ketiganya tetap satu baris seperti di desain. */
 .pmodal__info .contact-btns{gap:8px;flex-wrap:nowrap}
-.pmodal__info .contact-btn{height:38px;padding:0 12px;font-size:12.5px;gap:7px;white-space:nowrap}
-.pmodal__info .contact-btn svg{width:17px;height:17px;flex-basis:17px}
-.pmodal__info .contact-btn img{height:18px}
+.pmodal__info .contact-btn{height:43px;padding:0 14px;font-size:13.5px;gap:8px;white-space:nowrap}
+.pmodal__info .contact-btn svg{width:19px;height:19px;flex-basis:19px}
+.pmodal__info .contact-btn img{height:20px}
 
 /* --- navigasi bawah --- */
 .pmodal__nav{
@@ -1207,6 +1231,60 @@ ul{margin:0;padding:0;list-style:none}
 .gallery__thumbs button{background:var(--grey-100);border-radius:var(--radius);padding:12px;aspect-ratio:1.14;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid transparent;transition:border-color .25s var(--ease)}
 .gallery__thumbs button.is-active{border-color:var(--outline-strong)}
 .gallery__thumbs img{max-height:100%;max-width:100%;object-fit:contain}
+
+/* --- Gambar utama galeri: klik -> tampilan penuh (main.js bagian 7) --- */
+/* Kelas dipasang skrip, jadi tanpa JS gambarnya tetap gambar biasa tanpa
+   kursor kaca pembesar yang menipu. */
+.gallery__main img.is-zoomable{cursor:zoom-in}
+.gallery__main img.is-zoomable:focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:6px}
+/* Tanda kaca pembesar, muncul waktu disorot/difokus supaya tidak menutupi
+   produknya waktu diam. Digantung pada .has-zoom yang dipasang skrip — tanpa
+   JS lencananya tidak pernah ada. Sengaja TIDAK memakai :has(): satu selector
+   tak dikenal membatalkan seluruh aturan di peramban lama, jadi efek hover-nya
+   ikut mati; .has-zoom + :focus-within didukung di mana-mana.
+   pointer-events:none — kliknya harus sampai ke gambarnya, bukan tertelan
+   lencana ini. */
+.gallery__main{position:relative}
+.gallery__main.has-zoom::after{
+  content:'';position:absolute;right:12px;bottom:12px;width:34px;height:34px;
+  border-radius:50%;background:rgba(20,20,22,.62) no-repeat center/17px 17px;
+  background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23fff' stroke-width='1.9' stroke-linecap='round'%3E%3Ccircle cx='8.5' cy='8.5' r='5.5'/%3E%3Cpath d='M12.6 12.6L17 17M6.3 8.5h4.4M8.5 6.3v4.4'/%3E%3C/svg%3E");
+  opacity:0;transition:opacity .2s var(--ease);pointer-events:none;
+}
+.gallery__main.has-zoom:hover::after{opacity:1}
+.gallery__main.has-zoom:focus-within::after{opacity:1}
+
+/* --- Kotak tampilan penuh --- */
+/* z-index 300 = di ATAS .pmodal (200): di katalog, galerinya berada di dalam
+   modal itu, jadi kotak ini harus menimpanya. */
+.lbox{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:clamp(16px,4vw,40px)}
+.lbox[hidden]{display:none}
+.lbox__scrim{position:absolute;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)}
+/* Panel TERANG, bukan gelap: keempat PNG ban berlatar transparan, dan ban yang
+   memang hitam akan lenyap di atas kain gelap. */
+.lbox__panel{
+  position:relative;display:grid;place-items:center;
+  max-width:min(96vw,1140px);max-height:90vh;
+  padding:clamp(20px,3.4vw,40px);
+  background:var(--grey-100);border-radius:var(--radius-xl);
+  box-shadow:0 40px 90px rgba(0,0,0,.5);
+  animation:lbox-in .22s var(--ease);
+}
+@keyframes lbox-in{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+/* --lbox-max dipasang main.js dari lebar ASLI gambarnya (maks 1,5x) supaya
+   PNG kecil seperti tyre-preview.png (592px) tidak dipaksa melar jadi pecah. */
+.lbox__img{display:block;width:auto;height:auto;max-width:min(100%,var(--lbox-max,1040px));max-height:100%;object-fit:contain}
+.lbox__close{
+  position:absolute;top:10px;right:12px;z-index:1;
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  color:var(--text);background:transparent;transition:background .2s var(--ease);
+}
+.lbox__close:hover{background:rgba(128,128,128,.22)}
+.lbox__close svg{width:13px;height:13px}
+@media (prefers-reduced-motion:reduce){
+  .lbox__panel{animation:none}
+  .gallery__main.has-zoom::after{transition:none}
+}
 .doc-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
 .doc-btns a{height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:var(--body-text);transition:border-color .25s var(--ease),color .25s var(--ease)}
 .doc-btns a:hover{border-color:var(--red);color:var(--red)}
@@ -1502,24 +1580,30 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 
 /* ==========================================================================
    HALAMAN SUPERAREA (superarea.html)
-   Latar bumi + ban kiri/kanan itu SATU gambar komposit (earth-superarea),
-   bukan beberapa elemen yang ditumpuk: gambarnya dipaku ke dasar halaman,
-   selebar layar, dan isinya mengambang di atasnya.
+   Latar bumi (maps-superarea.webp) dipaku ke dasar halaman, selebar layar,
+   dan isinya mengambang di atasnya.
+   Gambar lama (earth-superarea) adalah komposit yang sekaligus memuat ban
+   kiri-kanan dan pin merah yang tercetak; maps-superarea cuma bumi, jadi
+   ban dan pin itu tidak ada lagi di halaman ini.
    ========================================================================== */
 /* --sa-earth = tinggi bagian BUMI pada gambar latar, dinyatakan dalam persen
-   LEBAR .sa: bumi mengisi 38% tinggi gambar dan rasio gambarnya 0.896, jadi
-   0.38 x 0.896 = 34%. Nilai itu dipakai sebagai padding bawah isi halaman,
-   supaya kartu terakhir berhenti tepat di garis cakrawala dan cuma ban
-   kiri-kanannya yang menjorok naik ke area kartu — seperti di desain. */
-.sa{--sa-earth:34%;position:relative;background:#000;color:#fff;overflow:hidden;min-height:100vh;display:flex;flex-direction:column}
+   LEBAR .sa. Di maps-superarea.webp (2880x412) tepi atas planetnya ada di 30%
+   tinggi gambar (titik tertinggi, di tengah), jadi bumi mengisi 70% tinggi
+   gambar dan rasio gambarnya 0.143: 0.70 x 0.143 = 10%. Nilai itu dipakai
+   sebagai padding bawah isi halaman supaya kartu terakhir berhenti tepat di
+   garis cakrawala. Dulu 34% karena gambar lamanya jauh lebih jangkung. */
+.sa{--sa-earth:10%;position:relative;background:#000;color:#fff;overflow:hidden;min-height:100vh;display:flex;flex-direction:column}
 .sa__bg,.sa__pins{position:absolute;left:0;right:0;bottom:0;pointer-events:none}
 .sa__bg{z-index:0}
 .sa__bg img{display:block;width:100%;height:auto}
 /* aspect-ratio menyamakan tingginya dengan gambar di .sa__bg tanpa perlu
    diukur lewat skrip, jadi koordinat persen tiap pin jatuh pas. z-index 3
    menaruhnya DI ATAS kartu supaya popup lokasi tidak tertutup — .sa__bg
-   sendiri tetap di z-index 0 di belakang kartu. */
-.sa__pins{z-index:3;aspect-ratio:2880/2580}
+   sendiri tetap di z-index 0 di belakang kartu.
+   Lapisan ini sedang tidak diisi (lihat catatan di superarea.html): rasionya
+   disamakan dengan maps-superarea.webp supaya tetap benar kalau nanti
+   dihidupkan lagi. */
+.sa__pins{z-index:3;aspect-ratio:2880/412}
 /* pointer-events dihidupkan di TOMBOLNYA, bukan di .sa-spots: kotak itu
    inset:0 setinggi gambar, jadi kalau dia yang menangkap klik, separuh atas
    halaman (tab pulau dan kartu) ikut tertutup lapisan tak kelihatan. */
@@ -1554,7 +1638,30 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
    yang kosong membuat kartunya menepi ke kiri — dengan flex sisa barisnya
    ditengahkan. --sa-cols dipakai supaya lebar kartunya tetap sama dengan
    waktu barisnya penuh. */
-.sa__grid{--sa-cols:3;--sa-gap:26px;display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sa-gap);margin-top:40px}
+.sa__grid{--sa-cols:3;--sa-gap:26px;display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sa-gap);margin-top:40px;
+  /* Tingginya dianimasikan waktu ganti tab. Nilainya diisi superarea-page.js
+     (tinggi lama -> tinggi baru dalam px); tanpa ini, pindah dari 4 kartu
+     (2 baris) ke 1 kartu (1 baris) memotong tinggi halaman dalam satu frame
+     dan bumi yang terpaku di dasar halaman ikut melompat.
+     DURASI di skrip itu harus sama dengan angka di sini. */
+  transition:height .42s var(--ease)}
+/* overflow cuma dipasang SELAMA animasi. Kalau dipasang permanen, angkatan
+   hover kartu (translateY -4px + bayangan) ikut terpotong tepi grid. */
+.sa__grid.is-anim{overflow:hidden}
+/* Kartu yang baru muncul memudar naik, bukan nongol mendadak.
+   fill-mode BACKWARDS, bukan both: backwards cuma memasang keadaan awal
+   selama jeda stagger, lalu melepas elemennya kembali ke gaya normal begitu
+   animasinya habis. Dengan `both`, transform dari keyframe terakhir tetap
+   menempel dan mengalahkan .sa-card:hover — kartunya jadi tidak bisa
+   terangkat lagi kalau kelasnya sempat tertinggal (bisa terjadi waktu tab
+   diganti di tengah animasi: kartu jadi display:none, animasinya dibatalkan,
+   dan animationend tidak pernah terkirim). */
+.sa-card.is-enter{animation:sa-card-in .38s var(--ease) backwards;animation-delay:var(--sa-enter-delay,0ms)}
+@keyframes sa-card-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){
+  .sa__grid{transition:none}
+  .sa-card.is-enter{animation:none}
+}
 .sa-card{
   flex:0 0 calc((100% - (var(--sa-cols) - 1) * var(--sa-gap)) / var(--sa-cols));
   background:var(--catalog-bg);color:var(--text);
@@ -1575,13 +1682,13 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 }
 @media (max-width:620px){
   /* gambarnya dilebarkan jadi 180% (lihat .sa__bg di bawah), jadi bagian
-     buminya ikut 1.8x lebih tinggi terhadap lebar halaman */
-  .sa{--sa-earth:61%}
+     buminya ikut 1.8x lebih tinggi terhadap lebar halaman: 10% x 1.8 = 18% */
+  .sa{--sa-earth:18%}
   .sa__inner{padding:44px 18px calc(var(--sa-earth) + 20px)}
   .sa__grid{--sa-cols:1;--sa-gap:16px}
   .sa-tab{height:34px;padding:0 16px;font-size:12.5px}
-  /* Di layar sempit gambarnya jadi jauh lebih pendek daripada isinya, jadi
-     diperbesar melewati lebar layar supaya bumi & bannya tetap terbaca. */
+  /* Di layar sempit pita cakrawalanya tinggal ~54px kalau selebar layar, jadi
+     diperbesar melewati tepi layar supaya lengkung buminya tetap terbaca. */
   .sa__bg,.sa__pins{left:-40%;right:-40%}
 }
 
@@ -1660,6 +1767,22 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 .nwp-cat[hidden]{display:none}
 .nwp-cat:nth-of-type(even){background:var(--grey-50)}
 .nwp-cat__head{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.03em;margin-bottom:22px}
+
+/* --- news.html (tab Home & tab kategori): latar RATA abu ---
+   Selang-seling putih/abu di atas bikin halamannya kelihatan belang per
+   kategori. .nwp--flat mematikan selang-selingnya dan menyamakan seluruh
+   latar ke --grey-50. Dipasang lewat kelas modifier, bukan mengubah .nwp
+   langsung, supaya news-detail.html tetap berlatar putih — badan artikelnya
+   panjang dan lebih enak dibaca di atas putih. */
+.nwp--flat{background:var(--grey-50)}
+.nwp--flat .nwp__banner{background:var(--grey-50)}
+.nwp--flat .nwp-cat:nth-of-type(even){background:transparent}
+/* Dua panel di baris atas tadinya abu di atas putih. Begitu halamannya ikut
+   abu, warnanya dibalik jadi putih supaya tetap terbaca sebagai kartu —
+   sama seperti .news-card di bawahnya. */
+.nwp--flat .nwp-feature,
+.nwp--flat .nwp-latest{background:var(--surface)}
+.nwp--flat .nwp-mini:hover{background:var(--grey-50)}
 
 /* --- headline utama tiap kategori ---
    Disembunyikan secara bawaan dan cuma dibuka lewat .is-solo, yaitu waktu
