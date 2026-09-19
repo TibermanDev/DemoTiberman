@@ -252,23 +252,25 @@ ul{margin:0;padding:0;list-style:none}
    tak berefek — sorotnya menyatu, bukan menempel seperti stiker. */
 .superarea__glow{
   position:absolute;left:0;right:0;pointer-events:none;mix-blend-mode:screen;
-  /* Tinggi gambar bumi = 1172/2880 x LEBAR SECTION. Ditulis sebagai persen,
+  /* Tinggi gambar bumi = 1171/2880 x LEBAR SECTION. Ditulis sebagai persen,
      bukan vw: vw ikut lebar viewport termasuk scrollbar, jadi di desktop
      ber-scrollbar hasilnya meleset ~5px ke atas dan garis potongnya menyembul di
      atas lengkung bumi. Persen pada padding dihitung dari lebar containing
      block (tanpa scrollbar), jadi selalu pas. */
-  --sa-globe-h:40.694%;
-  /* earth-location.webp sekarang punya ALPHA sungguhan (dikonversi dari
-     earth-location.png): angkasa di atas planetnya transparan dengan tepi
-     atmosfer yang ter-feather, bukan lagi hitam pekat. Jadi sorot yang dicetak
-     di BELAKANG bumi tembus sampai ke tepi planetnya dan berbaur lewat feather
-     itu — tidak ada lagi strip hitam maupun garis potong.
+  --sa-globe-h:40.660%;
+  /* maps-new.webp punya ALPHA sungguhan (dikonversi dari maps-new.png):
+     angkasa di atas planetnya transparan dengan tepi atmosfer yang ter-feather,
+     bukan hitam pekat. Jadi sorot yang dicetak di BELAKANG bumi tembus sampai ke
+     tepi planetnya dan berbaur lewat feather itu — tidak ada strip hitam maupun
+     garis potong.
 
      --sa-glow-cut: seberapa dalam tepi bawah sorot (yang sekaligus titik paling
      terangnya, karena PNG-nya mentok di sudut) ditenggelamkan ke balik planet,
      dihitung dari dasar section sebagai pecahan tinggi gambar bumi. 0.62 = 38%
-     tinggi gambar dari atas; alfa planetnya baru benar-benar pekat di 21% (tengah),
-     31% (kiri) dan 37% (kanan — planetnya miring), jadi 42% aman tertutup. */
+     tinggi gambar dari atas; di maps-new.webp planetnya naik lebih tinggi
+     daripada earth-location.webp yang lama — alfanya sudah pekat di 11% (tengah),
+     20% (kiri) dan 22% (kanan — planetnya miring), jadi 38% jauh lebih dari cukup
+     untuk menutupi garis potongnya. */
   --sa-glow-cut:.62;
   /* Trik padding: tepi bawah CONTENT BOX-lah yang jadi garis jangkar, dan
      jaraknya ke dasar section = 20% tinggi bumi, dihitung dari lebar section
