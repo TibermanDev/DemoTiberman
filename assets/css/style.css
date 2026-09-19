@@ -740,15 +740,21 @@ ul{margin:0;padding:0;list-style:none}
 /* ---------- Testimoni ---------- */
 .testi{background:var(--grey-50);padding:64px 0;overflow:hidden;margin: 150px 0;}
 .testi__grid{
-  display:grid;grid-template-columns:320px 1fr;gap:40px;align-items:center;
-  /* rail sengaja full-bleed; padding kiri disamakan dengan tepi .container biar
-     judulnya lurus dengan section lain (dulu ada max-width:1440px + margin auto
-     yang bikin offset kehitung dobel di layar lebar) */
-  /* pakai 100% (lebar layout section), bukan 100vw, supaya lebar scrollbar tidak ikut terhitung */
-  padding-left:max(24px,calc((100% - var(--container))/2 + 24px));
+  /* Kolom judul ikut melebar di layar besar. Kalau dipatok 320px, semua sisa
+     lebar jatuh ke rel dan kartunya yang melar; melebarkan kolom ini menyerap
+     kelebihan itu sekaligus bikin paragraf intronya tidak wrap sempit. */
+  display:grid;grid-template-columns:clamp(320px,24vw,460px) 1fr;gap:40px;align-items:center;
+  /* Rail sengaja full-bleed. Padding kiri DULU disamakan dengan tepi .container
+     ((100% - var(--container))/2 + 24px) supaya judulnya lurus dengan section
+     lain — tapi di layar lebar itu jadi 400px+ ruang kosong di kiri judul,
+     sementara relnya memanjang sampai tepi layar. Sekarang dipatok clamp:
+     ikut lebar layar tapi ada langit-langitnya, jadi judulnya tidak lagi
+     terdorong jauh ke tengah. Konsekuensinya judul section ini memang tidak
+     lagi sejajar dengan judul section lain. */
+  padding-left:clamp(24px,6vw,140px);
 }
 .testi__intro h2{margin-bottom:16px}
-.testi__intro p{color:var(--muted);font-size:20px;line-height:1.6}
+.testi__intro p{color:var(--muted);font-size:17px;line-height:1.6}
 /* --testi-per = berapa kartu UTUH yang muat dalam satu layar rel. Lebar kartu
    dihitung dari angka itu, bukan dipatok 346px: dengan lebar tetap, tepi rel
    hampir tidak pernah jatuh pas di batas kartu, jadi selalu ada kartu yang
@@ -759,6 +765,14 @@ ul{margin:0;padding:0;list-style:none}
   display:flex;gap:var(--testi-gap);overflow-x:auto;scroll-snap-type:x mandatory;
   padding:8px var(--testi-gap) 20px 0;scrollbar-width:none;cursor:grab;
 }
+/* Jumlahnya naik mengikuti lebar layar. Kalau dibiarkan 3 terus, makin lebar
+   layar makin melar kartunya — di 1920px satu kartu jadi ~360px dan teksnya
+   terlalu renggang. Dengan ambang ini lebar kartu bertahan di kisaran 245-335px.
+
+   Dipatok maksimal 4 karena kartunya memang cuma 4: kalau --testi-per lebih
+   besar dari jumlah kartu, relnya tidak pernah terisi penuh dan menyisakan
+   ruang abu-abu kosong di kanan. */
+@media (min-width:1600px){ .testi__rail{--testi-per:4} }
 .testi__rail::-webkit-scrollbar{display:none}
 .testi__rail.is-dragging{cursor:grabbing;scroll-snap-type:none}
 /* Dipasang main.js waktu carousel otomatis aktif. Snap mandatory menarik
@@ -768,14 +782,14 @@ ul{margin:0;padding:0;list-style:none}
 .testi__rail.is-auto{scroll-snap-type:none}
 /* 100% di sini = lebar isi rel (sudah dikurangi padding), jadi
    --testi-per kartu + selanya persis mengisi satu layar rel. */
-.testi-card{flex:0 0 calc((100% - (var(--testi-per) - 1) * var(--testi-gap)) / var(--testi-per));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:22px;position:relative}
-.testi-card__quote{font-size:60px;line-height:.6;color:#a1a1a8;font-weight:800}
-.testi-card__avatar{position:absolute;top:22px;right:22px;width:88px;height:88px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(140deg,#c2410c,#7c1d0c);color:#fff;font-weight:800;font-size:26px}
+.testi-card{flex:0 0 calc((100% - (var(--testi-per) - 1) * var(--testi-gap)) / var(--testi-per));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:20px;position:relative}
+.testi-card__quote{font-size:46px;line-height:.6;color:#a1a1a8;font-weight:800}
+.testi-card__avatar{position:absolute;top:20px;right:20px;width:64px;height:64px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:linear-gradient(140deg,#c2410c,#7c1d0c);color:#fff;font-weight:800;font-size:20px}
 .testi-card__avatar img{width:100%;height:100%;object-fit:cover}
-.testi-card p{margin-top:84px;font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.45}  /* avatar tingginya 88px -> 84px kasih jarak ~30px di bawah avatar */
-.testi-card__who{margin-top:auto;padding-top:64px}  /* nempel ke dasar kartu -> nama sejajar di semua kartu */
-.testi-card__who strong{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em}
-.testi-card__who span{font-size:18px;color:var(--muted-2)}
+.testi-card p{margin-top:60px;font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.45}  /* avatar tingginya 64px -> 60px kasih jarak ~24px di bawah avatar */
+.testi-card__who{margin-top:auto;padding-top:44px}  /* nempel ke dasar kartu -> nama sejajar di semua kartu */
+.testi-card__who strong{display:block;font-size:18px;font-weight:800;letter-spacing:-.02em}
+.testi-card__who span{font-size:14px;color:var(--muted-2)}
 
 /* ---------- FAQ ---------- */
 /* Halaman contact: pita abu di bawah section form. Sosok di kirinya sengaja
