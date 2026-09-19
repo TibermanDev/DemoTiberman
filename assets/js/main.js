@@ -479,12 +479,63 @@
     } else if (!('IntersectionObserver' in window)) {
       bgVideos.forEach(startBg);
     } else {
-      /* Ambangnya rasio, bukan rootMargin: dengan rootMargin videonya mulai
-         200px SEBELUM sectionnya kelihatan, dan karena durasinya cuma 6 detik,
-         pada scroll pelan dia bisa habis sebelum sectionnya benar-benar terlihat.
-         PLAY_AT 0.35 = baru diputar ketika sepertiga section sudah di layar. */
-      var PLAY_AT = 0.35;
+      /* DUA pengamat dengan tugas berbeda — ini kuncinya supaya playback tidak
+         terasa telat:
+
+         1. PREFETCH (rootMargin) cuma MENGUNDUH, sekitar satu layar sebelum
+            sectionnya sampai. Dulu unduhan ~2 MB baru dimulai pada saat yang
+            sama dengan perintah putar, jadi yang terlihat pengguna adalah poster
+            diam selama videonya masih dijemput — dan kalau scroll-nya cepat,
+            sectionnya sudah lewat sebelum frame pertama sempat jalan.
+         2. PLAY (rasio, bukan rootMargin) baru MEMUTAR ketika sectionnya memang
+            sudah di layar. Rasio dipakai karena dengan rootMargin videonya mulai
+            sebelum sectionnya kelihatan, dan durasinya cuma 6 detik — pada scroll
+            pelan dia bisa habis sebelum sectionnya benar-benar terlihat.
+
+         PLAY_AT diturunkan 0.35 -> 0.08: begitu sectionnya mulai mengintip di
+         tepi layar, videonya sudah jalan. */
+      var PLAY_AT = 0.08;
       var bgOn = new WeakSet();   /* videonya sedang "dikunjungi" atau belum */
+
+      var jemput = function (v) {
+        if (v.preload !== 'auto') { v.preload = 'auto'; v.load(); }
+      };
+
+      /* Kapan unduhannya dimulai.
+
+         Videonya 1920x1080 / 2,1 MB: di jaringan 10 Mbps saja perlu ~1,7 detik
+         sebelum frame pertama siap. Ancang-ancang "satu layar sebelum sampai"
+         tidak cukup kalau scroll-nya cepat — makanya dulu terasa telat.
+
+         Karena section ini yang KEDUA di halaman depan (hampir semua pengunjung
+         yang men-scroll pasti melewatinya), unduhannya dimulai begitu halaman
+         selesai sibuk memuat yang terlihat lebih dulu — bukan menunggu
+         sectionnya mendekat. Waktu siapnya jadi hitungan detik lebih awal.
+
+         Kecualinya: Save-Data dan jaringan lambat. Di sana 2 MB lebih mahal
+         daripada animasinya, jadi mereka kembali ke pola lama (baru dijemput
+         waktu sectionnya sudah dekat). */
+      var koneksi = navigator.connection || {};
+      var hematData = koneksi.saveData === true ||
+                      /(^|-)2g$/.test(koneksi.effectiveType || '');
+
+      if (!hematData) {
+        var mulaiJemput = function () { bgVideos.forEach(jemput); };
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(mulaiJemput, { timeout: 2500 });
+        } else {
+          setTimeout(mulaiJemput, 1200);
+        }
+      } else {
+        var bgPre = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            jemput(e.target);
+            bgPre.unobserve(e.target);   /* sekali jemput, cukup */
+          });
+        }, { rootMargin: '0px 0px 1200px 0px' });   /* ~1,3 layar ancang-ancang */
+        bgVideos.forEach(function (v) { bgPre.observe(v); });
+      }
 
       var bgIO = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
