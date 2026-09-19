@@ -44,6 +44,8 @@
   --surface:#fff;       /* kartu di atas latar terang */
   --body-text:#3f3f46;  /* paragraf isi */
   --card-img:#fff;      /* kotak foto produk di katalog */
+  --catalog-bg:#f3f3f5; /* latar area katalog (nilai dari Figma) */
+  --card-foot:#e6e6e6;  /* pita nama di kartu katalog (nilai dari Figma) */
   --illus-bg:#f6f5f8;
   --outline-strong:rgba(0,0,0,.45);
 }
@@ -774,15 +776,58 @@ ul{margin:0;padding:0;list-style:none}
 .testi-card__who span{font-size:18px;color:var(--muted-2)}
 
 /* ---------- FAQ ---------- */
-.faq{padding:80px 0 150px}
-.faq__grid{display:grid;grid-template-columns:1.05fr 1fr;gap:32px;align-items:end}
+/* Halaman contact: pita abu di bawah section form. Sosok di kirinya sengaja
+   lebih tinggi daripada pitanya — kepalanya menonjol ke atas, kakinya
+   terpotong tepi bawah.
+   clip-path (bukan overflow:hidden) yang memotong bagian bawah: inset dengan
+   nilai atas negatif membiarkan kepalanya tetap terlihat di luar section,
+   sementara tepi bawah dan sampingnya tetap dipotong rapi.
+   overflow-x:clip untuk limpahan ke kiri, supaya tidak memunculkan scrollbar
+   mendatar — clip-path sendiri cuma soal tampilan, tidak menahan scroll. */
+/* padding atas memberi jarak antara tepi atas pita abu dan kartu FAQ.
+   Ingat dua-duanya ikut mengubah komposisi sosok di kiri: padding ATAS
+   mengurangi tonjolan kepalanya (gambar ikut turun), padding BAWAH
+   mengurangi dalamnya potongan kaki. */
+.faq{background:var(--grey-50);padding:clamp(40px,4vw,64px) 0 clamp(20px,2vw,36px);overflow-x:clip;clip-path:inset(-700px 0 0 0)}
+.faq__grid{display:grid;grid-template-columns:.58fr 1fr;gap:28px;align-items:end}
 /* Gambar dibesarkan dengan cara melimpah ke ruang kosong di kiri container,
    bukan dengan mengambil lebar panel FAQ (panel sudah mepet: pertanyaan
    terpanjang cuma sisa ~6px sebelum pecah dua baris). Limpahannya dibatasi
    140px dan otomatis 0 kalau layar tidak punya ruang kosong. */
-.faq__art{margin-left:calc(-1 * clamp(0px, calc((100vw - var(--container))/2 - 24px), 140px))}
-.faq__art img{width:100%;filter:drop-shadow(0 24px 40px rgba(0,0,0,.14))}
-.faq__panel{background:var(--grey-100);border-radius:var(--radius-xl);padding:34px 28px}
+/* Sosoknya sekarang utuh dari helm sampai sepatu (3408x5556, rasio 0,61),
+   jadi ukurannya dipatok lewat TINGGI dan lebarnya ikut — kalau dipatok lewat
+   lebar kolom seperti dulu, tingginya membengkak sampai menabrak section di
+   atasnya. margin-top negatif yang membuat helmnya keluar dari pita abu. */
+.faq__art{
+  /* min-width:0 — kolom grid `fr` secara bawaan tidak boleh lebih sempit
+     daripada isinya, jadi begitu gambarnya lebih lebar dari jatahnya,
+     kolomnya ikut melebar dan kartu FAQ yang terdesak. Ini yang menahannya
+     tetap selebar jatah, dan kelebihan gambar melimpah ke kiri. */
+  display:flex;justify-content:flex-end;align-items:flex-end;min-width:0;
+  margin-left:calc(-1 * clamp(20px, 5vw, 150px));
+  /* Dua margin negatif ini memperpendek KOTAKNYA, bukan menggeser gambarnya.
+     Dengan align-items:end: margin-bottom menurunkan gambar melewati dasar
+     baris (kaki terpotong), margin-top memperkecil sumbangannya ke tinggi
+     baris sehingga kepalanya naik melewati batas section. Seberapa jauh
+     menonjolnya = tinggi gambar - |margin-bottom| - tinggi baris, jadi
+     gambarnya memang harus jauh lebih tinggi daripada kartu FAQ. */
+  margin-top:clamp(-360px,-20vw,-130px);
+  margin-bottom:clamp(-300px,-15vw,-110px);
+}
+/* justify-content:flex-end — kelebihan lebarnya melimpah ke KIRI (ruang
+   kosong / tepi layar), bukan ke kanan tempat kartu FAQ berada. */
+/* flex:none — tanpa ini gambar diperlakukan sebagai flex item yang boleh
+   menyusut, dan karena lebarnya melebihi kolom, lebarnya dipepetkan.
+   aspect-ratio + object-fit:contain mengunci proporsinya: dengan width:auto
+   saja, algoritma flex sempat memberi lebar yang tidak sesuai rasio aslinya
+   dan sosoknya kelihatan gepeng. */
+/* max-width:none WAJIB: reset global `img{max-width:100%}` di atas memotong
+   lebar gambar ini sebatas kolomnya, sementara tingginya tetap — itu yang
+   membuat sosoknya kelihatan gepeng. Sosok ini memang sengaja lebih lebar
+   daripada kolomnya dan melimpah ke kiri.
+   flex:none supaya tidak ikut disusutkan algoritma flex. */
+.faq__art img{display:block;flex:none;width:auto;max-width:none;height:clamp(620px,88vw,1340px);aspect-ratio:774/1467}
+.faq__panel{background:var(--surface);border-radius:var(--radius-xl);padding:34px 30px;box-shadow:var(--shadow-s);margin-bottom:34px}
 .faq__panel h2{font-size:clamp(24px,2.8vw,34px);margin-bottom:14px}
 .acc__item{border-bottom:1px solid #e2e2e5}
 .acc__item:last-of-type{border-bottom:0}
@@ -796,13 +841,9 @@ ul{margin:0;padding:0;list-style:none}
 .btn--connect{background:var(--red);color:#fff;text-transform:uppercase;font-weight:700;letter-spacing:.04em;height:44px}
 
 /* ---------- News ---------- */
-.news{background:var(--grey-50);padding:80px 0 96px;margin-top: 150px;}
 /* margin-top itu jarak ke section di ATASNYA waktu News masih ikut beranda.
    Di halaman News sendiri tidak ada yang di atasnya selain navbar, jadi
    jaraknya jadi ruang kosong yang menganggur. */
-.subpage .news{margin-top:0}
-.news__head h2{font-size:clamp(34px,4.4vw,52px);letter-spacing:-.035em}
-.news__head p{font-weight:700;margin-top:6px}
 .news__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:36px}
 /* tiap berita dibungkus kartu putih supaya terpisah dari latar abu section */
 .news-card{
@@ -871,6 +912,8 @@ ul{margin:0;padding:0;list-style:none}
   height:calc(100vh - var(--nav-h));overflow-y:auto;
 }
 .side-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px}
+/* label "Telusuri berdasarkan Merk" dst.: beri jarak dari daftar di atasnya */
+.unitlist + .side-label{margin-top:4px}
 .search{position:relative;margin-bottom:20px}
 .search input{width:100%;height:40px;border-radius:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);color:#fff;padding:0 12px 0 38px;font-size:14px}
 .search input::placeholder{color:rgba(255,255,255,.4)}
@@ -880,26 +923,33 @@ ul{margin:0;padding:0;list-style:none}
 .unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
 .unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
 .unitlist button.is-active{background:var(--red);color:#fff;font-weight:600}
-.side-promo{display:block;border:1px solid rgba(255,255,255,.12);border-radius:var(--radius-s);padding:12px 14px;margin-bottom:12px;transition:border-color .25s var(--ease),background .25s var(--ease)}
-.side-promo:hover{border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.04)}
-.side-promo strong{display:block;font-size:13px;font-weight:800;letter-spacing:-.02em}
-.side-promo span{font-size:11px;color:rgba(255,255,255,.55);line-height:1.45;display:block;margin-top:4px}
 
 /* Kolom isi katalog berlatar abu terang (bukan putih, supaya tidak menyilaukan
    di sebelah sidebar yang hitam). Navbar, sidebar, banner, dan footer tetap
    gelap. Kartunya putih supaya terangkat dari latar abu ini. */
-.catalog__main{min-width:0;background:var(--grey-200);color:var(--text)}
+/* Flex kolom supaya footer bisa didorong ke DASAR kolom isi. .catalog__main
+   itu grid item yang selalu diregangkan setinggi sidebar, jadi kalau produknya
+   sedikit ada sisa ruang di bawah — tanpa margin-top:auto sisa itu jatuh di
+   bawah footer dan footernya kelihatan menggantung. flex-shrink:0 menjaga
+   banner 190px tidak ikut dipepetkan waktu isinya panjang. */
+.catalog__main{min-width:0;background:var(--catalog-bg);color:var(--text);display:flex;flex-direction:column}
+.catalog__main > *{flex-shrink:0}
+.catalog__main > .footer--slim{margin-top:auto}
 .catalog__banner{height:190px;overflow:hidden;position:relative}
 .catalog__banner img{width:100%;height:100%;object-fit:cover}
 .catalog__banner::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.1),rgba(29,29,31,.6))}
 .chips{display:flex;flex-wrap:wrap;gap:10px;padding:22px 32px 4px}
 .chip{
-  height:36px;padding:0 18px;border-radius:8px;border:1px solid var(--line);
-  font-size:12.5px;font-weight:600;color:var(--body-text);background:var(--surface);
-  display:inline-flex;align-items:center;gap:8px;transition:background .22s var(--ease),border-color .22s var(--ease),color .22s var(--ease);
+  height:44px;padding:0 26px;border-radius:8px;border:0;
+  /* satu tingkat lebih gelap dari latar .catalog__main (--catalog-bg) — kalau
+     dipakai token yang sama, chip-nya lenyap ke latarnya sendiri */
+  font-size:14px;font-weight:700;letter-spacing:-.01em;color:var(--text);background:#dedee1;
+  display:inline-flex;align-items:center;gap:8px;transition:background .22s var(--ease),color .22s var(--ease);
 }
-.chip:hover{border-color:rgba(0,0,0,.35);color:var(--text)}
-.chip.is-active{background:var(--ink);border-color:var(--ink);color:#fff}
+.chip:hover{background:#d3d3d7}
+/* chip terpilih memakai merah brand, sama dengan item aktif di sidebar */
+.chip.is-active{background:var(--red);color:#fff}
+.chip.is-active:hover{background:var(--red-dark)}
 .catalog__body{padding:18px 32px 80px}
 .size-group{margin-bottom:38px}
 .size-group h2{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:18px}
@@ -909,13 +959,181 @@ ul{margin:0;padding:0;list-style:none}
   display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease);
 }
 .product-card:hover{transform:translateY(-4px);border-color:rgba(0,0,0,.26);box-shadow:0 16px 34px rgba(0,0,0,.14)}
-.product-card__img{background:var(--card-img);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;padding:10px;overflow:hidden}
+.product-card__img{background:var(--card-img);aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;padding:12px;overflow:hidden}
 .product-card__img img{max-height:100%;max-width:100%;object-fit:contain;transition:transform .45s var(--ease)}
 .product-card:hover .product-card__img img{transform:scale(1.06)}
-.product-card__body{padding:13px 10px 10px;text-align:center}
-.product-card__body strong{display:block;margin-bottom:5px;font-size:14px;line-height:1.25;font-weight:700;letter-spacing:.01em}
-.product-card__body span{display:block;font-size:11px;line-height:1.3;color:var(--muted)}
+/* Pita nama memakai abu dengan garis pemisah, jadi kotak fotonya terbaca
+   sebagai bidang putih sendiri. Nilainya langsung dari Figma: latar katalog
+   #f3f3f5, pita kartu #e6e6e6 — pitanya lebih gelap dari latar supaya tepi
+   bawah kartu tidak kelihatan nyambung dengan halaman. */
+.product-card__body{flex:1;background:var(--card-foot);border-top:1px solid var(--line);padding:14px 12px 15px;text-align:center}
+.product-card__body strong{display:block;margin-bottom:5px;font-size:13.5px;line-height:1.3;font-weight:700;letter-spacing:.01em}
+.product-card__body span{display:block;font-size:11.5px;line-height:1.35;color:var(--muted)}
 .empty{padding:60px 0;text-align:center;color:var(--muted)}
+
+/* ---------- Modal detail produk ----------
+   Empat slide, isinya sama dengan produk.html: hero, "Kenapa Harus Ban Ini",
+   "Perfect pair for", dan spesifikasi. Semuanya memakai permukaan terang —
+   foto bannya PNG beralpha dan logonya versi untuk latar terang, jadi tidak
+   ada yang perlu digelapkan. */
+.pmodal{position:fixed;inset:0;z-index:200;display:grid;place-items:center;padding:24px}
+.pmodal[hidden]{display:none}
+.pmodal__scrim{position:absolute;inset:0;background:rgba(0,0,0,.62);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+.pmodal__dialog{
+  position:relative;width:min(900px,100%);
+  /* Tinggi dipatok, bukan ikut isi: keempat slide punya panjang isi yang beda
+     jauh (hero pendek, spesifikasi panjang) — kalau dibiarkan auto, kotaknya
+     melompat-lompat tiap ganti slide. */
+  height:min(86vh,580px);
+  background:var(--surface);color:var(--text);
+  border-radius:var(--radius-xl);overflow:hidden;
+  box-shadow:0 40px 90px rgba(0,0,0,.45);
+}
+
+.pmodal__close{
+  position:absolute;top:14px;right:16px;z-index:3;
+  width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  color:var(--text);background:transparent;transition:background .2s var(--ease);
+}
+.pmodal__close:hover{background:rgba(128,128,128,.22)}
+.pmodal__close svg{width:15px;height:15px}
+
+/* Viewport mengisi SELURUH tinggi dialog. Dulu nav mengambil barisnya
+   sendiri di bawah viewport, jadi area isi terpotong ~70px dan slide yang
+   pendek menyisakan pita kosong lebar di bawahnya. Sekarang nav melayang di
+   atas isi (absolute), slide tinggal diberi jatah padding bawah. */
+.pmodal__viewport{position:absolute;inset:0;overflow:hidden}
+.pmodal__track{display:flex;height:100%;transition:transform .5s var(--ease)}
+.pmodal__slide{flex:0 0 100%;min-width:0;height:100%;overflow-y:auto;padding:40px 80px}
+
+/* --- slide 1: foto besar di kiri, logo + teks di kanan --- */
+/* Padding atas-bawah hero dipangkas supaya bannya dapat tinggi maksimal —
+   di desain bannya nyaris menyentuh tepi atas dan bawah modal. */
+.pmodal__slide--hero{display:grid;grid-template-columns:.92fr 1fr;gap:50px;align-items:center;padding-top:30px;padding-bottom:65px}
+.pmodal__art{height:100%;display:flex;align-items:center;justify-content:center;min-height:0}
+.pmodal__art img{width:100%;height:100%;object-fit:contain}
+.pmodal__logo{width:100%;height:auto;display:block}
+/* Logo hero dibesarkan melewati kolomnya dengan menjorok ke separuh padding
+   kanan slide (80px), jadi masih tersisa 40px ke tepi modal. Pola margin
+   negatif yang sama dipakai foto sidewall di slide 2. */
+/* Logonya memakai file -trim, jadi width:100% membuat TULISANNYA rata kanan
+   dengan paragraf di bawahnya — bukan kanvas transparannya. Tidak perlu lagi
+   margin negatif untuk menambal selisih itu. */
+.pmodal__slide--hero .pmodal__logo{width:100%}
+.pmodal__copy p{margin-top:22px;font-size:16px;line-height:1.7;color:var(--muted);text-align:justify}
+.pmodal__copy p b{color:var(--text);font-weight:700}
+/* nama produk di awal paragraf miring, mengikuti gaya yang sama di produk.html */
+.pmodal__copy p b:first-child{font-style:italic}
+
+/* --- slide 2: judul di tengah, teks rata kanan, foto melimpah ke tepi kanan --- */
+.pmodal__slide--why{display:grid;grid-template-columns:.8fr 1fr;grid-template-rows:auto 1fr;gap:0 20px;align-items:center}
+.pmodal__head{font-size:clamp(19px,2.2vw,26px);font-weight:800;letter-spacing:-.025em}
+/* Judul mengambil satu baris penuh di atas kedua kolom, ditengahkan terhadap
+   modal — bukan terhadap kolom teksnya saja. */
+/* z-index: fotonya sekarang ditarik sampai tepi atas modal dan menindih baris
+   judul (sudut kiri-atas PNG-nya transparan, jadi tidak kelihatan) — judulnya
+   dinaikkan supaya tetap di atas foto. */
+.pmodal__slide--why > .pmodal__head{grid-column:1/-1;text-align:center;margin-bottom:6px;font-size:clamp(24px,3vw,34px);position:relative;z-index:1}
+.pmodal__slide--why .pmodal__copy{text-align:right}
+.pmodal__slide--why .pmodal__copy p{text-align:right}
+.pmodal__slide--why h3{font-style:italic;font-size:clamp(40px,5.4vw,64px);letter-spacing:-.035em;line-height:1.08}
+/* Paragrafnya sebelumnya --muted (abu) dan kelihatan pudar di sebelah judul
+   sebesar ini; disamakan dengan paragraf isi halaman produk. */
+.pmodal__slide--why .pmodal__copy p{margin-top:18px;color:var(--body-text)}
+/* Dipotong tepi modal di tiga sisi, persis seperti desain: fotonya memang
+   tidak dimaksudkan tampil utuh, yang penting lengkung sidewall-nya. */
+/* Kotaknya ditarik ke atas 85px (sampai kira-kira sejajar judul) supaya
+   bannya naik dan tidak menyisakan pita putih di sudut kanan atas. Tingginya
+   ditambah sebesar tarikan itu + 40px bleed bawah, jadi tepi bawahnya tetap
+   mentok dasar modal seperti sebelumnya. */
+.pmodal__art--bleed{margin:-85px -80px -40px 0;height:calc(100% + 125px);overflow:hidden;align-items:flex-start}
+/* Fotonya potret (1864x2268) dan lebih tinggi daripada kotaknya. Yang dijaga
+   LEBARNYA: width:100% + height auto menampilkan seluruh lebar foto (lengkung
+   sidewall kiri sampai tepi kanan) dan membiarkan sisa tingginya yang meluber
+   ke bawah terpotong tepi modal — kebalikan dari object-fit:cover yang dulu
+   memangkas kiri-kanan. */
+.pmodal__art--bleed img{width:100%;height:auto;object-fit:contain}
+
+/* --- slide 3: tiga kartu potret --- */
+/* +34px di bawah: padding dasar slide sekarang 40px, sedangkan nav yang
+   melayang memakan ~58px dari dasar modal. */
+.pmodal__slide--pair{text-align:center;display:flex;flex-direction:column;justify-content:center;padding-bottom:74px}
+.pmodal__slide--pair .pair-grid{margin-top:26px;gap:20px}
+.pmodal__slide--pair .pair-card img{height:auto;aspect-ratio:.86;border-radius:var(--radius);filter:none}
+.pmodal__slide--pair .pair-card strong{margin-top:14px;font-size:17px;color:var(--text)}
+
+/* --- slide 4: galeri + spesifikasi --- */
+.pmodal__slide--spec{display:grid;grid-template-columns:.8fr 1fr;gap:28px;align-items:start;padding-bottom:74px}
+.pmodal__slide--spec .gallery__main{aspect-ratio:.97;padding:16px;border-radius:var(--radius)}
+.pmodal__slide--spec .gallery__thumbs{grid-template-columns:repeat(4,1fr);gap:9px;margin-top:10px}
+.pmodal__slide--spec .gallery__thumbs button{padding:7px;border-radius:9px;aspect-ratio:1}
+/* Tombol dokumen ikut masuk ke modal seperti di produk.html, jadi kolom kiri
+   ikut terisi sampai bawah. Dipendekkan dari 52px karena tinggi modal dipatok. */
+/* grid-template-columns ditegaskan di sini: aturan mobile umum menumpuk
+   .doc-btns jadi satu kolom, sedangkan di modal dua tombol ini tetap muat
+   bersebelahan di bawah thumbnail. */
+.pmodal__slide--spec .doc-btns{grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.pmodal__slide--spec .doc-btns a{height:42px;font-size:13.5px;border-radius:10px}
+.pmodal__info .pmodal__logo{max-width:335px}
+/* Subjudulnya samakan dengan produk.html: abu gelap (--spec), bukan merah. */
+.pmodal__info .subhead{margin:20px 0 14px;font-size:16px;color:var(--spec)}
+.pmodal__info .spec-table{font-size:12.5px;width:100%}
+.pmodal__info .spec-table td{padding:10px 5px}
+.pmodal__info .size-chips{gap:9px}
+.pmodal__info .size-chip{height:33px}
+/* Kolom kanan modal lebih sempit daripada di produk.html, jadi tombolnya
+   dikecilkan supaya ketiganya tetap satu baris seperti di desain. */
+.pmodal__info .contact-btns{gap:8px;flex-wrap:nowrap}
+.pmodal__info .contact-btn{height:38px;padding:0 12px;font-size:12.5px;gap:7px;white-space:nowrap}
+.pmodal__info .contact-btn svg{width:17px;height:17px;flex-basis:17px}
+.pmodal__info .contact-btn img{height:18px}
+
+/* --- navigasi bawah --- */
+.pmodal__nav{
+  position:absolute;left:0;right:0;bottom:18px;z-index:2;
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  pointer-events:none;                     /* biar isi di belakangnya tetap bisa diklik */
+}
+.pmodal__nav > *{pointer-events:auto}
+/* Titik indikator duduk di atas pil abu, seperti di desain — sekalian menjaga
+   keterbacaannya waktu melayang di atas foto. */
+.pmodal__dots{margin-top:0;background:var(--grey-100);border-radius:999px;padding:11px 18px}
+.pmodal__dots button{background:#c9c9cf}
+.pmodal__dots button.is-active{background:var(--ink)}
+.pmodal__next{
+  width:40px;height:40px;border-radius:50%;display:grid;place-items:center;
+  background:var(--grey-200);color:var(--ink);transition:background .2s var(--ease);
+}
+.pmodal__next:hover{background:#d3d3d7}
+.pmodal__next svg{width:12px;height:12px;margin-left:2px}
+
+@media (max-width:860px){
+  .pmodal{padding:12px}
+  .pmodal__dialog{height:min(90vh,640px)}
+  .pmodal__slide{padding:34px 22px 74px}
+  /* satu kolom: foto di atas, teks di bawah — dua kolom jadi terlalu sempit.
+     minmax(0,1fr), bukan 1fr: kolom grid default tidak boleh lebih kecil dari
+     isi terlebarnya, dan tabel spesifikasi yang sel-selnya white-space:nowrap
+     memaksa kolomnya melebar melewati modal. */
+  .pmodal__slide--hero,.pmodal__slide--why,.pmodal__slide--spec{grid-template-columns:minmax(0,1fr);align-items:start}
+  /* judul selebar modal + tombol tutup yang melayang di kanan atas: di lebar
+     ponsel keduanya bertabrakan, jadi judulnya dikecilkan sedikit dan
+     disisakan jalur untuk tombolnya. */
+  .pmodal__slide--why > .pmodal__head{font-size:21px;padding-right:30px}
+  /* di lebar ponsel tabelnya memang tidak muat kalau selnya dilarang membungkus */
+  .pmodal__info .spec-table{font-size:11px}
+  .pmodal__info .spec-table td{white-space:normal;padding:6px 3px}
+  .pmodal__info .contact-btns{flex-wrap:wrap}
+  .pmodal__art{height:200px}
+  /* satu kolom: fotonya tidak lagi dipatok 190px — kalau tingginya dipatok,
+     yang kelihatan cuma pita tipis bagian atas foto potretnya. Dibiarkan
+     mengikuti lebar kolom, dan cuma tepi bawahnya yang menempel dasar slide. */
+  .pmodal__art--bleed{margin:0 -22px -74px;height:auto}
+  .pmodal__slide--pair .pair-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pmodal__track{transition:none}
+}
 
 /* varian top-nav (halaman 3 di PDF) */
 .catalog--topnav .catalog__banner{height:215px}
@@ -1105,8 +1323,7 @@ ul{margin:0;padding:0;list-style:none}
   .pilar{padding:110px 0 90px}
   .aftersales{padding-bottom:90px}
   .testi{margin:90px 0}
-  .faq{padding-bottom:90px}
-  .news{margin-top:90px}
+  .faq{padding-bottom:60px}
   .feature-card__body{padding:40px 28px}
   .feature-card__media{min-height:260px}
   /* kartu jadi 1 kolom: ilustrasi mengalir di bawah teks selebar kartu, kotaknya
@@ -1138,8 +1355,10 @@ ul{margin:0;padding:0;list-style:none}
   .aftersales{padding:56px 0 60px}
   .testi{margin:60px 0}
   .testi__rail{--testi-per:1;--testi-gap:16px}
-  .faq{padding:56px 0 60px}
-  .news{margin-top:60px}
+  .faq{padding:0 0 46px}
+  /* satu kolom: sosoknya tidak perlu lagi menjorok naik sejauh itu */
+  .faq__art{margin-top:-30px;margin-bottom:-70px;margin-inline:auto;justify-content:center}
+  .faq__art img{height:clamp(340px,96vw,460px);aspect-ratio:774/1467;max-width:100%}
   /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
      layar) dan lebih pendek. Di lebar segini kolom foto pasti menyusut, jadi
      ruang atas antar kartu tidak lagi sama persis — konsekuensi yang tak
@@ -1264,3 +1483,376 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   .intro{display:none!important}
 }
 
+
+/* ==========================================================================
+   HALAMAN SUPERAREA (superarea.html)
+   Latar bumi + ban kiri/kanan itu SATU gambar komposit (earth-superarea),
+   bukan beberapa elemen yang ditumpuk: gambarnya dipaku ke dasar halaman,
+   selebar layar, dan isinya mengambang di atasnya.
+   ========================================================================== */
+/* --sa-earth = tinggi bagian BUMI pada gambar latar, dinyatakan dalam persen
+   LEBAR .sa: bumi mengisi 38% tinggi gambar dan rasio gambarnya 0.896, jadi
+   0.38 x 0.896 = 34%. Nilai itu dipakai sebagai padding bawah isi halaman,
+   supaya kartu terakhir berhenti tepat di garis cakrawala dan cuma ban
+   kiri-kanannya yang menjorok naik ke area kartu — seperti di desain. */
+.sa{--sa-earth:34%;position:relative;background:#000;color:#fff;overflow:hidden;min-height:100vh;display:flex;flex-direction:column}
+.sa__bg,.sa__pins{position:absolute;left:0;right:0;bottom:0;pointer-events:none}
+.sa__bg{z-index:0}
+.sa__bg img{display:block;width:100%;height:auto}
+/* aspect-ratio menyamakan tingginya dengan gambar di .sa__bg tanpa perlu
+   diukur lewat skrip, jadi koordinat persen tiap pin jatuh pas. z-index 3
+   menaruhnya DI ATAS kartu supaya popup lokasi tidak tertutup — .sa__bg
+   sendiri tetap di z-index 0 di belakang kartu. */
+.sa__pins{z-index:3;aspect-ratio:2880/2580}
+/* pointer-events dihidupkan di TOMBOLNYA, bukan di .sa-spots: kotak itu
+   inset:0 setinggi gambar, jadi kalau dia yang menangkap klik, separuh atas
+   halaman (tab pulau dan kartu) ikut tertutup lapisan tak kelihatan. */
+.sa__pins .sa-spot,.sa__pins .sa-pop{pointer-events:auto}
+/* Sorot merah di tepi atas: aset top-shadow, dipaku ke tepi atas dan selebar
+   layar. PNG-nya sudah beralpha dan menghitam ke bawah, jadi tidak perlu
+   gradien atau mask tambahan. */
+.sa__glow{position:absolute;left:0;top:0;width:100%;height:auto;z-index:0;pointer-events:none}
+.sa__inner{position:relative;z-index:1;flex:1;width:100%;max-width:1160px;margin-inline:auto;padding:70px 40px calc(var(--sa-earth) + 30px)}
+
+.sa__head{text-align:center}
+/* logo-white.png itu lockup "Tiberman" yang sudah miring & tebal, jadi
+   judulnya memakai gambar — bukan teks yang di-italic-kan sendiri. */
+.sa__wordmark{display:block;width:min(430px,72vw);height:auto;margin:0 auto}
+.sa__kicker{margin-top:10px;font-size:clamp(20px,2.6vw,30px);font-weight:800;letter-spacing:.06em}
+
+.sa__tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:34px}
+.sa-tab{
+  height:38px;padding:0 24px;border-radius:999px;
+  /* pil gelap, bukan putih transparan: sorot merah di belakangnya tembus
+     lewat isian transparan dan bikin tab non-aktif ikut kelihatan kemerahan
+     seperti tab yang terpilih */
+  border:1px solid rgba(255,255,255,.3);background:rgba(18,18,20,.72);color:#fff;
+  font-size:13.5px;font-weight:700;letter-spacing:-.01em;
+  transition:background .22s var(--ease),border-color .22s var(--ease);
+}
+.sa-tab:hover{background:rgba(70,70,76,.85)}
+.sa-tab.is-active{background:var(--red);border-color:var(--red)}
+.sa-tab.is-active:hover{background:var(--red-dark);border-color:var(--red-dark)}
+
+/* flex, bukan grid: kalau satu pulau cuma punya 1-2 SuperArea, kolom grid
+   yang kosong membuat kartunya menepi ke kiri — dengan flex sisa barisnya
+   ditengahkan. --sa-cols dipakai supaya lebar kartunya tetap sama dengan
+   waktu barisnya penuh. */
+.sa__grid{--sa-cols:3;--sa-gap:26px;display:flex;flex-wrap:wrap;justify-content:center;gap:var(--sa-gap);margin-top:40px}
+.sa-card{
+  flex:0 0 calc((100% - (var(--sa-cols) - 1) * var(--sa-gap)) / var(--sa-cols));
+  background:var(--catalog-bg);color:var(--text);
+  border-radius:14px;padding:12px 12px 18px;text-align:center;
+  transition:transform .3s var(--ease),box-shadow .3s var(--ease);
+}
+.sa-card[hidden]{display:none}
+.sa-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(0,0,0,.45)}
+.sa-card__img{display:block;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:var(--grey-200)}
+.sa-card__img img{width:100%;height:100%;object-fit:cover}
+.sa-card strong{display:block;margin-top:14px;font-size:19px;font-weight:800;letter-spacing:-.02em}
+.sa-card strong em{font-style:normal;font-weight:700;font-size:.72em;color:var(--muted)}
+.sa-card > span{display:block;margin-top:7px;font-size:11.5px;line-height:1.5;color:var(--muted)}
+
+@media (max-width:1024px){
+  .sa__inner{padding:56px 28px calc(var(--sa-earth) + 24px)}
+  .sa__grid{--sa-cols:2;--sa-gap:20px}
+}
+@media (max-width:620px){
+  /* gambarnya dilebarkan jadi 180% (lihat .sa__bg di bawah), jadi bagian
+     buminya ikut 1.8x lebih tinggi terhadap lebar halaman */
+  .sa{--sa-earth:61%}
+  .sa__inner{padding:44px 18px calc(var(--sa-earth) + 20px)}
+  .sa__grid{--sa-cols:1;--sa-gap:16px}
+  .sa-tab{height:34px;padding:0 16px;font-size:12.5px}
+  /* Di layar sempit gambarnya jadi jauh lebih pendek daripada isinya, jadi
+     diperbesar melewati lebar layar supaya bumi & bannya tetap terbaca. */
+  .sa__bg,.sa__pins{left:-40%;right:-40%}
+}
+
+/* ==========================================================================
+   HALAMAN NEWS (news.html)
+   Banner utuh di atas, deretan tab kategori, lalu sorotan + "Latest Post",
+   dan section per kategori yang latarnya berselang-seling.
+   ========================================================================== */
+.nwp{background:#fff}
+/* Banner: tinggi bandnya dipatok sendiri (tidak lagi ikut rasio gambar),
+   lalu tiap lapis diposisikan di dalamnya. Ini yang membuat lockup tetap
+   terbaca di layar sempit sekaligus tidak jadi raksasa di layar lebar. */
+.nwp__banner{
+  position:relative;display:grid;place-items:center;overflow:hidden;
+  height:clamp(104px,11.5vw,168px);background:#fff;
+}
+.nwp__banner img{display:block}
+/* tekstur gudang: lapis paling bawah, menutup seluruh band */
+.nwp__banner-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+/* ban kiri-kanan: setinggi band, lebarnya ikut rasio, sisanya terpotong
+   tepi banner */
+.nwp__banner-tyre{position:absolute;top:0;height:100%;width:auto;pointer-events:none}
+.nwp__banner-tyre--l{left:0}
+.nwp__banner-tyre--r{right:0}
+/* lockup: relative supaya duduk di atas ketiga lapis di belakangnya */
+.nwp__banner-logo{position:relative;width:min(430px,42%);height:auto}
+
+.nwp__tabs{
+  display:flex;flex-wrap:wrap;justify-content:center;gap:34px;
+  padding:22px 24px 0;border-bottom:1px solid var(--line);
+}
+.nwp-tab{
+  position:relative;padding:0 2px 14px;background:transparent;
+  font-size:14.5px;font-weight:700;letter-spacing:-.01em;color:var(--muted);
+  transition:color .2s var(--ease);
+}
+.nwp-tab:hover{color:var(--text)}
+/* garis bawah tab aktif ditarik 1px ke bawah supaya menindih garis
+   .nwp__tabs, bukan duduk di atasnya */
+.nwp-tab.is-active{color:var(--text)}
+.nwp-tab.is-active::after{
+  content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--red);
+}
+
+.nwp-top{padding:40px 0 10px}
+.nwp-top[hidden]{display:none}
+.nwp-top__grid{display:grid;grid-template-columns:1.9fr 1fr;gap:26px;align-items:start}
+
+.nwp-feature{background:var(--grey-50);border:1px solid var(--line);border-radius:14px;padding:16px 16px 22px}
+.nwp-feature__thumb{display:block;aspect-ratio:16/8;border-radius:10px;overflow:hidden;background:var(--grey-200)}
+.nwp-feature__thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.nwp-feature__thumb:hover img{transform:scale(1.03)}
+.nwp-feature__date{display:block;margin:18px 4px 0;font-size:13px;font-weight:700;color:var(--red)}
+.nwp-feature h2{margin:8px 4px 0;font-size:clamp(22px,2.4vw,28px);line-height:1.25;letter-spacing:-.025em}
+.nwp-feature h2 a{color:inherit}
+.nwp-feature h2 a:hover{color:var(--red)}
+.nwp-feature p{margin:12px 4px 0;font-size:15px;line-height:1.65;color:var(--body-text)}
+
+.nwp-latest{background:var(--grey-50);border:1px solid var(--line);border-radius:14px;padding:18px}
+.nwp-latest__head{font-size:17px;letter-spacing:-.02em;margin-bottom:14px}
+.nwp-mini{display:flex;gap:12px;padding:10px;border-radius:10px;transition:background .2s var(--ease)}
+.nwp-mini:hover{background:#fff}
+.nwp-mini__thumb{flex:0 0 74px;aspect-ratio:1;border-radius:8px;overflow:hidden;background:var(--grey-200)}
+.nwp-mini__thumb img{width:100%;height:100%;object-fit:cover}
+.nwp-mini__body{min-width:0}
+.nwp-mini__body strong{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;
+  font-size:13px;line-height:1.4;font-weight:700;letter-spacing:-.01em;color:var(--text);
+}
+.nwp-mini__body em{display:block;margin-top:6px;font-style:normal;font-size:11.5px;font-weight:700;color:var(--red)}
+
+/* Latar berselang-seling, dimulai dari abu muda. nth-of-type menghitung
+   SEMUA <section> sekandung — .nwp-top ikut terhitung sebagai yang pertama,
+   jadi kategori pertama jatuh di urutan genap. */
+.nwp-cat{padding:44px 0 48px}
+.nwp-cat[hidden]{display:none}
+.nwp-cat:nth-of-type(even){background:var(--grey-50)}
+.nwp-cat__head{font-size:clamp(22px,2.6vw,30px);letter-spacing:-.03em;margin-bottom:22px}
+
+/* --- headline utama tiap kategori ---
+   Disembunyikan secara bawaan dan cuma dibuka lewat .is-solo, yaitu waktu
+   kategorinya jadi satu-satunya yang tampil. Di tab Home judul section-nya
+   yang dipakai, karena di sana sudah ada kartu sorotan sendiri. */
+.nwp-hero{display:none}
+.nwp-cat.is-solo{padding-top:26px}
+.nwp-cat.is-solo .nwp-cat__head{display:none}
+.nwp-cat.is-solo .nwp-hero{
+  display:block;position:relative;overflow:hidden;
+  border-radius:14px;aspect-ratio:16/6;margin-bottom:28px;background:var(--ink-2);
+}
+.nwp-hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.nwp-hero:hover img{transform:scale(1.03)}
+/* lapis gelap supaya judul putihnya tetap terbaca di atas foto apa pun */
+.nwp-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.3),rgba(0,0,0,.74))}
+.nwp-hero__body{
+  position:relative;z-index:1;height:100%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  text-align:center;padding:26px 8%;
+}
+.nwp-hero__kicker{font-size:12.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.82)}
+.nwp-hero__body strong{
+  max-width:900px;font-size:clamp(20px,3vw,38px);line-height:1.2;
+  letter-spacing:-.03em;font-weight:800;color:#fff;
+}
+.nwp-hero__cta{
+  height:38px;padding:0 20px;border-radius:999px;display:inline-flex;align-items:center;
+  font-size:13.5px;font-weight:700;color:#fff;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.4);
+  transition:background .22s var(--ease)
+}
+.nwp-hero:hover .nwp-hero__cta{background:var(--red);border-color:var(--red)}
+/* .news__grid & .news-card dipakai ulang dari komponen yang sudah ada,
+   cuma judulnya dikecilkan karena di sini kartunya lebih rapat. */
+.nwp-cat .news__grid{margin-top:0}
+.nwp-cat .news-card h3{font-size:18px}
+.nwp-cat .news-card p{font-size:14px;font-weight:500}
+
+@media (max-width:1024px){
+  .nwp__tabs{gap:22px}
+  .nwp-top__grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (max-width:620px){
+  .nwp__tabs{gap:16px;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  .nwp__tabs::-webkit-scrollbar{display:none}
+  .nwp-tab{white-space:nowrap;font-size:13.5px}
+  /* Di bawah ~520px ban setinggi band sudah memakan 2/3 lebar layar dan
+     menabrak lockup. Jadi ukurannya dibalik: lebarnya yang dipatok (27%
+     tiap sisi), tingginya ikut rasio, dan didudukkan di dasar band. */
+  .nwp__banner{height:92px}
+  .nwp__banner-tyre{top:auto;bottom:0;height:auto;width:27%}
+  .nwp__banner-logo{width:44%}
+  .nwp-top{padding-top:26px}
+  .nwp-cat{padding:32px 0 34px}
+  /* 16/6 di lebar ponsel tinggal ~120px — tidak cukup untuk judul dua baris
+     plus tombol, jadi dibuat lebih jangkung. */
+  .nwp-cat.is-solo .nwp-hero{aspect-ratio:16/11;margin-bottom:20px}
+  .nwp-hero__body{gap:10px;padding:20px 22px}
+}
+
+/* ==========================================================================
+   HALAMAN DETAIL BERITA (news-detail.html)
+   Isi artikel di kiri + panel "Populer Bulan Ini" yang menempel di kanan.
+   Banner, tab, kartu "Artikel Terkait", dan panel sampingnya memakai ulang
+   komponen dari news.html supaya kedua halaman terasa satu kesatuan.
+   ========================================================================== */
+.nwp-art{padding:34px 0 10px}
+.nwp-art__grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:44px;align-items:start}
+/* top = tinggi .nav (45px) + jeda, karena navbarnya sticky */
+.nwp-art__side{position:sticky;top:calc(var(--nav-h) + 18px)}
+
+.art__crumb{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--muted)}
+.art__crumb a{color:var(--red)}
+.art__crumb a:hover{text-decoration:underline}
+.art h1{margin-top:14px;font-size:clamp(26px,3.6vw,42px);line-height:1.18;letter-spacing:-.035em}
+.art__meta{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin-top:14px;font-size:13px;color:var(--muted)}
+.art__meta .art__author{font-weight:700;color:var(--red)}
+
+.art__figure{margin-top:24px}
+.art__figure img{display:block;width:100%;height:auto;border-radius:14px;background:var(--grey-200)}
+.art__figure figcaption{margin-top:10px;font-size:12.5px;line-height:1.5;color:var(--muted-2)}
+/* gambar di tengah tulisan dibuat lebih kecil daripada gambar utama */
+.art__figure--inline{margin:30px 0}
+.art__figure--inline img{border-radius:12px}
+
+/* Ukuran teks isi artikel dipatok agak besar (17px / line-height 1.8) karena
+   ini satu-satunya halaman yang memang untuk dibaca panjang. */
+.art__body{margin-top:26px;font-size:17px;line-height:1.8;color:var(--body-text)}
+.art__body > * + *{margin-top:20px}
+.art__lead{font-size:19px;line-height:1.7;font-weight:600;color:var(--text)}
+.art__body h2{
+  margin-top:38px;font-size:clamp(20px,2.4vw,26px);line-height:1.3;
+  letter-spacing:-.025em;color:var(--text);
+}
+.art__body strong{color:var(--text)}
+.art__body ul,.art__body ol{padding-left:24px}
+.art__body li + li{margin-top:10px}
+.art__body ul{list-style:disc}
+.art__body ol{list-style:decimal}
+.art__body ol li::marker{font-weight:800;color:var(--red)}
+.art__body blockquote{
+  margin:32px 0;padding:4px 0 4px 22px;border-left:3px solid var(--red);
+  font-size:19px;line-height:1.6;font-weight:700;letter-spacing:-.02em;color:var(--text);
+}
+
+.art__tags{display:flex;flex-wrap:wrap;gap:9px;margin-top:38px;padding-top:26px;border-top:1px solid var(--line)}
+.art__tags a{
+  height:32px;padding:0 14px;border-radius:999px;display:inline-flex;align-items:center;
+  font-size:12.5px;font-weight:700;color:var(--body-text);
+  background:var(--grey-50);border:1px solid var(--line);
+  transition:border-color .22s var(--ease),color .22s var(--ease);
+}
+.art__tags a:hover{border-color:var(--red);color:var(--red)}
+.art__foot{margin-top:28px}
+
+@media (max-width:1024px){
+  .nwp-art__grid{grid-template-columns:minmax(0,1fr);gap:30px}
+  /* sticky dimatikan: di satu kolom panelnya ada DI BAWAH artikel, jadi kalau
+     tetap sticky dia ikut menggantung sampai footer */
+  .nwp-art__side{position:static}
+}
+@media (max-width:620px){
+  .nwp-art{padding-top:22px}
+  .art__body{font-size:16px}
+  .art__lead{font-size:17px}
+  .art__body blockquote{margin:26px 0;font-size:17px}
+}
+
+/* ==========================================================================
+   HALAMAN CONTACT US (contact.html)
+   Section atas: judul di tengah, form di kiri, kumpulan produk di kanan.
+   Section bawah memakai ulang blok .faq yang sudah ada.
+   ========================================================================== */
+/* padding bawah = ruang putih tempat kepala sosok di section berikutnya
+   menonjol, supaya helmnya tidak menempel kartu form. */
+.ctc-partner{padding:66px 0 clamp(76px,8.5vw,150px)}
+/* Kedua section halaman ini memakai container yang lebih lebar daripada
+   --container (1160px) supaya isinya lebih mepet ke tepi layar. */
+.ctc-partner > .container,.faq > .container{max-width:1440px;padding-inline:40px}
+.ctc-partner__head{text-align:center;max-width:960px;margin:0 auto clamp(56px,6.5vw,104px)}
+.ctc-eyebrow{font-size:clamp(17px,2.1vw,25px);font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.ctc-partner__head h1{margin-top:10px;font-size:clamp(34px,5.4vw,62px);line-height:1.15;letter-spacing:-.04em}
+/* align-items:center, bukan stretch: kumpulan produknya lebih pendek daripada
+   form, jadi kalau diregangkan dia mengambang di atas. */
+.ctc-partner__grid{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:end}
+
+/* --- form --- */
+/* Kartu dan isian sengaja dibedakan satu tingkat: kartu --grey-50 (#f5f5f7),
+   isian #e8e8ec. Sebelumnya isian memakai --grey-100 (#f2f2f2) yang cuma beda
+   3 poin dari kartunya, jadi kotak isiannya nyaris tidak kelihatan. */
+.ctc-form{background:var(--grey-50);border-radius:var(--radius-l);padding:30px 28px 32px}
+.ctc-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ctc-form__row,.ctc-form > .ctc-field{margin-bottom:16px}
+.ctc-field{display:block}
+.ctc-field > span{display:block;margin-bottom:7px;font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+/* satu aturan untuk ketiga jenis isian supaya tinggi & radiusnya tidak
+   berbeda-beda antar browser */
+.ctc-field input,.ctc-field select,.ctc-field textarea{
+  width:100%;background:#e8e8ec;border:1px solid transparent;border-radius:10px;
+  padding:0 14px;height:46px;font:inherit;font-size:14px;color:var(--text);
+  transition:border-color .22s var(--ease),background .22s var(--ease);
+}
+.ctc-field textarea{height:auto;padding:12px 14px;line-height:1.55;resize:vertical;min-height:96px}
+.ctc-field input::placeholder,.ctc-field textarea::placeholder{color:var(--muted-2)}
+.ctc-field input:focus,.ctc-field select:focus,.ctc-field textarea:focus{
+  outline:none;background:#fff;border-color:var(--outline-strong);
+}
+/* select bawaan berbeda jauh antar platform, jadi panahnya digambar sendiri */
+.ctc-field select{
+  appearance:none;color:var(--muted-2);cursor:pointer;padding-right:38px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%236e6e73' stroke-width='1.6'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:12px;
+}
+.ctc-field select:valid{color:var(--text)}
+.ctc-form__foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.ctc-form__note{font-size:13px;font-weight:700;color:var(--wa);opacity:0;transition:opacity .25s var(--ease)}
+.ctc-form__note.is-on{opacity:1}
+
+/* --- kumpulan produk: satu gambar accessories ---
+   margin-inline:auto dulu menengahkannya di kolom, jadi ada ruang kosong
+   lebar antara form dan gambar. Sekarang dirapatkan ke tepi kiri kolom.
+   margin-right negatif membiarkannya melebar ke padding kanan container,
+   jadi gambarnya bisa lebih besar tanpa mengambil lebar form. */
+/* BUKAN width:100% + justify-self:start — dengan itu lebarnya terkunci di
+   lebar kolom dan margin negatifnya tidak menambah apa pun. Dibiarkan
+   meregang mengisi kolom, lalu margin kanan negatif menariknya melewati
+   padding container. */
+/* Tarikannya dibatasi 36px — padding container di sini 40px, jadi gambar
+   berhenti tepat sebelum tepi isi dan tidak memicu scroll mendatar. */
+.ctc-stack{max-width:800px;margin-right:calc(-1 * clamp(0px,2.6vw,36px))}
+.ctc-stack img{display:block;width:100%;height:auto}
+
+@media (max-width:1024px){
+  .ctc-partner{padding-top:48px}
+  .ctc-partner__grid{grid-template-columns:minmax(0,1fr);gap:26px}
+  /* di satu kolom kumpulan produknya pindah ke ATAS form, mengikuti urutan
+     baca desain (gambar dulu baru isian) tidak lagi relevan — form yang
+     lebih penting, jadi dia tetap di atas dan gambarnya menyusut */
+  .ctc-stack{max-width:480px;justify-self:center;margin-right:0}
+}
+@media (max-width:620px){
+  .ctc-partner{padding-top:34px}
+  /* padding-inline 40px itu untuk layar lebar; di ponsel dia malah memakan
+     lebar isi, jadi dikembalikan ke 24px seperti .container biasa */
+  .ctc-partner > .container,.faq > .container{padding-inline:24px}
+  .ctc-partner__head{margin-bottom:28px}
+  .ctc-form{padding:20px 18px 24px}
+  /* dua kolom isian terlalu sempit di ponsel */
+  .ctc-form__row{grid-template-columns:minmax(0,1fr)}
+  .ctc-stack{max-width:360px;justify-self:center;margin-right:0}
+}

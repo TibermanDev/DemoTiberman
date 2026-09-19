@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>News — Tiberman</title>
-<meta name="description" content="Kabar terbaru dan wawasan seputar ban truk & alat berat dari Tiberman.">
+<meta name="description" content="Kabar terbaru dan wawasan seputar ban truk, alat berat, dan dunia pertambangan dari Tiberman.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <script>(function(){try{var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
-<link rel="stylesheet" href="assets/css/style.css?v=20260907a">
+<link rel="stylesheet" href="assets/css/style.css?v=20260918a">
 </head>
 <body class="subpage">
 
@@ -31,7 +31,7 @@
         </div>
       </div>
       <a href="news.html" class="is-active">News</a>
-      <a href="index.html#superarea">SuperArea</a>
+      <a href="superarea.html">SuperArea</a>
       <a href="contact.html">Contact Us</a>
     </nav>
     <div class="nav__tools">
@@ -50,39 +50,307 @@
   </div>
 </header>
 
-<main>
+<main class="nwp">
 
-  <!-- ============================= NEWS ============================= -->
-  <section class="news" id="news">
+  <!-- Banner disusun dari EMPAT lapis, bukan satu gambar jadi: tinggi
+       bandnya bisa ditentukan sendiri, lockup "Tiberman News" punya ukuran
+       minimum sendiri, dan ban kiri-kanan bisa dikecilkan terpisah di layar
+       sempit. Dengan satu gambar utuh semuanya ikut menyusut bersama rasio
+       9,5:1 dan lockup-nya tinggal belasan piksel di ponsel. -->
+  <div class="nwp__banner">
+    <img class="nwp__banner-bg" src="assets/img/warehouse-trans-news.webp" width="2400" height="252" alt="" aria-hidden="true" fetchpriority="high">
+    <img class="nwp__banner-tyre nwp__banner-tyre--l" src="assets/img/tyre-left.webp" width="700" height="520" alt="" aria-hidden="true">
+    <img class="nwp__banner-tyre nwp__banner-tyre--r" src="assets/img/tyre-right.webp" width="700" height="520" alt="" aria-hidden="true">
+    <img class="nwp__banner-logo" src="assets/img/tbm-news.webp" width="1200" height="173" alt="Tiberman News">
+  </div>
+
+  <!-- Tab kategori: memilih salah satunya menyembunyikan section kategori
+       lain (assets/js/news-page.js). "Home" menampilkan semuanya. -->
+  <nav class="nwp__tabs" data-news-tabs aria-label="Kategori artikel">
+    <button class="nwp-tab is-active" type="button" data-cat="all">Home</button>
+    <button class="nwp-tab" type="button" data-cat="alat-berat">Alat Berat</button>
+    <button class="nwp-tab" type="button" data-cat="ban">Ban</button>
+    <button class="nwp-tab" type="button" data-cat="pertambangan">Pertambangan</button>
+    <button class="nwp-tab" type="button" data-cat="tips">Tips</button>
+    <button class="nwp-tab" type="button" data-cat="info-produk">Info Produk</button>
+    <button class="nwp-tab" type="button" data-cat="info-lain">Info Lain</button>
+  </nav>
+
+  <!-- ===================== SOROTAN + POSTINGAN TERBARU ===================== -->
+  <section class="nwp-top" data-news-top>
+    <div class="container nwp-top__grid">
+
+      <article class="nwp-feature">
+        <a class="nwp-feature__thumb" href="news-detail.html">
+          <img src="assets/img/plb-truck.webp" alt="Barisan truk di area pergudangan Tiberman" fetchpriority="high">
+        </a>
+        <span class="nwp-feature__date">10 September 2026</span>
+        <h2><a href="news-detail.html">Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk</a></h2>
+        <p>Mengelola lima hingga sepuluh unit truk mungkin masih bisa dilakukan dengan pengawasan kasat mata dan pencatatan sederhana. Namun bagaimana jika armadanya sudah ratusan unit?</p>
+      </article>
+
+      <aside class="nwp-latest">
+        <h2 class="nwp-latest__head">Latest Post</h2>
+
+        <a class="nwp-mini" href="news-detail.html">
+          <span class="nwp-mini__thumb"><img src="assets/img/after-sales-4.webp" alt="" loading="lazy"></span>
+          <span class="nwp-mini__body">
+            <strong>Mengenal Arti Warna Baju Proyek dan Helm Proyek di Lapangan</strong>
+            <em>10 September 2026</em>
+          </span>
+        </a>
+
+        <a class="nwp-mini" href="news-detail.html">
+          <span class="nwp-mini__thumb"><img src="assets/img/tire-554.webp" alt="" loading="lazy"></span>
+          <span class="nwp-mini__body">
+            <strong>Perbedaan Ban Truk dan Ban Mobil dari Konstruksi hingga Penggunaannya</strong>
+            <em>2 September 2026</em>
+          </span>
+        </a>
+
+        <a class="nwp-mini" href="news-detail.html">
+          <span class="nwp-mini__thumb"><img src="assets/img/delivery-forklift.webp" alt="" loading="lazy"></span>
+          <span class="nwp-mini__body">
+            <strong>Di Balik Jalan Kokoh &amp; Rahasia Pemilihan Ban Alat Berat Compactor</strong>
+            <em>29 Agustus 2026</em>
+          </span>
+        </a>
+
+        <a class="nwp-mini" href="news-detail.html">
+          <span class="nwp-mini__thumb"><img src="assets/img/dumptruck.webp" alt="" loading="lazy"></span>
+          <span class="nwp-mini__body">
+            <strong>Motor Grader, Penjaga Kelancaran Hauling Road</strong>
+            <em>28 Agustus 2026</em>
+          </span>
+        </a>
+      </aside>
+
+    </div>
+  </section>
+
+  <!-- ===================== DUNIA ALAT BERAT ===================== -->
+  <section class="nwp-cat" data-cat="alat-berat">
     <div class="container">
-      <div class="news__head reveal">
-        <h2>News</h2>
-        <p>Kabar terbaru dan wawasan seputar ban truk &amp; alat berat</p>
-      </div>
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/plb-truck.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Dunia Alat Berat</span>
+          <strong>Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Dunia Alat Berat</h2>
       <div class="news__grid">
-        <a class="news-card reveal" href="#">
-          <div class="news-card__thumb">
-            <img src="assets/img/news-1.webp" alt="Penyerahan dua Rekor MURI di Tiberman Expo 2026" loading="lazy">
-          </div>
-          <span class="news-card__date">July 31, 2026</span>
-          <h3>Mengukir Sejarah di Industri Alat Berat : Tiberman Sabet Dua Rekor MURI di Tiberman Expo 2026</h3>
-          <p>Industri ban komersial dan alat berat di Indonesia baru saja menyaksikan sebuah terobosan bersejarah. PT Tiga Berlian Mandiri (Tiberman) berhasil menorehkan prestasi gemilang tingkat nasional dengan memecahkan dua Rekor MURI sekaligus.</p>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/plb-truck.webp" alt="Armada truk milik pelanggan Tiberman" loading="lazy"></div>
+          <span class="news-card__date">10 September 2026</span>
+          <h3>Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk</h3>
+          <p>Mengelola lima hingga sepuluh unit truk masih bisa diawasi kasat mata. Begitu armadanya ratusan, biaya ban hanya bisa dikendalikan lewat pencatatan yang rapi.</p>
         </a>
-        <a class="news-card reveal" data-delay="100" href="#">
-          <div class="news-card__thumb">
-            <img src="assets/img/news-2.webp" alt="Pemandangan udara area tambang di Indonesia" loading="lazy">
-          </div>
-          <span class="news-card__date">August 8, 2026</span>
-          <h3>Perbedaan Geografis Tambang di Indonesia dan Strategi Pemilihan Ban Alat Berat</h3>
-          <p>Indonesia dikenal sebagai salah satu raksasa komoditas global. Namun memindahkan material tambang dari perut bumi ke pelabuhan bukanlah perkara mudah, dan kondisi geografis tiap lokasi menentukan spesifikasi ban OTR yang dipakai.</p>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/tire-554.webp" alt="Ban truk Uninest TiberMAX" loading="lazy"></div>
+          <span class="news-card__date">2 September 2026</span>
+          <h3>Perbedaan Ban Truk dan Ban Mobil dari Konstruksi hingga Penggunaannya</h3>
+          <p>Ban adalah penghubung antara kendaraan dan permukaan jalan. Konstruksi ban truk dan ban mobil dirancang untuk beban dan medan yang sama sekali berbeda.</p>
         </a>
-        <a class="news-card reveal" data-delay="200" href="#">
-          <div class="news-card__thumb">
-            <img src="assets/img/news-3.webp" alt="Barisan dump truck di lokasi proyek" loading="lazy">
-          </div>
-          <span class="news-card__date">August 13, 2026</span>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/news-3.webp" alt="Dump truck di lokasi proyek" loading="lazy"></div>
+          <span class="news-card__date">13 Agustus 2026</span>
           <h3>Dump Truck: Fungsi, Jenis, Komponen, dan Tips Memilih Ban yang Tepat untuk Operasional</h3>
-          <p>Dump truck punya peran penting dalam berbagai aktivitas industri karena dirancang untuk mengangkut sekaligus menurunkan material dalam jumlah besar. Simak jenis, komponen, dan cara memilih bannya.</p>
+          <p>Dump truck dirancang untuk mengangkut sekaligus menurunkan material dalam jumlah besar. Simak jenis, komponen, dan cara memilih bannya.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PENGETAHUAN BAN ===================== -->
+  <section class="nwp-cat" data-cat="ban">
+    <div class="container">
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/tires-strip.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Pengetahuan Ban</span>
+          <strong>Ban Tubeless atau Tube Type? Ban Radial atau Bias?</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Pengetahuan Ban</h2>
+      <div class="news__grid">
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/tires-strip.webp" alt="Deretan ban siap kirim" loading="lazy"></div>
+          <span class="news-card__date">28 Agustus 2026</span>
+          <h3>Ban Tubeless atau Tube Type? Ban Radial atau Bias?</h3>
+          <p>Empat istilah yang paling sering tertukar waktu memilih ban. Perbedaannya bukan sekadar nama, tapi menentukan daya angkut, umur pakai, dan biaya perawatan.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/banner-tyre.webp" alt="Ban OTR untuk dump truck tambang" loading="lazy"></div>
+          <span class="news-card__date">7 Oktober 2025</span>
+          <h3>Dump Truck di Tambang: Lebih Baik Pakai Ban Bias atau Radial?</h3>
+          <p>Di tengah deru mesin dan debu yang mengepul, pilihan konstruksi ban menentukan berapa rit yang sanggup ditempuh sebelum unit harus masuk bengkel.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/tire-tread.webp" alt="Pola telapak ban" loading="lazy"></div>
+          <span class="news-card__date">10 September 2026</span>
+          <h3>Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk</h3>
+          <p>Umur pakai ban adalah komponen biaya terbesar kedua setelah bahan bakar. Mengukurnya per unit adalah langkah pertama menekan biaya armada.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== DUNIA PERTAMBANGAN ===================== -->
+  <section class="nwp-cat" data-cat="pertambangan">
+    <div class="container">
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/news-2.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Dunia Pertambangan</span>
+          <strong>Dampak Naiknya Harga Emas pada Industri Ban Alat Berat</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Dunia Pertambangan</h2>
+      <div class="news__grid">
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/news-2.webp" alt="Pemandangan udara area tambang" loading="lazy"></div>
+          <span class="news-card__date">4 September 2025</span>
+          <h3>Dampak Naiknya Harga Emas pada Industri Ban Alat Berat</h3>
+          <p>Dari pasar global ke ban alat berat di tambang: kenaikan harga emas mendorong produksi, dan produksi yang naik langsung terasa pada kebutuhan ban OTR.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/warehouse-dark.webp" alt="Stok ban di gudang Tiberman" loading="lazy"></div>
+          <span class="news-card__date">21 Agustus 2026</span>
+          <h3>Inilah 10 Perusahaan Tambang Terbesar di Indonesia</h3>
+          <p>Dari batu bara di Kalimantan sampai nikel di Sulawesi, sepuluh nama ini menggerakkan sebagian besar aktivitas pertambangan nasional.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/plb-stock.webp" alt="Gudang stok ban alat berat" loading="lazy"></div>
+          <span class="news-card__date">14 Agustus 2026</span>
+          <h3>Daftar Pertambangan di Kalimantan: Emas, Batu Bara, dan Nikel</h3>
+          <p>Kalimantan menyimpan tiga komoditas sekaligus, dan tiap komoditas menuntut spesifikasi armada serta ban yang berbeda.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TIPS & PANDUAN ===================== -->
+  <section class="nwp-cat" data-cat="tips">
+    <div class="container">
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/after-sales-4.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Tips &amp; Panduan</span>
+          <strong>Mengenal Arti Warna Baju Proyek dan Helm Proyek di Lapangan</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Tips &amp; Panduan</h2>
+      <div class="news__grid">
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/after-sales-4.webp" alt="Pekerja dengan atribut keselamatan di lapangan" loading="lazy"></div>
+          <span class="news-card__date">10 September 2026</span>
+          <h3>Mengenal Arti Warna Baju Proyek dan Helm Proyek di Lapangan</h3>
+          <p>Warna helm dan rompi di area proyek bukan soal selera. Tiap warna menandai peran, dan salah baca bisa berakibat fatal saat keadaan darurat.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/delivery-forklift.webp" alt="Alat berat compactor di proyek jalan" loading="lazy"></div>
+          <span class="news-card__date">29 Agustus 2026</span>
+          <h3>Di Balik Jalan Kokoh &amp; Rahasia Pemilihan Ban Alat Berat Compactor</h3>
+          <p>Jalan yang padat dan rata berawal dari compactor. Ban yang dipakainya menentukan kerataan hasil pemadatan sekaligus kenyamanan operator.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/after-sales-3.webp" alt="Alat berat di medan berbatu" loading="lazy"></div>
+          <span class="news-card__date">5 Agustus 2026</span>
+          <h3>11 Macam Alat Berat Tambang dan Kegunaannya</h3>
+          <p>Excavator, bulldozer, wheel loader, sampai articulated dump truck — kenali fungsi tiap unit sebelum menentukan ban yang dipasang.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INFO PRODUK ===================== -->
+  <section class="nwp-cat" data-cat="info-produk">
+    <div class="container">
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/dumptruck.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Info Produk</span>
+          <strong>Motor Grader, Penjaga Kelancaran Hauling Road</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Info Produk</h2>
+      <div class="news__grid">
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/dumptruck.webp" alt="Motor grader di hauling road" loading="lazy"></div>
+          <span class="news-card__date">28 Agustus 2026</span>
+          <h3>Motor Grader, Penjaga Kelancaran Hauling Road</h3>
+          <p>Hauling road yang mulus memangkas waktu siklus angkut. Di sinilah motor grader dan ban yang tepat memegang peran.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/truck-tiberman.webp" alt="Truk tambang berukuran besar" loading="lazy"></div>
+          <span class="news-card__date">18 Agustus 2026</span>
+          <h3>7 Truk Tambang Terbesar di Dunia, Jangan Ngeri Lihat Ukurannya!</h3>
+          <p>Tujuh raksasa pengangkut material ini punya ban setinggi orang dewasa — dan tiap satu bannya seharga sebuah mobil.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/velg-heavy.webp" alt="Velg untuk alat berat" loading="lazy"></div>
+          <span class="news-card__date">2 Agustus 2026</span>
+          <h3>Memilih Velg &amp; Tube yang Sepadan dengan Ban Alat Berat Anda</h3>
+          <p>Ban yang benar tapi velg yang tidak sepadan tetap berujung pada umur pakai yang pendek. Ini patokan memilih pasangannya.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== INFO LAIN ===================== -->
+  <section class="nwp-cat" data-cat="info-lain">
+    <div class="container">
+      <!-- Headline utama: hanya tampil kalau kategori ini yang dipilih
+           (kelas is-solo dari assets/js/news-page.js). Di tab Home
+           perannya sudah diambil kartu sorotan + "Latest Post". -->
+      <a class="nwp-hero" href="news-detail.html">
+        <img src="assets/img/news-1.webp" alt="" aria-hidden="true" loading="lazy">
+        <span class="nwp-hero__body">
+          <span class="nwp-hero__kicker">Info Lain</span>
+          <strong>Tiberman Sabet Dua Rekor MURI di Tiberman Expo 2026</strong>
+          <span class="nwp-hero__cta">Selengkapnya &rarr;</span>
+        </span>
+      </a>
+      <h2 class="nwp-cat__head">Info Lain</h2>
+      <div class="news__grid">
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/news-1.webp" alt="Penyerahan dua Rekor MURI di Tiberman Expo 2026" loading="lazy"></div>
+          <span class="news-card__date">31 Juli 2026</span>
+          <h3>Tiberman Sabet Dua Rekor MURI di Tiberman Expo 2026</h3>
+          <p>PT Tiga Berlian Mandiri menorehkan prestasi tingkat nasional dengan memecahkan dua Rekor MURI sekaligus di ajang Tiberman Expo 2026.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/news-2.webp" alt="Pemandangan udara area tambang di Indonesia" loading="lazy"></div>
+          <span class="news-card__date">8 Agustus 2026</span>
+          <h3>Perbedaan Geografis Tambang di Indonesia dan Strategi Pemilihan Ban Alat Berat</h3>
+          <p>Kondisi geografis tiap lokasi tambang menentukan spesifikasi ban OTR yang dipakai — dari rawa Kalimantan sampai bukit berbatu Sulawesi.</p>
+        </a>
+        <a class="news-card" href="news-detail.html">
+          <div class="news-card__thumb"><img src="assets/img/plb-gresik.webp" alt="Pusat Logistik Berikat Tiberman" loading="lazy"></div>
+          <span class="news-card__date">24 Juli 2026</span>
+          <h3>Jenis Bahan Galian Tambang (Golongan A, B, dan C) di Indonesia</h3>
+          <p>Golongan A, B, dan C membedakan bahan galian menurut kepentingannya bagi negara. Ini yang membedakan ketiganya di lapangan.</p>
         </a>
       </div>
     </div>
@@ -160,7 +428,7 @@
       <div class="footer__col">
         <h3>Navigasi</h3>
         <ul class="footer__links">
-          <li><a href="news.html" class="is-active">Berita &amp; Artikel</a></li>
+          <li><a href="news.html">Berita &amp; Artikel</a></li>
           <li><a href="#">Karir</a></li>
           <li><a href="katalog.html">Semua Produk</a></li>
           <li><a href="index.html#kenapa">After Sales Service</a></li>
@@ -171,7 +439,8 @@
     <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
   </div>
 </footer>
-<script src="assets/js/i18n.js?v=20260907a" defer></script>
-<script src="assets/js/main.js?v=20260907a" defer></script>
+<script src="assets/js/i18n.js?v=20260918a" defer></script>
+<script src="assets/js/main.js?v=20260918a" defer></script>
+<script src="assets/js/news-page.js?v=20260918a" defer></script>
 </body>
 </html>

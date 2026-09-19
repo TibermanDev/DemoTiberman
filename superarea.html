@@ -3,28 +3,36 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Uninest TiberMAX 800 — Tiberman</title>
-<meta name="description" content="Uninest Tibermax 800: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.">
+<title>SuperArea — Tiberman</title>
+<meta name="description" content="15 SuperArea Tiberman yang tersebar dari Sumatra sampai Maluku & Papua, siap melayani kebutuhan ban truk & alat berat lebih dekat.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <script>(function(){try{var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
 <link rel="stylesheet" href="assets/css/style.css?v=20260918a">
 </head>
-<body>
+<body class="subpage">
 
-<!-- ============================= NAVBAR KATEGORI ============================= -->
-<header class="nav nav--center nav--grouped">
+<!-- ============================= NAVBAR ============================= -->
+<header class="nav">
   <div class="nav__inner">
     <a class="nav__logo" href="index.html"><img src="assets/img/logo-white.png" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
-      <a href="katalog.html" class="is-active">Truk &amp; Bus</a>
-      <a href="katalog.html">Mining Truck</a>
-      <a href="katalog.html">Loader-Grader</a>
-      <a href="katalog.html">Traktor</a>
-      <a href="katalog.html">Forklift</a>
-      <a href="katalog.html">Velg &amp; Tube</a>
+      <div class="nav__item">
+        <a href="katalog.html">Products</a>
+        <div class="nav__menu">
+          <a href="katalog.html?unit=truk-bus">Truk &amp; Bus</a>
+          <a href="katalog.html?unit=mining-truck">Mining Truck</a>
+          <a href="katalog.html?unit=loader-grader">Loader-Grader</a>
+          <a href="katalog.html?unit=traktor">Traktor</a>
+          <a href="katalog.html?unit=forklift">Forklift</a>
+          <a href="katalog.html?unit=velg-tube">Velg &amp; Tube</a>
+        </div>
+      </div>
+      <a href="news.html">News</a>
+      <a href="superarea.html" class="is-active">SuperArea</a>
+      <a href="contact.html">Contact Us</a>
     </nav>
     <div class="nav__tools">
       <div class="lang">
@@ -42,143 +50,142 @@
   </div>
 </header>
 
-<main>
+<!-- ============================= SUPERAREA =============================
+     Latar bumi + ban kiri/kanan datang dari SATU gambar komposit
+     (earth-superarea). Gambarnya dipaku ke DASAR halaman dan selebar
+     layar, isinya mengambang di atasnya. -->
+<main class="sa">
+  <!-- Sorot merah di tepi atas: aset top-shadow (PNG beralpha), bukan
+       radial-gradient buatan CSS. -->
+  <img class="sa__glow" src="assets/img/top-shadow.webp" width="1920" height="1181" alt="" aria-hidden="true">
+  <div class="sa__bg" aria-hidden="true">
+    <!-- webp langsung, sama seperti earth-location di index.html: PNG aslinya
+         13 MB, jadi dia disimpan sebagai file sumber saja dan tidak dirujuk
+         dari markup. -->
+    <img src="assets/img/earth-superarea.webp" width="2880" height="2580" alt="" fetchpriority="high">
+  </div>
+  <!-- Lapisan titik yang bisa diklik (assets/js/superarea-spots.js). Sengaja
+       elemen TERPISAH dari .sa__bg, bukan di dalamnya: .sa__bg harus tetap di
+       belakang kartu (z-index 0) sedangkan popup lokasinya harus di depan,
+       dan keduanya tidak bisa dipisah kalau berada di satu stacking context.
+       Kotaknya dibuat sebangun dengan gambarnya lewat aspect-ratio, jadi
+       koordinat persen tiap pin tetap jatuh pas. -->
+  <div class="sa__pins" data-superarea="page"></div>
 
-  <!-- ============================= HERO PRODUK ============================= -->
-  <section class="pdp-hero">
-    <div class="pdp-hero__inner">
-      <div class="pdp-hero__img reveal">
-        <img src="assets/img/tire-hero-dark.webp" alt="Uninest TiberMAX 800 ukuran 12.00R24" fetchpriority="high">
-      </div>
-      <div class="reveal" data-delay="120">
-        <h1 class="pdp-hero__logo"><img src="assets/img/tibermax-logo-light.png" alt="Uninest TiberMAX 800" width="2004" height="356" fetchpriority="high"></h1>
-        <p><b>Uninest Tibermax 800</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.</p>
-      </div>
+  <div class="sa__inner">
+    <div class="sa__head">
+      <img class="sa__wordmark" src="assets/img/logo-white.png" alt="Tiberman" width="1000" height="180">
+      <p class="sa__kicker">SUPERAREA</p>
     </div>
-  </section>
 
-  <!-- ============================= KENAPA HARUS BAN INI ============================= -->
-  <section class="pdp-why">
-    <h2 class="reveal">Kenapa Harus Ban Ini ?</h2>
+    <!-- Tab pulau: memfilter kartu di bawahnya (assets/js/superarea-page.js) -->
+    <div class="sa__tabs" data-sa-tabs role="tablist" aria-label="Pilih pulau">
+      <button class="sa-tab is-active" type="button" role="tab" aria-selected="true"  data-region="jawa">Jawa</button>
+      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="sumatra">Sumatra</button>
+      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="kalimantan">Kalimantan</button>
+      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="sulawesi">Sulawesi</button>
+      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="maluku-papua">Maluku &amp; Papua</button>
+    </div>
 
-    <div class="bento">
-      <article class="bento__cell reveal">
-        <h3>Sidewall<br>Kuat</h3>
-        <p>Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.</p>
+    <!-- CATATAN: foto tiap kartu masih memakai stok foto yang sudah ada di
+         repo sebagai placeholder — tinggal ganti src-nya dengan foto kota /
+         kantor masing-masing SuperArea. -->
+    <div class="sa__grid" data-sa-grid>
+
+      <article class="sa-card" data-region="jawa">
+        <span class="sa-card__img"><img src="assets/img/plb-truck.webp" alt="SuperArea Jabodetabek" loading="lazy"></span>
+        <strong>Jabodetabek</strong>
+        <span>Komplek Pergudangan Cahaya, Jl. Nurul Huda No.34, Jatimulya, Bekasi</span>
       </article>
-      <div class="bento__cell bento__cell--img bento__cell--contain reveal" data-delay="100">
-        <img src="assets/img/tyre-90.png" alt="Sidewall TiberMAX 800" loading="lazy">
-      </div>
-    </div>
 
-    <div class="bento">
-      <div class="bento__cell bento__cell--img reveal">
-        <img src="assets/img/tire-tread.webp" alt="Pola telapak TiberMAX 800" loading="lazy">
-      </div>
-      <article class="bento__cell reveal" data-delay="100">
-        <h3>Telapak<br>Tebal</h3>
-        <p>Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.</p>
+      <article class="sa-card" data-region="jawa">
+        <span class="sa-card__img"><img src="assets/img/warehouse-dark.webp" alt="SuperArea Surabaya" loading="lazy"></span>
+        <strong>Surabaya <em>( Head Office )</em></strong>
+        <span>Jl. Mustika No.10, Ngagel, Kec. Wonokromo, Kota Surabaya</span>
       </article>
+
+      <article class="sa-card" data-region="jawa">
+        <span class="sa-card__img"><img src="assets/img/plb-mojokerto.webp" alt="SuperArea Mojokerto" loading="lazy"></span>
+        <strong>Mojokerto</strong>
+        <span>Pergudangan Fie Min Logistics, Jl. Raya Pacing, Kec. Bangsal, Mojokerto</span>
+      </article>
+
+      <article class="sa-card" data-region="jawa">
+        <span class="sa-card__img"><img src="assets/img/plb-gresik.webp" alt="SuperArea Gresik" loading="lazy"></span>
+        <strong>Gresik</strong>
+        <span>Pergudangan Fie Min Logistics, Jl. Raya Bungah, Kec. Bungah, Gresik</span>
+      </article>
+
+      <article class="sa-card" data-region="sumatra">
+        <span class="sa-card__img"><img src="assets/img/plb-stock.webp" alt="SuperArea Palembang" loading="lazy"></span>
+        <strong>Palembang</strong>
+        <span>Jl. Musi 2, Kel. Karang Jaya, Kec. Gandus, Kota Palembang</span>
+      </article>
+
+      <article class="sa-card" data-region="kalimantan">
+        <span class="sa-card__img"><img src="assets/img/plb-truck.webp" alt="SuperArea Pontianak" loading="lazy"></span>
+        <strong>Pontianak</strong>
+        <span>Pergudangan Primaco, Jl. Komodor Yos Sudarso No.2, Pontianak</span>
+      </article>
+
+      <article class="sa-card" data-region="kalimantan">
+        <span class="sa-card__img"><img src="assets/img/warehouse-dark.webp" alt="SuperArea Banjarbaru" loading="lazy"></span>
+        <strong>Banjarbaru</strong>
+        <span>Pergudangan Kalimantan Kencana Blok D No.13, Banjarbaru</span>
+      </article>
+
+      <article class="sa-card" data-region="kalimantan">
+        <span class="sa-card__img"><img src="assets/img/plb-mojokerto.webp" alt="SuperArea Balikpapan" loading="lazy"></span>
+        <strong>Balikpapan</strong>
+        <span>Jl. Soekarno Hatta Km. 11, RW.115, Karang Joang, Balikpapan</span>
+      </article>
+
+      <article class="sa-card" data-region="sulawesi">
+        <span class="sa-card__img"><img src="assets/img/plb-gresik.webp" alt="SuperArea Manado" loading="lazy"></span>
+        <strong>Manado</strong>
+        <span>Kawasan Pergudangan, Jl. Raya Manado - Bitung, Sulawesi Utara</span>
+      </article>
+
+      <article class="sa-card" data-region="sulawesi">
+        <span class="sa-card__img"><img src="assets/img/delivery-forklift.webp" alt="SuperArea Kendari" loading="lazy"></span>
+        <strong>Kendari</strong>
+        <span>Jl. Pajak, Korumba, Kec. Mandonga, Kota Kendari</span>
+      </article>
+
+      <article class="sa-card" data-region="sulawesi">
+        <span class="sa-card__img"><img src="assets/img/plb-stock.webp" alt="SuperArea Morowali" loading="lazy"></span>
+        <strong>Morowali</strong>
+        <span>Jl. Trans Sulawesi, Bahoruru, Kec. Bungku Tengah, Morowali</span>
+      </article>
+
+      <article class="sa-card" data-region="sulawesi">
+        <span class="sa-card__img"><img src="assets/img/truck-tiberman.webp" alt="SuperArea Luwuk Banggai" loading="lazy"></span>
+        <strong>Luwuk Banggai</strong>
+        <span>Jl. Tanjung Malaka No.1, Kelurahan Kraton, Luwuk, Banggai</span>
+      </article>
+
+      <article class="sa-card" data-region="maluku-papua">
+        <span class="sa-card__img"><img src="assets/img/plb-truck.webp" alt="SuperArea Ternate" loading="lazy"></span>
+        <strong>Ternate</strong>
+        <span>Jl. Pertamina, Gambesi, Kec. Ternate Selatan, Maluku Utara</span>
+      </article>
+
+      <article class="sa-card" data-region="maluku-papua">
+        <span class="sa-card__img"><img src="assets/img/warehouse-dark.webp" alt="SuperArea Sofifi" loading="lazy"></span>
+        <strong>Sofifi</strong>
+        <span>Jl. Trans Halmahera, Bukit Durian, Oba Utara, Kota Tidore Kepulauan</span>
+      </article>
+
+      <article class="sa-card" data-region="maluku-papua">
+        <span class="sa-card__img"><img src="assets/img/plb-stock.webp" alt="SuperArea Weda" loading="lazy"></span>
+        <strong>Weda</strong>
+        <span>Lelilef Sawai, Kec. Weda Tengah, Halmahera Tengah, Maluku Utara</span>
+      </article>
+
     </div>
-  </section>
-
-  <!-- ============================= PERFECT PAIR FOR ============================= -->
-  <section class="pdp-pair">
-    <div class="container">
-      <h2 class="reveal">Perfect Pair For</h2>
-      <div class="pair-grid">
-        <article class="pair-card reveal">
-          <img src="assets/img/dumptruck.webp" alt="Dump truck" loading="lazy">
-          <strong>Dump Truck</strong>
-        </article>
-        <article class="pair-card reveal" data-delay="100">
-          <img src="assets/img/tire-tread.webp" alt="Medan off-road" loading="lazy">
-          <strong>Off-Road</strong>
-        </article>
-        <article class="pair-card reveal" data-delay="200">
-          <img src="assets/img/plb-stock.webp" alt="Muatan berat" loading="lazy">
-          <strong>Muatan Berat</strong>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ============================= DETAIL + SPESIFIKASI ============================= -->
-  <section class="pdp-detail">
-    <div class="container">
-      <div class="pdp-detail__grid">
-
-        <!-- Galeri -->
-        <div data-gallery>
-          <div class="gallery__main">
-            <img src="assets/img/tyre-preview.png" alt="Uninest TiberMAX 800" data-gallery-main>
-          </div>
-          <div class="gallery__thumbs">
-            <button type="button" class="is-active" data-gallery-thumb data-full="assets/img/tyre-preview.png">
-              <img src="assets/img/tyre-preview.png" alt="Tampak serong TiberMAX 800">
-            </button>
-            <button type="button" data-gallery-thumb data-full="assets/img/tyre-diameter.png">
-              <img src="assets/img/tyre-diameter.png" alt="Tampak depan TiberMAX 800">
-            </button>
-            <button type="button" data-gallery-thumb data-full="assets/img/tapak-ban.png">
-              <img src="assets/img/tapak-ban.png" alt="Pola telapak TiberMAX 800">
-            </button>
-          </div>
-          <div class="doc-btns">
-            <a href="#">E-Katalog</a>
-            <a href="#">Flash Card</a>
-          </div>
-        </div>
-
-        <!-- Info -->
-        <div class="pdp-info">
-          <span class="pdp-logo">
-            <img class="pdp-logo__a" src="assets/img/tibermax-logo.png" alt="Uninest TiberMAX 800" width="584" height="97">
-          </span>
-          <p><b>Uninest Tibermax 800</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.</p>
-
-          <h2 class="subhead">Spesifikasi</h2>
-          <table class="spec-table">
-            <tbody>
-              <tr><td>Ply Rating</td><td>: 16PR</td><td>Overall Diameter</td><td>: 1500 mm</td></tr>
-              <tr><td>Tread Depth</td><td>: 25.5 mm</td><td>Max Load</td><td>: 6150 kg</td></tr>
-              <tr><td>Standard Rim</td><td>: DW20</td><td>Max Speed</td><td>: 10 km/jam</td></tr>
-              <tr><td>Section Width</td><td>: 595 mm</td><td>Pressure</td><td>: 38 Psi</td></tr>
-            </tbody>
-          </table>
-
-          <h2 class="subhead">Available Size :</h2>
-          <div class="size-chips" data-size-chips>
-            <a class="size-chip is-active" href="#">11.00R20</a>
-            <a class="size-chip" href="#">12.00R20</a>
-            <a class="size-chip" href="#">12.00R24</a>
-            <a class="size-chip" href="#">14.00R25</a>
-          </div>
-
-          <h2 class="subhead">Contact us :</h2>
-          <div class="contact-btns">
-            <a class="contact-btn contact-btn--wa" href="https://wa.me/6281234567890">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-1-.3-2.6-1-4-2.5-1.3-1.3-2-2.7-2.3-3.4-.2-.6-.3-1.2-.2-1.7.1-.4.7-1.4 1.2-1.6.3-.1.6 0 .8.2l.9 1.5c.1.2.1.5 0 .7l-.4.6c-.1.2-.1.4 0 .6.3.5.8 1.2 1.4 1.7.6.5 1.2.9 1.7 1.1.2.1.5 0 .6-.1l.6-.6c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.4.3.7l-.1.2z"/></svg>
-              Whatsapp
-            </a>
-            <a class="contact-btn contact-btn--shopee" href="#">
-              <img src="assets/img/shopee.png" alt="">
-              Shoppe
-            </a>
-            <a class="contact-btn contact-btn--tokped" href="#">
-              <img src="assets/img/tokopedia.png" alt="">
-              Tokopedia
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
+  </div>
 </main>
 
-<!-- ============================= FOOTER ============================= -->
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
@@ -260,8 +267,9 @@
     <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
   </div>
 </footer>
-
 <script src="assets/js/i18n.js?v=20260918a" defer></script>
 <script src="assets/js/main.js?v=20260918a" defer></script>
+<script src="assets/js/superarea-spots.js?v=20260918a" defer></script>
+<script src="assets/js/superarea-page.js?v=20260918a" defer></script>
 </body>
 </html>
