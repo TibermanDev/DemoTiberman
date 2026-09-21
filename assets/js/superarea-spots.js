@@ -1,10 +1,15 @@
 /* =============================================================
-   SuperArea — peta statis (maps-new.webp) + titik yang bisa diklik.
+   SuperArea — peta statis (earth-maps.webp) + titik interaktif.
 
    Pin-nya sudah tercetak di gambar, jadi tombolnya transparan dan
    diposisikan dalam persen supaya tetap pas saat gambar diperbesar
    atau diperkecil. Koordinat persen diambil dari deteksi blob merah
    pada gambarnya, bukan dikira-kira.
+
+   Keterangannya muncul saat pin DIHOVER (di perangkat yang punya
+   kursor), bukan harus diklik dulu — supaya pengunjung langsung tahu
+   petanya bisa dipakai. Di layar sentuh hover tidak ada, jadi di sana
+   tetap ketuk untuk buka/tutup.
    ============================================================= */
 (function () {
   'use strict';
@@ -34,29 +39,37 @@
      sama jatuh di persen yang berbeda pula. Dipilih lewat nilai atribut
      data-superarea. */
 
-  /* maps-new.webp (beranda). Bingkainya lebih zoom daripada earth-location.webp
-     yang lama: planetnya naik, jadi semua y bergeser ~4-5% ke atas dan pin-nya
-     tercetak lebih kecil. Angka di bawah hasil deteksi blob merah pada
-     maps-new.webp (2880x1171).
+  /* earth-maps.webp (beranda). Bingkai buminya PERSIS sama dengan maps-new.webp
+     yang dulu dipakai — ukuran (7868x3200 pada PNG sumbernya) dan profil alfanya
+     identik, jadi --sa-globe-h dan --sa-glow-cut di style.css tidak ikut berubah.
+     Yang berganti cuma grafik pin-nya: dari pin kecil rata jadi pin 3D besar,
+     2.6x lebih besar (131x182 px pada mask skala 50%, dulu 25x36).
+
+     Karena pin-nya membesar sementara UJUNGNYA tetap menancap di titik geografis
+     yang sama, pusat KEPALA pin naik ~3-5% tinggi gambar. Semua y di bawah sudah
+     digeser mengikuti itu. Angkanya hasil deteksi blob merah pada earth-maps.png
+     (color-threshold merah -> connected-components), bukan kira-kira: untuk pin
+     yang berdiri sendiri dipakai centroid LUBANG di kepala pin, dan untuk pin
+     yang menumpuk dipakai kotak batas blobnya dengan kepala di 37% tinggi pin —
+     dua cara itu cocok sampai ~0.05% di semua pin tunggal.
+
      CATATAN: gambar ini cuma punya DUA pin di Sulawesi — Morowali dan Kendari.
-     Pin LUWUK yang ada di gambar lama tidak ikut tercetak di maps-new, jadi
-     tombolnya tidak dibuat di beranda (datanya tetap dipakai SPOTS_PAGE di
-     superarea.html). Kalau pin Luwuk ditambahkan lagi ke gambarnya, posisinya
-     jatuh di sekitar x 55.84 / y 47.39.
-     Sama seperti gambar lama, ada satu pin di Papua barat (~76.6% / 48.8%) yang
+     Pin LUWUK tidak ikut tercetak (sama seperti maps-new), jadi tombolnya tidak
+     dibuat di beranda (datanya tetap dipakai SPOTS_PAGE di superarea.html).
+     Sama seperti gambar lama, ada satu pin di Papua barat (~76.7% / 43.9%) yang
      tidak punya pasangan di daftar 15 SuperArea — dibiarkan jadi bagian gambar
      saja, tanpa tombol. */
   var SPOTS_GLOBE = [
-    { x: 18.41, y: 55.62, kota: ['PALEMBANG'] },
-    { x: 23.90, y: 70.70, kota: ['JAKARTA'] },
-    { x: 31.89, y: 48.33, kota: ['PONTIANAK'] },
-    { x: 36.26, y: 71.79, lebar: 1.8, kota: ['SURABAYA', 'GRESIK', 'MOJOKERTO'] },
-    { x: 36.75, y: 54.62, kota: ['BANJARBARU'] },
-    { x: 43.98, y: 46.96, kota: ['BALIKPAPAN'] },
-    { x: 54.90, y: 51.84, kota: ['MOROWALI'] },
-    { x: 56.43, y: 54.62, kota: ['KENDARI'] },
-    { x: 60.61, y: 40.11, kota: ['MANADO'] },
-    { x: 66.45, y: 40.69, lebar: 1.3, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
+    { x: 18.89, y: 52.62, kota: ['PALEMBANG'] },
+    { x: 24.74, y: 66.74, kota: ['JAKARTA'] },
+    { x: 31.90, y: 44.11, kota: ['PONTIANAK'] },
+    { x: 36.90, y: 68.96, lebar: 1.8, kota: ['SURABAYA', 'GRESIK', 'MOJOKERTO'] },
+    { x: 36.33, y: 49.89, kota: ['BANJARBARU'] },
+    { x: 43.90, y: 42.99, kota: ['BALIKPAPAN'] },
+    { x: 55.14, y: 48.86, kota: ['MOROWALI'] },
+    { x: 56.92, y: 53.49, kota: ['KENDARI'] },
+    { x: 60.78, y: 35.24, kota: ['MANADO'] },
+    { x: 66.20, y: 36.08, lebar: 1.3, tinggi: 1.5, kota: ['TERNATE', 'SOFIFI', 'WEDA'] }
   ];
 
   /* TIDAK DIPAKAI untuk sementara. Tabel ini milik earth-superarea.webp, dan
@@ -173,7 +186,23 @@
     btn.classList.add('is-on');
   }
 
-  SPOTS.forEach(function (spot) {
+  /* Hover cuma dipakai di perangkat yang benar-benar punya kursor. Di layar
+     sentuh, (hover:hover) palsu bisa membuat popup terbuka lalu nyangkut
+     setelah satu ketukan, jadi di sana alurnya tetap ketuk untuk buka/tutup. */
+  var kursor = window.matchMedia('(hover:hover) and (pointer:fine)');
+  function pakaiHover() { return kursor.matches; }
+
+  /* Popup dicetak di ATAS pin dengan jarak 22px dari PUSAT pin, sementara
+     tombolnya sendiri beradius ~23px — jadi tepi bawah popup praktis menempel
+     ke tepi atas tombol dan kursor tidak pernah jatuh ke celah kosong.
+     Tapi kalau popupnya kena jepitan tepi layar dia bergeser menyamping dan
+     celah itu muncul, jadi menutupnya selalu DITUNDA sebentar: cukup untuk
+     menyeberang, tidak cukup untuk terasa nyangkut. */
+  var jeda = null;
+  function jadwalTutup() { clearTimeout(jeda); jeda = setTimeout(tutup, 260); }
+  function batalTutup() { clearTimeout(jeda); }
+
+  SPOTS.forEach(function (spot, i) {
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'sa-spot';
@@ -181,22 +210,72 @@
     btn.style.top = spot.y + '%';
     if (spot.lebar) btn.style.setProperty('--w', spot.lebar);
     if (spot.tinggi) btn.style.setProperty('--h', spot.tinggi);
+    /* Denyut cincinnya digilir, bukan serempak — kalau semuanya berdenyut
+       bersamaan hasilnya berkedip seperti lampu strobo, bukan undangan. */
+    btn.style.setProperty('--d', (i * 0.26).toFixed(2) + 's');
     btn.setAttribute('aria-expanded', 'false');
     btn.setAttribute('aria-label', bahasa().titik + ': ' + spot.kota.join(', '));
+
+    btn.addEventListener('mouseenter', function () {
+      if (!pakaiHover()) return;
+      batalTutup();
+      /* Kalau popupnya memang sudah milik pin ini, jangan digambar ulang:
+         innerHTML baru bikin isinya berkedip dan animasi masuknya jalan lagi. */
+      if (aktif === btn && !pop.hidden) return;
+      buka(btn, spot);
+    });
+    btn.addEventListener('mouseleave', function () {
+      if (pakaiHover()) jadwalTutup();
+    });
+    /* Keyboard: Tab ke pin membuka keterangannya, sama seperti hover. */
+    btn.addEventListener('focus', function () {
+      batalTutup();
+      if (aktif === btn && !pop.hidden) return;
+      buka(btn, spot);
+    });
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
+      /* Di perangkat berkursor popupnya sudah terbuka karena hover, jadi klik
+         hanya dipakai untuk "memakukan" — bukan menutup, karena menutup di
+         bawah kursor yang masih menempel langsung terbuka lagi oleh hover. */
+      if (pakaiHover()) { batalTutup(); buka(btn, spot); return; }
       if (aktif === btn && !pop.hidden) tutup(); else buka(btn, spot);
     });
     spotsBox.appendChild(btn);
+  });
+
+  /* Kursor yang pindah dari pin ke dalam popup membatalkan jadwal tutup,
+     supaya tautan Google Maps di dalamnya bisa benar-benar diklik. */
+  pop.addEventListener('mouseenter', batalTutup);
+  pop.addEventListener('mouseleave', function () {
+    if (pakaiHover()) jadwalTutup();
   });
 
   pop.addEventListener('click', function (e) {
     if (e.target.closest('.sa-pop__x')) tutup();
     else e.stopPropagation();
   });
+  /* Fokus keluar dari seluruh blok peta (Tab sampai lewat) -> tutup. Dicek
+     lewat setTimeout karena saat focusout berlangsung document.activeElement
+     masih body, belum elemen tujuannya. */
+  wrap.addEventListener('focusout', function () {
+    setTimeout(function () {
+      if (!wrap.contains(document.activeElement)) jadwalTutup();
+    }, 0);
+  });
   document.addEventListener('click', function (e) {
-    if (!pop.hidden && !e.target.closest('.sa-spot')) tutup();
+    if (!pop.hidden && !e.target.closest('.sa-spot') && !e.target.closest('.sa-pop')) tutup();
   });
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tutup(); });
   window.addEventListener('resize', tutup);
+
+  /* Denyut cincin hanya jalan saat petanya kelihatan: sepuluh animasi tak
+     berujung yang berputar di luar layar cuma membuang baterai. */
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (baris) {
+      baris.forEach(function (b) { spotsBox.classList.toggle('is-live', b.isIntersecting); });
+    }, { rootMargin: '80px' }).observe(wrap);
+  } else {
+    spotsBox.classList.add('is-live');
+  }
 })();

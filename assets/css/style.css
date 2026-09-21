@@ -258,7 +258,7 @@ ul{margin:0;padding:0;list-style:none}
      atas lengkung bumi. Persen pada padding dihitung dari lebar containing
      block (tanpa scrollbar), jadi selalu pas. */
   --sa-globe-h:40.660%;
-  /* maps-new.webp punya ALPHA sungguhan (dikonversi dari maps-new.png):
+  /* earth-maps.webp punya ALPHA sungguhan (dikonversi dari earth-maps.png):
      angkasa di atas planetnya transparan dengan tepi atmosfer yang ter-feather,
      bukan hitam pekat. Jadi sorot yang dicetak di BELAKANG bumi tembus sampai ke
      tepi planetnya dan berbaur lewat feather itu — tidak ada strip hitam maupun
@@ -267,10 +267,15 @@ ul{margin:0;padding:0;list-style:none}
      --sa-glow-cut: seberapa dalam tepi bawah sorot (yang sekaligus titik paling
      terangnya, karena PNG-nya mentok di sudut) ditenggelamkan ke balik planet,
      dihitung dari dasar section sebagai pecahan tinggi gambar bumi. 0.62 = 38%
-     tinggi gambar dari atas; di maps-new.webp planetnya naik lebih tinggi
-     daripada earth-location.webp yang lama — alfanya sudah pekat di 11% (tengah),
-     20% (kiri) dan 22% (kanan — planetnya miring), jadi 38% jauh lebih dari cukup
-     untuk menutupi garis potongnya. */
+     tinggi gambar dari atas; alfanya sudah pekat di 11% (tengah), 20% (kiri) dan
+     22% (kanan — planetnya miring), jadi 38% jauh lebih dari cukup untuk
+     menutupi garis potongnya.
+
+     Kedua angka di atas TIDAK berubah waktu aset bumi diganti dari maps-new.webp
+     ke earth-maps.webp: dua gambar itu bingkai buminya identik (2880x1171, dan
+     profil alfa per baris sama sampai dua angka desimal), yang berganti hanya
+     grafik pin-nya. Kalau nanti diganti aset bumi dengan bingkai lain, dua-duanya
+     harus diukur ulang — dan tabel koordinat di superarea-spots.js ikut. */
   --sa-glow-cut:.62;
   /* Trik padding: tepi bawah CONTENT BOX-lah yang jadi garis jangkar, dan
      jaraknya ke dasar section = 20% tinggi bumi, dihitung dari lebar section
@@ -320,18 +325,47 @@ ul{margin:0;padding:0;list-style:none}
 .superarea__globe{position:relative}
 .superarea__earth{display:block;width:100%;height:auto}
 /* Pin sudah tercetak di gambar, jadi tombolnya transparan dan cuma
-   memberi lingkaran sorot. Posisinya persen -> ikut skala gambar. */
+   memberi lingkaran sorot. Posisinya persen -> ikut skala gambar.
+
+   Ukurannya dipatok ke vw karena kotak buminya selebar viewport: kepala pin
+   pada earth-maps.webp berdiameter ~3,3% lebar gambar, jadi 3.3vw membuat
+   tombolnya setara kepala pin di lebar berapa pun. Batas bawah 30px bukan hasil
+   hitungan itu melainkan ukuran minimum sasaran sentuh — di ponsel pin-nya
+   memang tercetak lebih kecil dari itu. Batas atasnya 64px (dulu 48px), naik
+   bersama pin yang sekarang digambar 2,6x lebih besar. */
 .sa-spots{position:absolute;inset:0;z-index:3}
 .sa-spot{
   position:absolute;translate:-50% -50%;
-  width:calc(clamp(30px,3vw,48px) * var(--w,1));
-  height:calc(clamp(30px,3vw,48px) * var(--h,1));
+  width:calc(clamp(30px,3.3vw,64px) * var(--w,1));
+  height:calc(clamp(30px,3.3vw,64px) * var(--h,1));
   border-radius:999px;background:transparent;cursor:pointer;
   transition:background .2s var(--ease),box-shadow .2s var(--ease);
 }
+/* ::before = denyut MERAH saat diam, penanda bahwa pin-nya bisa dipakai.
+   ::after  = cincin PUTIH saat disorot/dibuka.
+   Dua warna berbeda supaya "ada yang bisa dipakai di sini" dan "yang ini
+   sedang aktif" tidak tertukar. Denyutnya cuma jalan kalau petanya kelihatan
+   (.is-live dipasang IntersectionObserver di superarea-spots.js) dan langsung
+   mati begitu pin-nya disorot, jadi tidak berebut perhatian dengan ::after. */
+.sa-spot::before{
+  content:'';position:absolute;inset:-4px;border-radius:inherit;
+  border:2px solid var(--red);opacity:0;pointer-events:none;
+}
+.sa-spots.is-live .sa-spot::before{animation:sa-ping 3s var(--d,0s) ease-out infinite}
+@keyframes sa-ping{
+  0%{opacity:0;transform:scale(.6)}
+  20%{opacity:.8}
+  70%,100%{opacity:0;transform:scale(1.5)}
+}
+.sa-spot:hover::before,.sa-spot:focus-visible::before,.sa-spot.is-on::before{animation:none;opacity:0}
+/* pointer-events:none WAJIB: inset -6px membuat cincin ini 12px lebih besar
+   daripada border-box tombolnya, dan pseudo-element ikut menangkap pointer atas
+   nama tombol induknya. Tanpa ini, sasaran sentuh sebenarnya jadi 12px lebih
+   lebar dari yang terlihat — di layar sempit cincin Ternate/Sofifi/Weda sampai
+   menelan pusat pin Manado, jadi Manado tidak bisa diketuk sama sekali. */
 .sa-spot::after{
   content:'';position:absolute;inset:-6px;border-radius:inherit;
-  border:2px solid rgba(255,255,255,.55);opacity:0;
+  border:2px solid rgba(255,255,255,.55);opacity:0;pointer-events:none;
   transition:opacity .2s var(--ease),transform .2s var(--ease);
   transform:scale(.8);
 }
@@ -361,6 +395,9 @@ ul{margin:0;padding:0;list-style:none}
 @media (prefers-reduced-motion:reduce){
   .sa-spot,.sa-spot::after{transition:none}
   .sa-pop{animation:none}
+  /* Denyutnya dimatikan, tapi cincinnya tetap dicetak tipis supaya pin-nya
+     masih terbaca sebagai sesuatu yang bisa dipakai tanpa perlu gerak. */
+  .sa-spots.is-live .sa-spot::before{animation:none;opacity:.5}
 }
 
 .superarea__globe img{width:100%;object-fit:cover}
@@ -815,16 +852,26 @@ ul{margin:0;padding:0;list-style:none}
    membengkak sampai menabrak section di atasnya. margin-top negatif yang
    membuat helmnya keluar dari pita abu.
 
-   PENTING kalau burhan.webp diganti: semua margin negatif di bawah ditala
-   terhadap BINGKAI gambarnya, bukan cuma rasionya. Bingkai yang berlaku pada
-   kanvas 774x1467 adalah: sosok setinggi 1169px (79,7% tinggi kanvas), tepi
-   atas helm di y=209 (14,3%), dan sisa ruang 22px di kanan sosok (2,8% lebar
-   kanvas) — sisi kanan yang menentukan posisi mendatarnya karena .faq__art
-   memakai justify-content:flex-end. burhan.webp yang sekarang dibuat dari
-   burhan.png (potongan rapat 3764x6688) dengan cara disusun ulang ke bingkai
-   itu; kalau gambar baru dipasang mentah dengan bingkai berbeda, sosoknya
-   akan berubah ukuran dan posisinya, dan margin-margin di bawah ikut harus
-   ditala ulang. */
+   PENTING kalau panda-contact.webp diganti: semua margin negatif di bawah
+   ditala terhadap BINGKAI gambarnya, bukan cuma rasionya. Bingkai yang berlaku
+   adalah (dalam piksel kanvas, tinggi kanvas SELALU 1467):
+     - sosok setinggi 1169px = 79,7% tinggi kanvas
+     - tepi atas helm di y=209 (14,3%), sisa 89px di bawah kaki
+     - sisa ruang 22px di kanan sosok — sisi kanan yang menentukan posisi
+       mendatarnya karena .faq__art memakai justify-content:flex-end
+   Hanya LEBAR kanvas yang ikut proporsi sosoknya; lebar itu harus dicerminkan
+   di aspect-ratio pada .faq__art img (dua tempat: di sini dan di media query
+   <=720px), kalau tidak sosoknya gepeng.
+
+   panda-contact.webp (895x1467, sosok 873x1169) dibuat dari panda-contact.png
+   (potongan rapat 4292x5860) dengan cara disusun ulang ke bingkai itu — persis
+   cara burhan.webp (774x1467, sosok 651x1169) dulu dibuat dari burhan.png.
+   Karena tinggi kanvas, tinggi sosok, dan offset atas/bawahnya sama dalam
+   piksel absolut, penggantian aset itu TIDAK menuntut margin di bawah ditala
+   ulang; yang berubah cuma lebar kanvas 774 -> 895, jadi sosoknya melimpah
+   ~16% lebih jauh ke kiri. Kalau gambar baru dipasang mentah dengan bingkai
+   berbeda, sosoknya akan berubah ukuran dan posisinya, dan margin-margin di
+   bawah ikut harus ditala ulang. */
 .faq__art{
   /* min-width:0 — kolom grid `fr` secara bawaan tidak boleh lebih sempit
      daripada isinya, jadi begitu gambarnya lebih lebar dari jatahnya,
@@ -839,7 +886,35 @@ ul{margin:0;padding:0;list-style:none}
      menonjolnya = tinggi gambar - |margin-bottom| - tinggi baris, jadi
      gambarnya memang harus jauh lebih tinggi daripada kartu FAQ. */
   margin-top:clamp(-360px,-20vw,-130px);
-  margin-bottom:clamp(-300px,-15vw,-110px);
+  /* Dulu clamp(-300px,-15vw,-110px), yang menenggelamkan kaki sosoknya sampai
+     ~155px di bawah tepi bawah section supaya terpotong rapi. Itu ditala untuk
+     burhan; maskot panda kakinya (sepatu putihnya) memang mau ditampilkan utuh,
+     jadi pendorong ke bawah sebesar itu dihilangkan dan sisanya cuma -20px.
+     Efeknya sosoknya NAIK jauh — kedua ujungnya bergerak bersamaan — dan
+     sepatunya berhenti DI DALAM section, bukan ~155px di luarnya.
+     Ujung bawah gambar yang terjangkar (align-items:flex-end) berarti setiap
+     kali tingginya dikecilkan, kepalanya yang turun. Di 50vw sosoknya (574px)
+     lebih pendek daripada tinggi section (650px), jadi helmnya berhenti ~28px
+     DI BAWAH tepi atas section — slack-nya sengaja ditaruh di atas supaya panda
+     tetap terbaca "berdiri", bukan melayang dengan celah kosong di bawah kaki.
+     Kalau helm ingin menembus tepi atas lagi tanpa membesarkan pandanya, beri
+     margin-bottom positif (+100px ~ menonjol 72px di 1440px) — tapi celah di
+     bawah sepatunya ikut melebar sebesar itu juga.
+     Yang menentukan tinggi baris tetap (tinggi gambar + margin-top + margin-
+     bottom) versus tinggi kartu FAQ, mana yang lebih besar — persis seperti
+     sebelumnya. Di >=~1500px gambarlah yang menentukan (sama seperti zaman
+     burhan: 690 vs 692 px, tinggi sectionnya 790 vs 792), di bawah itu
+     kartunya. Kalau nilainya dibuat POSITIF dan cukup besar, gambar akan
+     menentukan tinggi baris di SEMUA lebar dan sectionnya memanjang. */
+  /* -20px = turun sedikit dari 0, sambil sepatunya tetap utuh di SEMUA lebar.
+     Batasnya sempit: klirens sepatu ke tepi bawah section kira-kira
+     (89px * skala gambar) + margin-bottom, dan skalanya paling kecil tepat di
+     atas breakpoint 1024px (di bawah itu gridnya jadi satu kolom dan ruangnya
+     longgar). Terukur di 1040px: 28px klirens pada 0, 8px pada -20px, dan -2px
+     pada -30px — jadi -30px sudah mulai memotong sepatunya di sana. Kalau mau
+     lebih turun lagi, sepatunya harus rela terpotong, atau nilainya dibuat
+     ikut lebar layar (mis. clamp) bukan flat seperti sekarang. */
+  margin-bottom:-20px;
 }
 /* justify-content:flex-end — kelebihan lebarnya melimpah ke KIRI (ruang
    kosong / tepi layar), bukan ke kanan tempat kartu FAQ berada. */
@@ -853,7 +928,17 @@ ul{margin:0;padding:0;list-style:none}
    membuat sosoknya kelihatan gepeng. Sosok ini memang sengaja lebih lebar
    daripada kolomnya dan melimpah ke kiri.
    flex:none supaya tidak ikut disusutkan algoritma flex. */
-.faq__art img{display:block;flex:none;width:auto;max-width:none;height:clamp(620px,88vw,1340px);aspect-ratio:774/1467}
+/* Tingginya diturunkan dari clamp(620px,88vw,1340px) waktu aset diganti dari
+   burhan ke panda. Bukan selera: sosok panda rasionya 0,747 (l/t) sementara
+   burhan 0,557, jadi pada TINGGI yang sama panda 1,34x lebih lebar. Ruang
+   mendatar yang ada cuma sampai tepi kiri layar — di 1440px sosoknya boleh
+   selebar ~504px — dan dengan 88vw panda jadi 754px, 250px di antaranya
+   (tablet + lengan kirinya) terpotong hilang di luar layar.
+   Sekarang 50vw (turun bertahap 88 -> 64 -> 58 -> 50): potongannya 0 di semua
+   lebar dengan jarak aman lebar — di 1440px sosoknya 428px, jauh di bawah pagu
+   ~504px itu. Konsekuensinya sosoknya tidak lagi cukup jangkung untuk menembus
+   tepi atas section di <=1440px (lihat catatan margin-bottom di atas). */
+.faq__art img{display:block;flex:none;width:auto;max-width:none;height:clamp(360px,50vw,910px);aspect-ratio:895/1467}
 .faq__panel{background:var(--surface);border-radius:var(--radius-xl);padding:34px 30px;box-shadow:var(--shadow-s);margin-bottom:34px}
 .faq__panel h2{font-size:clamp(24px,2.8vw,34px);margin-bottom:14px}
 .acc__item{border-bottom:1px solid #e2e2e5}
@@ -1452,7 +1537,7 @@ ul{margin:0;padding:0;list-style:none}
   .faq{padding:0 0 46px}
   /* satu kolom: sosoknya tidak perlu lagi menjorok naik sejauh itu */
   .faq__art{margin-top:-30px;margin-bottom:-70px;margin-inline:auto;justify-content:center}
-  .faq__art img{height:clamp(340px,96vw,460px);aspect-ratio:774/1467;max-width:100%}
+  .faq__art img{height:clamp(340px,96vw,460px);aspect-ratio:895/1467;max-width:100%}
   /* Di ponsel 520px tidak muat: kartunya dibuat selebar layar (satu kartu per
      layar) dan lebih pendek. Di lebar segini kolom foto pasti menyusut, jadi
      ruang atas antar kartu tidak lagi sama persis — konsekuensi yang tak
