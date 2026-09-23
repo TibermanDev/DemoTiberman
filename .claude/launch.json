@@ -3,8 +3,14 @@
   "configurations": [
     {
       "name": "tiberman",
+      "runtimeExecutable": "php",
+      "runtimeArgs": ["artisan", "serve", "--port=8000"],
+      "port": 8000
+    },
+    {
+      "name": "tiberman-legacy-static",
       "runtimeExecutable": "node",
-      "runtimeArgs": ["serve.mjs"],
+      "runtimeArgs": ["_legacy/serve.mjs"],
       "port": 4322
     }
   ]
