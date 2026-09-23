@@ -116,7 +116,7 @@ window.__tbmIntroBail=setTimeout(function(){
         <div class="superarea__copy">
           <p class="eyebrow reveal">siap melayani Anda lebih dekat dengan</p>
           <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
-          <a class="btn btn--primary reveal" data-delay="160" href="/contact">Check it !</a>
+          <a class="btn btn--primary reveal" data-delay="160" href="{{ route('contact') }}">Check it !</a>
         </div>
       </section>
       <div class="superarea__glow" aria-hidden="true"></div>
@@ -159,11 +159,12 @@ window.__tbmIntroBail=setTimeout(function(){
     <div class="importir__inner">
       <h2 class="reveal">Importir Ban Truk &amp; Alat Berat<br>TERPERCAYA</h2>
       <div class="pills reveal" data-delay="120">
-        <a class="pill" href="/katalog?unit=truk-bus">Truck &amp; Bus</a>
-        <a class="pill" href="/katalog?unit=mining-truck">Mining Truck</a>
-        <a class="pill" href="/katalog?unit=loader-grader">Loader-Grader</a>
-        <a class="pill" href="/katalog?unit=forklift">Forklift</a>
-        <a class="pill" href="/katalog?unit=traktor">Tractor</a>
+        <a class="pill" href="/kategori-produk/ban-truk">Truck &amp; Bus</a>
+        <a class="pill" href="/kategori-produk/ban-truk/ban-truk-off-the-road">Mining Truck</a>
+        <a class="pill" href="/kategori-produk/ban-loader">Loader</a>
+        <a class="pill" href="/kategori-produk/ban-grader">Grader</a>
+        <a class="pill" href="/kategori-produk/ban-forklift">Forklift</a>
+        <a class="pill" href="/kategori-produk/ban-traktor">Tractor</a>
       </div>
     </div>
   </section>
@@ -212,28 +213,28 @@ window.__tbmIntroBail=setTimeout(function(){
         <div class="velg-card__img"><img src="{{ asset('assets/img/otr-tyre.png') }}" alt="Ban OTR untuk alat berat" loading="lazy"></div>
         <div class="velg-card__body">
           <h3>OTR TYRE<span>(Off The Road)</span></h3>
-          <a class="btn btn--primary" href="/katalog?unit=mining-truck">Check it !</a>
+          <a class="btn btn--primary" href="/kategori-produk/ban-truk/ban-truk-off-the-road">Check it !</a>
         </div>
       </article>
       <article class="velg-card velg-card--tyre reveal" data-delay="300" style="--ar:1348/920">
         <div class="velg-card__img"><img src="{{ asset('assets/img/tbr-tyre.png') }}" alt="Ban TBR untuk truk dan bus" loading="lazy"></div>
         <div class="velg-card__body">
           <h3>TBR TYRE<span>(Truck Bus)</span></h3>
-          <a class="btn btn--primary" href="/katalog?unit=truk-bus">Check it !</a>
+          <a class="btn btn--primary" href="/kategori-produk/ban-truk">Check it !</a>
         </div>
       </article>
       <article class="velg-card reveal" style="--ar:1203/999">
         <div class="velg-card__img"><img src="{{ asset('assets/img/velg-heavy-2.webp') }}" alt="Velg heavy duty" loading="lazy"></div>
         <div class="velg-card__body">
           <h3>VELG<span>Heavy-Duty</span></h3>
-          <a class="btn btn--primary" href="/katalog">Check it !</a>
+          <a class="btn btn--primary" href="/kategori-produk/velg-truk">Check it !</a>
         </div>
       </article>
       <article class="velg-card reveal" data-delay="100" style="--ar:1234/919">
         <div class="velg-card__img"><img src="{{ asset('assets/img/velg-light-2.webp') }}" alt="Velg light truck" loading="lazy"></div>
         <div class="velg-card__body">
           <h3>VELG<span>Light Truck</span></h3>
-          <a class="btn btn--primary" href="/katalog">Check it !</a>
+          <a class="btn btn--primary" href="/kategori-produk/velg-truk">Check it !</a>
         </div>
       </article>
     </div>
@@ -304,7 +305,7 @@ window.__tbmIntroBail=setTimeout(function(){
           </div>
           <h3>Memiliki 2 Pusat Logistik<br>Berikat (PLB) sendiri</h3>
           <p>Tiberman Group didukung oleh 2 Pusat Logistik Berikat (PLB) yang dikelola <b>PT Fiemin Logistics</b>. yang berlokasi di <b>Gresik</b> dan <b>Mojokerto</b></p>
-          <a class="btn btn--primary" href="/contact">Check it !</a>
+          <a class="btn btn--primary" href="{{ route('contact') }}">Check it !</a>
         </div>
         <div class="feature-card__media">
           <img src="{{ asset('assets/img/plb-stock.webp') }}" alt="Gudang stok ban Pusat Logistik Berikat" loading="lazy">
@@ -346,7 +347,7 @@ window.__tbmIntroBail=setTimeout(function(){
           </div>
           <h3>Aman sampai tujuan dengan<br>armada delivery sendiri</h3>
           <p>Tiberman Group didukung oleh layanan distribusi yang dikelola oleh PT Hantar Lintas Nusantara (Halilintar) memastikan setiap pengiriman aman hingga sampai ke tangan anda.</p>
-          <a class="btn btn--primary" href="/contact">Check it !</a>
+          <a class="btn btn--primary" href="{{ route('contact') }}">Check it !</a>
         </div>
         <div class="feature-card__media">
           <img src="{{ asset('assets/img/truck-tiberman.webp') }}" alt="Ilustrasi truk pengiriman Tiberman bermuatan ban" loading="lazy">

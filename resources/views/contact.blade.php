@@ -119,7 +119,7 @@
               <button class="acc__q" aria-expanded="false">Di mana saja lokasi SuperArea Tiberman?
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
               </button>
-              <div class="acc__a"><p>Ada 15 SuperArea dari Sumatra sampai Maluku &amp; Papua. Daftar lengkap beserta alamatnya bisa dilihat di halaman <a href="/superarea">SuperArea</a>.</p></div>
+              <div class="acc__a"><p>Ada 15 SuperArea dari Sumatra sampai Maluku &amp; Papua. Daftar lengkap beserta alamatnya bisa dilihat di halaman <a href="{{ route('superarea') }}">SuperArea</a>.</p></div>
             </div>
           </div>
           <div class="faq__foot">

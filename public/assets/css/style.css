@@ -1032,9 +1032,9 @@ ul{margin:0;padding:0;list-style:none}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:rgba(255,255,255,.5)}
 .side-divider{height:1px;background:rgba(255,255,255,.08);margin:4px 0 20px}
 .unitlist{display:flex;flex-direction:column;gap:4px;margin-bottom:26px}
-.unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
-.unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
-.unitlist button.is-active{background:var(--red);color:#fff;font-weight:600}
+.unitlist button,.unitlist a{display:flex;align-items:center;text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
+.unitlist button:hover,.unitlist a:hover{background:rgba(255,255,255,.06);color:#fff}
+.unitlist button.is-active,.unitlist a.is-active{background:var(--red);color:#fff;font-weight:600}
 
 /* Kolom isi katalog berlatar abu terang (bukan putih, supaya tidak menyilaukan
    di sebelah sidebar yang hitam). Navbar, sidebar, banner, dan footer tetap

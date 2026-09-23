@@ -10,12 +10,13 @@
     <a class="nav__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
-      <a href="/katalog" class="is-active">Truk &amp; Bus</a>
-      <a href="/katalog">Mining Truck</a>
-      <a href="/katalog">Loader-Grader</a>
-      <a href="/katalog">Traktor</a>
-      <a href="/katalog">Forklift</a>
-      <a href="/katalog">Velg &amp; Tube</a>
+      <a href="/kategori-produk/ban-truk" class="is-active">Truk &amp; Bus</a>
+      <a href="/kategori-produk/ban-truk/ban-truk-off-the-road">Mining Truck</a>
+      <a href="/kategori-produk/ban-loader">Loader</a>
+      <a href="/kategori-produk/ban-grader">Grader</a>
+      <a href="/kategori-produk/ban-traktor">Traktor</a>
+      <a href="/kategori-produk/ban-forklift">Forklift</a>
+      <a href="/kategori-produk/velg-truk">Velg &amp; Tube</a>
     </nav>
     <div class="nav__tools">
       <div class="lang">

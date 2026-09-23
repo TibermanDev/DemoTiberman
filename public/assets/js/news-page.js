@@ -33,24 +33,33 @@
     });
   }
 
+  /* Tab-nya tautan ke /blog atau /blog/category/{slug}. Klik biasa disaring
+     di tempat lalu URL-nya diganti lewat pushState, jadi alamat di browser
+     tetap sama dengan yang dirender server kalau halamannya dimuat ulang.
+     Ctrl/Cmd/Shift-klik dibiarkan supaya buka-di-tab-baru tetap jalan. */
   tabsBox.addEventListener('click', function (e) {
     var tab = e.target.closest('[data-cat]');
-    if (tab) pilih(tab.getAttribute('data-cat'));
+    if (!tab || e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+    e.preventDefault();
+    pilih(tab.getAttribute('data-cat'));
+    if (tab.href && tab.href !== location.href) history.pushState(null, '', tab.href);
   });
 
-  /* Kategori awal boleh ditentukan dari hash, mis. news.html#alat-berat —
-     itu yang dipakai tab & tautan kategori di news-detail.html supaya
-     kembalinya langsung ke kategori yang benar. */
-  function dariHash() {
-    var h = (location.hash || '').replace('#', '');
-    return tabs.some(function (t) { return t.getAttribute('data-cat') === h; }) ? h : null;
+  /* Tombol Back/Forward: cocokkan path sekarang dengan href tab. */
+  function dariPath() {
+    var path = location.pathname.replace(/\/+$/, '');
+    for (var i = 0; i < tabs.length; i++) {
+      if (tabs[i].pathname.replace(/\/+$/, '') === path) return tabs[i].getAttribute('data-cat');
+    }
+    return null;
   }
 
+  /* Keadaan awal sudah dirender server (is-active, hidden, is-solo);
+     ini cuma menyamakan ulang kalau ada yang berbeda. */
   var awal = tabsBox.querySelector('.is-active') || tabs[0];
-  pilih(dariHash() || (awal && awal.getAttribute('data-cat')) || 'all');
+  pilih((awal && awal.getAttribute('data-cat')) || 'all');
 
-  window.addEventListener('hashchange', function () {
-    var h = dariHash();
-    if (h) pilih(h);
+  window.addEventListener('popstate', function () {
+    pilih(dariPath() || 'all');
   });
 })();

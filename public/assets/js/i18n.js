@@ -16,6 +16,8 @@ window.TIBERMAN_I18N = (function () {
     'Velg & Tube': 'Rims & Tubes',
     'Traktor': 'Tractor',
     'Loader-Grader': 'Loader & Grader',
+    'Semua Ban': 'All Tyres',
+    'Industri': 'Industrial',
     'Buka menu': 'Open menu',
 
     /* --- hero & beranda --- */
@@ -138,6 +140,11 @@ window.TIBERMAN_I18N = (function () {
     'Truk & Bus': '卡车与客车',
     'Mining Truck': '矿用卡车',
     'Loader-Grader': '装载机与平地机',
+    'Loader': '装载机',
+    'Grader': '平地机',
+    'Compactor': '压路机',
+    'Industri': '工业轮胎',
+    'Semua Ban': '全部轮胎',
     'Traktor': '拖拉机',
     'Forklift': '叉车',
     'Velg & Tube': '轮辋与内胎',

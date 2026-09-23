@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Katalog Ban — Tiberman')
+@section('title', \App\Support\Catalog::title($state).' — Tiberman')
 @section('description', 'Telusuri katalog ban truk, mining truck, loader-grader, traktor, forklift, velg & tube Tiberman berdasarkan unit dan ukuran.')
 @section('body-class', 'catalog')
 
@@ -9,7 +9,9 @@
 
 @section('content')
 
-<div class="catalog__layout" data-catalog data-unit="truk-bus">
+<!-- Keadaan awal filter datang dari URL (config/catalog.php); JS memakainya
+     sebagai titik mulai lalu mengganti URL tiap kali filter diklik. -->
+<div class="catalog__layout" data-catalog data-unit="{{ $state['unit'] }}" data-brand="{{ $state['brand'] }}" data-size="{{ $state['size'] }}">
 
   <!-- ============================= SIDEBAR ============================= -->
   <aside class="catalog__sidebar">
@@ -21,25 +23,22 @@
     <div class="side-divider"></div>
 
     <p class="side-label">Telusuri berdasarkan unit</p>
+    <!-- Tautan ke URL kategori lama; klik biasa disaring di tempat oleh
+         assets/js/main.js tanpa reload. -->
     <div class="unitlist">
-      <button type="button" class="is-active" data-unit="truk-bus">Truk &amp; Bus</button>
-      <button type="button" data-unit="mining-truck">Mining Truck</button>
-      <button type="button" data-unit="loader-grader">Loader-Grader</button>
-      <button type="button" data-unit="traktor">Traktor</button>
-      <button type="button" data-unit="forklift">Forklift</button>
-      <button type="button" data-unit="velg-tube">Velg &amp; Tube</button>
+      @foreach (config('catalog.units') as $unit => $u)
+        <a @class(['is-active' => $state['unit'] === $unit && $state['brand'] === 'all']) href="/{{ $u['path'] }}" data-unit="{{ $unit }}">{{ $u['label'] }}</a>
+      @endforeach
     </div>
 
     <p class="side-label">Telusuri berdasarkan Merk</p>
-    <!-- Menyaring berdasarkan awalan nama produk ("UNINEST - TIBERMAX 554").
-         Klik lagi pada merk yang sedang aktif untuk melepas saringannya. -->
+    <!-- Menyaring berdasarkan awalan nama produk ("UNINEST - TIBERMAX 554")
+         di semua unit. Klik lagi pada merk yang sedang aktif untuk melepas
+         saringannya. -->
     <div class="unitlist">
-      <button type="button" data-brand="uninest">Uninest</button>
-      <button type="button" data-brand="tutric">Tutric</button>
-      <button type="button" data-brand="tianli">Tianli</button>
-      <button type="button" data-brand="hengli">Hengli</button>
-      <button type="button" data-brand="bontyre">Bontyre</button>
-      <button type="button" data-brand="durun">Durun</button>
+      @foreach (config('catalog.brands') as $brand => $label)
+        <a @class(['is-active' => $state['brand'] === $brand]) href="{{ route('katalog.brand', $brand) }}" data-brand="{{ $brand }}">{{ $label }}</a>
+      @endforeach
     </div>
   </aside>
 
@@ -176,5 +175,6 @@
 @endsection
 
 @push('scripts')
+<script>window.TIBERMAN_CATALOG_URLS = @json(\App\Support\Catalog::forJs());</script>
 <script src="{{ asset('assets/js/products.js') }}"></script>
 @endpush

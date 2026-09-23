@@ -21,22 +21,23 @@
     <a class="nav__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
-      @unless(request()->routeIs('katalog'))
+      @unless(request()->routeIs('katalog*'))
       <div class="nav__item">
-        <a href="/katalog" @class(['is-active' => request()->is('katalog*')])>Products</a>
+        <a href="/kategori-produk/ban-truk" @class(['is-active' => request()->routeIs('katalog*')])>Products</a>
         <div class="nav__menu">
-          <a href="/katalog?unit=truk-bus">Truk &amp; Bus</a>
-          <a href="/katalog?unit=mining-truck">Mining Truck</a>
-          <a href="/katalog?unit=loader-grader">Loader-Grader</a>
-          <a href="/katalog?unit=traktor">Traktor</a>
-          <a href="/katalog?unit=forklift">Forklift</a>
-          <a href="/katalog?unit=velg-tube">Velg &amp; Tube</a>
+          <a href="/kategori-produk/ban-truk">Truk &amp; Bus</a>
+          <a href="/kategori-produk/ban-truk/ban-truk-off-the-road">Mining Truck</a>
+          <a href="/kategori-produk/ban-loader">Loader</a>
+          <a href="/kategori-produk/ban-grader">Grader</a>
+          <a href="/kategori-produk/ban-traktor">Traktor</a>
+          <a href="/kategori-produk/ban-forklift">Forklift</a>
+          <a href="/kategori-produk/velg-truk">Velg &amp; Tube</a>
         </div>
       </div>
       @endunless
-      <a href="/news" @class(['is-active' => request()->is('news*')])>News</a>
-      <a href="/superarea" @class(['is-active' => request()->is('superarea*')])>SuperArea</a>
-      <a href="/contact" @class(['is-active' => request()->is('contact*')])>Contact Us</a>
+      <a href="/blog" @class(['is-active' => request()->is('blog*')])>News</a>
+      <a href="{{ route('superarea') }}" @class(['is-active' => request()->routeIs('superarea')])>SuperArea</a>
+      <a href="{{ route('contact') }}" @class(['is-active' => request()->routeIs('contact')])>Contact Us</a>
     </nav>
     <div class="nav__tools">
       <div class="lang">
@@ -130,9 +131,9 @@
       <div class="footer__col">
         <h3>Navigasi</h3>
         <ul class="footer__links">
-          <li><a href="/news">Berita &amp; Artikel</a></li>
+          <li><a href="/blog">Berita &amp; Artikel</a></li>
           <li><a href="#">Karir</a></li>
-          <li><a href="/katalog">Semua Produk</a></li>
+          <li><a href="/kategori-produk/semua-ban">Semua Produk</a></li>
           @php $afterSalesHref = request()->routeIs('home') ? '#kenapa' : route('home').'#kenapa'; @endphp
           <li><a href="{{ $afterSalesHref }}">After Sales Service</a></li>
         </ul>

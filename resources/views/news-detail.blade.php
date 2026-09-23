@@ -17,16 +17,13 @@
     <img class="nwp__banner-logo" src="{{ asset('assets/img/tbm-news.webp') }}" width="1200" height="173" alt="Tiberman News">
   </div>
 
-  <!-- Di halaman detail tab-nya jadi TAUTAN ke indeks, bukan tombol filter.
-       news.html membaca hash-nya dan langsung membuka kategori itu. -->
+  <!-- Tab di halaman detail: tautan ke halaman kategori, dengan kategori
+       artikel ini yang ditandai aktif. -->
   <nav class="nwp__tabs" aria-label="Kategori artikel">
-    <a class="nwp-tab" href="/news">Home</a>
-    <a class="nwp-tab is-active" href="/news#alat-berat">Alat Berat</a>
-    <a class="nwp-tab" href="/news#ban">Ban</a>
-    <a class="nwp-tab" href="/news#pertambangan">Pertambangan</a>
-    <a class="nwp-tab" href="/news#tips">Tips</a>
-    <a class="nwp-tab" href="/news#info-produk">Info Produk</a>
-    <a class="nwp-tab" href="/news#info-lain">Info Lain</a>
+    <a class="nwp-tab" href="{{ route('blog') }}">Home</a>
+    @foreach (config('blog.categories') as $slug => $label)
+      <a @class(['nwp-tab', 'is-active' => $slug === 'alat-berat']) href="{{ route('blog.category', $slug) }}">{{ $label }}</a>
+    @endforeach
   </nav>
 
   <section class="nwp-art">
@@ -34,9 +31,9 @@
 
       <article class="art">
         <nav class="art__crumb" aria-label="Breadcrumb">
-          <a href="/news">News</a>
+          <a href="/blog">News</a>
           <span aria-hidden="true">/</span>
-          <a href="/news#alat-berat">Dunia Alat Berat</a>
+          <a href="{{ route('blog.category', 'alat-berat') }}">Dunia Alat Berat</a>
         </nav>
 
         <h1>Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk</h1>
@@ -103,20 +100,20 @@
         </div>
 
         <div class="art__tags">
-          <a href="/news#alat-berat">Dunia Alat Berat</a>
-          <a href="/news#ban">Pengetahuan Ban</a>
-          <a href="/news#tips">Tips &amp; Panduan</a>
+          <a href="{{ route('blog.category', 'alat-berat') }}">Dunia Alat Berat</a>
+          <a href="{{ route('blog.category', 'pengetahuan-ban') }}">Pengetahuan Ban</a>
+          <a href="{{ route('blog.category', 'tips-dan-trik') }}">Tips &amp; Panduan</a>
         </div>
 
         <div class="art__foot">
-          <a class="btn btn--primary" href="/news">&larr; Kembali ke News</a>
+          <a class="btn btn--primary" href="/blog">&larr; Kembali ke News</a>
         </div>
       </article>
 
       <aside class="nwp-latest nwp-art__side">
         <h2 class="nwp-latest__head">Populer Bulan Ini</h2>
 
-        <a class="nwp-mini" href="/news-detail">
+        <a class="nwp-mini" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <span class="nwp-mini__thumb"><img src="{{ asset('assets/img/warehouse-dark.webp') }}" alt="" loading="lazy"></span>
           <span class="nwp-mini__body">
             <strong>Inilah 10 Perusahaan Tambang Terbesar di Indonesia</strong>
@@ -124,7 +121,7 @@
           </span>
         </a>
 
-        <a class="nwp-mini" href="/news-detail">
+        <a class="nwp-mini" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <span class="nwp-mini__thumb"><img src="{{ asset('assets/img/plb-gresik.webp') }}" alt="" loading="lazy"></span>
           <span class="nwp-mini__body">
             <strong>Jenis Bahan Galian Tambang (Golongan A, B, dan C) di Indonesia</strong>
@@ -132,7 +129,7 @@
           </span>
         </a>
 
-        <a class="nwp-mini" href="/news-detail">
+        <a class="nwp-mini" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <span class="nwp-mini__thumb"><img src="{{ asset('assets/img/truck-tiberman.webp') }}" alt="" loading="lazy"></span>
           <span class="nwp-mini__body">
             <strong>7 Truk Tambang Terbesar di Dunia, Jangan Ngeri Lihat Ukurannya!</strong>
@@ -140,7 +137,7 @@
           </span>
         </a>
 
-        <a class="nwp-mini" href="/news-detail">
+        <a class="nwp-mini" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <span class="nwp-mini__thumb"><img src="{{ asset('assets/img/after-sales-3.webp') }}" alt="" loading="lazy"></span>
           <span class="nwp-mini__body">
             <strong>11 Macam Alat Berat Tambang dan Kegunaannya</strong>
@@ -148,7 +145,7 @@
           </span>
         </a>
 
-        <a class="nwp-mini" href="/news-detail">
+        <a class="nwp-mini" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <span class="nwp-mini__thumb"><img src="{{ asset('assets/img/plb-stock.webp') }}" alt="" loading="lazy"></span>
           <span class="nwp-mini__body">
             <strong>Daftar Pertambangan di Kalimantan: Emas, Batu Bara, dan Nikel</strong>
@@ -165,19 +162,19 @@
     <div class="container">
       <h2 class="nwp-cat__head">Artikel Terkait</h2>
       <div class="news__grid">
-        <a class="news-card" href="/news-detail">
+        <a class="news-card" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <div class="news-card__thumb"><img src="{{ asset('assets/img/tire-554.webp') }}" alt="Ban truk Uninest TiberMAX" loading="lazy"></div>
           <span class="news-card__date">2 September 2026</span>
           <h3>Perbedaan Ban Truk dan Ban Mobil dari Konstruksi hingga Penggunaannya</h3>
           <p>Ban adalah penghubung antara kendaraan dan permukaan jalan. Konstruksi ban truk dan ban mobil dirancang untuk beban dan medan yang sama sekali berbeda.</p>
         </a>
-        <a class="news-card" href="/news-detail">
+        <a class="news-card" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <div class="news-card__thumb"><img src="{{ asset('assets/img/tires-strip.webp') }}" alt="Deretan ban siap kirim" loading="lazy"></div>
           <span class="news-card__date">28 Agustus 2026</span>
           <h3>Ban Tubeless atau Tube Type? Ban Radial atau Bias?</h3>
           <p>Empat istilah yang paling sering tertukar waktu memilih ban. Perbedaannya menentukan daya angkut, umur pakai, dan biaya perawatan.</p>
         </a>
-        <a class="news-card" href="/news-detail">
+        <a class="news-card" href="/blog/fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk">
           <div class="news-card__thumb"><img src="{{ asset('assets/img/news-3.webp') }}" alt="Dump truck di lokasi proyek" loading="lazy"></div>
           <span class="news-card__date">13 Agustus 2026</span>
           <h3>Dump Truck: Fungsi, Jenis, Komponen, dan Tips Memilih Ban yang Tepat untuk Operasional</h3>

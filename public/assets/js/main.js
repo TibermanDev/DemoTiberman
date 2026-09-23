@@ -214,48 +214,70 @@
     });
   }
 
-  /* ---------- 6. Katalog: filter unit + ukuran + pencarian ---------- */
+  /* ---------- 6. Katalog: filter unit + merk + ukuran + pencarian ----------
+     Tombol unit & merk (dan chip ukuran) adalah tautan ke URL kategori toko
+     lama — petanya di config/catalog.php, dikirim ke sini sebagai
+     window.TIBERMAN_CATALOG_URLS. Keadaan awal dirender server lewat
+     data-unit / data-brand / data-size; klik berikutnya disaring di tempat
+     tanpa reload dan URL-nya diganti lewat pushState, jadi halaman yang
+     dimuat ulang menampilkan hasil yang sama. */
   var catalog = document.querySelector('[data-catalog]');
   if (catalog) {
     var DATA = window.TIBERMAN_PRODUCTS || {};
+    var URLS = window.TIBERMAN_CATALOG_URLS || { units: {}, brands: {}, sizes: {}, paths: {} };
     var grid = catalog.querySelector('[data-catalog-body]');
     var chipsWrap = catalog.querySelector('[data-chips]');
-    /* unit awal boleh ditentukan lewat ?unit= (dipakai dropdown Products) */
-    var wanted = (new URLSearchParams(location.search).get('unit') || '').trim();
-    if (!DATA[wanted]) wanted = '';
+    var DEFAULT = { unit: 'truk-bus', brand: 'all', size: 'all' };
 
     var state = {
-      unit: wanted || catalog.dataset.unit || 'truk-bus',
-      size: 'all',
-      brand: 'all',
+      unit: catalog.dataset.unit || DEFAULT.unit,
+      brand: catalog.dataset.brand || 'all',
+      size: catalog.dataset.size || 'all',
       q: ''
     };
 
-    if (wanted) {
-      catalog.dataset.unit = wanted;
-      catalog.querySelectorAll('[data-unit]').forEach(function (b) {
-        b.classList.toggle('is-active', b.dataset.unit === wanted);
+    /* Unit 'all' = semua unit digabung, dikelompokkan per ukuran. Dipakai
+       halaman merk (merk dijual di banyak unit) dan halaman ukuran. */
+    var groupsOf = function (unit) {
+      if (unit !== 'all') return DATA[unit] || [];
+      var bySize = {}, order = [];
+      Object.keys(DATA).forEach(function (u) {
+        DATA[u].forEach(function (g) {
+          if (!bySize[g.size]) { bySize[g.size] = []; order.push(g.size); }
+          bySize[g.size] = bySize[g.size].concat(g.items);
+        });
       });
-    }
+      return order.map(function (s) { return { size: s, items: bySize[s] }; });
+    };
 
-    /* chip ukuran dibangun dari data unit yang aktif */
+    /* Merk = bagian nama sebelum " - " ("UNINEST - TIBERMAX 554"). */
+    var brandOf = function (p) { return p.name.toLowerCase().split(' - ')[0].trim(); };
+
+    /* chip ukuran dibangun dari unit (dan merk) yang aktif; chip yang punya
+       URL toko lama jadi tautan, sisanya (mis. ukuran velg) tetap tombol */
     var renderChips = function () {
       if (!chipsWrap) return;
-      var sizes = (DATA[state.unit] || []).map(function (g) { return g.size; });
-      chipsWrap.innerHTML =
-        '<button type="button" class="chip is-active" data-size="all">All Size</button>' +
-        sizes.map(function (s) {
-          return '<button type="button" class="chip" data-size="' + s + '">' + s + '</button>';
-        }).join('');
+      var sizes = groupsOf(state.unit).filter(function (g) {
+        return state.brand === 'all' || g.items.some(function (p) { return brandOf(p) === state.brand; });
+      }).map(function (g) { return g.size; });
+      /* ukuran dari URL tetap punya chip walau belum ada produknya */
+      if (state.size !== 'all' && sizes.indexOf(state.size) < 0) sizes.push(state.size);
+
+      var chip = function (size, label) {
+        var cls = 'chip' + (state.size === size ? ' is-active' : '');
+        var href = size === 'all' ? URLS.units[state.unit] : URLS.sizes[size];
+        return href
+          ? '<a class="' + cls + '" href="' + href + '" data-size="' + size + '">' + label + '</a>'
+          : '<button type="button" class="' + cls + '" data-size="' + size + '">' + label + '</button>';
+      };
+      chipsWrap.innerHTML = chip('all', 'All Size') + sizes.map(function (s) { return chip(s, s); }).join('');
     };
 
     var render = function () {
-      var groups = (DATA[state.unit] || []).map(function (g) {
+      var groups = groupsOf(state.unit).map(function (g) {
         var items = g.items.filter(function (p) {
           var matchSize = state.size === 'all' || g.size === state.size;
-          /* Merk = bagian nama sebelum " - " ("UNINEST - TIBERMAX 554"). */
-          var matchBrand = state.brand === 'all'
-            || p.name.toLowerCase().split(' - ')[0].trim() === state.brand;
+          var matchBrand = state.brand === 'all' || brandOf(p) === state.brand;
           var hay = (p.name + ' ' + p.compat + ' ' + g.size).toLowerCase();
           return matchSize && matchBrand && hay.indexOf(state.q) > -1;
         });
@@ -288,49 +310,91 @@
       }).join('');
     };
 
-    catalog.querySelectorAll('[data-unit]').forEach(function (btn) {
+    var unitBtns = catalog.querySelectorAll('[data-unit]:not([data-catalog])');
+    var brandBtns = catalog.querySelectorAll('[data-brand]:not([data-catalog])');
+
+    var syncSidebar = function () {
+      unitBtns.forEach(function (b) {
+        b.classList.toggle('is-active', state.brand === 'all' && b.dataset.unit === state.unit);
+      });
+      brandBtns.forEach(function (b) {
+        b.classList.toggle('is-active', b.dataset.brand === state.brand);
+      });
+    };
+
+    /* URL untuk keadaan sekarang: filter yang paling spesifik yang menang. */
+    var urlFor = function () {
+      if (state.brand !== 'all') return URLS.brands[state.brand];
+      if (state.size !== 'all' && URLS.sizes[state.size]) return URLS.sizes[state.size];
+      return URLS.units[state.unit];
+    };
+
+    var titleFor = function () {
+      var label;
+      if (state.brand !== 'all') {
+        brandBtns.forEach(function (b) { if (b.dataset.brand === state.brand) label = 'Ban ' + b.textContent.trim(); });
+      } else if (state.size !== 'all') {
+        label = 'Ban ' + state.size;
+      } else {
+        unitBtns.forEach(function (b) { if (b.dataset.unit === state.unit) label = b.textContent.trim(); });
+      }
+      return (label || 'Katalog Ban') + ' — Tiberman';
+    };
+
+    var apply = function (next, push) {
+      state.unit = next.unit;
+      state.brand = next.brand;
+      state.size = next.size;
+      renderChips();
+      render();
+      syncSidebar();
+      if (push) {
+        var url = urlFor();
+        if (url && url !== location.pathname) history.pushState(null, '', url);
+        document.title = titleFor();
+      }
+      if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+    };
+
+    /* Ctrl/Cmd/Shift/klik tengah dibiarkan jalan sebagai tautan biasa. */
+    var plainClick = function (e) {
+      return !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0);
+    };
+
+    unitBtns.forEach(function (btn) {
       btn.addEventListener('click', function (e) {
-        if (btn.tagName === 'A') e.preventDefault();
-        catalog.querySelectorAll('[data-unit]').forEach(function (b) {
-          b.classList.toggle('is-active', b === btn);
-        });
-        state.unit = btn.dataset.unit;
-        state.size = 'all';
-        state.brand = 'all';
-        catalog.querySelectorAll('[data-brand]').forEach(function (b) { b.classList.remove('is-active'); });
-        renderChips();
-        render();
-        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+        if (!plainClick(e)) return;
+        e.preventDefault();
+        apply({ unit: btn.dataset.unit, brand: 'all', size: 'all' }, true);
       });
     });
 
-    /* Daftar merk. Tidak ada tombol "semua merk" di desainnya, jadi cara
-       melepas saringannya lewat klik ulang pada merk yang sedang aktif. */
-    catalog.querySelectorAll('[data-brand]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var lepas = btn.classList.contains('is-active');
-        catalog.querySelectorAll('[data-brand]').forEach(function (b) {
-          b.classList.toggle('is-active', !lepas && b === btn);
-        });
-        state.brand = lepas ? 'all' : btn.dataset.brand;
-        render();
-        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+    /* Merk menyaring di semua unit. Tidak ada tombol "semua merk" di
+       desainnya, jadi klik ulang merk yang aktif kembali ke Semua Ban. */
+    brandBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        if (!plainClick(e)) return;
+        e.preventDefault();
+        var lepas = state.brand === btn.dataset.brand;
+        apply({ unit: 'all', brand: lepas ? 'all' : btn.dataset.brand, size: 'all' }, true);
       });
     });
 
-    /* delegasi: chip ukuran bisa dibangun ulang saat unit berganti */
+    /* delegasi: chip ukuran dibangun ulang tiap filter berganti */
     if (chipsWrap) {
       chipsWrap.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-size]');
-        if (!btn) return;
-        chipsWrap.querySelectorAll('[data-size]').forEach(function (b) {
-          b.classList.toggle('is-active', b === btn);
-        });
-        state.size = btn.dataset.size;
-        render();
-        if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+        if (!btn || !plainClick(e)) return;
+        e.preventDefault();
+        apply({ unit: state.unit, brand: state.brand, size: btn.dataset.size }, true);
       });
     }
+
+    window.addEventListener('popstate', function () {
+      var path = location.pathname.replace(/\/+$/, '');
+      apply(URLS.paths[path] || DEFAULT, false);
+      document.title = titleFor();
+    });
 
     var input = catalog.querySelector('[data-search]');
     if (input) {
@@ -341,9 +405,7 @@
       });
     }
 
-    renderChips();
-    render();
-    if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh();
+    apply(state, false);
   }
 
   /* ---------- 6b. Modal detail produk ----------
