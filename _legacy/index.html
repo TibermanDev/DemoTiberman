@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tiberman — Importir Ban Truk &amp; Alat Berat Terpercaya</title>
+<meta name="description" content="Tiberman, importir ban truk & alat berat terpercaya dengan 15 SuperArea di seluruh Indonesia, 2 Pusat Logistik Berikat, dan armada delivery sendiri.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">
+<script>(function(){try{var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
+<!-- Intro diputar saat home dibuka DARI LUAR situs (alamat diketik, bookmark,
+     tab baru, link dari mesin pencari atau chat) dan setiap kali home
+     di-REFRESH. Yang TIDAK memutarnya hanya perpindahan di dalam situs ini —
+     produk / news / contact / superarea -> home — termasuk lewat tombol Back.
+     Keputusannya diambil sebelum paint pertama supaya halaman tidak sempat
+     berkedip duluan.
+     Timer di bawah jaring pengaman kalau main.js gagal dimuat; main.js akan
+     mengambil alih dan membatalkannya begitu video benar-benar mulai jalan. -->
+<script>(function(){var d=document.documentElement;
+try{if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;}catch(e){}
+/* Tidak ada penanda di localStorage lagi (dulu 'tbm-intro-seen', sekali
+   seumur pengunjung). Yang menentukan sekarang cuma DARI MANA halaman ini
+   dibuka, dan urutan pemeriksaannya penting:
+
+     1) reload -> SELALU putar, dan dicek paling awal. Pada refresh browser
+        tetap membawa referrer navigasi aslinya, jadi kalau referrer diperiksa
+        lebih dulu, refresh home sesudah datang dari /produk.html akan salah
+        dianggap perpindahan internal dan intronya hilang.
+     2) back_forward -> lewati. Sampai di home lewat Back/Forward berarti
+        pengunjung memang sudah ada di dalam situs.
+     3) referrer satu origin DAN halamannya berbeda -> lewati (pindah internal).
+        '/' dan '/index.html' disamakan supaya home -> home (klik logo waktu
+        sudah di home) tetap dihitung seperti refresh, bukan pindah internal.
+
+   Kalau apa pun di sini tidak tersedia atau melempar, jatuhnya ke PUTAR —
+   lebih baik intronya muncul daripada hilang diam-diam. */
+var lewati=false;
+try{
+  var p=window.performance,
+      e=p&&p.getEntriesByType&&p.getEntriesByType('navigation')[0],
+      tipe=e?e.type:(p&&p.navigation?['navigate','reload','back_forward','prerender'][p.navigation.type]:'');
+  if(tipe==='back_forward'){lewati=true;}
+  else if(tipe!=='reload'&&document.referrer){
+    var n=function(x){return x.replace(/\/index\.html$/,'/');},
+        r=new URL(document.referrer,location.href);
+    lewati=r.origin===location.origin&&n(r.pathname)!==n(location.pathname);
+  }
+}catch(err){lewati=false;}
+if(lewati)return;
+d.setAttribute('data-intro','on');
+window.__tbmIntroBail=setTimeout(function(){
+  d.removeAttribute('data-intro');
+  var i=document.querySelector('[data-intro-root]');
+  if(i)i.remove();
+},12000);})();</script>
+<link rel="stylesheet" href="assets/css/style.css?v=20260921a">
+</head>
+<body>
+
+<!-- ============================= INTRO ============================= -->
+<div class="intro" data-intro-root>
+  <video class="intro__video" data-intro-video
+         autoplay muted playsinline preload="auto" disablepictureinpicture>
+    <!-- WebM beralpha (Chrome/Edge/Firefox): latarnya transparan dan tidak
+         memuat adegan gudang sama sekali, jadi halaman aslinya bisa muncul
+         selagi logonya masih beranimasi. -->
+    <source src="assets/img/animation-transparent.webm" type="video/webm">
+    <!-- Safari/iOS tidak bisa memutar WebM sama sekali, jadi otomatis jatuh
+         ke sini: versi latar hitam, gudangnya ikut terbakar di videonya. -->
+    <source src="assets/img/animation-black.mp4" type="video/mp4">
+  </video>
+  <img class="intro__wordmark" data-intro-wordmark src="assets/img/logo-white.png" alt="" aria-hidden="true">
+  <div class="intro__bar" data-intro-bar><span data-intro-bar-fill></span></div>
+</div>
+<noscript><style>.intro{display:none!important}</style></noscript>
+<!-- Kalau intronya tidak jadi diputar, elemennya langsung dibuang di sini juga
+     — video 6 MB itu tetap diunduh browser walau CSS-nya display:none. -->
+<script>if(!document.documentElement.hasAttribute('data-intro')){var i=document.querySelector('[data-intro-root]');if(i)i.remove();}</script>
+
+<!-- ============================= NAVBAR ============================= -->
+<header class="nav">
+  <div class="nav__inner">
+    <a class="nav__logo" href="index.html"><img src="assets/img/logo-white.png" alt="Tiberman"></a>
+    <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
+    <nav class="nav__links">
+      <div class="nav__item">
+        <a href="katalog.html">Products</a>
+        <div class="nav__menu">
+          <a href="katalog.html?unit=truk-bus">Truk &amp; Bus</a>
+          <a href="katalog.html?unit=mining-truck">Mining Truck</a>
+          <a href="katalog.html?unit=loader-grader">Loader-Grader</a>
+          <a href="katalog.html?unit=traktor">Traktor</a>
+          <a href="katalog.html?unit=forklift">Forklift</a>
+          <a href="katalog.html?unit=velg-tube">Velg &amp; Tube</a>
+        </div>
+      </div>
+      <a href="news.html">News</a>
+      <a href="superarea.html">SuperArea</a>
+      <a href="contact.html">Contact Us</a>
+    </nav>
+    <div class="nav__tools">
+      <div class="lang">
+        <button class="tool-btn" type="button" data-lang-btn aria-haspopup="true" aria-expanded="false">
+          <span data-lang-label>ID</span>
+          <svg class="lang__caret" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
+        </button>
+        <div class="lang__menu" data-lang-menu>
+          <button type="button" data-lang="id">Indonesia</button>
+          <button type="button" data-lang="en">English</button>
+          <button type="button" data-lang="zh">中文</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- hero dipaku (position:sticky) sampai .superarea lewat; SuperArea yang
+       opaque itulah yang naik menutupinya, jadi TIDAK ada jarak scroll tambahan. -->
+  <div class="hero-stack">
+    <!-- ============================= HERO ============================= -->
+    <section class="hero">
+      <div class="hero__stage">
+        <div class="hero__media">
+          <img src="assets/img/hero-warehouse-2.webp" alt="Tim Tiberman di gudang ban" fetchpriority="high">
+          <div class="hero__wordmark"><img src="assets/img/logo-white.png" alt="Tiberman"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tutup lengkung: menjiplak lengkung yang sudah tercetak di
+         hero-warehouse-2.webp (parabola puncak 13,94% tinggi gambar di tengah,
+         3,71% di pinggir). Waktu belum discroll dia bertindih PERSIS di atas
+         lengkung cetakan itu — hitam di atas hitam, jadi tidak kelihatan; begitu
+         SuperArea naik, tepi yang menutupi gambar jadi melengkung, bukan lurus.
+
+         Ditaruh di pembungkus, bukan di dalam .superarea, karena section itu
+         overflow:hidden — elemen yang menjorok ke atas tepinya bakal kepotong.
+
+         margin-bottom:-1px BUKAN kosmetik: tepi bawah SVG dan tepi atas section
+         jatuh di baris piksel pecahan yang sama, dua-duanya di-antialias ~72%
+         hitam dan tumpukannya cuma ~92% — muncul garis tipis selebar layar.
+         Ditindihkan 1px supaya baris itu ketutup hitam penuh. -->
+    <div class="sa-cover">
+      <svg class="sa-cover__cap" viewBox="0 0 1000 61.3" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <path d="M0 45 Q500 -45 1000 45 L1000 61.3 L0 61.3 Z"/>
+      </svg>
+      <!-- ============================= 15 SUPERAREA ============================= -->
+      <!-- Sorot ditaruh di LUAR .superarea dan paling akhir: (a) section itu
+           overflow:hidden, jadi kalau di dalam, ekor yang naik ke gambar hero
+           bakal kepotong rata di tepi lengkung; (b) ditaruh paling akhir supaya
+           tercetak di atas tutup lengkung dan gambar hero, sehingga
+           mix-blend-mode:screen-nya benar-benar mencampur cahaya dengan
+           gambarnya — bukan berhenti mendadak di batas section. -->
+      <section class="superarea" id="superarea">
+        <div class="superarea__copy">
+          <p class="eyebrow reveal">siap melayani Anda lebih dekat dengan</p>
+          <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
+          <a class="btn btn--primary reveal" data-delay="160" href="contact.html">Check it !</a>
+        </div>
+      </section>
+      <div class="superarea__glow" aria-hidden="true"></div>
+      <!-- Bumi sengaja di LUAR <section> dan sesudah sorot: yang terakhir di DOM
+           tercetak paling atas, jadi bumi menutupi tepi bawah sorot. Potongan
+           PNG sorot yang mentok di sudut itu jadi tersembunyi di balik bumi,
+           bukan berhenti sebagai garis lurus di tengah angkasa. -->
+      <div class="superarea__globe" data-superarea>
+        <!-- pin sudah tercetak di gambar; tombolnya dibuat assets/js/superarea-spots.js.
+             Tombolnya membuka keterangan saat DIHOVER (bukan diklik), dan ada
+             cincin yang berdenyut pelan di tiap pin supaya kelihatan bisa
+             dipakai — bukan gambar biasa. -->
+        <img class="superarea__earth" src="assets/img/earth-maps.webp" width="2880" height="1171" loading="lazy" decoding="async" alt="Peta sebaran SuperArea Tiberman di Indonesia">
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================= IMPORTIR + KATEGORI ============================= -->
+  <section class="importir" id="produk">
+    <!-- Latar section ini video. Posternya diambil dari frame pertama video
+         itu sendiri (bukan category-section.webp yang bannya sudah terlanjur
+         di depan), supaya tidak ada lompatan gambar waktu playback mulai —
+         dan tetap jadi latar kalau videonya gagal dimuat.
+
+         Dua sumber, sama seperti video intro: AV1/WebM dulu (jauh lebih kecil,
+         didukung Chrome/Edge/Firefox dan Safari 17+ di perangkat yang mampu),
+         sisanya otomatis jatuh ke H.264/MP4.
+
+         Sengaja TANPA atribut autoplay: atribut itu bikin Chrome tetap
+         mengunduh videonya walau preload="none", jadi pemutarannya dipicu
+         dari main.js begitu sectionnya masuk viewport. -->
+    <video class="importir__bg" data-bg-video
+           muted playsinline preload="none"
+           poster="assets/img/tires-moving-poster.webp"
+           aria-hidden="true" tabindex="-1" disablepictureinpicture>
+      <source src="assets/img/tires-moving.webm" type="video/webm">
+      <source src="assets/img/tires-moving.mp4" type="video/mp4">
+    </video>
+    <div class="importir__scrim" aria-hidden="true"></div>
+    <div class="importir__inner">
+      <h2 class="reveal">Importir Ban Truk &amp; Alat Berat<br>TERPERCAYA</h2>
+      <div class="pills reveal" data-delay="120">
+        <a class="pill" href="katalog.html?unit=truk-bus">Truck &amp; Bus</a>
+        <a class="pill" href="katalog.html?unit=mining-truck">Mining Truck</a>
+        <a class="pill" href="katalog.html?unit=loader-grader">Loader-Grader</a>
+        <a class="pill" href="katalog.html?unit=forklift">Forklift</a>
+        <a class="pill" href="katalog.html?unit=traktor">Tractor</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= AKSESORIS ============================= -->
+  <section class="accessories">
+    <!-- Tutup lengkung yang menindih bagian bawah section video di atasnya.
+         DUA path dengan bentuk identik, yang kedua digeser 12 satuan ke bawah:
+         yang putih tercetak duluan, yang abu menimpanya, jadi yang tersisa di
+         antara keduanya adalah pita putih setebal 12/80 tinggi kotak yang
+         mengikuti lengkungnya persis.
+
+         Titik ujung (a) dan titik kendali (c) tiap path simetris: puncak = (a+c)/2
+         dan kedalaman busur = (a-c)/2. Sekarang 22/-22 (puncak 0) dan 40/-4
+         (puncak 18) — kedalaman 22 satuan, pita putih 18 satuan. Puncak path
+         putih HARUS >= 0; kalau negatif, bagian tengahnya terpotong tepi viewBox
+         dan pita putihnya menipis di tengah sementara tetap tebal di pinggir. -->
+    <svg class="accessories__cap" viewBox="0 0 1000 80" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path class="accessories__cap-gap" d="M0 30 Q500 -30 1000 30 L1000 80 L0 80 Z"/>
+      <path d="M0 48 Q500 -12 1000 48 L1000 80 L0 80 Z"/>
+    </svg>
+    <!-- Sengaja BUKAN .container: kelas itu dipakai hampir semua section dan
+         mengunci lebar ke 1160px. Section ini perlu melebar sampai mepet tepi
+         layar, jadi pembungkusnya sendiri supaya section lain tidak ikut
+         berubah. -->
+    <div class="accessories__wrap">
+      <div class="accessories__grid">
+        <div class="accessories__art reveal">
+          <img src="assets/img/accessories-2.webp" alt="Ban, velg, dan aksesoris pendukung" loading="lazy">
+        </div>
+        <div class="accessories__copy reveal" data-delay="100">
+          <h2 class="h2">Lengkapi kebutuhan<br>Anda di satu tempat.</h2>
+          <p class="lead">Tak hanya ban, kami juga menyediakan aksesoris pendukung seperti velg, ban dalam, flap, marset, dan O-ring dengan stok siap kirim.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Rel kartu kategori. Sengaja di luar .container supaya bisa full-bleed:
+       kartu di ujung kiri/kanan memang boleh terpotong tepi layar, itu yang
+       memberi sinyal "masih ada lanjutannya". Gerak otomatisnya dipasang
+       main.js lewat data-velg-rail. -->
+  <div class="velg-wrap">
+    <div class="velg-cards" data-velg-rail>
+      <article class="velg-card velg-card--tyre reveal" data-delay="200" style="--ar:1720/952">
+        <div class="velg-card__img"><img src="assets/img/otr-tyre.png" alt="Ban OTR untuk alat berat" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>OTR TYRE<span>(Off The Road)</span></h3>
+          <a class="btn btn--primary" href="katalog.html?unit=mining-truck">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card velg-card--tyre reveal" data-delay="300" style="--ar:1348/920">
+        <div class="velg-card__img"><img src="assets/img/tbr-tyre.png" alt="Ban TBR untuk truk dan bus" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>TBR TYRE<span>(Truck Bus)</span></h3>
+          <a class="btn btn--primary" href="katalog.html?unit=truk-bus">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card reveal" style="--ar:1203/999">
+        <div class="velg-card__img"><img src="assets/img/velg-heavy-2.webp" alt="Velg heavy duty" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>VELG<span>Heavy-Duty</span></h3>
+          <a class="btn btn--primary" href="katalog.html">Check it !</a>
+        </div>
+      </article>
+      <article class="velg-card reveal" data-delay="100" style="--ar:1234/919">
+        <div class="velg-card__img"><img src="assets/img/velg-light-2.webp" alt="Velg light truck" loading="lazy"></div>
+        <div class="velg-card__body">
+          <h3>VELG<span>Light Truck</span></h3>
+          <a class="btn btn--primary" href="katalog.html">Check it !</a>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- ============================= KENAPA HARUS TIBERMAN =============================
+       Video gudang yang menyusut jadi isi tulisan, digerakkan oleh scroll.
+
+       .why__track yang tinggi itu jarak scroll animasinya; .why__stage dipaku
+       sticky setinggi layar selama track itu lewat. main.js cuma menghitung
+       kemajuan scroll jadi tiga custom property; seluruh geraknya transform +
+       opacity, jadi tidak ada layout ulang per frame.
+
+       Teksnya HTML biasa (bukan <text> SVG) supaya bisa wrap dan ikut clamp()
+       di layar sempit. Efek "video di dalam huruf" datang dari mix-blend-mode:
+       lapisan .why__mask berwarna latar halaman menutupi video, dan huruf
+       hitamnya jadi lubang — screen dengan putih = putih (menutup), screen
+       dengan hitam = biarkan backdrop (video tembus). Di mode gelap dibalik:
+       lapisan hitam + huruf putih + multiply. -->
+  <section class="why" id="kenapa" data-why>
+    <div class="why__track">
+      <div class="why__stage">
+        <video class="why__video" data-bg-video
+               muted playsinline loop preload="none"
+               poster="assets/img/warehouse-dark.webp"
+               aria-hidden="true" tabindex="-1" disablepictureinpicture>
+          <!-- versi web: 1920x1080 CRF 30, 8 MB (aslinya 2560x1440 / 28,4 MB).
+               1440p sempat dicoba dan hasilnya pecah: di layar 1920 dia harus
+               di-upscale 1,33x, artefak kompresinya jadi kelihatan. -->
+          <source src="assets/img/warehouse-loop-web.mp4?v=1920b" type="video/mp4">
+        </video>
+        <!-- Kedua lapisan isinya SAMA PERSIS, termasuk baris kecil di atas judul.
+             Di lapisan penutup baris itu diberi warna latar (jadi tak terlihat
+             dan tidak ikut jadi lubang), tapi tetap memakan ruang — kalau cuma
+             ada di salah satu lapisan, posisi judulnya bergeser dan pergantian
+             ke teks merah terlihat meloncat. -->
+        <div class="why__mask" aria-hidden="true">
+          <div class="why__inner">
+            <p>Dari sekian banyak supplier lain</p>
+            <span>Kenapa Harus Tiberman ?</span>
+          </div>
+        </div>
+        <!-- Salinan tulisan yang sama, berwarna merah, dimunculkan di ujung
+             animasi. Jadi hurufnya berisi video selama menyusut, lalu berubah
+             jadi merah begitu sampai ukuran akhir — pola yang sama dipakai
+             halaman MacBook Pro (video di dalam huruf -> teks biru muda). -->
+        <div class="why__tint" aria-hidden="true">
+          <div class="why__inner">
+            <p>Dari sekian banyak supplier lain</p>
+            <span>Kenapa Harus Tiberman ?</span>
+          </div>
+        </div>
+        <h2 class="sr-only">Kenapa Harus Tiberman ?</h2>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stok Aman -->
+  <section class="pilar">
+    <div class="container">
+      <h2 class="pilar__title reveal">Stok Aman</h2>
+
+      <article class="feature-card reveal" data-delay="120">
+        <div class="feature-card__body">
+          <div class="feature-card__brand">
+            <img src="assets/img/logo-fiemin.png" alt="PT Fie Min Logistics">
+            <span>PT Fie Min Logistics</span>
+          </div>
+          <h3>Memiliki 2 Pusat Logistik<br>Berikat (PLB) sendiri</h3>
+          <p>Tiberman Group didukung oleh 2 Pusat Logistik Berikat (PLB) yang dikelola <b>PT Fiemin Logistics</b>. yang berlokasi di <b>Gresik</b> dan <b>Mojokerto</b></p>
+          <a class="btn btn--primary" href="contact.html">Check it !</a>
+        </div>
+        <div class="feature-card__media">
+          <img src="assets/img/plb-stock.webp" alt="Gudang stok ban Pusat Logistik Berikat" loading="lazy">
+        </div>
+      </article>
+
+      <div class="plb-grid">
+        <article class="plb reveal">
+          <div class="plb__img"><img src="assets/img/plb-mojokerto.webp" alt="PLB Mojokerto" loading="lazy"></div>
+          <div class="plb__foot">
+            <div class="plb__name">Mojokerto</div>
+            <div class="plb__stats">
+              <div class="plb__stat"><span>kapasitas :</span><strong>150 kontainer</strong></div>
+            </div>
+          </div>
+        </article>
+        <article class="plb reveal" data-delay="150">
+          <div class="plb__img"><img src="assets/img/plb-gresik.webp" alt="PLB Gresik" loading="lazy"></div>
+          <div class="plb__foot">
+            <div class="plb__name">Gresik</div>
+            <div class="plb__stats">
+              <div class="plb__stat"><span>kapasitas :</span><strong>250 kontainer</strong></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pengiriman Aman -->
+  <section class="pilar" style="padding-top:0">
+    <div class="container">
+      <h2 class="pilar__title reveal">Pengiriman Aman</h2>
+
+      <article class="feature-card feature-card--illus reveal" data-delay="120">
+        <div class="feature-card__body">
+          <div class="feature-card__brand feature-card__brand--halilintar">
+            <img src="assets/img/logo-halilintar.png" alt="Halilintar">
+          </div>
+          <h3>Aman sampai tujuan dengan<br>armada delivery sendiri</h3>
+          <p>Tiberman Group didukung oleh layanan distribusi yang dikelola oleh PT Hantar Lintas Nusantara (Halilintar) memastikan setiap pengiriman aman hingga sampai ke tangan anda.</p>
+          <a class="btn btn--primary" href="contact.html">Check it !</a>
+        </div>
+        <div class="feature-card__media">
+          <img src="assets/img/truck-tiberman.webp" alt="Ilustrasi truk pengiriman Tiberman bermuatan ban" loading="lazy">
+        </div>
+      </article>
+
+      <div class="photo-duo">
+        <img class="reveal" src="assets/img/plb-truck.webp" alt="Truk kontainer Tiberman di gudang" loading="lazy">
+        <img class="reveal" data-delay="150" src="assets/img/delivery-forklift.webp" alt="Forklift memuat ban ke kontainer" loading="lazy">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= AFTER SALES ============================= -->
+  <section class="aftersales">
+    <div class="container">
+      <h2 class="pilar__title reveal">After Sales</h2>
+      <!-- Judul & deskripsi tiap layanan ditempel di slide-nya sendiri
+           (data-title/data-desc); main.js menyalinnya ke caption di bawah
+           setiap kali slide tengah berganti. Caption di HTML diisi layanan
+           yang pertama kali jadi slide tengah, jadi tanpa JS tetap nyambung. -->
+      <div class="coverflow" data-coverflow>
+        <div class="coverflow__track">
+          <div class="coverflow__item" data-title="Tyre Repair" data-desc="Layanan jaminan perbaikan kerusakan ban, sesuai dengan ketentuan yang berlaku.">
+            <img src="assets/img/after-sales-5.webp" alt="Teknisi Tiberman memperbaiki tapak ban truk" loading="lazy" decoding="async">
+          </div>
+          <div class="coverflow__item" data-title="Tyre Lab" data-desc="Konsultasi online segala permasalahan ban 24 jam.">
+            <img src="assets/img/after-sales-4.webp" alt="Staf Tiberman melayani konsultasi lewat ponsel di area tambang" loading="lazy" decoding="async">
+          </div>
+          <div class="coverflow__item" data-title="Site Visit" data-desc="Kunjungan eksklusif tire engineer profesional ke site customer.">
+            <img src="assets/img/after-sales-3.webp" alt="Dua tire engineer meninjau alat berat di site customer" loading="lazy" decoding="async">
+          </div>
+          <div class="coverflow__item" data-title="Learning Center" data-desc="Layanan pembelajaran online seputar ban bersertifikat.">
+            <img src="assets/img/after-sales-2.webp" alt="Peserta mengikuti kelas online Tiberman lewat laptop" loading="lazy" decoding="async">
+          </div>
+          <div class="coverflow__item" data-title="Privilege Card" data-desc="Benefit lebih untuk customer loyal dengan persyaratan khusus.">
+            <img src="assets/img/after-sales-1.webp" alt="Kartu Privilege Tiberman tingkat Silver sampai Platinum" loading="lazy" decoding="async">
+          </div>
+        </div>
+      </div>
+      <div class="dots" data-coverflow-dots></div>
+      <div class="aftersales__foot">
+        <button class="coverflow__nav coverflow__nav--prev" type="button" aria-label="Sebelumnya">
+          <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M9 0 3 6l6 6z"/></svg>
+        </button>
+        <div class="aftersales__caption reveal">
+          <h3><span>Tiberman</span><span data-coverflow-title>Site Visit</span></h3>
+          <p data-coverflow-desc>Kunjungan eksklusif tire engineer profesional ke site customer.</p>
+        </div>
+        <button class="coverflow__nav coverflow__nav--next" type="button" aria-label="Berikutnya">
+          <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 0l6 6-6 6z"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= TESTIMONI ============================= -->
+  <section class="testi">
+    <div class="testi__grid">
+      <div class="testi__intro reveal">
+        <h2 class="h2">Testimoni<br>Pelanggan</h2>
+        <p>Berikut beberapa testimoni dari pelanggan yang telah menggunakan produk ban kami.</p>
+      </div>
+      <div class="testi__rail" data-drag-rail>
+        <article class="testi-card">
+          <div class="testi-card__quote">&ldquo;</div>
+          <div class="testi-card__avatar">AR</div>
+          <p>Bannya sangat bagus, sampai saya pengen beli lagi walau gatau buat apa, terimakasih Tiberman!</p>
+          <div class="testi-card__who"><strong>Agnes Remi</strong><span>Mbak2 tambang</span></div>
+        </article>
+        <article class="testi-card">
+          <div class="testi-card__quote">&ldquo;</div>
+          <div class="testi-card__avatar">BS</div>
+          <p>Stok selalu ada dan pengiriman cepat. Armada kami tidak pernah menunggu ban lagi.</p>
+          <div class="testi-card__who"><strong>Bagus Santosa</strong><span>Fleet Manager</span></div>
+        </article>
+        <article class="testi-card">
+          <div class="testi-card__quote">&ldquo;</div>
+          <div class="testi-card__avatar">DP</div>
+          <p>Layanan free tyre repair-nya benar-benar terpakai. Support after sales-nya cepat tanggap.</p>
+          <div class="testi-card__who"><strong>Dimas Prakoso</strong><span>Owner Dump Truck</span></div>
+        </article>
+        <article class="testi-card">
+          <div class="testi-card__quote">&ldquo;</div>
+          <div class="testi-card__avatar">RN</div>
+          <p>Sidewall-nya kuat untuk jalur tambang. Umur pakainya jauh lebih panjang dari ban sebelumnya.</p>
+          <div class="testi-card__who"><strong>Rizky Nugraha</strong><span>Supervisor Hauling</span></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__grid">
+
+      <div class="footer__brand">
+        <img class="footer__logo" src="assets/img/logo-white.png" alt="Tiberman">
+        <strong>PT. Tiga Berlian Mandiri</strong>
+        <p>Kami adalah One Stop Supplier ban alat berat yang telah dipercaya oleh ribuan customer di seluruh Indonesia. Sejak berdiri pada tahun 2008, jaringan distribusi kami telah tersebar di berbagai titik Super Area yang dapat menjangkau hingga pelosok negeri.</p>
+        <div class="footer__social">
+          <a class="soc soc--fb" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.63c-.29-.04-1.27-.13-2.41-.13-2.39 0-4.02 1.46-4.02 4.13V9.9H7.5V13h2.77v8h3.23z"/></svg></a>
+          <a class="soc soc--yt" href="#" aria-label="YouTube"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.6 7.2s-.2-1.4-.8-2c-.75-.8-1.6-.8-2-.85C16 4.2 12 4.2 12 4.2h-.01s-4 0-6.8.15c-.4.05-1.25.05-2 .85-.6.6-.8 2-.8 2S2.2 8.8 2.2 10.5v1.6c0 1.65.2 3.3.2 3.3s.2 1.4.8 2c.75.8 1.75.78 2.2.86 1.6.15 6.8.2 6.8.2s4 0 6.8-.16c.4-.05 1.25-.05 2-.85.6-.6.8-2 .8-2s.2-1.65.2-3.3v-1.6c0-1.7-.2-3.35-.2-3.35zM9.95 14.2V8.85l5.15 2.68-5.15 2.67z"/></svg></a>
+          <a class="soc soc--ig" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.23.41.56.22.96.48 1.38.9.42.42.68.82.9 1.38.16.42.36 1.06.41 2.23.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.23-.22.56-.48.96-.9 1.38-.42.42-.82.68-1.38.9-.42.16-1.06.36-2.23.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.23-.41-.56-.22-.96-.48-1.38-.9-.42-.42-.68-.82-.9-1.38-.16-.42-.36-1.06-.41-2.23C2.17 15.58 2.16 15.2 2.16 12s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.23.22-.56.48-.96.9-1.38.42-.42.82-.68 1.38-.9.42-.16 1.06-.36 2.23-.41C8.42 2.17 8.8 2.16 12 2.16zm0 3.88a5.96 5.96 0 100 11.92 5.96 5.96 0 000-11.92zm0 9.83a3.87 3.87 0 110-7.74 3.87 3.87 0 010 7.74zm7.58-10.06a1.39 1.39 0 11-2.78 0 1.39 1.39 0 012.78 0z"/></svg></a>
+          <a class="soc soc--tt" href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16.6 5.82A4.28 4.28 0 0115.54 3h-3.09v12.4a2.59 2.59 0 01-2.59 2.5 2.59 2.59 0 01-2.59-2.6 2.59 2.59 0 013.19-2.51v-3.1a5.66 5.66 0 00-.6-.03A5.68 5.68 0 004.2 15.3 5.68 5.68 0 009.86 21a5.68 5.68 0 005.66-5.7V8.9a7.35 7.35 0 004.28 1.37V7.18a4.29 4.29 0 01-3.2-1.36z"/></svg></a>
+          <a class="soc soc--li" href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6.94 8.5v10.6H3.6V8.5h3.34zM5.27 3.4c1.07 0 1.93.87 1.93 1.94S6.34 7.28 5.27 7.28 3.34 6.41 3.34 5.34 4.2 3.4 5.27 3.4zM20.66 19.1h-3.33v-5.16c0-1.23-.02-2.82-1.72-2.82-1.72 0-1.98 1.34-1.98 2.73v5.25H10.3V8.5h3.2v1.45h.05c.44-.84 1.53-1.73 3.15-1.73 3.37 0 3.99 2.22 3.99 5.1v5.78z"/></svg></a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h3>Hubungi Kami</h3>
+        <ul class="footer__contact">
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2c.28-.28.68-.36 1.03-.24 1.13.37 2.35.57 3.6.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1A17 17 0 013 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.6.11.35.03.75-.25 1.03l-2.22 2.17z"/></svg>
+            <a href="tel:+6281283258200">+62 812 8325 8200</a>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 00-2 2v12a2 2 0 002 2h16a2 2 0 002-2V6a2 2 0 00-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <a href="mailto:info@tiberman.com">info@tiberman.com</a>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.5 0-9.96 4.46-9.96 9.96 0 1.76.46 3.48 1.34 5L2 22l5.2-1.36a9.9 9.9 0 004.84 1.24h.01c5.5 0 9.96-4.46 9.96-9.96 0-2.66-1.04-5.16-2.92-7.04A9.9 9.9 0 0012.04 2zm5.83 14.24c-.25.7-1.44 1.33-2 1.42-.51.08-1.16.11-1.87-.12-.43-.14-.99-.32-1.7-.63-2.99-1.29-4.94-4.3-5.09-4.5-.15-.2-1.22-1.62-1.22-3.09s.77-2.19 1.04-2.49c.27-.3.59-.37.79-.37h.57c.18 0 .43-.7.67.51.25.6.84 2.07.91 2.22.07.15.12.32.02.52-.1.2-.15.32-.3.5-.15.17-.31.39-.44.52-.15.15-.3.31-.13.61.17.3.76 1.25 1.63 2.03 1.12 1 2.06 1.3 2.36 1.45.3.15.47.13.65-.08.17-.2.75-.87.95-1.17.2-.3.4-.25.67-.15.27.1 1.72.81 2.02.96.3.15.5.22.57.35.07.12.07.72-.18 1.42z"/></svg>
+            <a href="https://wa.me/6281283258200">+62 812 8325 8200</a>
+          </li>
+        </ul>
+
+        <h3>Marketplace</h3>
+        <div class="footer__market">
+          <a class="market market--tokped" href="#">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8h14l-1 11a2 2 0 01-2 1.8H8A2 2 0 016 19L5 8zm3.5 0V6.5a3.5 3.5 0 017 0V8h-2V6.5a1.5 1.5 0 00-3 0V8h-2z"/></svg>
+            <span>tokopedia</span>
+          </a>
+          <a class="market market--shopee" href="#">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8h14l-1 11a2 2 0 01-2 1.8H8A2 2 0 016 19L5 8zm3.5 0V6.5a3.5 3.5 0 017 0V8h-2V6.5a1.5 1.5 0 00-3 0V8h-2z"/></svg>
+            <span>Shopee</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer__col">
+        <h3>Super Area</h3>
+        <ul class="footer__links">
+          <li><a href="#superarea">Surabaya ( Head Office )</a></li>
+          <li><a href="#superarea">Jabodetabek</a></li>
+          <li><a href="#superarea">Gresik</a></li>
+          <li><a href="#superarea">Mojokerto</a></li>
+          <li><a href="#superarea">Balikpapan</a></li>
+          <li><a href="#superarea">Banjarbaru</a></li>
+          <li><a href="#superarea">Pontianak</a></li>
+          <li><a href="#superarea">Manado</a></li>
+          <li><a href="#superarea">Kendari</a></li>
+          <li><a href="#superarea">Morowali</a></li>
+          <li><a href="#superarea">Luwuk Banggai</a></li>
+          <li><a href="#superarea">Ternate</a></li>
+          <li><a href="#superarea">Sofifi</a></li>
+          <li><a href="#superarea">Palembang</a></li>
+        </ul>
+      </div>
+
+      <div class="footer__col">
+        <h3>Navigasi</h3>
+        <ul class="footer__links">
+          <li><a href="news.html">Berita &amp; Artikel</a></li>
+          <li><a href="#">Karir</a></li>
+          <li><a href="katalog.html">Semua Produk</a></li>
+          <li><a href="#kenapa">After Sales Service</a></li>
+        </ul>
+      </div>
+
+    </div>
+    <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
+  </div>
+</footer>
+
+<script src="assets/js/superarea-spots.js?v=20260921a" defer></script>
+<script src="assets/js/i18n.js?v=20260921a" defer></script>
+<script src="assets/js/main.js?v=20260921a" defer></script>
+</body>
+</html>

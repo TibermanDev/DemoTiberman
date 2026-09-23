@@ -1,77 +1,58 @@
-# Tiberman — HTML dari desain PDF
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-Hasil implementasi HTML/CSS/JS dari `tiberman_removed.pdf` (4 artboard, lebar 1440px).
-Semua gambar diambil dari folder aset `F:\sasa\aset tiberman` lalu dikompres ke `assets/img`.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## Halaman
+## About Laravel
 
-| File | Artboard di PDF | Isi |
-|---|---|---|
-| `index.html` | Halaman 1 (1440 × 11051) | Homepage: hero, 15 SuperArea, kategori unit, aksesoris + VELG, "Kenapa Harus Tiberman" (Stok Aman / Pengiriman Aman / After Sales), testimoni, FAQ, News |
-| `katalog.html` | Halaman 2 (1440 × 966) | Katalog dengan sidebar kiri: search, daftar unit, box promo, banner, chip ukuran, grid produk 5 kolom |
-| `katalog-topnav.html` | Halaman 3 (1440 × 966) | Varian katalog tanpa sidebar — kategori unit di navbar atas |
-| `produk.html` | Halaman 4 (1440 × 4096) | Halaman produk Uninest TiberMAX 800: hero hitam, bento "Kenapa Harus Ban Ini", "Perfect Pair For", galeri + spesifikasi + available size + contact |
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-## Struktur
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-```
-web/
-├── index.html, katalog.html, katalog-topnav.html, produk.html
-└── assets/
-    ├── css/style.css      design system (token warna, komponen, responsive)
-    ├── js/main.js         nav mobile, reveal on scroll, accordion FAQ, coverflow
-    │                      After Sales, drag testimoni, filter katalog, galeri PDP
-    ├── js/products.js     data contoh produk katalog (per unit → per ukuran)
-    └── img/               21 gambar hasil kompresi (webp untuk foto, png untuk logo)
-```
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## Warna (di-sample langsung dari PDF)
+## Learning Laravel
 
-| Token | Nilai | Dipakai untuk |
-|---|---|---|
-| `--blue` | `#0071e3` | tombol "Check it !", chip aktif, item unit aktif |
-| `--ink` | `#1d1d1f` | navbar, background katalog, footer |
-| `--ink-2` | `#121214` | sidebar katalog |
-| `--red` | `#ef3936` | wordmark TIBERMAX |
-| `--sky-1/2/card` | `#dcedf7` / `#eef3f7` / `#d6ebf7` | section aksesoris & kartu VELG |
-| `--grey-50/100/200` | `#f5f5f7` / `#f2f2f2` / `#ebebeb` | kartu, panel FAQ, kartu testimoni |
-| `--spec` | `#6c6f89` | heading "Spesifikasi", "Available Size", "Contact us" |
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-Font: **Plus Jakarta Sans** (Google Fonts) sebagai padanan terdekat dari font geometris di desain.
+In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Pemetaan aset
+You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
 
-| File di `assets/img` | Sumber di folder aset | Dipakai di |
-|---|---|---|
-| `hero-warehouse.webp` | ChatGPT Image Jul 8, 2026 | hero homepage |
-| `earth.webp` | earth.png | section 15 SuperArea (15 pin lokasi) |
-| `warehouse-dark.webp` | vlcsnap-2025-03-03 | background "Importir Ban Truk & Alat Berat" |
-| `tires-strip.webp` | ban banyak.png | strip ban antar-section |
-| `accessories.webp` | Ban Ban.png | section aksesoris + ilustrasi FAQ |
-| `velg-heavy.webp` / `velg-light.webp` | velg 4.png / DSC03206.png | kartu VELG Heavy-Duty & Light Truck |
-| `plb-stock.webp` | vlcsnap-2025-11-04 | kartu PT Fie Min Logistics |
-| `plb-mojokerto.webp` / `plb-gresik.webp` | VLC ss00019 / VLC ss00217 | kartu PLB Mojokerto & Gresik |
-| `delivery-forklift.webp` | 20260306_111616.jpg | section Pengiriman Aman |
-| `tire-hero-dark.webp` | ChatGPT Image Aug 21 09_53_34 | hero halaman produk |
-| `tire-white.webp` | ChatGPT Image Aug 21 09_53_18 | kartu katalog & galeri produk |
-| `tire-tread.webp` | ChatGPT Image Jul 30 | bento "Telapak Tebal", galeri |
-| `tire-554.webp` | Tibermax 554 12.00R24 2.png | bento "Sidewall Kuat", galeri utama |
-| `dumptruck.webp` | ChatGPT Image Jun 9 | banner katalog, kartu "Dump Truck" |
-| `logo-white/black/red.png` | TBM putih / LOGO TIBERMAN - HITAM / LOGO TIBERMAN | navbar, hero, footer |
-| `logo-fiemin.png`, `logo-halilintar.png` | fml logo.png, logo halilintar FIX.png | kartu Stok Aman & Pengiriman Aman |
+## Agentic Development
 
-## Catatan penyesuaian dari desain
-
-- **Footer**: artboard PDF berakhir setelah section News tanpa footer. Ditambahkan footer minimal (logo + menu + copyright) supar setiap halaman punya penutup.
-- **Aset yang tidak ada di folder**: foto teknisi carousel After Sales, avatar testimoni, thumbnail artikel News, dan ilustrasi truk+maskot Halilintar. Diganti dengan foto ban/gudang yang tersedia, avatar inisial, dan thumbnail gradien.
-- **Chip ukuran katalog** dibuat dinamis mengikuti unit yang dipilih (di desain masih placeholder "Ukuran Ban").
-- **Data produk** di `products.js` adalah contoh; ganti dengan data asli atau sambungkan ke backend.
-- Teks FAQ dan News masih memakai placeholder bahasa Inggris seperti di desain.
-
-## Menjalankan
-
-Buka `index.html` langsung di browser, atau jalankan static server dari folder `web/`:
+Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
 
 ```bash
-npx serve "F:/sasa/aset tiberman/web"
+composer require laravel/boost --dev
+
+php artisan boost:install
 ```
+
+Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+
+## Contributing
+
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+
+## Code of Conduct
+
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+
+## Security Vulnerabilities
+
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+
+## License
+
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
