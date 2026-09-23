@@ -14,12 +14,14 @@
 </head>
 <body class="@yield('body-class')">
 
+@section('nav')
 <!-- ============================= NAVBAR ============================= -->
 <header class="nav">
   <div class="nav__inner">
     <a class="nav__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
+      @unless(request()->routeIs('katalog'))
       <div class="nav__item">
         <a href="/katalog" @class(['is-active' => request()->is('katalog*')])>Products</a>
         <div class="nav__menu">
@@ -31,6 +33,7 @@
           <a href="/katalog?unit=velg-tube">Velg &amp; Tube</a>
         </div>
       </div>
+      @endunless
       <a href="/news" @class(['is-active' => request()->is('news*')])>News</a>
       <a href="/superarea" @class(['is-active' => request()->is('superarea*')])>SuperArea</a>
       <a href="/contact" @class(['is-active' => request()->is('contact*')])>Contact Us</a>
@@ -50,9 +53,11 @@
     </div>
   </div>
 </header>
+@show
 
 @yield('content')
 
+@section('footer')
 <!-- ============================= FOOTER ============================= -->
 <footer class="footer">
   <div class="container">
@@ -137,6 +142,7 @@
     <p class="footer__note">Copyright &copy; 2021 PT. Tiga Berlian Mandiri</p>
   </div>
 </footer>
+@show
 
 <script src="{{ asset('assets/js/i18n.js') }}" defer></script>
 <script src="{{ asset('assets/js/main.js') }}" defer></script>

@@ -275,7 +275,7 @@
             '<div class="product-grid">' +
               g.items.map(function (p) {
                 return '' +
-                  '<a class="product-card" href="produk.html">' +
+                  '<a class="product-card" href="/produk">' +
                     '<span class="product-card__img"><img src="' + p.img + '" alt="' + p.name + ' ' + g.size + '" loading="lazy"></span>' +
                     '<span class="product-card__body">' +
                       '<strong>' + p.name + '</strong>' +
