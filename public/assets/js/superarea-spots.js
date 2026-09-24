@@ -32,6 +32,12 @@
     PALEMBANG:  { kode: '15', alias: 'PBG', lat: -3.00996008204691,   lng: 104.72304592921462, addr: 'Jl. Musi 2, Kel. Karang Jaya, Kec. Gandus, Palembang' }
   };
 
+  /* Keterangan kota dari CMS (menu SuperArea) disuntikkan halaman sebagai
+     window.TIBERMAN_AREAS dan menggantikan tabel bawaan di atas; tabel itu
+     tinggal jadi cadangan kalau datanya tidak ada. Kota yang dinonaktifkan di
+     CMS tidak ikut, jadi pinnya tidak dibuatkan keterangan. */
+  if (window.TIBERMAN_AREAS) AREAS = window.TIBERMAN_AREAS;
+
   /* x/y = posisi pusat pin dalam persen gambar.
      lebar/tinggi = pengali ukuran tombol, dipakai untuk pin yang menumpuk.
 
@@ -141,11 +147,11 @@
     var t = bahasa();
     pop.innerHTML =
       '<button type="button" class="sa-pop__x" aria-label="' + esc(t.tutup) + '">&times;</button>' +
-      spot.kota.map(function (nama) {
+      spot.kota.filter(function (nama) { return AREAS[nama]; }).map(function (nama) {
         var a = AREAS[nama];
         return '<div class="sa-pop__item">' +
           '<span class="sa-pop__kode">' + esc(a.kode) + ' &middot; ' + esc(a.alias) + '</span>' +
-          '<strong class="sa-pop__nama">' + esc(nama) + '</strong>' +
+          '<strong class="sa-pop__nama">' + esc(a.nama || nama) + '</strong>' +
           '<span class="sa-pop__addr">' + esc(a.addr) + '</span>' +
           '<a class="sa-pop__maps" target="_blank" rel="noopener"' +
           ' href="https://www.google.com/maps/search/?api=1&query=' + a.lat + ',' + a.lng + '">' +
@@ -203,6 +209,8 @@
   function batalTutup() { clearTimeout(jeda); }
 
   SPOTS.forEach(function (spot, i) {
+    /* pin yang semua kotanya dinonaktifkan di CMS tidak dibuatkan tombol */
+    if (!spot.kota.some(function (nama) { return AREAS[nama]; })) return;
     var btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'sa-spot';

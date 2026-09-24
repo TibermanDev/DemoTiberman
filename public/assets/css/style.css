@@ -1017,12 +1017,15 @@ ul{margin:0;padding:0;list-style:none}
 .catalog .nav{background:#1d1d1f}
 /* header katalog full-bleed: logo sejajar sidebar, menu rata kanan layar */
 .catalog .nav__inner{max-width:none;padding-left:22px;padding-right:32px}
-.catalog__layout{display:grid;grid-template-columns:240px 1fr}
+.catalog__layout{display:grid;grid-template-columns:290px 1fr}
 .catalog__sidebar{
   background:var(--ink-2);border-right:1px solid rgba(255,255,255,.07);
   padding:28px 22px 40px;position:sticky;top:var(--nav-h);align-self:start;
   height:calc(100vh - var(--nav-h));overflow-y:auto;
+  /* tetap bisa di-scroll (roda mouse/sentuh), hanya batang scroll-nya disembunyikan */
+  scrollbar-width:none;-ms-overflow-style:none;
 }
+.catalog__sidebar::-webkit-scrollbar{display:none}
 .side-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px}
 /* label "Telusuri berdasarkan Merk" dst.: beri jarak dari daftar di atasnya */
 .unitlist + .side-label{margin-top:4px}
@@ -1032,9 +1035,9 @@ ul{margin:0;padding:0;list-style:none}
 .search svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:16px;height:16px;color:rgba(255,255,255,.5)}
 .side-divider{height:1px;background:rgba(255,255,255,.08);margin:4px 0 20px}
 .unitlist{display:flex;flex-direction:column;gap:4px;margin-bottom:26px}
-.unitlist button{text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
-.unitlist button:hover{background:rgba(255,255,255,.06);color:#fff}
-.unitlist button.is-active{background:var(--red);color:#fff;font-weight:600}
+.unitlist button,.unitlist a{display:flex;align-items:center;text-align:left;height:40px;padding:0 16px;border-radius:10px;font-size:15px;color:rgba(255,255,255,.78);transition:background .2s var(--ease),color .2s var(--ease)}
+.unitlist button:hover,.unitlist a:hover{background:rgba(255,255,255,.06);color:#fff}
+.unitlist button.is-active,.unitlist a.is-active{background:var(--red);color:#fff;font-weight:600}
 
 /* Kolom isi katalog berlatar abu terang (bukan putih, supaya tidak menyilaukan
    di sebelah sidebar yang hitam). Navbar, sidebar, banner, dan footer tetap
@@ -1312,7 +1315,8 @@ ul{margin:0;padding:0;list-style:none}
 .pdp-detail__grid{position:relative;display:grid;grid-template-columns:1fr 1.12fr;gap:68px;align-items:start}
 .gallery__main{background:var(--grey-100);border-radius:var(--radius-l);display:flex;align-items:center;justify-content:center;padding:26px;aspect-ratio:1.075;overflow:hidden}
 .gallery__main img{max-height:100%;max-width:100%;object-fit:contain}
-.gallery__thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
+/* 4 thumbnail sebaris (foto ke-5 dst. turun ke baris berikutnya) */
+.gallery__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
 .gallery__thumbs button{background:var(--grey-100);border-radius:var(--radius);padding:12px;aspect-ratio:1.14;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid transparent;transition:border-color .25s var(--ease)}
 .gallery__thumbs button.is-active{border-color:var(--outline-strong)}
 .gallery__thumbs img{max-height:100%;max-width:100%;object-fit:contain}
@@ -1526,7 +1530,7 @@ ul{margin:0;padding:0;list-style:none}
 @media (max-width:720px){
   .section{padding:64px 0}
   .velg-cards,.plb-grid,.photo-duo,.news__grid,.pair-grid,.doc-btns,.gallery__thumbs{grid-template-columns:1fr}
-  .gallery__thumbs{grid-template-columns:repeat(3,1fr)}
+  .gallery__thumbs{grid-template-columns:repeat(4,1fr);gap:10px}
   /* di layar sempit kolom gambar dikecilkan supaya "VELG Heavy-Duty" tidak
      pecah jadi 3 baris dan tombolnya tetap muat */
   .velg-wrap{padding-bottom:80px}
@@ -1753,6 +1757,7 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   border-radius:14px;padding:12px 12px 18px;text-align:center;
   transition:transform .3s var(--ease),box-shadow .3s var(--ease);
 }
+.sa-card{display:block;text-decoration:none;cursor:pointer}
 .sa-card[hidden]{display:none}
 .sa-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(0,0,0,.45)}
 .sa-card__img{display:block;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:var(--grey-200)}
@@ -2044,8 +2049,16 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 }
 .ctc-field select:valid{color:var(--text)}
 .ctc-form__foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
-.ctc-form__note{font-size:13px;font-weight:700;color:var(--wa);opacity:0;transition:opacity .25s var(--ease)}
+.ctc-form__note{font-size:13px;font-weight:700;color:var(--red);opacity:0;transition:opacity .25s var(--ease)}
 .ctc-form__note.is-on{opacity:1}
+/* Popup sukses form Contact */
+.ctc-toast{position:fixed;left:50%;top:96px;z-index:1000;display:flex;align-items:flex-start;gap:14px;width:min(440px,calc(100% - 32px));padding:16px 18px;background:#fff;color:#1d1d1f;border-radius:16px;border-left:5px solid var(--red);box-shadow:0 18px 50px rgba(0,0,0,.18);opacity:0;visibility:hidden;transform:translate(-50%,-16px);transition:opacity .3s var(--ease),transform .3s var(--ease),visibility 0s linear .3s}
+.ctc-toast.is-on{opacity:1;visibility:visible;transform:translate(-50%,0);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.ctc-toast__icon{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff}
+.ctc-toast__body{flex:1;display:flex;flex-direction:column;gap:3px;font-size:14px;line-height:1.45}
+.ctc-toast__body strong{font-size:15px}
+.ctc-toast__close{flex:none;border:0;background:none;font-size:22px;line-height:1;color:#86868b;cursor:pointer;padding:2px 4px}
+.ctc-toast__close:hover{color:#1d1d1f}
 
 /* --- kumpulan produk: satu gambar accessories ---
    margin-inline:auto dulu menengahkannya di kolom, jadi ada ruang kosong
@@ -2080,3 +2093,12 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   .ctc-form__row{grid-template-columns:minmax(0,1fr)}
   .ctc-stack{max-width:360px;justify-self:center;margin-right:0}
 }
+
+/* ---------- Produk tanpa logo gambar (diisi dari CMS) ----------
+   Produk yang belum punya logo di CMS menampilkan namanya sebagai teks
+   di tempat logo. */
+.pdp-hero__title{font-size:clamp(28px,4.4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 18px}
+.pdp-info__name,.pmodal__name{font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.1;text-transform:uppercase;margin:0 0 12px}
+.pmodal__more{margin-top:14px;font-size:13px;font-weight:700}
+.pmodal__more a{color:inherit;text-decoration:underline}
+.product-card.is-loading{opacity:.6;cursor:progress}

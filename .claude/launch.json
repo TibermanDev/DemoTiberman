@@ -2,16 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "tiberman",
+      "name": "laravel",
       "runtimeExecutable": "php",
       "runtimeArgs": ["artisan", "serve", "--port=8000"],
       "port": 8000
-    },
-    {
-      "name": "tiberman-legacy-static",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["_legacy/serve.mjs"],
-      "port": 4322
     }
   ]
 }

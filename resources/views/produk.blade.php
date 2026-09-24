@@ -1,21 +1,18 @@
 @extends('layouts.app')
 
-@section('title', 'Uninest TiberMAX 800 — Tiberman')
-@section('description', 'Uninest Tibermax 800: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.')
+@section('title', $product->name.' '.$product->size.' — Tiberman')
+@section('description', $product->meta_description ?: strip_tags((string) $product->description) ?: $product->name.' '.$product->size.' — '.$product->compat)
 
 @section('nav')
 <!-- ============================= NAVBAR KATEGORI ============================= -->
 <header class="nav nav--center nav--grouped">
   <div class="nav__inner">
-    <a class="nav__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
+    <a class="nav__logo" href="{{ route('home') }}"><img src="{{ media(cms('site.logo')) ?? asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
     <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
     <nav class="nav__links">
-      <a href="/katalog" class="is-active">Truk &amp; Bus</a>
-      <a href="/katalog">Mining Truck</a>
-      <a href="/katalog">Loader-Grader</a>
-      <a href="/katalog">Traktor</a>
-      <a href="/katalog">Forklift</a>
-      <a href="/katalog">Velg &amp; Tube</a>
+      @foreach ($navUnits as $unit)
+      <a href="{{ $unit->url() }}" @class(['is-active' => $unit->id === $product->catalog_unit_id])>{{ $unit->label }}</a>
+      @endforeach
     </nav>
     <div class="nav__tools">
       <div class="lang">
@@ -36,134 +33,91 @@
 
 @section('content')
 
+@php($description = $product->description ? rich($product->description) : e($product->name.' — ukuran '.$product->size.', cocok untuk '.$product->compat.'.'))
+
 <main>
 
   <!-- ============================= HERO PRODUK ============================= -->
   <section class="pdp-hero">
     <div class="pdp-hero__inner">
       <div class="pdp-hero__img reveal">
-        <img src="{{ asset('assets/img/tire-hero-dark.webp') }}" alt="Uninest TiberMAX 800 ukuran 12.00R24" fetchpriority="high">
+        <img src="{{ media($product->hero_image) ?? $product->imageUrl() }}" alt="{{ $product->name }} ukuran {{ $product->size }}" fetchpriority="high">
       </div>
       <div class="reveal" data-delay="120">
-        <h1 class="pdp-hero__logo"><img src="{{ asset('assets/img/tibermax-logo-light.png') }}" alt="Uninest TiberMAX 800" width="2004" height="356" fetchpriority="high"></h1>
-        <p><b>Uninest Tibermax 800</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.</p>
+        @if ($product->logo_light)
+        <h1 class="pdp-hero__logo"><img src="{{ media($product->logo_light) }}" alt="{{ $product->name }}" fetchpriority="high"></h1>
+        @else
+        <h1 class="pdp-hero__title">{{ $product->name }}</h1>
+        @endif
+        <p>{!! $description !!}</p>
       </div>
     </div>
   </section>
 
   <!-- ============================= KENAPA HARUS BAN INI ============================= -->
+  @if (filled($product->features))
   <section class="pdp-why">
     <h2 class="reveal">Kenapa Harus Ban Ini ?</h2>
 
+    @foreach ($product->features as $feature)
+    @php($text = '<article class="bento__cell reveal"'.($loop->even ? ' data-delay="100"' : '').'><h3>'.rich($feature['title'] ?? '').'</h3><p>'.rich($feature['body'] ?? '').'</p></article>')
     <div class="bento">
-      <article class="bento__cell reveal">
-        <h3>Sidewall<br>Kuat</h3>
-        <p>Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.</p>
-      </article>
-      <div class="bento__cell bento__cell--img bento__cell--contain reveal" data-delay="100">
-        <img src="{{ asset('assets/img/tyre-90.png') }}" alt="Sidewall TiberMAX 800" loading="lazy">
+      @if ($loop->odd){!! $text !!}@endif
+      @if (filled($feature['image'] ?? null))
+      <div @class(['bento__cell', 'bento__cell--img', 'bento__cell--contain' => ! empty($feature['contain']), 'reveal']) @if ($loop->odd) data-delay="100" @endif>
+        <img src="{{ media($feature['image']) }}" alt="{{ strip_tags(str_replace("\n", ' ', $feature['title'] ?? '')) }} {{ $product->shortName() }}" loading="lazy">
       </div>
+      @endif
+      @if ($loop->even){!! $text !!}@endif
     </div>
-
-    <div class="bento">
-      <div class="bento__cell bento__cell--img reveal">
-        <img src="{{ asset('assets/img/tire-tread.webp') }}" alt="Pola telapak TiberMAX 800" loading="lazy">
-      </div>
-      <article class="bento__cell reveal" data-delay="100">
-        <h3>Telapak<br>Tebal</h3>
-        <p>Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.</p>
-      </article>
-    </div>
+    @endforeach
   </section>
+  @endif
 
   <!-- ============================= PERFECT PAIR FOR ============================= -->
+  @if (filled($product->pairs))
   <section class="pdp-pair">
     <div class="container">
       <h2 class="reveal">Perfect Pair For</h2>
       <div class="pair-grid">
-        <article class="pair-card reveal">
-          <img src="{{ asset('assets/img/dumptruck.webp') }}" alt="Dump truck" loading="lazy">
-          <strong>Dump Truck</strong>
+        @foreach ($product->pairs as $pair)
+        <article class="pair-card reveal" @if ($loop->index) data-delay="{{ $loop->index * 100 }}" @endif>
+          <img src="{{ media($pair['image'] ?? null) }}" alt="{{ $pair['title'] ?? '' }}" loading="lazy">
+          <strong>{{ $pair['title'] ?? '' }}</strong>
         </article>
-        <article class="pair-card reveal" data-delay="100">
-          <img src="{{ asset('assets/img/tire-tread.webp') }}" alt="Medan off-road" loading="lazy">
-          <strong>Off-Road</strong>
-        </article>
-        <article class="pair-card reveal" data-delay="200">
-          <img src="{{ asset('assets/img/plb-stock.webp') }}" alt="Muatan berat" loading="lazy">
-          <strong>Muatan Berat</strong>
-        </article>
+        @endforeach
       </div>
     </div>
   </section>
+  @endif
 
   <!-- ============================= DETAIL + SPESIFIKASI ============================= -->
   <section class="pdp-detail">
     <div class="container">
       <div class="pdp-detail__grid">
 
-        <!-- Galeri -->
-        <div data-gallery>
-          <div class="gallery__main">
-            <img src="{{ asset('assets/img/tyre-preview.png') }}" alt="Uninest TiberMAX 800" data-gallery-main>
-          </div>
-          <div class="gallery__thumbs">
-            <button type="button" class="is-active" data-gallery-thumb data-full="{{ asset('assets/img/tyre-preview.png') }}">
-              <img src="{{ asset('assets/img/tyre-preview.png') }}" alt="Tampak serong TiberMAX 800">
-            </button>
-            <button type="button" data-gallery-thumb data-full="{{ asset('assets/img/tyre-diameter.png') }}">
-              <img src="{{ asset('assets/img/tyre-diameter.png') }}" alt="Tampak depan TiberMAX 800">
-            </button>
-            <button type="button" data-gallery-thumb data-full="{{ asset('assets/img/tapak-ban.png') }}">
-              <img src="{{ asset('assets/img/tapak-ban.png') }}" alt="Pola telapak TiberMAX 800">
-            </button>
-          </div>
-          <div class="doc-btns">
-            <a href="#">E-Katalog</a>
-            <a href="#">Flash Card</a>
-          </div>
-        </div>
+        @include('partials.product-parts', ['part' => 'gallery'])
 
-        <!-- Info -->
         <div class="pdp-info">
+          @if ($product->logo)
           <span class="pdp-logo">
-            <img class="pdp-logo__a" src="{{ asset('assets/img/tibermax-logo.png') }}" alt="Uninest TiberMAX 800" width="584" height="97">
+            <img class="pdp-logo__a" src="{{ media($product->logo) }}" alt="{{ $product->name }}">
           </span>
-          <p><b>Uninest Tibermax 800</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.</p>
+          @else
+          <h2 class="pdp-info__name">{{ $product->name }}</h2>
+          @endif
+          <p>{!! $description !!}</p>
 
+          @if (filled($product->specs))
           <h2 class="subhead">Spesifikasi</h2>
-          <table class="spec-table">
-            <tbody>
-              <tr><td>Ply Rating</td><td>: 16PR</td><td>Overall Diameter</td><td>: 1500 mm</td></tr>
-              <tr><td>Tread Depth</td><td>: 25.5 mm</td><td>Max Load</td><td>: 6150 kg</td></tr>
-              <tr><td>Standard Rim</td><td>: DW20</td><td>Max Speed</td><td>: 10 km/jam</td></tr>
-              <tr><td>Section Width</td><td>: 595 mm</td><td>Pressure</td><td>: 38 Psi</td></tr>
-            </tbody>
-          </table>
+          @include('partials.product-parts', ['part' => 'specs'])
+          @endif
 
           <h2 class="subhead">Available Size :</h2>
-          <div class="size-chips" data-size-chips>
-            <a class="size-chip is-active" href="#">11.00R20</a>
-            <a class="size-chip" href="#">12.00R20</a>
-            <a class="size-chip" href="#">12.00R24</a>
-            <a class="size-chip" href="#">14.00R25</a>
-          </div>
+          @include('partials.product-parts', ['part' => 'sizes'])
 
           <h2 class="subhead">Contact us :</h2>
-          <div class="contact-btns">
-            <a class="contact-btn contact-btn--wa" href="https://wa.me/6281234567890">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .1-1.7-.1-1-.3-2.6-1-4-2.5-1.3-1.3-2-2.7-2.3-3.4-.2-.6-.3-1.2-.2-1.7.1-.4.7-1.4 1.2-1.6.3-.1.6 0 .8.2l.9 1.5c.1.2.1.5 0 .7l-.4.6c-.1.2-.1.4 0 .6.3.5.8 1.2 1.4 1.7.6.5 1.2.9 1.7 1.1.2.1.5 0 .6-.1l.6-.6c.2-.2.4-.2.6-.1l1.6.8c.2.1.4.4.3.7l-.1.2z"/></svg>
-              Whatsapp
-            </a>
-            <a class="contact-btn contact-btn--shopee" href="#">
-              <img src="{{ asset('assets/img/shopee.png') }}" alt="">
-              Shoppe
-            </a>
-            <a class="contact-btn contact-btn--tokped" href="#">
-              <img src="{{ asset('assets/img/tokopedia.png') }}" alt="">
-              Tokopedia
-            </a>
-          </div>
+          @include('partials.product-parts', ['part' => 'contact'])
         </div>
 
       </div>

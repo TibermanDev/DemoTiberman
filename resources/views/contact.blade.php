@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Contact Us — Tiberman')
-@section('description', 'Pertanyaan yang sering diajukan seputar pemesanan, pengiriman, dan garansi ban Tiberman — beserta jalur kontak langsung ke tim kami.')
+@section('title', data_get($page, 'seo_title') ?: 'Contact Us — Tiberman')
+@section('description', data_get($page, 'seo_description'))
 @section('body-class', 'subpage')
 
 @section('content')
@@ -12,14 +12,16 @@
   <section class="ctc-partner">
     <div class="container">
       <div class="ctc-partner__head reveal">
-        <p class="ctc-eyebrow">Become Our Partner!</p>
-        <h1>Stronger Business Start<br>with the Right Partner</h1>
+        <p class="ctc-eyebrow">{{ data_get($page, 'eyebrow') }}</p>
+        <h1>{!! rich(data_get($page, 'heading')) !!}</h1>
       </div>
 
       <div class="ctc-partner__grid">
-        <!-- Form demo: belum ada endpoint, jadi submit-nya ditahan dan diganti
-             pesan konfirmasi (assets/js/contact-form.js). -->
-        <form class="ctc-form reveal" data-contact-form novalidate>
+        <!-- Kiriman masuk ke menu Permintaan di CMS. Dengan JS dikirim lewat
+             fetch tanpa reload (assets/js/contact-form.js); tanpa JS tetap
+             terkirim sebagai POST biasa. -->
+        <form class="ctc-form reveal" method="post" action="{{ route('contact.store') }}" data-contact-form novalidate>
+          @csrf
           <div class="ctc-form__row">
             <label class="ctc-field">
               <span>Nama</span>
@@ -40,12 +42,9 @@
               <span>Kebutuhan Unit</span>
               <select name="unit" required>
                 <option value="" selected disabled>Pilih jenis unit&hellip;</option>
-                <option>Truk &amp; Bus</option>
-                <option>Mining Truck</option>
-                <option>Loader-Grader</option>
-                <option>Traktor</option>
-                <option>Forklift</option>
-                <option>Velg &amp; Tube</option>
+                @foreach (data_get($page, 'unit_options', []) as $option)
+                <option>{{ $option }}</option>
+                @endforeach
               </select>
             </label>
           </div>
@@ -67,15 +66,28 @@
           </label>
 
           <div class="ctc-form__foot">
-            <button class="btn btn--primary" type="submit">Kirim Permintaan</button>
-            <p class="ctc-form__note" data-form-note role="status"></p>
+            <button class="btn btn--primary" type="submit">{{ data_get($page, 'submit_label', 'Kirim Permintaan') }}</button>
+            <p @class(['ctc-form__note', 'is-on' => session('inquiry_sent')]) data-form-note role="status">@if (session('inquiry_sent'))Terima kasih. Permintaan Anda kami terima, tim kami akan menghubungi dalam 1x24 jam.@endif</p>
           </div>
         </form>
+
+        <!-- Popup "berhasil terkirim"; dimunculkan contact-form.js (atau langsung
+             oleh server saat form terkirim tanpa JS). -->
+        <div @class(['ctc-toast', 'is-on' => session('inquiry_sent')]) data-form-toast role="alert" aria-live="assertive">
+          <span class="ctc-toast__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+          <div class="ctc-toast__body">
+            <strong data-toast-title>Permintaan berhasil dikirim</strong>
+            <span data-toast-text>Tim kami akan menghubungi Anda dalam 1x24 jam.</span>
+          </div>
+          <button class="ctc-toast__close" type="button" data-toast-close aria-label="Tutup">&times;</button>
+        </div>
 
         <!-- Satu gambar accessories (ban + velg lengkap), bukan lagi tumpukan
              beberapa PNG yang disusun sendiri. -->
         <div class="ctc-stack" aria-hidden="true">
-          <img src="{{ asset('assets/img/accessories.webp') }}" width="991" height="646" alt="" loading="lazy">
+          <img src="{{ media(data_get($page, 'form_image')) }}" alt="" loading="lazy">
         </div>
       </div>
     </div>
@@ -86,45 +98,23 @@
     <div class="container">
       <div class="faq__grid">
         <div class="faq__art reveal">
-          <img src="{{ asset('assets/img/panda-contact.webp') }}" alt="Maskot panda Tiberman siap membantu" loading="lazy">
+          <img src="{{ media(data_get($page, 'faq_image')) }}" alt="Maskot panda Tiberman siap membantu" loading="lazy">
         </div>
         <div class="faq__panel reveal" data-delay="100">
-          <h2>Do you have questions?</h2>
+          <h2>{{ data_get($page, 'faq_heading') }}</h2>
           <div data-accordion>
-            <div class="acc__item is-open">
-              <button class="acc__q" aria-expanded="true">Apakah Tiberman melayani pembelian dalam jumlah besar?
+            @foreach (data_get($page, 'faq', []) as $item)
+            <div @class(['acc__item', 'is-open' => $loop->first])>
+              <button class="acc__q" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">{{ $item['question'] ?? '' }}
                 <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
               </button>
-              <div class="acc__a"><p>Ya. Sebagian besar pelanggan kami adalah perusahaan angkutan, kontraktor, dan perusahaan tambang dengan kebutuhan puluhan hingga ratusan ban per pengadaan. Tim kami akan membantu menyesuaikan spesifikasi dengan rute dan beban armada Anda.</p></div>
+              <div class="acc__a"><p>{!! rich($item['answer'] ?? '') !!}</p></div>
             </div>
-            <div class="acc__item">
-              <button class="acc__q" aria-expanded="false">Berapa lama proses pengirimannya?
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
-              </button>
-              <div class="acc__a"><p>Untuk stok yang tersedia di SuperArea terdekat, pengiriman umumnya dilakukan dalam 24 jam. Distribusi dikelola sendiri oleh PT Hantar Lintas Nusantara (Halilintar), jadi jadwalnya bisa kami pantau sampai barang diterima.</p></div>
-            </div>
-            <div class="acc__item">
-              <button class="acc__q" aria-expanded="false">Bagaimana kalau ban yang saya terima cacat produksi?
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
-              </button>
-              <div class="acc__a"><p>Hubungi SuperArea tempat Anda membeli beserta foto dan nomor seri bannya. Klaim garansi cacat produksi kami proses tanpa biaya, termasuk penggantian unit bila hasil pemeriksaan memenuhi syarat.</p></div>
-            </div>
-            <div class="acc__item">
-              <button class="acc__q" aria-expanded="false">Apakah tersedia layanan konsultasi pemilihan ban?
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
-              </button>
-              <div class="acc__a"><p>Tersedia dan tanpa biaya. Sampaikan jenis unit, medan, dan beban rata-rata Anda — tim teknis kami akan merekomendasikan ukuran, pola telapak, dan konstruksi yang paling sesuai.</p></div>
-            </div>
-            <div class="acc__item">
-              <button class="acc__q" aria-expanded="false">Di mana saja lokasi SuperArea Tiberman?
-                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6l5 5 5-5"/></svg>
-              </button>
-              <div class="acc__a"><p>Ada 15 SuperArea dari Sumatra sampai Maluku &amp; Papua. Daftar lengkap beserta alamatnya bisa dilihat di halaman <a href="/superarea">SuperArea</a>.</p></div>
-            </div>
+            @endforeach
           </div>
           <div class="faq__foot">
-            <span>Pertanyaan saya tidak ada di sini.</span>
-            <a class="btn btn--connect" href="https://wa.me/6281283258200">Connect us
+            <span>{{ data_get($page, 'faq_foot') }}</span>
+            <a class="btn btn--connect" href="{{ data_get($page, 'connect_url') ?: 'https://wa.me/'.cms('site.whatsapp') }}">{{ data_get($page, 'connect_label') }}
               <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11L11 3M5 3h6v6"/></svg>
             </a>
           </div>
