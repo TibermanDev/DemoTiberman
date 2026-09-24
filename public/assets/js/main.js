@@ -250,8 +250,16 @@
       return order.map(function (s) { return { size: s, items: bySize[s] }; });
     };
 
-    /* Merk = bagian nama sebelum " - " ("UNINEST - TIBERMAX 554"). */
-    var brandOf = function (p) { return p.name.toLowerCase().split(' - ')[0].trim(); };
+    /* Merk = slug merk dari CMS; cadangannya bagian nama sebelum " - "
+       ("UNINEST - TIBERMAX 554"). */
+    var brandOf = function (p) { return p.brand || p.name.toLowerCase().split(' - ')[0].trim(); };
+
+    /* Nama & keterangan produk diisi dari CMS, jadi di-escape sebelum masuk innerHTML. */
+    var esc = function (v) {
+      return String(v == null ? '' : v).replace(/[&<>"]/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+      });
+    };
 
     /* chip ukuran dibangun dari unit (dan merk) yang aktif; chip yang punya
        URL toko lama jadi tautan, sisanya (mis. ukuran velg) tetap tombol */
@@ -267,8 +275,8 @@
         var cls = 'chip' + (state.size === size ? ' is-active' : '');
         var href = size === 'all' ? URLS.units[state.unit] : URLS.sizes[size];
         return href
-          ? '<a class="' + cls + '" href="' + href + '" data-size="' + size + '">' + label + '</a>'
-          : '<button type="button" class="' + cls + '" data-size="' + size + '">' + label + '</button>';
+          ? '<a class="' + cls + '" href="' + esc(href) + '" data-size="' + esc(size) + '">' + esc(label) + '</a>'
+          : '<button type="button" class="' + cls + '" data-size="' + esc(size) + '">' + esc(label) + '</button>';
       };
       chipsWrap.innerHTML = chip('all', 'All Size') + sizes.map(function (s) { return chip(s, s); }).join('');
     };
@@ -293,15 +301,15 @@
       grid.innerHTML = groups.map(function (g) {
         return '' +
           '<section class="size-group">' +
-            '<h2><span>Ukuran</span> ' + g.size + '</h2>' +
+            '<h2><span>Ukuran</span> ' + esc(g.size) + '</h2>' +
             '<div class="product-grid">' +
               g.items.map(function (p) {
                 return '' +
-                  '<a class="product-card" href="/produk">' +
-                    '<span class="product-card__img"><img src="' + p.img + '" alt="' + p.name + ' ' + g.size + '" loading="lazy"></span>' +
+                  '<a class="product-card" href="' + esc(p.url || '/produk') + '">' +
+                    '<span class="product-card__img"><img src="' + esc(p.img) + '" alt="' + esc(p.name + ' ' + g.size) + '" loading="lazy"></span>' +
                     '<span class="product-card__body">' +
-                      '<strong>' + p.name + '</strong>' +
-                      '<span><span>compatible for :</span> ' + p.compat + '</span>' +
+                      '<strong>' + esc(p.name) + '</strong>' +
+                      '<span><span>compatible for :</span> ' + esc(p.compat) + '</span>' +
                     '</span>' +
                   '</a>';
               }).join('') +
@@ -409,20 +417,24 @@
   }
 
   /* ---------- 6b. Modal detail produk ----------
-     Kartu katalog tetap <a href="produk.html"> supaya tanpa JS, klik kanan,
+     Kartu katalog tetap <a href="/produk/{slug}"> supaya tanpa JS, klik kanan,
      atau klik tengah tetap membuka halaman produk. Klik biasa dicegat di sini
-     dan dialihkan ke modal.
+     dan dialihkan ke modal; isi slide-nya diambil dari /produk/{slug}/modal
+     (dirender server dari data CMS) lalu disimpan supaya kartu yang sama tidak
+     diminta ulang.
 
      Semua slide memakai permukaan terang, jadi modalnya tidak punya varian
      warna — fotonya PNG beralpha dan logonya versi untuk latar terang. */
   var pmodal = document.querySelector('[data-pmodal]');
   if (pmodal) {
     var pmTrack = pmodal.querySelector('[data-pmodal-track]');
-    var pmSlides = Array.prototype.slice.call(pmTrack.children);
+    var pmSlides = [];
     var pmDots = pmodal.querySelector('[data-pmodal-dots]');
-    var pmIdx = 0, pmPemanggil = null;
+    var pmIdx = 0, pmPemanggil = null, pmMinta = 0;
+    var pmCache = {};
 
     var pmShow = function (i) {
+      if (!pmSlides.length) return;
       pmIdx = (i + pmSlides.length) % pmSlides.length;
       pmTrack.style.transform = 'translateX(' + (-pmIdx * 100) + '%)';
       if (pmDots) {
@@ -438,15 +450,25 @@
       });
     };
 
-    if (pmDots) {
-      pmSlides.forEach(function (_, i) {
-        var b = document.createElement('button');
-        b.type = 'button';
-        b.setAttribute('aria-label', 'Slide ' + (i + 1));
-        b.addEventListener('click', function () { pmShow(i); });
-        pmDots.appendChild(b);
-      });
-    }
+    /* Isi slide baru -> titik navigasi, galeri, dan chip ukurannya dipasang ulang. */
+    var pmIsi = function (html) {
+      pmTrack.innerHTML = html;
+      pmSlides = Array.prototype.slice.call(pmTrack.children);
+      if (pmDots) {
+        pmDots.innerHTML = '';
+        pmSlides.forEach(function (_, i) {
+          var b = document.createElement('button');
+          b.type = 'button';
+          b.setAttribute('aria-label', 'Slide ' + (i + 1));
+          b.addEventListener('click', function () { pmShow(i); });
+          pmDots.appendChild(b);
+        });
+      }
+      pmTrack.querySelectorAll('[data-gallery]').forEach(pasangGaleri);
+      pmTrack.querySelectorAll('[data-size-chips]').forEach(pasangChipUkuran);
+      if (window.TIBERMAN_I18N) window.TIBERMAN_I18N.refresh(pmTrack);
+      pmShow(0);
+    };
 
     var pmClose = function () {
       pmodal.hidden = true;
@@ -457,12 +479,32 @@
 
     var pmOpen = function (pemanggil) {
       pmPemanggil = pemanggil || null;
-      pmodal.hidden = false;
-      /* halaman di belakang dikunci supaya scroll tidak bocor ke katalog */
-      document.body.style.overflow = 'hidden';
-      pmShow(0);
-      var tutup = pmodal.querySelector('[data-pmodal-close]');
-      if (tutup) tutup.focus();
+      var url = pemanggil.getAttribute('href').replace(/\/+$/, '') + '/modal';
+      var nomor = ++pmMinta;
+
+      var tampilkan = function (html) {
+        /* klik kartu lain sebelum yang ini selesai dimuat -> yang lama dibuang */
+        if (nomor !== pmMinta) return;
+        pmIsi(html);
+        pmodal.hidden = false;
+        /* halaman di belakang dikunci supaya scroll tidak bocor ke katalog */
+        document.body.style.overflow = 'hidden';
+        var tutup = pmodal.querySelector('[data-pmodal-close]');
+        if (tutup) tutup.focus();
+      };
+
+      if (pmCache[url]) { tampilkan(pmCache[url]); return; }
+
+      pemanggil.classList.add('is-loading');
+      fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.status);
+          return res.text();
+        })
+        .then(function (html) { pmCache[url] = html; tampilkan(html); })
+        /* modal gagal dimuat -> buka halaman produknya seperti tanpa JS */
+        .catch(function () { if (nomor === pmMinta) location.href = pemanggil.href; })
+        .then(function () { pemanggil.classList.remove('is-loading'); });
     };
 
     pmodal.querySelectorAll('[data-pmodal-close]').forEach(function (el) {
@@ -487,14 +529,17 @@
       e.preventDefault();
       pmOpen(kartu);
     });
-
-    pmShow(0);
   }
 
-  /* ---------- 7. Halaman produk: galeri + pilihan ukuran ---------- */
-  var gallery = document.querySelector('[data-gallery]');
-  if (gallery) {
+  /* ---------- 7. Halaman produk: galeri + pilihan ukuran ----------
+     Dibuat sebagai fungsi karena galerinya muncul di halaman produk DAN di
+     modal katalog, yang isinya diganti tiap kali kartu lain dibuka. */
+  document.querySelectorAll('[data-gallery]').forEach(pasangGaleri);
+  document.querySelectorAll('[data-size-chips]').forEach(pasangChipUkuran);
+
+  function pasangGaleri(gallery) {
     var main = gallery.querySelector('[data-gallery-main]');
+    if (!main) return;
     gallery.querySelectorAll('[data-gallery-thumb]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         gallery.querySelectorAll('[data-gallery-thumb]').forEach(function (b) {
@@ -505,16 +550,48 @@
       });
     });
 
-    /* --- klik gambar utama -> tampilan penuh ---------------------------
-       Kotaknya dibuat di sini, bukan ditulis di HTML, karena galerinya muncul
-       di tiga halaman (produk.html + modal di katalog.html & katalog-topnav.html)
-       dan markup yang sama tidak perlu diulang tiga kali.
+    /* Gambar <img> bukan elemen yang bisa difokus, jadi perannya dipasang di
+       sini — bukan di HTML — supaya tanpa JS dia tetap gambar biasa dan tidak
+       menawarkan tombol yang tidak berfungsi. */
+    main.setAttribute('role', 'button');
+    main.setAttribute('tabindex', '0');
+    main.setAttribute('aria-label', 'Lihat gambar ukuran penuh');
+    main.classList.add('is-zoomable');
+    if (main.parentElement) main.parentElement.classList.add('has-zoom');
+    main.addEventListener('click', function () { lbBuka(main); });
+    main.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        lbBuka(main);
+      }
+    });
+  }
 
-       z-index-nya di ATAS .pmodal (200), sebab di katalog galerinya sendiri
-       berada di dalam modal itu. Latarnya panel terang, bukan gelap: keempat
-       PNG ban itu berlatar TRANSPARAN, jadi di atas kain gelap ban yang
-       memang hitam nyaris tidak kelihatan. */
-    var lb = document.createElement('div');
+  function pasangChipUkuran(wrap) {
+    wrap.querySelectorAll('.size-chip').forEach(function (chip) {
+      chip.addEventListener('click', function (e) {
+        e.preventDefault();
+        wrap.querySelectorAll('.size-chip').forEach(function (c) {
+          c.classList.toggle('is-active', c === chip);
+        });
+      });
+    });
+  }
+
+  /* --- klik gambar utama -> tampilan penuh ---------------------------
+     Kotaknya dibuat sekali di sini, bukan ditulis di HTML, karena galerinya
+     muncul di halaman produk dan modal katalog, dan markup yang sama tidak
+     perlu diulang.
+
+     z-index-nya di ATAS .pmodal (200), sebab di katalog galerinya sendiri
+     berada di dalam modal itu. Latarnya panel terang, bukan gelap: PNG ban
+     berlatar TRANSPARAN, jadi di atas kain gelap ban yang memang hitam nyaris
+     tidak kelihatan. */
+  var lb = null, lbImg = null, lbTutup = null, lbAsal = null, lbOverflowLama = '';
+
+  function lbSiapkan() {
+    if (lb) return;
+    lb = document.createElement('div');
     lb.className = 'lbox';
     lb.hidden = true;
     lb.setAttribute('role', 'dialog');
@@ -530,58 +607,11 @@
       '</div>';
     document.body.appendChild(lb);
 
-    var lbImg = lb.querySelector('.lbox__img');
-    var lbTutup = lb.querySelector('.lbox__close');
-    var lbOverflowLama = '';
-
-    function lbBuka() {
-      lbImg.src = main.currentSrc || main.src;
-      lbImg.alt = main.alt || '';
-      /* Batas lebar dipasang dari ukuran ASLI gambarnya: tyre-preview.png cuma
-         592px, kalau dipaksa memenuhi layar hasilnya pecah. 1,5x masih terlihat
-         bersih, dan 1040px menahan tyre-90.png (2192px) supaya tidak raksasa. */
-      var pasangBatas = function () {
-        var n = lbImg.naturalWidth || 0;
-        lbImg.style.setProperty('--lbox-max', (n ? Math.round(Math.min(n * 1.5, 1040)) : 1040) + 'px');
-      };
-      if (lbImg.complete && lbImg.naturalWidth) pasangBatas();
-      else lbImg.addEventListener('load', pasangBatas, { once: true });
-
-      /* Nilai lama disimpan, bukan dikosongkan waktu menutup: di katalog,
-         .pmodal sudah lebih dulu mengunci scroll halaman — kalau dikosongkan,
-         menutup tampilan penuh ini ikut membuka kunci katalog di belakang
-         modal yang masih terbuka. */
-      lbOverflowLama = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
-      lb.hidden = false;
-      lbTutup.focus();
-    }
-
-    function lbTutupkan() {
-      lb.hidden = true;
-      lbImg.removeAttribute('src');
-      document.body.style.overflow = lbOverflowLama;
-      main.focus();
-    }
+    lbImg = lb.querySelector('.lbox__img');
+    lbTutup = lb.querySelector('.lbox__close');
 
     lb.querySelectorAll('[data-lbox-close]').forEach(function (el) {
       el.addEventListener('click', lbTutupkan);
-    });
-
-    /* Gambar <img> bukan elemen yang bisa difokus, jadi perannya dipasang di
-       sini — bukan di HTML — supaya tanpa JS dia tetap gambar biasa dan tidak
-       menawarkan tombol yang tidak berfungsi. */
-    main.setAttribute('role', 'button');
-    main.setAttribute('tabindex', '0');
-    main.setAttribute('aria-label', 'Lihat gambar ukuran penuh');
-    main.classList.add('is-zoomable');
-    if (main.parentElement) main.parentElement.classList.add('has-zoom');
-    main.addEventListener('click', lbBuka);
-    main.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault();
-        lbBuka();
-      }
     });
 
     /* Fase CAPTURE + stopPropagation: penangan .pmodal juga memasang keydown
@@ -596,16 +626,37 @@
     }, true);
   }
 
-  document.querySelectorAll('[data-size-chips]').forEach(function (wrap) {
-    wrap.querySelectorAll('.size-chip').forEach(function (chip) {
-      chip.addEventListener('click', function (e) {
-        e.preventDefault();
-        wrap.querySelectorAll('.size-chip').forEach(function (c) {
-          c.classList.toggle('is-active', c === chip);
-        });
-      });
-    });
-  });
+  function lbBuka(main) {
+    lbSiapkan();
+    lbAsal = main;
+    lbImg.src = main.currentSrc || main.src;
+    lbImg.alt = main.alt || '';
+    /* Batas lebar dipasang dari ukuran ASLI gambarnya: tyre-preview.png cuma
+       592px, kalau dipaksa memenuhi layar hasilnya pecah. 1,5x masih terlihat
+       bersih, dan 1040px menahan tyre-90.png (2192px) supaya tidak raksasa. */
+    var pasangBatas = function () {
+      var n = lbImg.naturalWidth || 0;
+      lbImg.style.setProperty('--lbox-max', (n ? Math.round(Math.min(n * 1.5, 1040)) : 1040) + 'px');
+    };
+    if (lbImg.complete && lbImg.naturalWidth) pasangBatas();
+    else lbImg.addEventListener('load', pasangBatas, { once: true });
+
+    /* Nilai lama disimpan, bukan dikosongkan waktu menutup: di katalog,
+       .pmodal sudah lebih dulu mengunci scroll halaman — kalau dikosongkan,
+       menutup tampilan penuh ini ikut membuka kunci katalog di belakang
+       modal yang masih terbuka. */
+    lbOverflowLama = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    lb.hidden = false;
+    lbTutup.focus();
+  }
+
+  function lbTutupkan() {
+    lb.hidden = true;
+    lbImg.removeAttribute('src');
+    document.body.style.overflow = lbOverflowLama;
+    if (lbAsal) lbAsal.focus();
+  }
 
   /* ---------- 8. Video latar section (Importir) ----------
      Videonya preload="none" dan baru dimuat + diputar begitu sectionnya masuk

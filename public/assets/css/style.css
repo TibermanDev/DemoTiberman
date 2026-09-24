@@ -2080,3 +2080,12 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   .ctc-form__row{grid-template-columns:minmax(0,1fr)}
   .ctc-stack{max-width:360px;justify-self:center;margin-right:0}
 }
+
+/* ---------- Produk tanpa logo gambar (diisi dari CMS) ----------
+   Produk yang belum punya logo di CMS menampilkan namanya sebagai teks
+   di tempat logo. */
+.pdp-hero__title{font-size:clamp(28px,4.4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 18px}
+.pdp-info__name,.pmodal__name{font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.1;text-transform:uppercase;margin:0 0 12px}
+.pmodal__more{margin-top:14px;font-size:13px;font-weight:700}
+.pmodal__more a{color:inherit;text-decoration:underline}
+.product-card.is-loading{opacity:.6;cursor:progress}

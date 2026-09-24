@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Tiberman — Importir Ban Truk & Alat Berat Terpercaya')
-@section('description', 'Tiberman, importir ban truk & alat berat terpercaya dengan 15 SuperArea di seluruh Indonesia, 2 Pusat Logistik Berikat, dan armada delivery sendiri.')
+@section('title', data_get($home, 'seo_title') ?: cms('site.seo_title'))
+@section('description', data_get($home, 'seo_description') ?: cms('site.seo_description'))
 
 @push('head')
 <!-- Intro diputar saat home dibuka DARI LUAR situs (alamat diketik, bookmark,
@@ -82,8 +82,8 @@ window.__tbmIntroBail=setTimeout(function(){
     <section class="hero">
       <div class="hero__stage">
         <div class="hero__media">
-          <img src="{{ asset('assets/img/hero-warehouse-2.webp') }}" alt="Tim Tiberman di gudang ban" fetchpriority="high">
-          <div class="hero__wordmark"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></div>
+          <img src="{{ media(data_get($home, 'hero.image')) }}" alt="{{ data_get($home, 'hero.alt') }}" fetchpriority="high">
+          <div class="hero__wordmark"><img src="{{ media(cms('site.logo')) ?? asset('assets/img/logo-white.png') }}" alt="Tiberman"></div>
         </div>
       </div>
     </section>
@@ -114,9 +114,11 @@ window.__tbmIntroBail=setTimeout(function(){
            gambarnya — bukan berhenti mendadak di batas section. -->
       <section class="superarea" id="superarea">
         <div class="superarea__copy">
-          <p class="eyebrow reveal">siap melayani Anda lebih dekat dengan</p>
-          <h2 class="reveal" data-delay="80">15 SuperArea yang tersebar di<br>seluruh Indonesia</h2>
-          <a class="btn btn--primary reveal" data-delay="160" href="{{ route('contact') }}">Check it !</a>
+          <p class="eyebrow reveal">{{ data_get($home, 'superarea.eyebrow') }}</p>
+          <h2 class="reveal" data-delay="80">{!! rich(data_get($home, 'superarea.heading')) !!}</h2>
+          @if (filled(data_get($home, 'superarea.button_label')))
+          <a class="btn btn--primary reveal" data-delay="160" href="{{ data_get($home, 'superarea.button_url') }}">{{ data_get($home, 'superarea.button_label') }}</a>
+          @endif
         </div>
       </section>
       <div class="superarea__glow" aria-hidden="true"></div>
@@ -157,14 +159,11 @@ window.__tbmIntroBail=setTimeout(function(){
     </video>
     <div class="importir__scrim" aria-hidden="true"></div>
     <div class="importir__inner">
-      <h2 class="reveal">Importir Ban Truk &amp; Alat Berat<br>TERPERCAYA</h2>
+      <h2 class="reveal">{!! rich(data_get($home, 'importir.heading')) !!}</h2>
       <div class="pills reveal" data-delay="120">
-        <a class="pill" href="/kategori-produk/ban-truk">Truck &amp; Bus</a>
-        <a class="pill" href="/kategori-produk/ban-truk/ban-truk-off-the-road">Mining Truck</a>
-        <a class="pill" href="/kategori-produk/ban-loader">Loader</a>
-        <a class="pill" href="/kategori-produk/ban-grader">Grader</a>
-        <a class="pill" href="/kategori-produk/ban-forklift">Forklift</a>
-        <a class="pill" href="/kategori-produk/ban-traktor">Tractor</a>
+        @foreach (data_get($home, 'importir.pills', []) as $pill)
+        <a class="pill" href="{{ $pill['url'] }}">{{ $pill['label'] }}</a>
+        @endforeach
       </div>
     </div>
   </section>
@@ -193,11 +192,11 @@ window.__tbmIntroBail=setTimeout(function(){
     <div class="accessories__wrap">
       <div class="accessories__grid">
         <div class="accessories__art reveal">
-          <img src="{{ asset('assets/img/accessories-2.webp') }}" alt="Ban, velg, dan aksesoris pendukung" loading="lazy">
+          <img src="{{ media(data_get($home, 'accessories.image')) }}" alt="{{ data_get($home, 'accessories.alt') }}" loading="lazy">
         </div>
         <div class="accessories__copy reveal" data-delay="100">
-          <h2 class="h2">Lengkapi kebutuhan<br>Anda di satu tempat.</h2>
-          <p class="lead">Tak hanya ban, kami juga menyediakan aksesoris pendukung seperti velg, ban dalam, flap, marset, dan O-ring dengan stok siap kirim.</p>
+          <h2 class="h2">{!! rich(data_get($home, 'accessories.heading')) !!}</h2>
+          <p class="lead">{!! rich(data_get($home, 'accessories.lead')) !!}</p>
         </div>
       </div>
     </div>
@@ -209,34 +208,19 @@ window.__tbmIntroBail=setTimeout(function(){
        main.js lewat data-velg-rail. -->
   <div class="velg-wrap">
     <div class="velg-cards" data-velg-rail>
-      <article class="velg-card velg-card--tyre reveal" data-delay="200" style="--ar:1720/952">
-        <div class="velg-card__img"><img src="{{ asset('assets/img/otr-tyre.png') }}" alt="Ban OTR untuk alat berat" loading="lazy"></div>
+      {{-- data-delay berurutan seperti markup lama: kartu ban muncul belakangan --}}
+      @foreach (data_get($home, 'cards', []) as $card)
+      @php($ratio = \App\Support\ImageRatio::of($card['image'] ?? null))
+      <article @class(['velg-card', 'velg-card--tyre' => ! empty($card['is_tyre']), 'reveal']) @if ($loop->index % 4) data-delay="{{ ($loop->index % 4) * 100 }}" @endif @if ($ratio) style="--ar:{{ $ratio }}" @endif>
+        <div class="velg-card__img"><img src="{{ media($card['image'] ?? null) }}" alt="{{ $card['alt'] ?? '' }}" loading="lazy"></div>
         <div class="velg-card__body">
-          <h3>OTR TYRE<span>(Off The Road)</span></h3>
-          <a class="btn btn--primary" href="/kategori-produk/ban-truk/ban-truk-off-the-road">Check it !</a>
+          <h3>{{ $card['title'] ?? '' }}<span>{{ $card['subtitle'] ?? '' }}</span></h3>
+          @if (filled($card['url'] ?? null))
+          <a class="btn btn--primary" href="{{ $card['url'] }}">{{ $card['button_label'] ?? 'Check it !' }}</a>
+          @endif
         </div>
       </article>
-      <article class="velg-card velg-card--tyre reveal" data-delay="300" style="--ar:1348/920">
-        <div class="velg-card__img"><img src="{{ asset('assets/img/tbr-tyre.png') }}" alt="Ban TBR untuk truk dan bus" loading="lazy"></div>
-        <div class="velg-card__body">
-          <h3>TBR TYRE<span>(Truck Bus)</span></h3>
-          <a class="btn btn--primary" href="/kategori-produk/ban-truk">Check it !</a>
-        </div>
-      </article>
-      <article class="velg-card reveal" style="--ar:1203/999">
-        <div class="velg-card__img"><img src="{{ asset('assets/img/velg-heavy-2.webp') }}" alt="Velg heavy duty" loading="lazy"></div>
-        <div class="velg-card__body">
-          <h3>VELG<span>Heavy-Duty</span></h3>
-          <a class="btn btn--primary" href="/kategori-produk/velg-truk">Check it !</a>
-        </div>
-      </article>
-      <article class="velg-card reveal" data-delay="100" style="--ar:1234/919">
-        <div class="velg-card__img"><img src="{{ asset('assets/img/velg-light-2.webp') }}" alt="Velg light truck" loading="lazy"></div>
-        <div class="velg-card__body">
-          <h3>VELG<span>Light Truck</span></h3>
-          <a class="btn btn--primary" href="/kategori-produk/velg-truk">Check it !</a>
-        </div>
-      </article>
+      @endforeach
     </div>
   </div>
 
@@ -273,8 +257,8 @@ window.__tbmIntroBail=setTimeout(function(){
              ke teks merah terlihat meloncat. -->
         <div class="why__mask" aria-hidden="true">
           <div class="why__inner">
-            <p>Dari sekian banyak supplier lain</p>
-            <span>Kenapa Harus Tiberman ?</span>
+            <p>{{ data_get($home, 'why.kicker') }}</p>
+            <span>{{ data_get($home, 'why.title') }}</span>
           </div>
         </div>
         <!-- Salinan tulisan yang sama, berwarna merah, dimunculkan di ujung
@@ -283,109 +267,106 @@ window.__tbmIntroBail=setTimeout(function(){
              halaman MacBook Pro (video di dalam huruf -> teks biru muda). -->
         <div class="why__tint" aria-hidden="true">
           <div class="why__inner">
-            <p>Dari sekian banyak supplier lain</p>
-            <span>Kenapa Harus Tiberman ?</span>
+            <p>{{ data_get($home, 'why.kicker') }}</p>
+            <span>{{ data_get($home, 'why.title') }}</span>
           </div>
         </div>
-        <h2 class="sr-only">Kenapa Harus Tiberman ?</h2>
+        <h2 class="sr-only">{{ data_get($home, 'why.title') }}</h2>
       </div>
     </div>
   </section>
 
   <!-- Stok Aman -->
+  @php($stock = data_get($home, 'stock', []))
   <section class="pilar">
     <div class="container">
-      <h2 class="pilar__title reveal">Stok Aman</h2>
+      <h2 class="pilar__title reveal">{{ $stock['title'] ?? '' }}</h2>
 
       <article class="feature-card reveal" data-delay="120">
         <div class="feature-card__body">
           <div class="feature-card__brand">
-            <img src="{{ asset('assets/img/logo-fiemin.png') }}" alt="PT Fie Min Logistics">
-            <span>PT Fie Min Logistics</span>
+            @if (filled($stock['brand_logo'] ?? null))
+            <img src="{{ media($stock['brand_logo']) }}" alt="{{ $stock['brand_name'] ?? '' }}">
+            @endif
+            <span>{{ $stock['brand_name'] ?? '' }}</span>
           </div>
-          <h3>Memiliki 2 Pusat Logistik<br>Berikat (PLB) sendiri</h3>
-          <p>Tiberman Group didukung oleh 2 Pusat Logistik Berikat (PLB) yang dikelola <b>PT Fiemin Logistics</b>. yang berlokasi di <b>Gresik</b> dan <b>Mojokerto</b></p>
-          <a class="btn btn--primary" href="{{ route('contact') }}">Check it !</a>
+          <h3>{!! rich($stock['heading'] ?? '') !!}</h3>
+          <p>{!! rich($stock['body'] ?? '') !!}</p>
+          @if (filled($stock['button_label'] ?? null))
+          <a class="btn btn--primary" href="{{ $stock['button_url'] ?? '#' }}">{{ $stock['button_label'] }}</a>
+          @endif
         </div>
         <div class="feature-card__media">
-          <img src="{{ asset('assets/img/plb-stock.webp') }}" alt="Gudang stok ban Pusat Logistik Berikat" loading="lazy">
+          <img src="{{ media($stock['image'] ?? null) }}" alt="{{ $stock['alt'] ?? '' }}" loading="lazy">
         </div>
       </article>
 
       <div class="plb-grid">
-        <article class="plb reveal">
-          <div class="plb__img"><img src="{{ asset('assets/img/plb-mojokerto.webp') }}" alt="PLB Mojokerto" loading="lazy"></div>
+        @foreach ($stock['warehouses'] ?? [] as $plb)
+        <article class="plb reveal" @if ($loop->odd === false) data-delay="150" @endif>
+          <div class="plb__img"><img src="{{ media($plb['image'] ?? null) }}" alt="PLB {{ $plb['name'] ?? '' }}" loading="lazy"></div>
           <div class="plb__foot">
-            <div class="plb__name">Mojokerto</div>
+            <div class="plb__name">{{ $plb['name'] ?? '' }}</div>
             <div class="plb__stats">
-              <div class="plb__stat"><span>kapasitas :</span><strong>150 kontainer</strong></div>
+              <div class="plb__stat"><span>kapasitas :</span><strong>{{ $plb['capacity'] ?? '' }}</strong></div>
             </div>
           </div>
         </article>
-        <article class="plb reveal" data-delay="150">
-          <div class="plb__img"><img src="{{ asset('assets/img/plb-gresik.webp') }}" alt="PLB Gresik" loading="lazy"></div>
-          <div class="plb__foot">
-            <div class="plb__name">Gresik</div>
-            <div class="plb__stats">
-              <div class="plb__stat"><span>kapasitas :</span><strong>250 kontainer</strong></div>
-            </div>
-          </div>
-        </article>
+        @endforeach
       </div>
     </div>
   </section>
 
   <!-- Pengiriman Aman -->
+  @php($delivery = data_get($home, 'delivery', []))
   <section class="pilar" style="padding-top:0">
     <div class="container">
-      <h2 class="pilar__title reveal">Pengiriman Aman</h2>
+      <h2 class="pilar__title reveal">{{ $delivery['title'] ?? '' }}</h2>
 
       <article class="feature-card feature-card--illus reveal" data-delay="120">
         <div class="feature-card__body">
           <div class="feature-card__brand feature-card__brand--halilintar">
-            <img src="{{ asset('assets/img/logo-halilintar.png') }}" alt="Halilintar">
+            @if (filled($delivery['brand_logo'] ?? null))
+            <img src="{{ media($delivery['brand_logo']) }}" alt="{{ $delivery['brand_name'] ?? '' }}">
+            @endif
           </div>
-          <h3>Aman sampai tujuan dengan<br>armada delivery sendiri</h3>
-          <p>Tiberman Group didukung oleh layanan distribusi yang dikelola oleh PT Hantar Lintas Nusantara (Halilintar) memastikan setiap pengiriman aman hingga sampai ke tangan anda.</p>
-          <a class="btn btn--primary" href="{{ route('contact') }}">Check it !</a>
+          <h3>{!! rich($delivery['heading'] ?? '') !!}</h3>
+          <p>{!! rich($delivery['body'] ?? '') !!}</p>
+          @if (filled($delivery['button_label'] ?? null))
+          <a class="btn btn--primary" href="{{ $delivery['button_url'] ?? '#' }}">{{ $delivery['button_label'] }}</a>
+          @endif
         </div>
         <div class="feature-card__media">
-          <img src="{{ asset('assets/img/truck-tiberman.webp') }}" alt="Ilustrasi truk pengiriman Tiberman bermuatan ban" loading="lazy">
+          <img src="{{ media($delivery['image'] ?? null) }}" alt="{{ $delivery['alt'] ?? '' }}" loading="lazy">
         </div>
       </article>
 
       <div class="photo-duo">
-        <img class="reveal" src="{{ asset('assets/img/plb-truck.webp') }}" alt="Truk kontainer Tiberman di gudang" loading="lazy">
-        <img class="reveal" data-delay="150" src="{{ asset('assets/img/delivery-forklift.webp') }}" alt="Forklift memuat ban ke kontainer" loading="lazy">
+        @foreach ($delivery['photos'] ?? [] as $photo)
+        <img class="reveal" @if (! $loop->first) data-delay="150" @endif src="{{ media($photo['image'] ?? null) }}" alt="{{ $photo['alt'] ?? '' }}" loading="lazy">
+        @endforeach
       </div>
     </div>
   </section>
 
   <!-- ============================= AFTER SALES ============================= -->
+  @php($services = data_get($home, 'aftersales.items', []))
+  {{-- Caption di HTML diisi layanan yang pertama kali jadi slide tengah
+       (index 2 dari 5 di coverflow), jadi tanpa JS tetap nyambung. --}}
+  @php($center = $services[min(2, max(count($services) - 1, 0))] ?? ['title' => '', 'desc' => ''])
   <section class="aftersales">
     <div class="container">
-      <h2 class="pilar__title reveal">After Sales</h2>
+      <h2 class="pilar__title reveal">{{ data_get($home, 'aftersales.title') }}</h2>
       <!-- Judul & deskripsi tiap layanan ditempel di slide-nya sendiri
            (data-title/data-desc); main.js menyalinnya ke caption di bawah
-           setiap kali slide tengah berganti. Caption di HTML diisi layanan
-           yang pertama kali jadi slide tengah, jadi tanpa JS tetap nyambung. -->
+           setiap kali slide tengah berganti. -->
       <div class="coverflow" data-coverflow>
         <div class="coverflow__track">
-          <div class="coverflow__item" data-title="Tyre Repair" data-desc="Layanan jaminan perbaikan kerusakan ban, sesuai dengan ketentuan yang berlaku.">
-            <img src="{{ asset('assets/img/after-sales-5.webp') }}" alt="Teknisi Tiberman memperbaiki tapak ban truk" loading="lazy" decoding="async">
+          @foreach ($services as $service)
+          <div class="coverflow__item" data-title="{{ $service['title'] ?? '' }}" data-desc="{{ $service['desc'] ?? '' }}">
+            <img src="{{ media($service['image'] ?? null) }}" alt="{{ $service['alt'] ?? '' }}" loading="lazy" decoding="async">
           </div>
-          <div class="coverflow__item" data-title="Tyre Lab" data-desc="Konsultasi online segala permasalahan ban 24 jam.">
-            <img src="{{ asset('assets/img/after-sales-4.webp') }}" alt="Staf Tiberman melayani konsultasi lewat ponsel di area tambang" loading="lazy" decoding="async">
-          </div>
-          <div class="coverflow__item" data-title="Site Visit" data-desc="Kunjungan eksklusif tire engineer profesional ke site customer.">
-            <img src="{{ asset('assets/img/after-sales-3.webp') }}" alt="Dua tire engineer meninjau alat berat di site customer" loading="lazy" decoding="async">
-          </div>
-          <div class="coverflow__item" data-title="Learning Center" data-desc="Layanan pembelajaran online seputar ban bersertifikat.">
-            <img src="{{ asset('assets/img/after-sales-2.webp') }}" alt="Peserta mengikuti kelas online Tiberman lewat laptop" loading="lazy" decoding="async">
-          </div>
-          <div class="coverflow__item" data-title="Privilege Card" data-desc="Benefit lebih untuk customer loyal dengan persyaratan khusus.">
-            <img src="{{ asset('assets/img/after-sales-1.webp') }}" alt="Kartu Privilege Tiberman tingkat Silver sampai Platinum" loading="lazy" decoding="async">
-          </div>
+          @endforeach
         </div>
       </div>
       <div class="dots" data-coverflow-dots></div>
@@ -394,8 +375,8 @@ window.__tbmIntroBail=setTimeout(function(){
           <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M9 0 3 6l6 6z"/></svg>
         </button>
         <div class="aftersales__caption reveal">
-          <h3><span>Tiberman</span><span data-coverflow-title>Site Visit</span></h3>
-          <p data-coverflow-desc>Kunjungan eksklusif tire engineer profesional ke site customer.</p>
+          <h3><span>Tiberman</span><span data-coverflow-title>{{ $center['title'] ?? '' }}</span></h3>
+          <p data-coverflow-desc>{{ $center['desc'] ?? '' }}</p>
         </div>
         <button class="coverflow__nav coverflow__nav--next" type="button" aria-label="Berikutnya">
           <svg viewBox="0 0 12 12" fill="currentColor" aria-hidden="true"><path d="M3 0l6 6-6 6z"/></svg>
@@ -408,34 +389,18 @@ window.__tbmIntroBail=setTimeout(function(){
   <section class="testi">
     <div class="testi__grid">
       <div class="testi__intro reveal">
-        <h2 class="h2">Testimoni<br>Pelanggan</h2>
-        <p>Berikut beberapa testimoni dari pelanggan yang telah menggunakan produk ban kami.</p>
+        <h2 class="h2">{!! rich(data_get($home, 'testimonials.heading')) !!}</h2>
+        <p>{!! rich(data_get($home, 'testimonials.intro')) !!}</p>
       </div>
       <div class="testi__rail" data-drag-rail>
+        @foreach (data_get($home, 'testimonials.items', []) as $testi)
         <article class="testi-card">
           <div class="testi-card__quote">&ldquo;</div>
-          <div class="testi-card__avatar">AR</div>
-          <p>Bannya sangat bagus, sampai saya pengen beli lagi walau gatau buat apa, terimakasih Tiberman!</p>
-          <div class="testi-card__who"><strong>Agnes Remi</strong><span>Mbak2 tambang</span></div>
+          <div class="testi-card__avatar">{{ \Illuminate\Support\Str::of($testi['name'] ?? '')->explode(' ')->filter()->take(2)->map(fn ($w) => mb_strtoupper(mb_substr($w, 0, 1)))->join('') }}</div>
+          <p>{{ $testi['quote'] ?? '' }}</p>
+          <div class="testi-card__who"><strong>{{ $testi['name'] ?? '' }}</strong><span>{{ $testi['role'] ?? '' }}</span></div>
         </article>
-        <article class="testi-card">
-          <div class="testi-card__quote">&ldquo;</div>
-          <div class="testi-card__avatar">BS</div>
-          <p>Stok selalu ada dan pengiriman cepat. Armada kami tidak pernah menunggu ban lagi.</p>
-          <div class="testi-card__who"><strong>Bagus Santosa</strong><span>Fleet Manager</span></div>
-        </article>
-        <article class="testi-card">
-          <div class="testi-card__quote">&ldquo;</div>
-          <div class="testi-card__avatar">DP</div>
-          <p>Layanan free tyre repair-nya benar-benar terpakai. Support after sales-nya cepat tanggap.</p>
-          <div class="testi-card__who"><strong>Dimas Prakoso</strong><span>Owner Dump Truck</span></div>
-        </article>
-        <article class="testi-card">
-          <div class="testi-card__quote">&ldquo;</div>
-          <div class="testi-card__avatar">RN</div>
-          <p>Sidewall-nya kuat untuk jalur tambang. Umur pakainya jauh lebih panjang dari ban sebelumnya.</p>
-          <div class="testi-card__who"><strong>Rizky Nugraha</strong><span>Supervisor Hauling</span></div>
-        </article>
+        @endforeach
       </div>
     </div>
   </section>
@@ -445,5 +410,6 @@ window.__tbmIntroBail=setTimeout(function(){
 @endsection
 
 @push('scripts')
+<script>window.TIBERMAN_AREAS = @json($areas, JSON_FORCE_OBJECT);</script>
 <script src="{{ asset('assets/js/superarea-spots.js') }}" defer></script>
 @endpush

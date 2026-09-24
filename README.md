@@ -1,3 +1,34 @@
+# Tiberman — situs & CMS
+
+Semua isi situs dikelola dari panel admin di **`/admin`** (Filament 5).
+
+| Menu CMS | Yang diatur |
+| --- | --- |
+| Permintaan Masuk | Kiriman form "Become Our Partner" di /kontak |
+| Halaman › Beranda, Contact Us, News, SuperArea, Katalog | Teks, gambar, tombol, kartu, After Sales, testimoni, FAQ, SEO tiap halaman |
+| Halaman › Lokasi SuperArea | Kota, alamat, foto, pulau, keterangan pin peta, tampil di footer |
+| Halaman › Flipbook PDF | /katalog, /company-profile, /proposal, dan flipbook baru |
+| Blog › Artikel, Kategori | Artikel (rich editor), sorotan, populer, jadwal terbit, tab kategori |
+| Katalog › Produk, Unit, Merk, URL Ukuran | Produk + halaman detailnya, menu Products di navbar, URL toko lama |
+| Pengaturan › Pengaturan Situs | Logo, kontak, WhatsApp, media sosial, marketplace, footer, SEO bawaan |
+| Pengaturan › Terjemahan EN / 中文 | Kamus tombol bahasa (assets/js/i18n.js) |
+| Pengaturan › Redirect URL | Redirect 301/302 dari URL situs lama |
+| Pengaturan › Admin | Akun admin CMS |
+
+## Menjalankan
+
+```bash
+composer install
+php artisan migrate --seed   # isi awal = konten situs statis sebelumnya
+php artisan storage:link     # gambar unggahan CMS disajikan dari /storage
+```
+
+Akun admin awal dari seeder: `admin@tiberman.com` / `password` — **ganti passwordnya** setelah login pertama.
+
+Butuh ekstensi PHP `intl` (dipakai Filament), termasuk di server produksi.
+
+---
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

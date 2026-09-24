@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'SuperArea — Tiberman')
-@section('description', '15 SuperArea Tiberman yang tersebar dari Sumatra sampai Maluku & Papua, siap melayani kebutuhan ban truk & alat berat lebih dekat.')
+@section('title', data_get($page, 'seo_title') ?: 'SuperArea — Tiberman')
+@section('description', data_get($page, 'seo_description'))
 @section('body-class', 'subpage')
 
 @section('content')
@@ -36,114 +36,25 @@
 
   <div class="sa__inner">
     <div class="sa__head">
-      <img class="sa__wordmark" src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman" width="1000" height="180">
-      <p class="sa__kicker">SUPERAREA</p>
+      <img class="sa__wordmark" src="{{ media(cms('site.logo')) ?? asset('assets/img/logo-white.png') }}" alt="Tiberman" width="1000" height="180">
+      <p class="sa__kicker">{{ data_get($page, 'kicker') }}</p>
     </div>
 
     <!-- Tab pulau: memfilter kartu di bawahnya (assets/js/superarea-page.js) -->
     <div class="sa__tabs" data-sa-tabs role="tablist" aria-label="Pilih pulau">
-      <button class="sa-tab is-active" type="button" role="tab" aria-selected="true"  data-region="jawa">Jawa</button>
-      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="sumatra">Sumatra</button>
-      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="kalimantan">Kalimantan</button>
-      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="sulawesi">Sulawesi</button>
-      <button class="sa-tab"           type="button" role="tab" aria-selected="false" data-region="maluku-papua">Maluku &amp; Papua</button>
+      @foreach (data_get($page, 'regions', []) as $region)
+      <button @class(['sa-tab', 'is-active' => $loop->first]) type="button" role="tab" aria-selected="{{ $loop->first ? 'true' : 'false' }}" data-region="{{ $region['key'] }}">{{ $region['label'] }}</button>
+      @endforeach
     </div>
 
-    <!-- CATATAN: foto tiap kartu masih memakai stok foto yang sudah ada di
-         repo sebagai placeholder — tinggal ganti src-nya dengan foto kota /
-         kantor masing-masing SuperArea. -->
     <div class="sa__grid" data-sa-grid>
-
-      <article class="sa-card" data-region="jawa">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-truck.webp') }}" alt="SuperArea Jabodetabek" loading="lazy"></span>
-        <strong>Jabodetabek</strong>
-        <span>Komplek Pergudangan Cahaya, Jl. Nurul Huda No.34, Jatimulya, Bekasi</span>
+      @foreach ($locations as $location)
+      <article class="sa-card" data-region="{{ $location->region }}">
+        <span class="sa-card__img"><img src="{{ media($location->image) }}" alt="SuperArea {{ $location->name }}" loading="lazy"></span>
+        <strong>{{ $location->name }}@if ($location->note) <em>( {{ $location->note }} )</em>@endif</strong>
+        <span>{{ $location->address }}</span>
       </article>
-
-      <article class="sa-card" data-region="jawa">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/warehouse-dark.webp') }}" alt="SuperArea Surabaya" loading="lazy"></span>
-        <strong>Surabaya <em>( Head Office )</em></strong>
-        <span>Jl. Mustika No.10, Ngagel, Kec. Wonokromo, Kota Surabaya</span>
-      </article>
-
-      <article class="sa-card" data-region="jawa">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-mojokerto.webp') }}" alt="SuperArea Mojokerto" loading="lazy"></span>
-        <strong>Mojokerto</strong>
-        <span>Pergudangan Fie Min Logistics, Jl. Raya Pacing, Kec. Bangsal, Mojokerto</span>
-      </article>
-
-      <article class="sa-card" data-region="jawa">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-gresik.webp') }}" alt="SuperArea Gresik" loading="lazy"></span>
-        <strong>Gresik</strong>
-        <span>Pergudangan Fie Min Logistics, Jl. Raya Bungah, Kec. Bungah, Gresik</span>
-      </article>
-
-      <article class="sa-card" data-region="sumatra">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-stock.webp') }}" alt="SuperArea Palembang" loading="lazy"></span>
-        <strong>Palembang</strong>
-        <span>Jl. Musi 2, Kel. Karang Jaya, Kec. Gandus, Kota Palembang</span>
-      </article>
-
-      <article class="sa-card" data-region="kalimantan">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-truck.webp') }}" alt="SuperArea Pontianak" loading="lazy"></span>
-        <strong>Pontianak</strong>
-        <span>Pergudangan Primaco, Jl. Komodor Yos Sudarso No.2, Pontianak</span>
-      </article>
-
-      <article class="sa-card" data-region="kalimantan">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/warehouse-dark.webp') }}" alt="SuperArea Banjarbaru" loading="lazy"></span>
-        <strong>Banjarbaru</strong>
-        <span>Pergudangan Kalimantan Kencana Blok D No.13, Banjarbaru</span>
-      </article>
-
-      <article class="sa-card" data-region="kalimantan">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-mojokerto.webp') }}" alt="SuperArea Balikpapan" loading="lazy"></span>
-        <strong>Balikpapan</strong>
-        <span>Jl. Soekarno Hatta Km. 11, RW.115, Karang Joang, Balikpapan</span>
-      </article>
-
-      <article class="sa-card" data-region="sulawesi">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-gresik.webp') }}" alt="SuperArea Manado" loading="lazy"></span>
-        <strong>Manado</strong>
-        <span>Kawasan Pergudangan, Jl. Raya Manado - Bitung, Sulawesi Utara</span>
-      </article>
-
-      <article class="sa-card" data-region="sulawesi">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/delivery-forklift.webp') }}" alt="SuperArea Kendari" loading="lazy"></span>
-        <strong>Kendari</strong>
-        <span>Jl. Pajak, Korumba, Kec. Mandonga, Kota Kendari</span>
-      </article>
-
-      <article class="sa-card" data-region="sulawesi">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-stock.webp') }}" alt="SuperArea Morowali" loading="lazy"></span>
-        <strong>Morowali</strong>
-        <span>Jl. Trans Sulawesi, Bahoruru, Kec. Bungku Tengah, Morowali</span>
-      </article>
-
-      <article class="sa-card" data-region="sulawesi">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/truck-tiberman.webp') }}" alt="SuperArea Luwuk Banggai" loading="lazy"></span>
-        <strong>Luwuk Banggai</strong>
-        <span>Jl. Tanjung Malaka No.1, Kelurahan Kraton, Luwuk, Banggai</span>
-      </article>
-
-      <article class="sa-card" data-region="maluku-papua">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-truck.webp') }}" alt="SuperArea Ternate" loading="lazy"></span>
-        <strong>Ternate</strong>
-        <span>Jl. Pertamina, Gambesi, Kec. Ternate Selatan, Maluku Utara</span>
-      </article>
-
-      <article class="sa-card" data-region="maluku-papua">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/warehouse-dark.webp') }}" alt="SuperArea Sofifi" loading="lazy"></span>
-        <strong>Sofifi</strong>
-        <span>Jl. Trans Halmahera, Bukit Durian, Oba Utara, Kota Tidore Kepulauan</span>
-      </article>
-
-      <article class="sa-card" data-region="maluku-papua">
-        <span class="sa-card__img"><img src="{{ asset('assets/img/plb-stock.webp') }}" alt="SuperArea Weda" loading="lazy"></span>
-        <strong>Weda</strong>
-        <span>Lelilef Sawai, Kec. Weda Tengah, Halmahera Tengah, Maluku Utara</span>
-      </article>
-
+      @endforeach
     </div>
   </div>
 </main>
@@ -151,6 +62,7 @@
 @endsection
 
 @push('scripts')
+<script>window.TIBERMAN_AREAS = @json($areas, JSON_FORCE_OBJECT);</script>
 <script src="{{ asset('assets/js/superarea-spots.js') }}" defer></script>
 <script src="{{ asset('assets/js/superarea-page.js') }}" defer></script>
 @endpush
