@@ -1017,12 +1017,15 @@ ul{margin:0;padding:0;list-style:none}
 .catalog .nav{background:#1d1d1f}
 /* header katalog full-bleed: logo sejajar sidebar, menu rata kanan layar */
 .catalog .nav__inner{max-width:none;padding-left:22px;padding-right:32px}
-.catalog__layout{display:grid;grid-template-columns:240px 1fr}
+.catalog__layout{display:grid;grid-template-columns:290px 1fr}
 .catalog__sidebar{
   background:var(--ink-2);border-right:1px solid rgba(255,255,255,.07);
   padding:28px 22px 40px;position:sticky;top:var(--nav-h);align-self:start;
   height:calc(100vh - var(--nav-h));overflow-y:auto;
+  /* tetap bisa di-scroll (roda mouse/sentuh), hanya batang scroll-nya disembunyikan */
+  scrollbar-width:none;-ms-overflow-style:none;
 }
+.catalog__sidebar::-webkit-scrollbar{display:none}
 .side-label{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:10px}
 /* label "Telusuri berdasarkan Merk" dst.: beri jarak dari daftar di atasnya */
 .unitlist + .side-label{margin-top:4px}
@@ -1312,7 +1315,8 @@ ul{margin:0;padding:0;list-style:none}
 .pdp-detail__grid{position:relative;display:grid;grid-template-columns:1fr 1.12fr;gap:68px;align-items:start}
 .gallery__main{background:var(--grey-100);border-radius:var(--radius-l);display:flex;align-items:center;justify-content:center;padding:26px;aspect-ratio:1.075;overflow:hidden}
 .gallery__main img{max-height:100%;max-width:100%;object-fit:contain}
-.gallery__thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:22px}
+/* 4 thumbnail sebaris (foto ke-5 dst. turun ke baris berikutnya) */
+.gallery__thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
 .gallery__thumbs button{background:var(--grey-100);border-radius:var(--radius);padding:12px;aspect-ratio:1.14;display:flex;align-items:center;justify-content:center;overflow:hidden;border:2px solid transparent;transition:border-color .25s var(--ease)}
 .gallery__thumbs button.is-active{border-color:var(--outline-strong)}
 .gallery__thumbs img{max-height:100%;max-width:100%;object-fit:contain}
@@ -1526,7 +1530,7 @@ ul{margin:0;padding:0;list-style:none}
 @media (max-width:720px){
   .section{padding:64px 0}
   .velg-cards,.plb-grid,.photo-duo,.news__grid,.pair-grid,.doc-btns,.gallery__thumbs{grid-template-columns:1fr}
-  .gallery__thumbs{grid-template-columns:repeat(3,1fr)}
+  .gallery__thumbs{grid-template-columns:repeat(4,1fr);gap:10px}
   /* di layar sempit kolom gambar dikecilkan supaya "VELG Heavy-Duty" tidak
      pecah jadi 3 baris dan tombolnya tetap muat */
   .velg-wrap{padding-bottom:80px}
@@ -1753,6 +1757,7 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   border-radius:14px;padding:12px 12px 18px;text-align:center;
   transition:transform .3s var(--ease),box-shadow .3s var(--ease);
 }
+.sa-card{display:block;text-decoration:none;cursor:pointer}
 .sa-card[hidden]{display:none}
 .sa-card:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(0,0,0,.45)}
 .sa-card__img{display:block;aspect-ratio:16/9;border-radius:9px;overflow:hidden;background:var(--grey-200)}

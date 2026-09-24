@@ -5,13 +5,16 @@ namespace Tests\Feature;
 use App\Filament\Pages\HomeContent;
 use App\Filament\Pages\SiteSettings;
 use App\Filament\Resources\Inquiries\Pages\ManageInquiries;
+use App\Filament\Resources\Locations\Pages\ManageLocations;
 use App\Filament\Resources\Posts\Pages\CreatePost;
 use App\Models\Inquiry;
+use App\Models\Location;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Livewire;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -48,6 +51,37 @@ class CmsAdminTest extends TestCase
         $this->get($url)->assertOk();
     }
 
+    public function test_replacing_background_video_clears_old_webm(): void
+    {
+        $this->assertNotNull(Setting::group('home')['importir']['video_webm']);
+
+        Livewire::test(HomeContent::class)
+            ->set('data.importir.video', [UploadedFile::fake()->create('baru.mp4', 1024, 'video/mp4')])
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $importir = Setting::group('home')['importir'];
+        $this->assertStringEndsWith('.mp4', $importir['video']);
+        $this->assertNull($importir['video_webm']);
+
+        $this->get('/')->assertSee('/storage/'.$importir['video'], false)
+            ->assertDontSee('tires-moving.webm', false);
+    }
+
+    public function test_location_maps_link_is_editable_in_cms(): void
+    {
+        $location = Location::query()->firstOrFail();
+
+        Livewire::test(ManageLocations::class)
+            ->assertSee('Google Maps')
+            ->mountTableAction('edit', $location)
+            ->setTableActionData(['maps_url' => 'https://maps.app.goo.gl/abc'])
+            ->callMountedTableAction()
+            ->assertHasNoTableActionErrors();
+
+        $this->assertSame('https://maps.app.goo.gl/abc', $location->fresh()->maps_url);
+    }
+
     public function test_viewing_an_inquiry_marks_it_read(): void
     {
         $inquiry = Inquiry::query()->create(['name' => 'Budi', 'email' => 'b@x.com', 'phone' => '0812']);
@@ -55,6 +89,11 @@ class CmsAdminTest extends TestCase
         Livewire::test(ManageInquiries::class)->mountTableAction('view', $inquiry);
 
         $this->assertNotNull($inquiry->fresh()->read_at);
+    }
+
+    public function test_image_lightbox_is_on_admin_pages(): void
+    {
+        $this->get('/admin/home-content')->assertOk()->assertSee('data-tbm-lightbox', false);
     }
 
     public function test_guests_are_sent_to_login(): void

@@ -54,6 +54,7 @@ class HomeContent extends ContentPage
                 Tab::make('Kategori')->schema([
                     Section::make('Importir (latar video)')->schema([
                         Fields::richText('importir.heading', 'Judul', 2),
+                        Grid::make(3)->schema(Fields::backgroundVideo('importir')),
                         Repeater::make('importir.pills')->label('Tombol kategori')
                             ->schema([
                                 TextInput::make('label')->required(),
@@ -85,9 +86,10 @@ class HomeContent extends ContentPage
                 ]),
 
                 Tab::make('Kenapa Tiberman')->schema([
-                    Section::make('Judul animasi')->columns(2)->schema([
+                    Section::make('Judul animasi & video')->columns(2)->schema([
                         TextInput::make('why.kicker')->label('Baris kecil'),
                         TextInput::make('why.title')->label('Judul'),
+                        Grid::make(3)->columnSpanFull()->schema(Fields::backgroundVideo('why')),
                     ]),
                     Section::make('Stok Aman')->columns(2)->schema([
                         TextInput::make('stock.title')->label('Judul section'),

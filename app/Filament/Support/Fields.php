@@ -5,6 +5,7 @@ namespace App\Filament\Support;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Utilities\Set;
 
 /** Field yang dipakai berulang di form CMS, supaya perilakunya seragam. */
 class Fields
@@ -22,6 +23,54 @@ class Fields
             ->imagePreviewHeight('120')
             ->openable()
             ->downloadable();
+    }
+
+    /**
+     * Video latar di disk public. Satu sumber MP4 (H.264) wajib karena hanya
+     * format itu yang pasti jalan di semua browser, termasuk Safari/iPhone.
+     */
+    public static function video(string $name, string $label = 'Video (MP4)'): FileUpload
+    {
+        return FileUpload::make($name)
+            ->label($label)
+            ->acceptedFileTypes(['video/mp4'])
+            ->disk('public')
+            ->directory('cms/video')
+            ->visibility('public')
+            ->maxSize(51200)
+            ->openable()
+            ->downloadable()
+            ->helperText('Format MP4, maks. 50 MB. Disarankan ≤ 10 MB (1920×1080, tanpa suara) supaya halaman tetap cepat.');
+    }
+
+    /**
+     * Versi WebM opsional dari video yang sama: jauh lebih kecil, diputar lebih
+     * dulu oleh Chrome/Edge/Firefox.
+     */
+    public static function webm(string $name): FileUpload
+    {
+        return static::video($name, 'Video WebM (opsional)')
+            ->acceptedFileTypes(['video/webm'])
+            ->helperText('Versi lebih ringan dari video yang SAMA. Otomatis dikosongkan saat video MP4 diganti.');
+    }
+
+    /**
+     * MP4 + WebM + sampul untuk satu video latar. Mengganti MP4 mengosongkan
+     * WebM, karena browser memutar WebM lebih dulu — kalau tertinggal, video
+     * lama yang tetap tampil.
+     *
+     * @return array<FileUpload>
+     */
+    public static function backgroundVideo(string $prefix): array
+    {
+        return [
+            static::video($prefix.'.video')
+                ->live()
+                ->afterStateUpdated(fn (Set $set) => $set($prefix.'.video_webm', null)),
+            static::webm($prefix.'.video_webm'),
+            static::image($prefix.'.poster', 'Gambar sampul video')
+                ->helperText('Tampil selama video dimuat. Ambil satu frame dari videonya.'),
+        ];
     }
 
     /** Teks yang boleh memuat <b>, <i>, <a> dan baris baru (dirender helper rich()). */

@@ -14,6 +14,7 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Support\Icons\Heroicon;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -35,6 +36,8 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Tiberman CMS')
             ->brandLogo(fn () => view('filament.brand-logo'))
             ->brandLogoHeight('1.75rem')
+            // klik pratinjau gambar -> popup besar, bukan tab baru
+            ->renderHook(PanelsRenderHook::BODY_END, fn () => view('filament.image-lightbox'))
             // rescue(): tabel settings belum ada saat migrate pertama kali
             ->favicon(rescue(fn () => Favicon::url(), null, false))
             ->colors([

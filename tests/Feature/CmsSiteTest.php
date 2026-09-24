@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Flipbook;
 use App\Models\Inquiry;
+use App\Models\Location;
 use App\Models\Post;
 use App\Models\Product;
 use App\Models\Redirect;
@@ -170,5 +171,16 @@ class CmsSiteTest extends TestCase
 
         $this->postJson('/kontak', ['nama' => 'Tanpa email'])->assertUnprocessable();
         $this->assertSame(1, Inquiry::query()->count());
+    }
+
+    public function test_superarea_cards_link_to_google_maps(): void
+    {
+        $custom = Location::query()->active()->firstOrFail();
+        $custom->update(['maps_url' => 'https://maps.app.goo.gl/contoh']);
+        $other = Location::query()->active()->where('id', '!=', $custom->id)->firstOrFail();
+
+        $this->get('/cabang-tiberman')
+            ->assertSee('href="https://maps.app.goo.gl/contoh"', false)
+            ->assertSee('query='.rawurlencode($other->lat.','.$other->lng), false);
     }
 }

@@ -49,11 +49,11 @@
 
     <div class="sa__grid" data-sa-grid>
       @foreach ($locations as $location)
-      <article class="sa-card" data-region="{{ $location->region }}">
+      <a class="sa-card" data-region="{{ $location->region }}" href="{{ $location->mapsUrl() }}" target="_blank" rel="noopener" title="Buka di Google Maps">
         <span class="sa-card__img"><img src="{{ media($location->image) }}" alt="SuperArea {{ $location->name }}" loading="lazy"></span>
         <strong>{{ $location->name }}@if ($location->note) <em>( {{ $location->note }} )</em>@endif</strong>
         <span>{{ $location->address }}</span>
-      </article>
+      </a>
       @endforeach
     </div>
   </div>

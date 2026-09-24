@@ -85,7 +85,7 @@ class ProductForm
                     FileUpload::make('gallery')->label('Galeri foto')
                         ->image()->multiple()->reorderable()->appendFiles()
                         ->disk('public')->directory('cms')->visibility('public')
-                        ->panelLayout('grid')
+                        ->panelLayout('grid')->openable()
                         ->helperText('Foto pertama jadi gambar utama. Kosong = foto kartu.'),
                     Repeater::make('specs')->label('Tabel spesifikasi')
                         ->schema([

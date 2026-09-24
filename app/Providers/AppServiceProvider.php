@@ -23,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Batas upload sementara Livewire (bawaan 12 MB) dinaikkan untuk video
+        // latar di CMS; batas per field tetap diatur di FileUpload::maxSize().
+        config([
+            'livewire.temporary_file_upload.rules' => ['required', 'file', 'max:51200'],
+            'livewire.temporary_file_upload.max_upload_time' => 15,
+        ]);
+
         // Menu Products di navbar, daftar SuperArea di footer, dan kamus i18n
         // dipakai di semua halaman — diambil sekali per render layout.
         View::composer(['layouts.app', 'produk'], function ($view) {

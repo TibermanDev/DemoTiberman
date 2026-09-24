@@ -42,3 +42,25 @@ if (! function_exists('rich')) {
         return nl2br(strip_tags((string) $text, '<b><strong><i><em><a><br>'), false);
     }
 }
+
+if (! function_exists('bg_video')) {
+    /**
+     * Sumber video latar dari CMS ({video, video_webm, poster}). Selama MP4
+     * belum diisi dipakai file bawaan di public/assets/img. WebM hanya ikut
+     * kalau memang diisi — kalau MP4 sudah diganti, WebM bawaan tidak boleh
+     * ikut karena browser memutarnya lebih dulu (video lama yang tampil).
+     *
+     * @param  array{video?: ?string, video_webm?: ?string, poster?: ?string}|null  $cms
+     * @return array{mp4: string, webm: ?string, poster: ?string}
+     */
+    function bg_video(?array $cms, string $mp4, ?string $webm, string $poster): array
+    {
+        $custom = filled($cms['video'] ?? null);
+
+        return [
+            'mp4' => $custom ? media($cms['video']) : asset('assets/img/'.$mp4),
+            'webm' => $custom ? media($cms['video_webm'] ?? null) : ($webm ? asset('assets/img/'.$webm) : null),
+            'poster' => media($cms['poster'] ?? null) ?? asset('assets/img/'.$poster),
+        ];
+    }
+}

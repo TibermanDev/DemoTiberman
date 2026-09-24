@@ -55,6 +55,9 @@ class LocationResource extends Resource
             Select::make('region')->label('Pulau')->options(fn () => static::regions())->required(),
             Fields::image('image', 'Foto'),
             Textarea::make('address')->label('Alamat')->rows(2)->required()->columnSpanFull(),
+            TextInput::make('maps_url')->label('Link Google Maps')->url()->maxLength(1000)->columnSpanFull()
+                ->placeholder('https://maps.app.goo.gl/...')
+                ->helperText('Tujuan saat kartu di halaman SuperArea diklik. Buka lokasi di Google Maps → Bagikan → Salin link. Kosong = pakai koordinat Latitude/Longitude di bawah.'),
             Section::make('Pin peta beranda')
                 ->description('Posisi pin menempel di gambar peta. Kunci pin harus sama dengan nama kota di tabel pin (JAKARTA, SURABAYA, ...); kota baru tanpa pin tercetak cukup dikosongkan.')
                 ->columns(3)->collapsible()->columnSpanFull()
@@ -80,6 +83,13 @@ class LocationResource extends Resource
                 TextColumn::make('name')->label('Kota')->description(fn (Location $r) => $r->note)->searchable(),
                 TextColumn::make('region')->label('Pulau')->formatStateUsing(fn ($state) => static::regions()[$state] ?? $state)->badge(),
                 TextColumn::make('address')->label('Alamat')->limit(50)->wrap()->toggleable(),
+                // tujuan klik kartu di situs; "Koordinat" = link belum diisi, pakai lat/lng
+                TextColumn::make('maps_url')->label('Google Maps')
+                    ->state(fn (Location $r) => filled($r->maps_url) ? 'Link khusus' : 'Koordinat')
+                    ->badge()->color(fn (Location $r) => filled($r->maps_url) ? 'success' : 'gray')
+                    ->icon(Heroicon::OutlinedMapPin)
+                    ->url(fn (Location $r) => $r->mapsUrl(), shouldOpenInNewTab: true)
+                    ->tooltip('Buka di Google Maps'),
                 ToggleColumn::make('show_in_footer')->label('Footer'),
                 ToggleColumn::make('is_active')->label('Aktif'),
             ])

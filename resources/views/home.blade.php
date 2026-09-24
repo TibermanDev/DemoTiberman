@@ -150,12 +150,13 @@ window.__tbmIntroBail=setTimeout(function(){
          Sengaja TANPA atribut autoplay: atribut itu bikin Chrome tetap
          mengunduh videonya walau preload="none", jadi pemutarannya dipicu
          dari main.js begitu sectionnya masuk viewport. -->
+    @php($video = bg_video(data_get($home, 'importir'), 'tires-moving.mp4', 'tires-moving.webm', 'tires-moving-poster.webp'))
     <video class="importir__bg" data-bg-video
            muted playsinline preload="none"
-           poster="{{ asset('assets/img/tires-moving-poster.webp') }}"
+           poster="{{ $video['poster'] }}"
            aria-hidden="true" tabindex="-1" disablepictureinpicture>
-      <source src="{{ asset('assets/img/tires-moving.webm') }}" type="video/webm">
-      <source src="{{ asset('assets/img/tires-moving.mp4') }}" type="video/mp4">
+      @if ($video['webm'])<source src="{{ $video['webm'] }}" type="video/webm">@endif
+      <source src="{{ $video['mp4'] }}" type="video/mp4">
     </video>
     <div class="importir__scrim" aria-hidden="true"></div>
     <div class="importir__inner">
@@ -241,14 +242,16 @@ window.__tbmIntroBail=setTimeout(function(){
   <section class="why" id="kenapa" data-why>
     <div class="why__track">
       <div class="why__stage">
+        @php($video = bg_video(data_get($home, 'why'), 'warehouse-loop-web.mp4', null, 'warehouse-dark.webp'))
         <video class="why__video" data-bg-video
                muted playsinline loop preload="none"
-               poster="{{ asset('assets/img/warehouse-dark.webp') }}"
+               poster="{{ $video['poster'] }}"
                aria-hidden="true" tabindex="-1" disablepictureinpicture>
           <!-- versi web: 1920x1080 CRF 30, 8 MB (aslinya 2560x1440 / 28,4 MB).
                1440p sempat dicoba dan hasilnya pecah: di layar 1920 dia harus
                di-upscale 1,33x, artefak kompresinya jadi kelihatan. -->
-          <source src="{{ asset('assets/img/warehouse-loop-web.mp4') }}" type="video/mp4">
+          @if ($video['webm'])<source src="{{ $video['webm'] }}" type="video/webm">@endif
+          <source src="{{ $video['mp4'] }}" type="video/mp4">
         </video>
         <!-- Kedua lapisan isinya SAMA PERSIS, termasuk baris kecil di atas judul.
              Di lapisan penutup baris itu diberi warna latar (jadi tak terlihat

@@ -59,6 +59,9 @@ class ContentSeeder extends Seeder
             ],
             'importir' => [
                 'heading' => "Importir Ban Truk & Alat Berat\nTERPERCAYA",
+                'video' => $this->img('tires-moving.mp4'),
+                'video_webm' => $this->img('tires-moving.webm'),
+                'poster' => $this->img('tires-moving-poster.webp'),
                 'pills' => [
                     ['label' => 'Truck & Bus', 'url' => '/kategori-produk/ban-truk'],
                     ['label' => 'Mining Truck', 'url' => '/kategori-produk/ban-truk/ban-truk-off-the-road'],
@@ -83,6 +86,9 @@ class ContentSeeder extends Seeder
             'why' => [
                 'kicker' => 'Dari sekian banyak supplier lain',
                 'title' => 'Kenapa Harus Tiberman ?',
+                'video' => $this->img('warehouse-loop-web.mp4'),
+                'video_webm' => null,
+                'poster' => $this->img('warehouse-dark.webp'),
             ],
             'stock' => [
                 'title' => 'Stok Aman',

@@ -41,7 +41,9 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            // Relatif (bukan APP_URL) supaya pratinjau upload di CMS tetap jalan walau
+            // panel dibuka lewat host lain (127.0.0.1 vs localhost) — beda origin diblokir CORS.
+            'url' => env('PUBLIC_DISK_URL', '/storage'),
             'visibility' => 'public',
             'throw' => false,
             'report' => false,
