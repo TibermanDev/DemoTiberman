@@ -81,7 +81,8 @@ class InquiryResource extends Resource
                     ->trueLabel('Sudah dibaca')->falseLabel('Belum dibaca'),
             ])
             ->recordActions([
-                ViewAction::make()->after(fn (Inquiry $record) => $record->read_at ?: $record->update(['read_at' => now()])),
+                // afterFormFilled: modal View tidak punya tombol submit, jadi after() tidak pernah jalan
+                ViewAction::make()->afterFormFilled(fn (Inquiry $record) => $record->read_at ?: $record->update(['read_at' => now()])),
                 Action::make('unread')->label('Tandai belum dibaca')->icon(Heroicon::OutlinedEnvelope)->color('gray')
                     ->visible(fn (Inquiry $r) => $r->read_at !== null)
                     ->action(fn (Inquiry $r) => $r->update(['read_at' => null])),

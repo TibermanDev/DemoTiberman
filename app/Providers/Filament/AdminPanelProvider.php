@@ -33,6 +33,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName('Tiberman CMS')
+            ->brandLogo(fn () => view('filament.brand-logo'))
+            ->brandLogoHeight('1.75rem')
             // rescue(): tabel settings belum ada saat migrate pertama kali
             ->favicon(rescue(fn () => Favicon::url(), null, false))
             ->colors([

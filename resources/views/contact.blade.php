@@ -71,6 +71,19 @@
           </div>
         </form>
 
+        <!-- Popup "berhasil terkirim"; dimunculkan contact-form.js (atau langsung
+             oleh server saat form terkirim tanpa JS). -->
+        <div @class(['ctc-toast', 'is-on' => session('inquiry_sent')]) data-form-toast role="alert" aria-live="assertive">
+          <span class="ctc-toast__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </span>
+          <div class="ctc-toast__body">
+            <strong data-toast-title>Permintaan berhasil dikirim</strong>
+            <span data-toast-text>Tim kami akan menghubungi Anda dalam 1x24 jam.</span>
+          </div>
+          <button class="ctc-toast__close" type="button" data-toast-close aria-label="Tutup">&times;</button>
+        </div>
+
         <!-- Satu gambar accessories (ban + velg lengkap), bukan lagi tumpukan
              beberapa PNG yang disusun sendiri. -->
         <div class="ctc-stack" aria-hidden="true">

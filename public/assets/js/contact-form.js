@@ -13,18 +13,26 @@
 
   var note = form.querySelector('[data-form-note]');
   var tombol = form.querySelector('[type="submit"]');
+  var toast = document.querySelector('[data-form-toast]');
+  var toastTimer;
 
   var PESAN = {
     id: {
       ok: 'Terima kasih. Permintaan Anda kami terima, tim kami akan menghubungi dalam 1x24 jam.',
+      toastJudul: 'Permintaan berhasil dikirim',
+      toastTeks: 'Tim kami akan menghubungi Anda dalam 1x24 jam.',
       gagal: 'Maaf, permintaan belum terkirim. Periksa isian Anda lalu coba lagi.'
     },
     en: {
       ok: 'Thank you. We have received your request and will get back to you within 1x24 hours.',
+      toastJudul: 'Request sent successfully',
+      toastTeks: 'Our team will contact you within 1x24 hours.',
       gagal: 'Sorry, your request was not sent. Please check the form and try again.'
     },
     zh: {
       ok: '感谢您的留言，我们会在 24 小时内与您联系。',
+      toastJudul: '提交成功',
+      toastTeks: '我们的团队会在 24 小时内与您联系。',
       gagal: '抱歉，提交失败，请检查填写内容后重试。'
     }
   };
@@ -38,6 +46,28 @@
     if (!note) return;
     note.textContent = teks;
     note.classList.add('is-on');
+  }
+
+  /* Popup sukses; hilang sendiri setelah 6 detik atau saat ditutup */
+  function tutupToast() {
+    if (toast) toast.classList.remove('is-on');
+    clearTimeout(toastTimer);
+  }
+
+  function bukaToast() {
+    if (!toast) return;
+    var p = bahasa();
+    toast.querySelector('[data-toast-title]').textContent = p.toastJudul;
+    toast.querySelector('[data-toast-text]').textContent = p.toastTeks;
+    toast.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(tutupToast, 6000);
+  }
+
+  if (toast) {
+    toast.querySelector('[data-toast-close]').addEventListener('click', tutupToast);
+    /* dimunculkan server (kiriman tanpa JS): tetap ditutup otomatis */
+    if (toast.classList.contains('is-on')) bukaToast();
   }
 
   form.addEventListener('submit', function (e) {
@@ -54,6 +84,7 @@
     }).then(function (res) {
       if (!res.ok) throw new Error(res.status);
       tampil(bahasa().ok);
+      bukaToast();
       form.reset();
     }).catch(function () {
       tampil(bahasa().gagal);

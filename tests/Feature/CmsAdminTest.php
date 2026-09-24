@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Filament\Pages\HomeContent;
 use App\Filament\Pages\SiteSettings;
+use App\Filament\Resources\Inquiries\Pages\ManageInquiries;
 use App\Filament\Resources\Posts\Pages\CreatePost;
+use App\Models\Inquiry;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Setting;
@@ -44,6 +46,15 @@ class CmsAdminTest extends TestCase
     public function test_admin_pages_render(string $url): void
     {
         $this->get($url)->assertOk();
+    }
+
+    public function test_viewing_an_inquiry_marks_it_read(): void
+    {
+        $inquiry = Inquiry::query()->create(['name' => 'Budi', 'email' => 'b@x.com', 'phone' => '0812']);
+
+        Livewire::test(ManageInquiries::class)->mountTableAction('view', $inquiry);
+
+        $this->assertNotNull($inquiry->fresh()->read_at);
     }
 
     public function test_guests_are_sent_to_login(): void
