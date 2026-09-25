@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', data_get($page, 'seo_title') ?: 'SuperArea — Tiberman')
-@section('description', data_get($page, 'seo_description'))
+@section('description', (string) (data_get($page, 'seo_description')))
+@section('og_image', (string) (media(data_get($page, 'seo_image'))))
+@section('noindex', data_get($page, 'seo_noindex') ? '1' : '')
 @section('body-class', 'subpage')
 
 @section('content')

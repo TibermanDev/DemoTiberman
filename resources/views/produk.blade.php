@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
-@section('title', $product->name.' '.$product->size.' — Tiberman')
-@section('description', $product->meta_description ?: strip_tags((string) $product->description) ?: $product->name.' '.$product->size.' — '.$product->compat)
+@section('title', $product->meta_title ?: $product->name.' '.$product->size.' — Tiberman')
+@section('og_image', (string) ($product->imageUrl()))
+@section('noindex', $product->noindex ? '1' : '')
+@section('description', (string) ($product->meta_description ?: strip_tags((string) $product->description) ?: $product->name.' '.$product->size.' — '.$product->compat))
 
 @section('nav')
 <!-- ============================= NAVBAR KATEGORI ============================= -->

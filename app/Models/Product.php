@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'catalog_unit_id', 'brand_id', 'name', 'slug', 'size', 'compat', 'image', 'sort_order', 'is_active',
     'logo', 'logo_light', 'hero_image', 'description', 'features', 'pairs', 'gallery', 'specs',
     'available_sizes', 'ecatalog_url', 'flashcard_url', 'whatsapp_url', 'shopee_url', 'tokopedia_url',
-    'meta_description',
+    'meta_description', 'meta_title', 'noindex',
 ])]
 class Product extends Model
 {
@@ -21,6 +21,7 @@ class Product extends Model
     {
         return [
             'is_active' => 'boolean',
+            'noindex' => 'boolean',
             'features' => 'array',
             'pairs' => 'array',
             'gallery' => 'array',

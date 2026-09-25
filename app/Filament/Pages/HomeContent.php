@@ -156,7 +156,7 @@ class HomeContent extends ContentPage
                         ->itemLabel(fn (array $state) => $state['name'] ?? null),
                 ]),
 
-                Tab::make('SEO')->schema(Fields::seo()),
+                Tab::make('SEO')->columns(2)->schema(Fields::seo('/', cms('site.seo_title'))),
             ]),
         ]);
     }

@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\FlipbookController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SeoController;
+use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +17,19 @@ use Illuminate\Support\Facades\Route;
 // dijalankan middleware RedirectLegacyUrls sebelum routing.
 
 Route::get('/', [PageController::class, 'home'])->name('home');
+
+// Dibangun dari isi CMS. public/robots.txt sengaja dihapus supaya route ini
+// yang melayani (web server menyajikan file statis lebih dulu).
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
+
+// Beacon analitik pengunjung (menu Analitik Pengunjung di CMS). Tanpa token
+// CSRF karena dikirim navigator.sendBeacon; isinya cuma dicatat, tidak
+// mengubah apa pun, dan dibatasi 120 kiriman/menit per IP.
+Route::post('/_a', AnalyticsController::class)
+    ->withoutMiddleware(PreventRequestForgery::class)
+    ->middleware('throttle:120,1')
+    ->name('analytics.collect');
 
 // SEMENTARA: PDF Katalog Komik masih di server lama, yang tidak mengirim
 // header CORS, jadi pdf.js tidak bisa membacanya langsung. Route ini

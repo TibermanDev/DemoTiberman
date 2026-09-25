@@ -39,7 +39,7 @@ class SiteSettings extends ContentPage
                     ->helperText('PNG/WebP berlatar transparan; tampil di atas latar gelap.'),
                 Fields::image('favicon', 'Ikon tab browser (favicon)')
                     ->acceptedFileTypes(['image/png', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml', 'image/webp'])
-                    ->helperText('Gambar persegi, mis. 512×512 PNG. Juga dipakai sebagai ikon di panel admin.'),
+                    ->helperText('Gambar persegi minimal 192×192 px (mis. 512×512 PNG). Tampil di tab browser, di samping nama situs pada hasil Google, dan di panel admin.'),
                 Toggle::make('favicon_round')->label('Potong favicon jadi lingkaran')->default(true)
                     ->helperText('Sudut di luar lingkaran dibuat transparan.'),
             ]),
@@ -50,9 +50,6 @@ class SiteSettings extends ContentPage
                     ->regex('/^\d{8,15}$/'),
                 TextInput::make('email')->label('Email')->email(),
             ]),
-            Section::make('Title & deskripsi bawaan')
-                ->description('Title = teks di tab browser & judul di Google. Dipakai halaman yang tidak mengisi title-nya sendiri; title tiap halaman diatur di tab/section SEO halaman itu (menu Halaman).')
-                ->columns(2)->schema(Fields::seo()),
         ]);
     }
 }

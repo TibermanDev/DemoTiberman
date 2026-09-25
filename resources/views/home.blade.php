@@ -1,7 +1,9 @@
 @extends('layouts.app')
 
 @section('title', data_get($home, 'seo_title') ?: cms('site.seo_title'))
-@section('description', data_get($home, 'seo_description') ?: cms('site.seo_description'))
+@section('description', (string) (data_get($home, 'seo_description') ?: cms('site.seo_description')))
+@section('og_image', (string) (media(data_get($home, 'seo_image')) ?? media(data_get($home, 'hero.image'))))
+@section('noindex', data_get($home, 'seo_noindex') ? '1' : '')
 
 @push('head')
 <!-- Intro diputar saat home dibuka DARI LUAR situs (alamat diketik, bookmark,

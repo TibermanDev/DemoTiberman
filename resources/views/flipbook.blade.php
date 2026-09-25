@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tiberman - {{ $book['title'] }}</title>
-@if ($favicon = \App\Support\Favicon::url())
-<link rel="icon" href="{{ $favicon }}">
-@endif
+@section('title', $book['title'].' — Tiberman')
+@include('partials.seo')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
@@ -47,8 +45,11 @@
     .fb-stage { padding: 8px; }
   }
 </style>
+@include('partials.analytics')
+@include('partials.tracking-head')
 </head>
 <body>
+@include('partials.tracking-body')
 
 <header class="fb-bar">
   <a class="fb-bar__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>

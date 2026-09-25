@@ -104,7 +104,16 @@ class ProductForm
                         ->helperText('Kosong = nomor WhatsApp di Pengaturan Situs, dengan pesan berisi nama produk.'),
                     TextInput::make('shopee_url')->label('Shopee')->helperText('Kosong = tautan Shopee di Pengaturan Situs.'),
                     TextInput::make('tokopedia_url')->label('Tokopedia')->helperText('Kosong = tautan Tokopedia di Pengaturan Situs.'),
-                    Textarea::make('meta_description')->label('Deskripsi meta (SEO)')->rows(2)->columnSpanFull(),
+                ]),
+
+                Tab::make('SEO')->schema([
+                    Fields::seoTitle('meta_title', null, 'Kosong = nama + ukuran produk + " — Tiberman".'),
+                    Fields::seoDescription('meta_description', 'Kosong = diambil dari deskripsi produk.'),
+                    Toggle::make('noindex')->label('Sembunyikan dari Google (noindex)'),
+                    Fields::seoPreview('meta_title', 'meta_description',
+                        fn ($get) => '/produk/'.$get('slug'),
+                        fn ($get) => trim($get('name').' '.$get('size')).' — Tiberman',
+                    ),
                 ]),
             ]),
         ]);

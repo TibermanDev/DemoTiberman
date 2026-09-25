@@ -4,7 +4,9 @@
 @php($active = $categories->firstWhere('slug', $category))
 
 @section('title', $active ? $active->name.' — Tiberman News' : (cms('news.seo_title') ?: 'News — Tiberman'))
-@section('description', cms('news.seo_description'))
+@section('description', (string) (cms('news.seo_description')))
+@section('og_image', (string) (media(cms('news.seo_image'))))
+@section('noindex', cms('news.seo_noindex') ? '1' : '')
 @section('body-class', 'subpage')
 
 @section('content')

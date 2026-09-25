@@ -43,7 +43,7 @@ class SuperareaContent extends ContentPage
                         ->columns(2)->reorderable()
                         ->itemLabel(fn (array $state) => $state['label'] ?? null),
                 ]),
-            Section::make('SEO')->columns(2)->schema(Fields::seo()),
+            Section::make('SEO')->columns(2)->schema(Fields::seo('/cabang-tiberman', 'SuperArea — Tiberman')),
         ]);
     }
 }

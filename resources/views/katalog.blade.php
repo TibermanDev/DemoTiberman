@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', \App\Support\Catalog::title($state).' — Tiberman')
-@section('description', cms('catalog.seo_description'))
+@section('description', (string) (cms('catalog.seo_description')))
 @section('body-class', 'catalog')
 
 @section('footer')

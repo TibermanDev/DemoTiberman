@@ -36,7 +36,7 @@ class NewsContent extends ContentPage
                     TextInput::make('popular_heading')->label('Samping artikel')->placeholder('Populer Bulan Ini'),
                     TextInput::make('related_heading')->label('Bawah artikel')->placeholder('Artikel Terkait'),
                 ]),
-            Section::make('SEO')->columns(2)->schema(Fields::seo()),
+            Section::make('SEO')->columns(2)->schema(Fields::seo('/blog', 'News — Tiberman')),
         ]);
     }
 }
