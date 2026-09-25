@@ -5,7 +5,10 @@ namespace App\Filament\Support;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
+use Filament\Schemas\Components\View;
 
 /** Field yang dipakai berulang di form CMS, supaya perilakunya seragam. */
 class Fields
@@ -98,12 +101,75 @@ class Fields
             ->maxLength(255);
     }
 
-    /** @return array<TextInput|Textarea> */
-    public static function seo(): array
+    /**
+     * Field SEO satu halaman + pratinjau tampilannya di hasil Google.
+     *
+     * Batas 60/160 karakter itu kira-kira lebar yang ditampilkan Google di
+     * desktop; lebih dari itu teksnya dipotong jadi "..." (seperti judul
+     * "... Dump Truck ..." di hasil pencarian sekarang).
+     *
+     * @param  string  $path  URL halaman ini, untuk pratinjau
+     * @param  string|null  $fallbackTitle  judul yang dipakai kalau kolomnya kosong
+     * @return array<int, mixed>
+     */
+    public static function seo(string $path = '/', ?string $fallbackTitle = null): array
     {
         return [
-            TextInput::make('seo_title')->label('Judul halaman (tab browser & Google)')->maxLength(255),
-            Textarea::make('seo_description')->label('Deskripsi meta')->rows(2)->maxLength(500),
+            static::seoTitle('seo_title', $fallbackTitle),
+            static::seoDescription('seo_description'),
+            static::image('seo_image', 'Gambar saat link dibagikan (WhatsApp, Facebook, LinkedIn)')
+                ->columnSpanFull()
+                ->helperText('Ideal 1200×630 px. Kosongkan untuk memakai gambar bawaan di menu SEO.'),
+            Toggle::make('seo_noindex')->label('Sembunyikan halaman ini dari Google (noindex)')
+                ->columnSpanFull()
+                ->helperText('Halaman tetap bisa dibuka, hanya tidak dimunculkan di hasil pencarian.'),
+            static::seoPreview('seo_title', 'seo_description', $path, $fallbackTitle),
         ];
+    }
+
+    public static function seoTitle(string $name, ?string $fallback = null, string $hint = 'Taruh kata kunci utama di depan.'): TextInput
+    {
+        return TextInput::make($name)->label('Judul di Google & tab browser')
+            ->maxLength(255)->live(onBlur: true)->columnSpanFull()
+            ->placeholder($fallback)
+            ->helperText(fn (?string $state) => static::charCount($state, 60).' '.$hint);
+    }
+
+    public static function seoDescription(string $name, string $hint = 'Ringkasan isi halaman yang mengundang klik.'): Textarea
+    {
+        return Textarea::make($name)->label('Deskripsi di Google')
+            ->rows(2)->maxLength(500)->live(onBlur: true)->columnSpanFull()
+            ->helperText(fn (?string $state) => static::charCount($state, 160).' '.$hint);
+    }
+
+    /**
+     * Kotak pratinjau hasil Google (resources/views/filament/seo-preview.blade.php).
+     *
+     * $path, $fallbackTitle, dan $fallbackDescription boleh berupa closure(Get)
+     * untuk nilai yang bergantung isian lain (slug, judul artikel, ringkasan).
+     */
+    public static function seoPreview(
+        string $titleField,
+        string $descriptionField,
+        string|\Closure $path,
+        string|\Closure|null $fallbackTitle = null,
+        string|\Closure|null $fallbackDescription = null,
+    ): View {
+        $value = fn ($v, Get $get) => $v instanceof \Closure ? $v($get) : $v;
+
+        return View::make('filament.seo-preview')
+            ->columnSpanFull()
+            ->viewData(fn (Get $get) => [
+                'title' => $get($titleField) ?: $value($fallbackTitle, $get),
+                'description' => $get($descriptionField) ?: $value($fallbackDescription, $get),
+                'url' => url($value($path, $get)),
+            ]);
+    }
+
+    private static function charCount(?string $state, int $max): string
+    {
+        $n = mb_strlen((string) $state);
+
+        return $n.' / '.$max.' karakter'.($n > $max ? ' — kepanjangan, akan dipotong Google.' : '.');
     }
 }

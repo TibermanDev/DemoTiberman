@@ -33,6 +33,22 @@ class ContentSeeder extends Seeder
                 'tokopedia' => '#',
                 'shopee' => '#',
             ],
+            'seo' => [
+                'site_name' => 'Tiberman',
+                'alternate_names' => 'PT Tiga Berlian Mandiri',
+                'business_type' => 'TireShop',
+                'founding_year' => '2008',
+                'address' => [
+                    'street' => 'Jl. Mustika No.10, Ngagel, Kec. Wonokromo',
+                    'city' => 'Surabaya',
+                    'region' => 'Jawa Timur',
+                    'postal_code' => '60246',
+                ],
+                'opening_hours' => [
+                    ['days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '07:30', 'closes' => '16:00'],
+                ],
+                'indexable' => true,
+            ],
             'footer' => [
                 'contact_title' => 'Hubungi Kami',
                 'marketplace_title' => 'Marketplace',

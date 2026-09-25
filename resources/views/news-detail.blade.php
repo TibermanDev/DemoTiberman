@@ -1,7 +1,15 @@
 @extends('layouts.app')
 
-@section('title', $post->title.' — Tiberman News')
-@section('description', $post->meta_description ?: $post->excerpt)
+@section('title', $post->meta_title ?: $post->title.' — Tiberman News')
+@section('description', (string) ($post->meta_description ?: $post->excerpt))
+@section('og_image', (string) (media($post->cover_image)))
+@section('og_type', 'article')
+@section('noindex', $post->noindex ? '1' : '')
+
+@push('jsonld')
+{{-- Artikel: tanggal terbit & penulis ikut tampil di hasil Google / Google News --}}
+<script type="application/ld+json">{!! \App\Support\Seo::json(\App\Support\Seo::article($post)) !!}</script>
+@endpush
 @section('body-class', 'subpage')
 
 @section('content')

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 #[Fillable([
     'post_category_id', 'title', 'slug', 'excerpt', 'cover_image', 'cover_alt', 'cover_caption',
     'body', 'author', 'published_at', 'is_published', 'is_featured', 'is_popular', 'meta_description',
+    'meta_title', 'noindex',
 ])]
 class Post extends Model
 {
@@ -21,6 +22,7 @@ class Post extends Model
             'is_published' => 'boolean',
             'is_featured' => 'boolean',
             'is_popular' => 'boolean',
+            'noindex' => 'boolean',
         ];
     }
 

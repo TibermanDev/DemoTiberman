@@ -6,6 +6,7 @@ use App\Http\Controllers\FlipbookController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SeoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,11 @@ use Illuminate\Support\Facades\Route;
 // dijalankan middleware RedirectLegacyUrls sebelum routing.
 
 Route::get('/', [PageController::class, 'home'])->name('home');
+
+// Dibangun dari isi CMS. public/robots.txt sengaja dihapus supaya route ini
+// yang melayani (web server menyajikan file statis lebih dulu).
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
 // SEMENTARA: PDF Katalog Komik masih di server lama, yang tidak mengirim
 // header CORS, jadi pdf.js tidak bisa membacanya langsung. Route ini

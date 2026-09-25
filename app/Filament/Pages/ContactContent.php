@@ -55,7 +55,7 @@ class ContactContent extends ContentPage
                 Fields::url('connect_url', 'Tautan tombol')
                     ->helperText('Kosongkan untuk memakai nomor WhatsApp di Pengaturan Situs.'),
             ]),
-            Section::make('SEO')->columns(2)->schema(Fields::seo()),
+            Section::make('SEO')->columns(2)->schema(Fields::seo('/kontak', 'Contact Us — Tiberman')),
         ]);
     }
 }

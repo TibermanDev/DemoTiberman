@@ -3,11 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>@yield('title', cms('site.seo_title', 'Tiberman'))</title>
-<meta name="description" content="@yield('description', cms('site.seo_description'))">
-@if ($favicon = \App\Support\Favicon::url())
-<link rel="icon" href="{{ $favicon }}">
-@endif
+@include('partials.seo')
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600;1,700&display=swap" rel="stylesheet">

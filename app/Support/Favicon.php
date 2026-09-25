@@ -6,13 +6,14 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * URL favicon dari Pengaturan Situs. Kalau opsi "bulat" aktif, gambarnya
- * dipotong jadi lingkaran 256px bersudut transparan — browser menampilkan
+ * dipotong jadi lingkaran 192px bersudut transparan — browser menampilkan
  * favicon apa adanya, jadi gambar persegi berlatar putih tampil sebagai kotak.
  * Hasil potongan disimpan sekali per gambar sumber (favicon/{hash}.png).
  */
 class Favicon
 {
-    private const SIZE = 256;
+    // Kelipatan 48 px: syarat favicon di hasil pencarian Google.
+    private const SIZE = 192;
 
     public static function url(): ?string
     {
@@ -29,7 +30,7 @@ class Favicon
             return media($path);
         }
 
-        $target = 'favicon/'.sha1($path.$disk->lastModified($path)).'.png';
+        $target = 'favicon/'.sha1($path.$disk->lastModified($path).self::SIZE).'.png';
         if (! $disk->exists($target)) {
             $png = self::circle($disk->get($path));
             if ($png === null) {

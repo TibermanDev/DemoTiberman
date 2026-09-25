@@ -4,7 +4,6 @@ namespace App\Filament\Pages;
 
 use App\Filament\Support\Fields;
 use BackedEnum;
-use Filament\Forms\Components\Textarea;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -34,7 +33,7 @@ class CatalogContent extends ContentPage
                 ->columns(2)->schema([
                     Fields::image('banner', 'Banner atas'),
                     Fields::alt('banner_alt'),
-                    Textarea::make('seo_description')->label('Deskripsi meta')->rows(2)->columnSpanFull(),
+                    Fields::seoDescription('seo_description'),
                 ]),
         ]);
     }

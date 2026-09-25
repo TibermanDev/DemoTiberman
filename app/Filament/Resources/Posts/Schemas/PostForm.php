@@ -62,8 +62,14 @@ class PostForm
                         TextInput::make('cover_caption')->label('Keterangan di bawah gambar'),
                     ]),
                     Section::make('SEO')->collapsed()->schema([
-                        Textarea::make('meta_description')->label('Deskripsi meta')->rows(3)->maxLength(500)
-                            ->helperText('Kosong = memakai ringkasan.'),
+                        Fields::seoTitle('meta_title', null, 'Kosong = judul artikel + " — Tiberman News".'),
+                        Fields::seoDescription('meta_description', 'Kosong = memakai ringkasan.'),
+                        Toggle::make('noindex')->label('Sembunyikan dari Google (noindex)'),
+                        Fields::seoPreview('meta_title', 'meta_description',
+                            fn ($get) => '/blog/'.$get('slug'),
+                            fn ($get) => $get('title') ? $get('title').' — Tiberman News' : null,
+                            fn ($get) => $get('excerpt'),
+                        ),
                     ]),
                 ]),
             ]);
