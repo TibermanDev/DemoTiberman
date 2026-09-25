@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Filament\Pages\FooterContent;
 use App\Filament\Pages\HomeContent;
 use App\Filament\Pages\SiteSettings;
 use App\Filament\Resources\Inquiries\Pages\ManageInquiries;
@@ -37,7 +38,7 @@ class CmsAdminTest extends TestCase
     {
         return array_map(fn ($u) => [$u], [
             '/admin', '/admin/home-content', '/admin/contact-content', '/admin/news-content',
-            '/admin/superarea-content', '/admin/catalog-content', '/admin/site-settings',
+            '/admin/superarea-content', '/admin/catalog-content', '/admin/site-settings', '/admin/footer-content',
             '/admin/posts', '/admin/posts/create', '/admin/post-categories',
             '/admin/products', '/admin/products/create', '/admin/catalog-units', '/admin/brands', '/admin/tire-sizes',
             '/admin/locations', '/admin/flipbooks', '/admin/redirects', '/admin/translations',
@@ -124,6 +125,22 @@ class CmsAdminTest extends TestCase
             ->set('data.whatsapp', '+62 812')
             ->call('save')
             ->assertHasErrors(['data.whatsapp']);
+    }
+
+    public function test_footer_content_saves_without_wiping_site_settings(): void
+    {
+        Livewire::test(FooterContent::class)
+            ->set('data.footer.nav_title', 'Menu Cepat')
+            ->set('data.footer.shopee_label', 'Toko Shopee')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $this->get('/')
+            ->assertSee('Menu Cepat')
+            ->assertSee('Toko Shopee')
+            ->assertSee(cms('site.email'));
+
+        $this->assertSame('6281283258200', cms('site.whatsapp'));
     }
 
     public function test_post_can_be_created_from_admin(): void
