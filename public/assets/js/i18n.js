@@ -83,6 +83,8 @@ window.TIBERMAN_I18N = (function () {
     try { localStorage.setItem(STORE_LANG, next); } catch (e) {}
     apply();
     syncControls();
+    /* untuk teks yang dibangun JS sendiri (mis. datepicker.js) */
+    document.dispatchEvent(new CustomEvent('tiberman:lang', { detail: next }));
   }
 
   /* ---------- kontrol di navbar ---------- */

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inquiry;
+use App\Rules\Turnstile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,6 +21,7 @@ class InquiryController extends Controller
             'tanggal' => ['nullable', 'date'],
             'jumlah' => ['nullable', 'string', 'max:255'],
             'pesan' => ['nullable', 'string', 'max:5000'],
+            'cf-turnstile-response' => [new Turnstile($request->ip())],
         ]);
 
         Inquiry::query()->create([

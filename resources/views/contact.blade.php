@@ -50,10 +50,13 @@
           </div>
 
           <div class="ctc-form__row">
-            <label class="ctc-field">
-              <span>Perkiraan Waktu Kebutuhan</span>
-              <input type="date" name="tanggal">
-            </label>
+            <!-- div + label for, bukan <label> pembungkus: panel kalender
+                 (datepicker.js) ditaruh di dalamnya, dan klik di dalam label
+                 akan ikut "mengklik" isiannya lagi. -->
+            <div class="ctc-field">
+              <label for="ctc-tanggal">Perkiraan Waktu Kebutuhan</label>
+              <input type="date" name="tanggal" id="ctc-tanggal" min="{{ now()->toDateString() }}" data-datepicker>
+            </div>
             <label class="ctc-field">
               <span>Perkiraan Jumlah</span>
               <input type="text" name="jumlah" placeholder="mis. 40 ban, 2 set velg">
@@ -68,6 +71,22 @@
           <div class="ctc-form__foot">
             <button class="btn btn--primary" type="submit">{{ data_get($page, 'submit_label', 'Kirim Permintaan') }}</button>
             <p @class(['ctc-form__note', 'is-on' => session('inquiry_sent')]) data-form-note role="status">@if (session('inquiry_sent'))Terima kasih. Permintaan Anda kami terima, tim kami akan menghubungi dalam 1x24 jam.@endif</p>
+            @if (filled(config('services.turnstile.site_key')))
+            <!-- Captcha Cloudflare Turnstile; tokennya ikut terkirim sebagai
+                 cf-turnstile-response dan dicek App\Rules\Turnstile. -->
+            <div class="ctc-captcha cf-turnstile" data-captcha
+                 data-sitekey="{{ config('services.turnstile.site_key') }}"
+                 data-language="auto" data-theme="light" data-size="normal"></div>
+            <!-- Widget normal lebarnya tetap 300px, lebih lebar dari isi kartu
+                 form di HP (±290px); di layar sempit dipakai versi compact
+                 (150x140). Harus diputuskan sebelum api.js merender widget-nya,
+                 makanya inline di sini. -->
+            <script>
+              if (window.matchMedia('(max-width: 420px)').matches) {
+                document.querySelector('[data-captcha]').setAttribute('data-size', 'compact');
+              }
+            </script>
+            @endif
           </div>
         </form>
 
@@ -128,5 +147,9 @@
 @endsection
 
 @push('scripts')
+<script src="{{ asset('assets/js/datepicker.js') }}" defer></script>
 <script src="{{ asset('assets/js/contact-form.js') }}" defer></script>
+@if (filled(config('services.turnstile.site_key')))
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+@endif
 @endpush

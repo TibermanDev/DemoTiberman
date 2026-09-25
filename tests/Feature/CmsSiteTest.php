@@ -11,6 +11,7 @@ use App\Models\Redirect;
 use App\Models\Setting;
 use App\Models\Translation;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
@@ -171,6 +172,22 @@ class CmsSiteTest extends TestCase
 
         $this->postJson('/kontak', ['nama' => 'Tanpa email'])->assertUnprocessable();
         $this->assertSame(1, Inquiry::query()->count());
+    }
+
+    public function test_contact_form_requires_valid_turnstile_token(): void
+    {
+        config(['services.turnstile.secret_key' => 'rahasia']);
+        Http::fake(['challenges.cloudflare.com/*' => Http::sequence()
+            ->push(['success' => false])
+            ->push(['success' => true])]);
+        $form = ['nama' => 'Budi', 'email' => 'budi@example.com', 'telepon' => '0812'];
+
+        $this->postJson('/kontak', $form)->assertJsonValidationErrors('cf-turnstile-response');
+        $this->postJson('/kontak', $form + ['cf-turnstile-response' => 'palsu'])->assertJsonValidationErrors('cf-turnstile-response');
+        $this->postJson('/kontak', $form + ['cf-turnstile-response' => 'asli'])->assertOk();
+
+        $this->assertSame(1, Inquiry::query()->count());
+        Http::assertSent(fn ($r) => $r['secret'] === 'rahasia' && $r['response'] === 'asli');
     }
 
     public function test_superarea_cards_link_to_google_maps(): void
