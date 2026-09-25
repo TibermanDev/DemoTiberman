@@ -70,7 +70,10 @@
   if (toast) {
     toast.querySelector('[data-toast-close]').addEventListener('click', tutupToast);
     /* dimunculkan server (kiriman tanpa JS): tetap ditutup otomatis */
-    if (toast.classList.contains('is-on')) bukaToast();
+    if (toast.classList.contains('is-on')) {
+      bukaToast();
+      if (window.tbmTrack) window.tbmTrack('lead');
+    }
   }
 
   form.addEventListener('submit', function (e) {
@@ -91,6 +94,8 @@
     }).then(function (res) {
       if (!res.ok) throw new Error(res.status);
       tampil(bahasa().ok);
+      /* konversi "Lead" ke pixel iklan yang aktif (partials/tracking-head) */
+      if (window.tbmTrack) window.tbmTrack('lead');
       bukaToast();
       form.reset();
     }).catch(function () {

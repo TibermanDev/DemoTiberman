@@ -45,8 +45,10 @@
     .fb-stage { padding: 8px; }
   }
 </style>
+@include('partials.tracking-head')
 </head>
 <body>
+@include('partials.tracking-body')
 
 <header class="fb-bar">
   <a class="fb-bar__logo" href="{{ route('home') }}"><img src="{{ asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>

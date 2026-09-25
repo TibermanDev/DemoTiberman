@@ -11,8 +11,10 @@
 <script>(function(){try{var l=localStorage.getItem('tbm-lang');if(l)document.documentElement.setAttribute('lang',l==='zh'?'zh-CN':l);}catch(e){}})();</script>
 @stack('head')
 <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+@include('partials.tracking-head')
 </head>
 <body class="@yield('body-class')">
+@include('partials.tracking-body')
 
 @section('nav')
 <!-- ============================= NAVBAR ============================= -->

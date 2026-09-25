@@ -38,7 +38,7 @@ class CmsAdminTest extends TestCase
     {
         return array_map(fn ($u) => [$u], [
             '/admin', '/admin/home-content', '/admin/contact-content', '/admin/news-content',
-            '/admin/superarea-content', '/admin/catalog-content', '/admin/site-settings', '/admin/footer-content', '/admin/seo-settings',
+            '/admin/superarea-content', '/admin/catalog-content', '/admin/site-settings', '/admin/footer-content', '/admin/seo-settings', '/admin/tracking-settings',
             '/admin/posts', '/admin/posts/create', '/admin/post-categories',
             '/admin/products', '/admin/products/create', '/admin/catalog-units', '/admin/brands', '/admin/tire-sizes',
             '/admin/locations', '/admin/flipbooks', '/admin/redirects', '/admin/translations',
