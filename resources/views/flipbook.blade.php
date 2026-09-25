@@ -45,6 +45,7 @@
     .fb-stage { padding: 8px; }
   }
 </style>
+@include('partials.analytics')
 @include('partials.tracking-head')
 </head>
 <body>

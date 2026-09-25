@@ -61,11 +61,15 @@
   (function(l){if(!l){window.lintrk=function(a,b){window.lintrk.q.push([a,b])};window.lintrk.q=[]}var s=document.getElementsByTagName("script")[0];var b=document.createElement("script");b.type="text/javascript";b.async=true;b.src="https://snap.licdn.com/li.lms-analytics/insight.min.js";s.parentNode.insertBefore(b,s);})(window.lintrk);
 </script>
 @endif
+@endif
+{{-- Selalu dipasang (walau semua pixel mati) supaya event konversi tetap
+     tercatat di analitik bawaan CMS lewat window.tbmAnalytics. --}}
 <script>
   window.tbmTrack = (function (cfg) {
     return function (name) {
       var lead = name === 'lead';
       try {
+        if (window.tbmAnalytics) window.tbmAnalytics(lead ? 'lead' : 'whatsapp');
         if (cfg.gtm) (window.dataLayer = window.dataLayer || []).push({ event: lead ? 'generate_lead' : 'contact_whatsapp' });
         if (window.gtag && cfg.ga4) gtag('event', lead ? 'generate_lead' : 'contact', { method: lead ? 'contact_form' : 'whatsapp' });
         var label = lead ? cfg.adsLead : cfg.adsWa;
@@ -84,5 +88,4 @@
 </script>
 @if ($v('custom_head'))
 {!! $v('custom_head') !!}
-@endif
 @endif

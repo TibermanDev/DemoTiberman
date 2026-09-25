@@ -95,6 +95,8 @@ class TrackingSettings extends ContentPage
             Section::make('Lainnya')->schema([
                 Toggle::make('tracking.enabled')->label('Aktifkan semua tag tracking')->default(true)
                     ->helperText('Matikan sementara (mis. di server uji coba) tanpa menghapus ID-nya.'),
+                Toggle::make('analytics.enabled')->label('Aktifkan analitik pengunjung bawaan')->default(true)
+                    ->helperText('Mencatat kunjungan untuk menu Analitik Pengunjung. Tidak menyimpan IP atau data pribadi; data lebih dari 13 bulan dihapus otomatis.'),
             ]),
         ]);
     }

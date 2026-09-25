@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Analytics\StatsOverview;
 use App\Support\Favicon;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -81,6 +82,8 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
+                // ringkasan 30 hari; detailnya di menu Analitik Pengunjung
+                StatsOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,

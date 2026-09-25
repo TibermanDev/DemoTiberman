@@ -67,6 +67,7 @@ class SeoController extends Controller
             'User-agent: *',
             'Disallow: /admin',
             'Disallow: /livewire',
+            'Disallow: /_a',
             'Disallow: /produk/*/modal',
             '',
             'Sitemap: '.url('sitemap.xml'),
