@@ -919,6 +919,49 @@
     autoRail(document.querySelector('[data-drag-rail]'), 3000);
   }
 
+  /* Roda mouse di atas rel = geser horizontal. Selama pointer ada di atas rel,
+     scroll vertikal dibelokkan jadi scrollLeft; begitu relnya mentok di ujung
+     searah putaran roda, event dibiarkan lewat supaya halaman lanjut scroll
+     dan pengguna tidak "terjebak" di rel.
+
+     Gerakannya dihaluskan sendiri (target + lerp per frame), bukan
+     scrollBy({behavior:'smooth'}): tiap notch roda akan memulai ulang animasi
+     bawaan browser dan hasilnya tersendat. Gestur yang dominan horizontal
+     (trackpad dua jari ke samping) sudah ditangani browser, jadi tidak
+     disentuh. Autoplay sendiri sudah berhenti lewat pointerenter di autoRail. */
+  var wheelRail = function (rail) {
+    if (!rail) return;
+    var target = 0, pos = 0, anim = null, idle = 0;
+    var max = function () { return rail.scrollWidth - rail.clientWidth; };
+    /* Posisinya disimpan sendiri sebagai pecahan. Kalau dibaca ulang dari
+       scrollLeft, browser membulatkannya ke piksel: langkah terakhir yang
+       < 0,5px hilang, animasinya tertahan 1-2px sebelum target dan tidak
+       pernah selesai. */
+    var step = function () {
+      pos += (target - pos) * 0.22;
+      if (Math.abs(target - pos) < 0.5) pos = target;
+      rail.scrollLeft = pos;
+      anim = pos === target ? null : requestAnimationFrame(step);
+    };
+    rail.addEventListener('wheel', function (e) {
+      if (e.ctrlKey || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      var dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? rail.clientWidth : 1);
+      var from = anim ? target : rail.scrollLeft;
+      if ((dy > 0 && from >= max() - 1) || (dy < 0 && from <= 1)) return;
+      e.preventDefault();
+      target = Math.min(Math.max(from + dy, 0), max());
+      /* scroll-snap mandatory menarik balik tiap penulisan scrollLeft kecil;
+         dimatikan selama roda berputar, lalu dinyalakan lagi supaya relnya
+         mendarat rapi di batas kartu. */
+      rail.classList.add('is-wheeling');
+      clearTimeout(idle);
+      idle = setTimeout(function () { rail.classList.remove('is-wheeling'); }, 260);
+      if (!anim) { pos = rail.scrollLeft; anim = requestAnimationFrame(step); }
+    }, { passive: false });
+  };
+  wheelRail(document.querySelector('[data-velg-rail]'));
+  wheelRail(document.querySelector('[data-drag-rail]'));
+
   /* ---------- 10. "Kenapa Harus Tiberman": video menyusut jadi isi tulisan ----------
      Digerakkan scroll, bukan waktu: posisi .why__track terhadap layar diubah
      jadi angka 0..1, lalu angka itu dipetakan ke tiga custom property yang

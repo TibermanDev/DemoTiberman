@@ -60,7 +60,7 @@
 
 @section('footer')
 <!-- ============================= FOOTER ============================= -->
-<footer class="footer">
+<footer class="footer" id="footer">
   <div class="container">
     <div class="footer__grid">
 
@@ -88,7 +88,7 @@
       </div>
 
       <div class="footer__col">
-        <h3>Hubungi Kami</h3>
+        <h3>{{ cms('site.footer.contact_title') ?: 'Hubungi Kami' }}</h3>
         <ul class="footer__contact">
           <li>
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.6 10.8a15.1 15.1 0 006.6 6.6l2.2-2.2c.28-.28.68-.36 1.03-.24 1.13.37 2.35.57 3.6.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1A17 17 0 013 4c0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.47.57 3.6.11.35.03.75-.25 1.03l-2.22 2.17z"/></svg>
@@ -104,21 +104,21 @@
           </li>
         </ul>
 
-        <h3>Marketplace</h3>
+        <h3>{{ cms('site.footer.marketplace_title') ?: 'Marketplace' }}</h3>
         <div class="footer__market">
           <a class="market market--tokped" href="{{ cms('site.marketplace.tokopedia', '#') }}">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8h14l-1 11a2 2 0 01-2 1.8H8A2 2 0 016 19L5 8zm3.5 0V6.5a3.5 3.5 0 017 0V8h-2V6.5a1.5 1.5 0 00-3 0V8h-2z"/></svg>
-            <span>tokopedia</span>
+            <span>{{ cms('site.footer.tokopedia_label') ?: 'tokopedia' }}</span>
           </a>
           <a class="market market--shopee" href="{{ cms('site.marketplace.shopee', '#') }}">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5 8h14l-1 11a2 2 0 01-2 1.8H8A2 2 0 016 19L5 8zm3.5 0V6.5a3.5 3.5 0 017 0V8h-2V6.5a1.5 1.5 0 00-3 0V8h-2z"/></svg>
-            <span>Shopee</span>
+            <span>{{ cms('site.footer.shopee_label') ?: 'Shopee' }}</span>
           </a>
         </div>
       </div>
 
       <div class="footer__col">
-        <h3>Super Area</h3>
+        <h3>{{ cms('site.footer.superarea_title') ?: 'Super Area' }}</h3>
         <ul class="footer__links">
           @php $superareaHref = request()->routeIs('home') ? '#superarea' : route('home').'#superarea'; @endphp
           @foreach ($footerLocations as $location)
@@ -128,7 +128,7 @@
       </div>
 
       <div class="footer__col">
-        <h3>Navigasi</h3>
+        <h3>{{ cms('site.footer.nav_title') ?: 'Navigasi' }}</h3>
         <ul class="footer__links">
           @foreach (cms('site.footer_links', []) as $link)
           <li><a href="{{ $link['url'] }}">{{ $link['label'] }}</a></li>

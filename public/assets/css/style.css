@@ -641,6 +641,11 @@ ul{margin:0;padding:0;list-style:none}
 .why__stage{position:sticky;top:0;height:100vh;overflow:hidden;isolation:isolate;background:#000}
 .why__video{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  /* Judul "Property of Tiberman" ada di pojok atas videonya. Di layar yang
+     lebih lebar dari 16:9, cover memotong atas-bawah; dikunci ke atas supaya
+     yang terpotong cuma lantai gudang di bawah. Origin skalanya ikut di atas
+     biar zoom 1.05 di awal animasi juga tidak memakan judulnya. */
+  object-position:50% 0;transform-origin:50% 0;
   transform:scale(var(--why-vs));will-change:transform;
 }
 .why__mask,.why__tint{
@@ -816,7 +821,7 @@ ul{margin:0;padding:0;list-style:none}
    balik posisi tiap frame, jadi geseran yang digerakkan skrip tidak pernah
    sampai. Tanpa JS / saat hemat gerak kelas ini tidak ada dan snap tetap
    berlaku untuk geseran manual. */
-.testi__rail.is-auto{scroll-snap-type:none}
+.testi__rail.is-auto,.testi__rail.is-wheeling{scroll-snap-type:none}
 /* 100% di sini = lebar isi rel (sudah dikurangi padding), jadi
    --testi-per kartu + selanya persis mengisi satu layar rel. */
 .testi-card{flex:0 0 calc((100% - (var(--testi-per) - 1) * var(--testi-gap)) / var(--testi-per));scroll-snap-align:start;display:flex;flex-direction:column;background:var(--grey-200);border-radius:var(--radius-l);padding:20px;position:relative}
@@ -989,7 +994,8 @@ ul{margin:0;padding:0;list-style:none}
 .soc--yt{background:#ff0000}
 /* IG & TikTok aslinya hitam -> tidak kelihatan di footer gelap, jadi dibuat kontras */
 .soc--ig{background:linear-gradient(45deg,#f9ce34,#ee2a7b,#6228d7)}
-.soc--tt{background:#fff;color:#010101}
+.soc--tt{background:#000}
+.footer__social .soc--tt svg{width:18px;height:18px}
 .soc--li{background:#0a66c2}
 .footer__col h3{font-size:19px;font-weight:800;letter-spacing:-.02em;margin-bottom:18px;color:#fff}
 .footer__contact{display:grid;gap:14px;margin-bottom:34px}
@@ -2028,7 +2034,7 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 .ctc-form__row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .ctc-form__row,.ctc-form > .ctc-field{margin-bottom:16px}
 .ctc-field{display:block}
-.ctc-field > span{display:block;margin-bottom:7px;font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.ctc-field > span,.ctc-field > label{display:block;margin-bottom:7px;font-size:13px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
 /* satu aturan untuk ketiga jenis isian supaya tinggi & radiusnya tidak
    berbeda-beda antar browser */
 .ctc-field input,.ctc-field select,.ctc-field textarea{
@@ -2048,7 +2054,59 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   background-repeat:no-repeat;background-position:right 14px center;background-size:12px;
 }
 .ctc-field select:valid{color:var(--text)}
-.ctc-form__foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+
+/* --- date picker (assets/js/datepicker.js), meniru date picker CMS --- */
+.dp-field{position:relative}
+.ctc-field .dp-display,.ctc-field .dp-display:focus{
+  cursor:pointer;padding-right:42px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%236e6e73' stroke-width='1.5'%3E%3Crect x='3' y='4.5' width='14' height='12.5' rx='2'/%3E%3Cpath d='M3 8.5h14M7 2.5v4M13 2.5v4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;background-size:18px;
+}
+.dp-panel{
+  position:absolute;left:0;top:calc(100% + 6px);z-index:50;width:296px;padding:14px;
+  background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:14px;
+  box-shadow:0 16px 40px rgba(0,0,0,.14);color:var(--text);font-size:14px;
+}
+.dp-panel[hidden]{display:none}
+.dp-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.dp-nav{flex:none;display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:8px;background:none;color:var(--text);cursor:pointer}
+.dp-nav svg{width:16px;height:16px}
+.dp-nav:hover:not(:disabled){background:#f0f0f3}
+.dp-nav:disabled{opacity:.3;cursor:default}
+/* Diawali .ctc-field .dp-panel supaya menang dari gaya isian form
+   (.ctc-field select / input, termasuk :focus dan :valid-nya). */
+.ctc-field .dp-panel .dp-month,.ctc-field .dp-panel .dp-year{
+  width:auto;height:32px;border:0;border-radius:8px;background:none;
+  font:inherit;font-size:14px;font-weight:700;color:var(--text);cursor:pointer;
+}
+.ctc-field .dp-panel .dp-month{flex:1;min-width:0;padding:0 26px 0 8px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none' stroke='%231d1d1f' stroke-width='1.6'%3E%3Cpath d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 8px center;background-size:10px}
+.ctc-field .dp-panel .dp-year{flex:none;width:72px;padding:0 6px;font-weight:600}
+.ctc-field .dp-panel .dp-month:hover,.ctc-field .dp-panel .dp-month:focus{background-color:#f0f0f3;outline:none}
+.ctc-field .dp-panel .dp-year:hover,.ctc-field .dp-panel .dp-year:focus{background:#f0f0f3;outline:none}
+.dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+.dp-dow{margin-bottom:4px;font-size:12px;font-weight:600;color:var(--muted-2)}
+.dp-day{
+  height:34px;border:0;border-radius:8px;background:none;font:inherit;color:var(--text);cursor:pointer;
+  transition:background .15s var(--ease),color .15s var(--ease);
+}
+.dp-day:hover:not(:disabled){background:#f0f0f3}
+.dp-day:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+.dp-day.is-today{color:var(--red);font-weight:700}
+.dp-day.is-selected{background:var(--red);color:#fff;font-weight:700}
+.dp-day:disabled{color:#c7c7cc;cursor:default}
+.dp-foot{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid #efeff2}
+.dp-link{border:0;background:none;padding:4px 6px;border-radius:6px;font:inherit;font-size:13px;font-weight:700;color:var(--red);cursor:pointer}
+.dp-link:hover:not(:disabled){background:#fdeeee}
+.dp-link:disabled{opacity:.35;cursor:default}
+
+/* Captcha Turnstile (ukuran normal, 300x65) di seberang tombol kirim.
+   Tingginya dipesan supaya barisnya tidak meloncat waktu widget selesai
+   dimuat. Pesan status turun ke baris sendiri di bawah keduanya. */
+.ctc-captcha{min-height:65px;margin-left:auto}
+.ctc-form__foot .ctc-form__note{order:1;flex-basis:100%}
+.ctc-form__note:empty{display:none}.ctc-form__foot{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
 .ctc-form__note{font-size:13px;font-weight:700;color:var(--red);opacity:0;transition:opacity .25s var(--ease)}
 .ctc-form__note.is-on{opacity:1}
 /* Popup sukses form Contact */

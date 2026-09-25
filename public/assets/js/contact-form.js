@@ -21,19 +21,22 @@
       ok: 'Terima kasih. Permintaan Anda kami terima, tim kami akan menghubungi dalam 1x24 jam.',
       toastJudul: 'Permintaan berhasil dikirim',
       toastTeks: 'Tim kami akan menghubungi Anda dalam 1x24 jam.',
-      gagal: 'Maaf, permintaan belum terkirim. Periksa isian Anda lalu coba lagi.'
+      gagal: 'Maaf, permintaan belum terkirim. Periksa isian Anda lalu coba lagi.',
+      captcha: 'Selesaikan verifikasi captcha terlebih dahulu.'
     },
     en: {
       ok: 'Thank you. We have received your request and will get back to you within 1x24 hours.',
       toastJudul: 'Request sent successfully',
       toastTeks: 'Our team will contact you within 1x24 hours.',
-      gagal: 'Sorry, your request was not sent. Please check the form and try again.'
+      gagal: 'Sorry, your request was not sent. Please check the form and try again.',
+      captcha: 'Please complete the captcha first.'
     },
     zh: {
       ok: '感谢您的留言，我们会在 24 小时内与您联系。',
       toastJudul: '提交成功',
       toastTeks: '我们的团队会在 24 小时内与您联系。',
-      gagal: '抱歉，提交失败，请检查填写内容后重试。'
+      gagal: '抱歉，提交失败，请检查填写内容后重试。',
+      captcha: '请先完成人机验证。'
     }
   };
 
@@ -75,6 +78,10 @@
     /* reportValidity dipakai supaya pesan "wajib diisi" bawaan browser tetap
        muncul walau form-nya novalidate */
     if (!form.reportValidity()) return;
+    /* Token Turnstile belum ada = widget belum selesai (atau masih memuat). */
+    var captcha = form.querySelector('[data-captcha]');
+    var token = form.querySelector('[name="cf-turnstile-response"]');
+    if (captcha && (!token || !token.value)) { tampil(bahasa().captcha); return; }
     if (tombol) tombol.disabled = true;
 
     fetch(form.action, {
@@ -90,6 +97,8 @@
       tampil(bahasa().gagal);
     }).then(function () {
       if (tombol) tombol.disabled = false;
+      /* Token hanya berlaku sekali: berhasil atau gagal, minta yang baru. */
+      if (captcha && window.turnstile) window.turnstile.reset(captcha);
     });
   });
 })();

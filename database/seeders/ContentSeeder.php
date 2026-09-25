@@ -33,6 +33,14 @@ class ContentSeeder extends Seeder
                 'tokopedia' => '#',
                 'shopee' => '#',
             ],
+            'footer' => [
+                'contact_title' => 'Hubungi Kami',
+                'marketplace_title' => 'Marketplace',
+                'superarea_title' => 'Super Area',
+                'nav_title' => 'Navigasi',
+                'tokopedia_label' => 'tokopedia',
+                'shopee_label' => 'Shopee',
+            ],
             'footer_links' => [
                 ['label' => 'Berita & Artikel', 'url' => '/blog'],
                 ['label' => 'Karir', 'url' => '#'],
