@@ -1207,7 +1207,7 @@ ul{margin:0;padding:0;list-style:none}
    .doc-btns jadi satu kolom, sedangkan di modal dua tombol ini tetap muat
    bersebelahan di bawah thumbnail. */
 .pmodal__slide--spec .doc-btns{grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
-.pmodal__slide--spec .doc-btns a{height:48px;font-size:14.5px;border-radius:10px}
+.pmodal__slide--spec .doc-btns a,.pmodal__slide--spec .doc-btns button{height:48px;font-size:14.5px;border-radius:10px}
 .pmodal__info .pmodal__logo{max-width:400px}
 /* Subjudulnya samakan dengan produk.html: abu gelap (--spec), bukan merah. */
 .pmodal__info .subhead{margin:22px 0 15px;font-size:17px;color:var(--spec)}
@@ -1240,6 +1240,19 @@ ul{margin:0;padding:0;list-style:none}
 }
 .pmodal__next:hover{background:#d3d3d7}
 .pmodal__next svg{width:12px;height:12px;margin-left:2px}
+/* Tombol ke halaman produk melayang di kanan bawah, sejajar nav, dan ikut
+   terlihat di keempat slide — dulu cuma ada di dasar slide spesifikasi. */
+.pmodal__cta{
+  position:absolute;right:24px;bottom:18px;z-index:2;
+  display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;
+  border-radius:999px;background:var(--red);color:#fff;
+  font-size:14px;font-weight:700;white-space:nowrap;
+  box-shadow:0 8px 20px rgba(239,57,54,.35);
+  transition:background .2s var(--ease),transform .2s var(--ease);
+}
+.pmodal__cta:hover{background:var(--red-dark);transform:translateY(-1px)}
+.pmodal__cta svg{width:15px;height:15px;transition:transform .2s var(--ease)}
+.pmodal__cta:hover svg{transform:translateX(3px)}
 
 @media (max-width:860px){
   .pmodal{padding:12px}
@@ -1264,6 +1277,10 @@ ul{margin:0;padding:0;list-style:none}
      mengikuti lebar kolom, dan cuma tepi bawahnya yang menempel dasar slide. */
   .pmodal__art--bleed{margin:0 -22px -74px;height:auto}
   .pmodal__slide--pair .pair-grid{grid-template-columns:repeat(3,1fr);gap:12px}
+  /* di lebar ponsel nav + tombol tidak muat berdampingan di tengah: nav
+     digeser ke kiri, tombolnya tetap di kanan. */
+  .pmodal__nav{justify-content:flex-start;padding-left:16px}
+  .pmodal__cta{right:16px;padding:0 14px;font-size:13px}
 }
 @media (prefers-reduced-motion:reduce){
   .pmodal__track{transition:none}
@@ -1381,8 +1398,8 @@ ul{margin:0;padding:0;list-style:none}
   .gallery__main.has-zoom::after{transition:none}
 }
 .doc-btns{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
-.doc-btns a{height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:var(--body-text);transition:border-color .25s var(--ease),color .25s var(--ease)}
-.doc-btns a:hover{border-color:var(--red);color:var(--red)}
+.doc-btns a,.doc-btns button{width:100%;font:inherit;background:transparent;cursor:pointer;height:52px;border:1px solid var(--line);border-radius:12px;display:grid;place-items:center;font-size:15px;color:var(--body-text);transition:border-color .25s var(--ease),color .25s var(--ease)}
+.doc-btns a:hover,.doc-btns button:hover{border-color:var(--red);color:var(--red)}
 
 /* lockup TiberMAX dipakai sebagai gambar (assets/img/tibermax-logo.png) */
 /* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x. */
@@ -2157,6 +2174,4 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
    di tempat logo. */
 .pdp-hero__title{font-size:clamp(28px,4.4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 18px}
 .pdp-info__name,.pmodal__name{font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.1;text-transform:uppercase;margin:0 0 12px}
-.pmodal__more{margin-top:14px;font-size:13px;font-weight:700}
-.pmodal__more a{color:inherit;text-decoration:underline}
 .product-card.is-loading{opacity:.6;cursor:progress}

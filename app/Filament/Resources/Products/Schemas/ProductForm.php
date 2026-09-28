@@ -98,8 +98,10 @@ class ProductForm
                 ]),
 
                 Tab::make('Tautan')->columns(2)->schema([
-                    TextInput::make('ecatalog_url')->label('E-Katalog')->placeholder('https://…'),
-                    TextInput::make('flashcard_url')->label('Flash Card')->placeholder('https://…'),
+                    TextInput::make('ecatalog_url')->label('E-Katalog')->placeholder('https://…')
+                        ->helperText('Kosong = flipbook katalog di /katalog.'),
+                    Fields::image('flashcard_image', 'Flash Card (JPG)')
+                        ->helperText('Tampil di popup saat tombol Flash Card diklik. Kosong = tombolnya disembunyikan.'),
                     TextInput::make('whatsapp_url')->label('WhatsApp')
                         ->helperText('Kosong = nomor WhatsApp di Pengaturan Situs, dengan pesan berisi nama produk.'),
                     TextInput::make('shopee_url')->label('Shopee')->helperText('Kosong = tautan Shopee di Pengaturan Situs.'),

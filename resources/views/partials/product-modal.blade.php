@@ -61,6 +61,5 @@
             @include('partials.product-parts', ['part' => 'sizes'])
             <h3 class="subhead">Contact us :</h3>
             @include('partials.product-parts', ['part' => 'contact'])
-            <p class="pmodal__more"><a href="{{ $product->url() }}">Lihat halaman produk &rarr;</a></p>
           </div>
         </section>

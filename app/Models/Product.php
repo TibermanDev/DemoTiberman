@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 #[Fillable([
     'catalog_unit_id', 'brand_id', 'name', 'slug', 'size', 'compat', 'image', 'sort_order', 'is_active',
     'logo', 'logo_light', 'hero_image', 'description', 'features', 'pairs', 'gallery', 'specs',
-    'available_sizes', 'ecatalog_url', 'flashcard_url', 'whatsapp_url', 'shopee_url', 'tokopedia_url',
+    'available_sizes', 'ecatalog_url', 'flashcard_image', 'whatsapp_url', 'shopee_url', 'tokopedia_url',
     'meta_description', 'meta_title', 'noindex',
 ])]
 class Product extends Model
@@ -48,6 +48,12 @@ class Product extends Model
     public function url(): string
     {
         return route('produk.show', $this->slug);
+    }
+
+    /** Tombol E-Katalog: tautan khusus produk, atau flipbook katalog di /katalog. */
+    public function ecatalogUrl(): string
+    {
+        return filled($this->ecatalog_url) && $this->ecatalog_url !== '#' ? $this->ecatalog_url : url('/katalog');
     }
 
     public function imageUrl(): string
