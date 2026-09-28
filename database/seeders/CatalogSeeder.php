@@ -184,8 +184,6 @@ class CatalogSeeder extends Seeder
                 ['label' => 'Pressure', 'value' => '38 Psi'],
             ]),
             'available_sizes' => json_encode(['11.00R20', '12.00R20', '12.00R24', '14.00R25']),
-            'ecatalog_url' => '#',
-            'flashcard_url' => '#',
             'meta_description' => 'Uninest Tibermax 800: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.',
         ]);
     }

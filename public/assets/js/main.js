@@ -430,6 +430,7 @@
     var pmTrack = pmodal.querySelector('[data-pmodal-track]');
     var pmSlides = [];
     var pmDots = pmodal.querySelector('[data-pmodal-dots]');
+    var pmLink = pmodal.querySelector('[data-pmodal-link]');
     var pmIdx = 0, pmPemanggil = null, pmMinta = 0;
     var pmCache = {};
 
@@ -486,6 +487,7 @@
         /* klik kartu lain sebelum yang ini selesai dimuat -> yang lama dibuang */
         if (nomor !== pmMinta) return;
         pmIsi(html);
+        if (pmLink) pmLink.href = pemanggil.href;
         pmodal.hidden = false;
         /* halaman di belakang dikunci supaya scroll tidak bocor ke katalog */
         document.body.style.overflow = 'hidden';
@@ -558,11 +560,11 @@
     main.setAttribute('aria-label', 'Lihat gambar ukuran penuh');
     main.classList.add('is-zoomable');
     if (main.parentElement) main.parentElement.classList.add('has-zoom');
-    main.addEventListener('click', function () { lbBuka(main); });
+    main.addEventListener('click', function () { lbBuka(main.currentSrc || main.src, main.alt, main); });
     main.addEventListener('keydown', function (e) {
       if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
-        lbBuka(main);
+        lbBuka(main.currentSrc || main.src, main.alt, main);
       }
     });
   }
@@ -626,11 +628,12 @@
     }, true);
   }
 
-  function lbBuka(main) {
+  /* asal = elemen yang membukanya; fokus dikembalikan ke sana saat ditutup. */
+  function lbBuka(src, alt, asal) {
     lbSiapkan();
-    lbAsal = main;
-    lbImg.src = main.currentSrc || main.src;
-    lbImg.alt = main.alt || '';
+    lbAsal = asal || null;
+    lbImg.src = src;
+    lbImg.alt = alt || '';
     /* Batas lebar dipasang dari ukuran ASLI gambarnya: tyre-preview.png cuma
        592px, kalau dipaksa memenuhi layar hasilnya pecah. 1,5x masih terlihat
        bersih, dan 1040px menahan tyre-90.png (2192px) supaya tidak raksasa. */
@@ -657,6 +660,16 @@
     document.body.style.overflow = lbOverflowLama;
     if (lbAsal) lbAsal.focus();
   }
+
+  /* Tombol Flash Card (halaman produk & modal katalog) -> JPG flash card
+     produknya di kotak tampilan penuh yang sama dengan galeri. Delegasi,
+     karena isi modal katalog dimuat ulang tiap kartu dibuka. */
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('[data-flashcard]');
+    if (!btn) return;
+    e.preventDefault();
+    lbBuka(btn.dataset.flashcard, btn.dataset.flashcardAlt, btn);
+  });
 
   /* ---------- 8. Video latar section (Importir) ----------
      Videonya preload="none" dan baru dimuat + diputar begitu sectionnya masuk

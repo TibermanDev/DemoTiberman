@@ -12,12 +12,10 @@
         @endforeach
       </div>
       @endif
-      @if ($product->ecatalog_url || $product->flashcard_url)
       <div class="doc-btns">
-        @if ($product->ecatalog_url)<a href="{{ $product->ecatalog_url }}">E-Katalog</a>@endif
-        @if ($product->flashcard_url)<a href="{{ $product->flashcard_url }}">Flash Card</a>@endif
+        <a href="{{ $product->ecatalogUrl() }}" target="_blank" rel="noopener">E-Katalog</a>
+        @if ($product->flashcard_image)<button type="button" data-flashcard="{{ media($product->flashcard_image) }}" data-flashcard-alt="Flash card {{ $product->name }}">Flash Card</button>@endif
       </div>
-      @endif
     </div>
     @break
 

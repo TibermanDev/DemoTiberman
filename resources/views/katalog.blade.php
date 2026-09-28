@@ -79,6 +79,13 @@
       <div class="pmodal__track" data-pmodal-track></div>
     </div>
 
+    <!-- Melayang di luar track supaya terlihat di keempat slide; href-nya
+         diisi JS dari kartu yang membuka modal. -->
+    <a class="pmodal__cta" href="#" data-pmodal-link>
+      <span>Lihat halaman produk</span>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+    </a>
+
     <div class="pmodal__nav">
       <div class="dots pmodal__dots" data-pmodal-dots></div>
       <button class="pmodal__next" type="button" data-pmodal-next aria-label="Slide berikutnya">
