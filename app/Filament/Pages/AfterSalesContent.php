@@ -68,7 +68,7 @@ class AfterSalesContent extends ContentPage
                     Fields::url('connect_url', 'Tautan tombol')
                         ->helperText('Kosongkan untuk memakai nomor WhatsApp di Pengaturan Situs.'),
                 ]),
-            Section::make('SEO')->columns(2)->schema(Fields::seo('/after-sales', 'After Sales — Tiberman')),
+            Section::make('SEO')->columns(2)->schema(Fields::seo('/after-sales-service', 'After Sales — Tiberman')),
         ]);
     }
 

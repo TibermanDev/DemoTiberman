@@ -10,10 +10,10 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
 /**
- * Unit, merk, dan ukuran katalog — dulu di config/catalog.php. Slug-nya
- * mengikuti toko lama (tiberman.com, WooCommerce) supaya URL lamanya tetap
- * hidup. Ditambah satu produk contoh; produk lain diisi lewat CMS dengan
- * slug produk tiberman.com.
+ * Data katalog awal untuk deploy: HANYA contoh sesuai desain katalog — 6 unit
+ * (+ "Semua Ban", wajib untuk /kategori-produk/semua-ban), 6 merk, 2 ukuran, dan
+ * 1 produk lengkap. Unit/merk/ukuran/produk lain diinput admin lewat CMS sesuai
+ * file "checklist slug admin" (slug-nya mengikuti toko lama tiberman.com).
  */
 class CatalogSeeder extends Seeder
 {
@@ -21,6 +21,8 @@ class CatalogSeeder extends Seeder
 
     public function run(): void
     {
+        // [label, path URL lama utama, tampil di menu Products, URL lama lain]
+        // URL lama lain = pemetaan alamat toko lama ke unit ini (bukan data tampilan).
         $units = [
             'all' => ['Semua Ban', 'kategori-produk/semua-ban', false, [
                 'kategori-produk/ukuran-ban',
@@ -40,17 +42,11 @@ class CatalogSeeder extends Seeder
                 'kategori-produk/ban-truk/ban-hd-rigid-dump-truck',
                 'kategori-produk/ban-truk/ban-articulated-dump-truck',
             ]],
-            'loader' => ['Loader', 'kategori-produk/ban-loader', true, []],
-            'grader' => ['Grader', 'kategori-produk/ban-grader', true, []],
+            'loader-grader' => ['Loader-Grader', 'kategori-produk/ban-loader', true, ['kategori-produk/ban-grader']],
             'traktor' => ['Traktor', 'kategori-produk/ban-traktor', true, []],
             'forklift' => ['Forklift', 'kategori-produk/ban-forklift', true, [
                 'kategori-produk/ban-forklift/ban-pneumatic',
                 'kategori-produk/ban-forklift/ban-solid',
-            ]],
-            'compactor' => ['Compactor', 'kategori-produk/ban-compactor', false, ['kategori-produk/ban-compactor/ban-vibro']],
-            'industri' => ['Industri', 'kategori-produk/ban-industri', false, [
-                'kategori-produk/ban-industri/ban-crane',
-                'kategori-produk/ban-industri/ban-reach-stacker',
             ]],
             'velg-tube' => ['Velg & Tube', 'kategori-produk/velg-truk', true, [
                 'kategori-produk/velg-truk/velg-pelek-alat-berat',
@@ -73,32 +69,32 @@ class CatalogSeeder extends Seeder
         }
 
         $order = 0;
-        foreach (['uninest' => 'Uninest', 'tutric' => 'Tutric', 'tianli' => 'Tianli', 'hengli' => 'Hengli', 'bontyre' => 'Bontyre', 'durun' => 'Durun', 'aeolus' => 'Aeolus', 'eced' => 'Eced', 'wingood' => 'Wingood'] as $slug => $name) {
+        foreach (['uninest' => 'Uninest', 'tutric' => 'Tutric', 'tianli' => 'Tianli', 'hengli' => 'Hengli', 'bontyre' => 'Bontyre', 'durun' => 'Durun'] as $slug => $name) {
             Brand::query()->updateOrCreate(['slug' => $slug], ['name' => $name, 'sort_order' => $order++]);
         }
 
-        foreach (['7.50-16', '10.00R20', '11.00-20', '11R22.5', '12.00-20', '12.00-24', '13.00-24', '14.00-24', '14.00-25', '14.00R20', '16.00-25', '16/70-20', '17.5-25', '18.00-25', '18.4-24', '20.5-25', '20.5/70-16', '21.00-35', '23.1-26', '23.5-25', '24.00-35', '26.5-25', '27.00-49', '29.5-25', '29.5-29', '30.00-51', '325/95-24', '33.00-51', '33.25-25', '33.25R29', '35/65-33', '45/65-45'] as $label) {
+        // Label harus sama persis dengan kolom "Ukuran" produk supaya chip-nya jadi tautan.
+        foreach (['11.00R20', '11.00R24'] as $label) {
             TireSize::query()->updateOrCreate(['label' => $label], ['slug' => 'ban-'.Str::slug(str_replace(['.', '/'], '-', $label))]);
         }
 
-        // Satu produk contoh yang lengkap dengan halaman detailnya. Slug-nya produk
-        // tiberman.com (/product/... dialihkan ke sini lewat SiteSeeder); spesifikasi
-        // di bawah hanya contoh, koreksi lewat CMS. Produk lain diinput lewat CMS.
+        // Satu produk contoh yang lengkap dengan halaman detailnya (sesuai desain
+        // katalog). Spesifikasinya hanya contoh — koreksi/ganti lewat CMS.
         $truck = CatalogUnit::query()->where('key', 'truk-bus')->firstOrFail();
         $uninest = Brand::query()->where('slug', 'uninest')->firstOrFail();
 
-        Product::query()->updateOrCreate(['slug' => 'uninest-tibermax-851-12-00r20-20pr'], [
+        Product::query()->updateOrCreate(['slug' => 'uninest-tibermax-554-11-00r20'], [
             'catalog_unit_id' => $truck->id,
             'brand_id' => $uninest->id,
-            'name' => 'UNINEST - TIBERMAX 851',
-            'size' => '12.00R20',
-            'compat' => 'Truk & Bus',
+            'name' => 'UNINEST - TIBERMAX 554',
+            'size' => '11.00R20',
+            'compat' => 'Dumptruck',
             'sort_order' => 0,
             'logo' => $this->img('tibermax-logo.png'),
             'logo_light' => $this->img('tibermax-logo-light.png'),
             'hero_image' => $this->img('tire-hero-dark.webp'),
             'image' => $this->img('tire-554.webp'),
-            'description' => '<b>Uninest Tibermax 851</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.',
+            'description' => '<b>Uninest Tibermax 554</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.',
             'features' => [
                 ['title' => "Sidewall\nKuat", 'body' => 'Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.', 'image' => $this->img('tyre-slice-left.png'), 'contain' => true],
                 ['title' => "Telapak\nTebal", 'body' => 'Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.', 'image' => $this->img('tire-tread.webp'), 'contain' => false],
@@ -124,8 +120,8 @@ class CatalogSeeder extends Seeder
                 ['label' => 'Section Width', 'value' => '595 mm'],
                 ['label' => 'Pressure', 'value' => '38 Psi'],
             ],
-            'available_sizes' => ['11.00R20', '12.00R20', '12.00R24', '14.00R25'],
-            'meta_description' => 'Uninest Tibermax 851: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.',
+            'available_sizes' => ['11.00R20', '11.00R24'],
+            'meta_description' => 'Uninest Tibermax 554: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.',
         ]);
     }
 }

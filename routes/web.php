@@ -78,7 +78,10 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/cabang-tiberman', [PageController::class, 'superarea'])->name('superarea');
 
-Route::get('/after-sales', [PageController::class, 'aftersales'])->name('aftersales');
+// Alamat mengikuti situs lama (tiberman.com/after-sales-service/); /after-sales
+// hanya pintasan yang diarahkan ke sana.
+Route::get('/after-sales-service', [PageController::class, 'aftersales'])->name('aftersales');
+Route::permanentRedirect('/after-sales', '/after-sales-service');
 
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 

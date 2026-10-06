@@ -24,6 +24,12 @@ class RedirectLegacyUrls
                 return redirect($target[0], $target[1]);
             }
 
+            // Halaman produk toko lama /product/{slug}/ -> /produk/{slug}: produk
+            // diinput dengan slug yang sama, tidak perlu entri Redirect URL.
+            if (preg_match('#^product/([^/]+)$#', $path, $m)) {
+                return redirect('/produk/'.$m[1], 301);
+            }
+
             // Halaman akun WooCommerce lama (/my-account/, /my-account/edit-akun/,
             // ...) ke beranda: situs baru tidak punya fitur akun pelanggan.
             if ($path === 'my-account' || str_starts_with($path, 'my-account/')) {

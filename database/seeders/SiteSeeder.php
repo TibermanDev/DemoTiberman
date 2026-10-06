@@ -31,7 +31,6 @@ class SiteSeeder extends Seeder
             'kategori-produk/ban-10-00-20' => '/kategori-produk/ukuran-ban/ban-10-00r20',
             'kategori-produk/ban-crane' => '/kategori-produk/ban-industri/ban-crane',
             'kategori-produk/ban-reach-stacker' => '/kategori-produk/ban-industri/ban-reach-stacker',
-            'tag-produk/ban-11-00-20' => '/kategori-produk/ukuran-ban/ban-11-00-20',
             'penjelasan-lengkap-tentang-pertambangan' => '/blog/penjelasan-lengkap-tentang-pertambangan',
             'blog/standar-ban-aeolus-750r16-harga-lebih-murah-tibermax-aja' => '/blog/ban-truk-750r16-harga-murah-diproduksi-di-pabrik-aeolus',
             'kategori/alat-berat' => '/blog/category/alat-berat',
@@ -59,8 +58,6 @@ class SiteSeeder extends Seeder
             'blog/author/daliana-fehabutar' => '/admin',
             'blog/author/tiberman' => '/admin',
             'tag-produk/tag-coba' => '/kategori-produk/semua-ban',
-            // URL produk contoh di toko lama (lihat CatalogSeeder).
-            'product/uninest-tibermax-851-12-00r20-20pr' => '/produk/uninest-tibermax-851-12-00r20-20pr',
             'katalog/katalogkomik_tbmaug_compressed.pdf' => '/files/katalog-komik.pdf',
         ];
         foreach ($redirects as $from => $to) {
