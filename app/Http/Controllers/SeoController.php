@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\CatalogUnit;
 use App\Models\Flipbook;
 use App\Models\LandingPage;
+use App\Models\LinkPage;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Product;
@@ -56,6 +57,8 @@ class SeoController extends Controller
                 ->each(fn ($p) => $add(url($p->slug), $p->updated_at, '0.6'));
             ProductTag::query()->where('is_active', true)->where('noindex', false)->has('products')->get()
                 ->each(fn ($t) => $add($t->url(), $t->updated_at, '0.5'));
+            LinkPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($l) => $add($l->url(), $l->updated_at, '0.3'));
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"

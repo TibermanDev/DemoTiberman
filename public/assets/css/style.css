@@ -2513,3 +2513,44 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 @media (max-width:620px){
   .catalog__result{padding-inline:18px}
 }
+
+/* ==========================================================================
+   Linktree (/lp/, /lp/{slug}.html) — menu Linktree (/lp) di CMS. Satu kolom
+   gelap bersorot merah di atas, tombol putih membulat seperti linktree.
+   ========================================================================== */
+.lt-body{background:#121214}
+.lt{position:relative;min-height:100vh;overflow:hidden;color:#fff;background:radial-gradient(ellipse 80% 55% at 50% 0%,#3a1512 0%,#121214 70%)}
+.lt__glow{position:absolute;left:50%;top:0;width:min(1200px,160vw);max-width:none;transform:translateX(-50%);opacity:.55;pointer-events:none}
+.lt__inner{position:relative;width:100%;max-width:560px;margin:0 auto;padding:clamp(40px,8vh,72px) 20px 36px}
+.lt__head{text-align:center}
+.lt__avatar{display:inline-flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;background:#1d1d1f;border:2px solid rgba(255,255,255,.14);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.lt__avatar img{width:100%;height:100%;object-fit:cover}
+.lt__avatar .lt__logo{width:78%;height:auto;object-fit:contain}
+.lt__head h1{margin-top:16px;font-size:clamp(22px,5vw,28px);font-weight:800;letter-spacing:-.01em}
+.lt__head p{margin:8px auto 0;max-width:420px;font-size:15px;line-height:1.55;color:rgba(255,255,255,.72)}
+
+.lt__links{display:grid;gap:12px;margin-top:28px}
+.lt-link{display:flex;align-items:center;gap:14px;min-height:58px;padding:10px 18px 10px 12px;border-radius:16px;background:#fff;color:var(--ink);font-size:15.5px;font-weight:700;letter-spacing:-.01em;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease)}
+.lt-link:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.32)}
+.lt-link__icon{flex:0 0 38px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--grey-100);color:var(--ink)}
+.lt-link__icon svg{width:21px;height:21px}
+.lt-link__label{flex:1;line-height:1.3}
+.lt-link__arrow{flex:0 0 16px;width:16px;height:16px;color:var(--muted-2)}
+/* warna ikon per kanal */
+.lt-link--whatsapp .lt-link__icon{background:#e7f9ee;color:var(--wa)}
+.lt-link--shopee .lt-link__icon{background:#fdece8;color:var(--shopee)}
+.lt-link--tokopedia .lt-link__icon{background:#e9f6e8;color:var(--tokped)}
+.lt-link--instagram .lt-link__icon{background:#fbe9f1;color:#d6297a}
+.lt-link--youtube .lt-link__icon{background:#fde8e8;color:#e62117}
+.lt-link--facebook .lt-link__icon{background:#e8effc;color:#1877f2}
+.lt-link--linkedin .lt-link__icon{background:#e6f0f8;color:#0a66c2}
+.lt-link--tiktok .lt-link__icon{background:#ececee;color:#111}
+/* tombol yang disorot: merah brand */
+.lt-link--hl{background:var(--red);color:#fff}
+.lt-link--hl .lt-link__icon{background:rgba(255,255,255,.18);color:#fff}
+.lt-link--hl .lt-link__arrow{color:rgba(255,255,255,.8)}
+.lt-link--hl:hover{background:var(--red-dark)}
+
+.lt__foot{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:36px;font-size:12.5px;color:rgba(255,255,255,.45);text-align:center}
+.lt__foot a{color:rgba(255,255,255,.75);font-weight:600}
+.lt__foot a:hover{color:#fff}

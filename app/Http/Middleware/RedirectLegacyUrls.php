@@ -24,6 +24,12 @@ class RedirectLegacyUrls
                 return redirect($target[0], $target[1]);
             }
 
+            // Halaman akun WooCommerce lama (/my-account/, /my-account/edit-akun/,
+            // ...) ke beranda: situs baru tidak punya fitur akun pelanggan.
+            if ($path === 'my-account' || str_starts_with($path, 'my-account/')) {
+                return redirect('/', 301);
+            }
+
             // Paginasi arsip penulis blog lama (/blog/author/x/page/2/) langsung
             // ke beranda: situs baru tidak punya halaman penulis.
             if (preg_match('#^blog/author/[^/]+/page/\d+$#', $path)) {

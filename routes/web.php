@@ -4,6 +4,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\LinkPageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
@@ -80,6 +81,9 @@ Route::get('/cabang-tiberman', [PageController::class, 'superarea'])->name('supe
 Route::get('/after-sales', [PageController::class, 'aftersales'])->name('aftersales');
 
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
+
+// Linktree bio media sosial: /lp/ dan /lp/{slug}.html (URL lama) — menu Linktree (/lp) di CMS.
+Route::get('/lp/{page?}', LinkPageController::class)->where('page', '[A-Za-z0-9_-]+\.html')->name('linktree');
 
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
 Route::get('/disclaimer', [PageController::class, 'disclaimer'])->name('disclaimer');
