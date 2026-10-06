@@ -298,21 +298,32 @@
         return;
       }
 
+      var card = function (p, size) {
+        return '' +
+          '<a class="product-card" href="' + esc(p.url || '/produk') + '">' +
+            '<span class="product-card__img"><img src="' + esc(p.img) + '" alt="' + esc(p.name + ' ' + size) + '" loading="lazy"></span>' +
+            '<span class="product-card__body">' +
+              '<strong>' + esc(p.name) + '</strong>' +
+              '<span><span>compatible for :</span> ' + esc(p.compat) + '</span>' +
+            '</span>' +
+          '</a>';
+      };
+
+      /* Halaman tag produk (data-flat): satu grid tanpa judul ukuran, sama
+         dengan versi yang dirender server. */
+      if ('flat' in catalog.dataset) {
+        grid.innerHTML = '<div class="product-grid">' + groups.map(function (g) {
+          return g.items.map(function (p) { return card(p, g.size); }).join('');
+        }).join('') + '</div>';
+        return;
+      }
+
       grid.innerHTML = groups.map(function (g) {
         return '' +
           '<section class="size-group">' +
             '<h2><span>Ukuran</span> ' + esc(g.size) + '</h2>' +
             '<div class="product-grid">' +
-              g.items.map(function (p) {
-                return '' +
-                  '<a class="product-card" href="' + esc(p.url || '/produk') + '">' +
-                    '<span class="product-card__img"><img src="' + esc(p.img) + '" alt="' + esc(p.name + ' ' + g.size) + '" loading="lazy"></span>' +
-                    '<span class="product-card__body">' +
-                      '<strong>' + esc(p.name) + '</strong>' +
-                      '<span><span>compatible for :</span> ' + esc(p.compat) + '</span>' +
-                    '</span>' +
-                  '</a>';
-              }).join('') +
+              g.items.map(function (p) { return card(p, g.size); }).join('') +
             '</div>' +
           '</section>';
       }).join('');
@@ -399,6 +410,7 @@
     }
 
     window.addEventListener('popstate', function () {
+      if ('flat' in catalog.dataset) return; // halaman tag tidak pernah pushState
       var path = location.pathname.replace(/\/+$/, '');
       apply(URLS.paths[path] || DEFAULT, false);
       document.title = titleFor();

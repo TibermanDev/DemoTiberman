@@ -63,6 +63,8 @@ Route::get('/files/katalog-komik.pdf', function (Request $request) {
 // URL kategori & merk mengikuti toko lama (tiberman.com) — petanya di CMS (Katalog).
 Route::get('/kategori-produk/{path}', [CatalogController::class, 'category'])->where('path', '.*')->name('katalog.kategori');
 Route::get('/brand/{brand}', [CatalogController::class, 'brand'])->name('katalog.brand');
+// Tag SEO toko lama: halaman katalog berisi produk pilihan (menu Tag Produk di CMS).
+Route::get('/tag-produk/{slug}', [CatalogController::class, 'tag'])->name('katalog.tag');
 
 Route::get('/produk', [ProductController::class, 'index'])->name('produk');
 Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.show');

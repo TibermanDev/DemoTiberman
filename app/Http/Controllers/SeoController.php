@@ -9,6 +9,8 @@ use App\Models\LandingPage;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Product;
+use App\Models\ProductTag;
+use App\Models\PromoPage;
 use App\Support\Seo;
 use Illuminate\Http\Response;
 
@@ -50,6 +52,10 @@ class SeoController extends Controller
             Flipbook::query()->where('is_active', true)->get()->each(fn ($f) => $add(url($f->slug), $f->updated_at, '0.4'));
             LandingPage::query()->where('is_active', true)->where('noindex', false)->get()
                 ->each(fn ($l) => $add(url($l->slug), $l->updated_at, '0.5'));
+            PromoPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($p) => $add(url($p->slug), $p->updated_at, '0.6'));
+            ProductTag::query()->where('is_active', true)->where('noindex', false)->has('products')->get()
+                ->each(fn ($t) => $add($t->url(), $t->updated_at, '0.5'));
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"

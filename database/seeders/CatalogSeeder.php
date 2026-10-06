@@ -100,7 +100,7 @@ class CatalogSeeder extends Seeder
             'image' => $this->img('tire-554.webp'),
             'description' => '<b>Uninest Tibermax 851</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.',
             'features' => [
-                ['title' => "Sidewall\nKuat", 'body' => 'Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.', 'image' => $this->img('tyre-90.png'), 'contain' => true],
+                ['title' => "Sidewall\nKuat", 'body' => 'Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.', 'image' => $this->img('tyre-slice-left.png'), 'contain' => true],
                 ['title' => "Telapak\nTebal", 'body' => 'Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.', 'image' => $this->img('tire-tread.webp'), 'contain' => false],
             ],
             'pairs' => [
@@ -111,7 +111,7 @@ class CatalogSeeder extends Seeder
             'gallery' => [
                 $this->img('tyre-preview.png'),
                 $this->img('tyre-diameter.png'),
-                $this->img('tyre-90.png'),
+                $this->img('tyre-slice-left.png'),
                 $this->img('tapak-ban.png'),
             ],
             'specs' => [

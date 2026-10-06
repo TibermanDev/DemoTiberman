@@ -6,8 +6,8 @@ use App\Filament\Resources\LandingPages\Pages\CreateLandingPage;
 use App\Filament\Resources\LandingPages\Pages\EditLandingPage;
 use App\Filament\Resources\LandingPages\Pages\ListLandingPages;
 use App\Filament\Support\Fields;
-use App\Models\Flipbook;
 use App\Models\LandingPage;
+use App\Support\PageSlug;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -24,7 +24,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use UnitEnum;
 
@@ -60,14 +59,8 @@ class LandingPageResource extends Resource
                     ->afterStateUpdated(fn (string $operation, $state, $set) => $operation === 'create' ? $set('slug', Str::slug($state)) : null),
                 TextInput::make('slug')->label('Alamat')->required()->alphaDash()->prefix('/')
                     ->unique(ignoreRecord: true)
-                    ->helperText('Tidak bisa memakai alamat halaman lain atau flipbook PDF.')
-                    ->rule(fn () => function (string $attribute, $value, $fail) {
-                        $taken = collect(Route::getRoutes())->contains(fn ($r) => ! $r->isFallback && trim($r->uri(), '/') === $value)
-                            || Flipbook::query()->where('slug', $value)->exists();
-                        if ($taken) {
-                            $fail('Alamat ini sudah dipakai halaman lain.');
-                        }
-                    }),
+                    ->helperText('Tidak bisa memakai alamat halaman lain, flipbook PDF, atau halaman promo.')
+                    ->rule(fn (?LandingPage $record) => PageSlug::rule($record)),
                 Fields::richText('heading', 'Judul besar', 2)
                     ->helperText('Logo marketplace ditaruh di akhir baris terakhir.'),
                 Fields::image('logo', 'Logo marketplace')

@@ -31,8 +31,10 @@ class DatabaseSeeder extends Seeder
             AfterSalesSeeder::class,
             LandingPageSeeder::class,
             LegalSeeder::class,
+            PromoPageSeeder::class,
             BlogSeeder::class,
             CatalogSeeder::class,
+            ProductTagSeeder::class, // setelah CatalogSeeder: contohnya butuh produk
             LocationSeeder::class,
             SiteSeeder::class,
         ]);

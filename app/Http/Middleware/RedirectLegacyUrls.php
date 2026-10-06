@@ -24,10 +24,17 @@ class RedirectLegacyUrls
                 return redirect($target[0], $target[1]);
             }
 
-            // Paginasi WordPress lama (/produk/page/2/, /blog/category/x/page/3/)
-            // diarahkan ke halaman induknya. Tag produk dikecualikan karena
-            // nanti punya halaman sendiri.
-            if (preg_match('#^(?:(.+)/)?page/\d+$#', $path, $m) && ! str_starts_with($path, 'tag-produk/')) {
+            // Paginasi arsip penulis blog lama (/blog/author/x/page/2/) langsung
+            // ke beranda: situs baru tidak punya halaman penulis.
+            if (preg_match('#^blog/author/[^/]+/page/\d+$#', $path)) {
+                return redirect('/', 301);
+            }
+
+            // Paginasi WordPress lama (/produk/page/2/, /blog/category/x/page/3/,
+            // /tag-produk/x/page/2/, /kategori-produk/x/page/2/) diarahkan ke
+            // halaman induknya — halaman baru tidak berhalaman, semua isinya
+            // tampil di halaman induk.
+            if (preg_match('#^(?:(.+)/)?page/\d+$#', $path, $m)) {
                 return redirect('/'.($m[1] ?? ''), 301);
             }
         }

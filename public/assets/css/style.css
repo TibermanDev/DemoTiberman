@@ -2435,3 +2435,81 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
   .lgl-hero__tyre{height:auto;width:34%}
   .lgl-section p{text-align:left}
 }
+
+/* ==========================================================================
+   Halaman promo (/{slug}, mis. /aeolus-tyre) — menu Halaman Promo di CMS.
+   Isinya blok Builder: .prm-text, .prm-split, .prm-cards, .prm-figure.
+   ========================================================================== */
+.prm{padding-top:clamp(24px,3vw,40px);background:#fff}
+.prm > .container{max-width:1180px}
+.prm__banner{display:block;width:100%;height:auto;margin-bottom:clamp(32px,4vw,56px)}
+.prm-block + .prm-block{margin-top:clamp(36px,4.6vw,72px)}
+.prm-text h1,.prm-text h2{margin-bottom:clamp(16px,2vw,28px);font-size:clamp(26px,2.6vw,38px);font-weight:800;letter-spacing:-.02em;color:#000}
+
+/* isi dari RichEditor */
+.prm-prose{font-size:clamp(14px,1.05vw,16px);line-height:1.7;color:#1d1d1f;text-align:justify}
+.prm-prose > * + *{margin-top:1em}
+.prm-prose a{text-decoration:underline;text-underline-offset:2px}
+.prm-prose a:hover{color:var(--red)}
+.prm-prose strong{font-weight:700}
+.prm-prose h3{font-size:clamp(18px,1.5vw,22px);font-weight:700;margin-top:1.4em}
+.prm-prose ul,.prm-prose ol{padding-left:22px}
+.prm-prose ul{list-style:disc}
+.prm-prose ol{list-style:decimal}
+.prm-prose blockquote{padding-left:16px;border-left:3px solid var(--red);color:var(--body-text)}
+
+.prm-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
+.prm-split--right .prm-split__img{order:2}
+.prm-split__img img{display:block;width:100%;height:auto}
+
+.prm-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.2vw,18px)}
+.prm-card{display:flex;flex-direction:column;align-items:center;background:#fff;border-radius:10px;padding:clamp(8px,.8vw,12px) clamp(8px,.8vw,12px) clamp(14px,1.4vw,20px);box-shadow:0 2px 6px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.08);transition:box-shadow .25s var(--ease),transform .25s var(--ease)}
+.prm-card:hover{transform:translateY(-3px);box-shadow:0 4px 10px rgba(0,0,0,.1),0 14px 34px rgba(0,0,0,.12)}
+/* kotak gambar seragam supaya tinggi kartu rata walau rasio gambarnya beda */
+.prm-card__img{display:block;width:100%;aspect-ratio:1/1;border-radius:6px;overflow:hidden}
+.prm-card__img img{display:block;width:100%;height:100%;object-fit:contain}
+.prm-card__btn{display:inline-flex;align-items:center;height:30px;margin-top:clamp(10px,1vw,14px);padding:0 clamp(16px,1.6vw,26px);border-radius:999px;background:var(--red);color:#fff;font-size:clamp(12px,1vw,14px);font-weight:500;transition:background .2s var(--ease)}
+.prm-card__btn:hover{background:var(--red-dark)}
+
+.prm-figure{margin:0}
+.prm-figure img{display:block;width:100%;height:auto;border-radius:8px}
+
+/* Pita ajakan: kepala maskot menyembul di atas pita merah */
+/* clip-path memotong apa pun di bawah pita (separuh bawah maskot) tapi
+   membiarkan kepalanya menyembul ke atas. */
+.prm-cta{margin-top:clamp(90px,12vw,170px);background:#e82927;color:#fff;clip-path:inset(-60vh 0 0 0)}
+.prm-cta__grid{display:grid;grid-template-columns:.85fr 1fr;align-items:center;gap:clamp(16px,3vw,48px)}
+/* Maskot setengah badan: --pw = lebarnya (rasio gambar 895:1467 = 1:1,639).
+   Naik 30% lebar di atas pita, dipotong di pinggang (±72% tinggi) lewat
+   margin bawah negatif. */
+.prm-cta__art{--pw:clamp(220px,26vw,380px);align-self:end;display:block;width:var(--pw);max-width:none;height:auto;margin:calc(var(--pw) * -.3) auto calc(var(--pw) * -.46)}
+.prm-cta__copy{padding:clamp(28px,3.4vw,52px) 0}
+.prm-cta__copy h2{font-size:clamp(22px,2.4vw,34px);font-weight:800;line-height:1.3;letter-spacing:-.01em}
+.prm-cta__btn{display:flex;align-items:center;justify-content:center;max-width:380px;height:clamp(44px,3.6vw,52px);margin-top:clamp(14px,1.6vw,22px);border-radius:999px;background:#fff;color:var(--red);font-size:clamp(17px,1.7vw,24px);font-weight:700;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.prm-cta__btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+@media (max-width:860px){
+  .prm-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prm-split{grid-template-columns:minmax(0,1fr)}
+  .prm-split--right .prm-split__img{order:0}
+  .prm-cta__grid{grid-template-columns:minmax(0,1fr);text-align:center}
+  /* bertumpuk: potong gambarnya sendiri (tinggi ±72%) supaya kaki tidak menimpa judul */
+  .prm-cta__art{--pw:220px;height:calc(var(--pw) * 1.18);object-fit:cover;object-position:top;margin-bottom:0}
+  .prm-cta__copy{padding-top:8px}
+  .prm-cta__btn{margin-inline:auto}
+}
+@media (max-width:560px){
+  .prm-prose{text-align:left}
+}
+
+/* ==========================================================================
+   Halaman tag produk (/tag-produk/{slug}) — pita putih "Showing all result
+   of" di bawah banner katalog. Menu Tag Produk di CMS.
+   ========================================================================== */
+.catalog__result{background:#fff;text-align:center;padding:clamp(20px,2.4vw,32px) 32px clamp(22px,2.6vw,34px)}
+.catalog__result p{font-size:clamp(13px,1.1vw,16px);color:var(--body-text)}
+.catalog__result h1{margin-top:6px;font-size:clamp(22px,2.4vw,34px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.catalog__result + .catalog__body{padding-top:clamp(22px,2.4vw,32px)}
+@media (max-width:620px){
+  .catalog__result{padding-inline:18px}
+}
