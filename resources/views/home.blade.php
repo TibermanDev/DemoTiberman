@@ -244,14 +244,15 @@ window.__tbmIntroBail=setTimeout(function(){
   <section class="why" id="kenapa" data-why>
     <div class="why__track">
       <div class="why__stage">
-        @php($video = bg_video(data_get($home, 'why'), 'warehouse-loop-web.mp4', null, 'warehouse-dark.webp'))
+        @php($video = bg_video(data_get($home, 'why'), 'rev-gudang.mp4', null, 'rev-gudang-poster.webp'))
         <video class="why__video" data-bg-video
                muted playsinline loop preload="none"
                poster="{{ $video['poster'] }}"
                aria-hidden="true" tabindex="-1" disablepictureinpicture>
-          <!-- versi web: 1920x1080 CRF 30, 8 MB (aslinya 2560x1440 / 28,4 MB).
-               1440p sempat dicoba dan hasilnya pecah: di layar 1920 dia harus
-               di-upscale 1,33x, artefak kompresinya jadi kelihatan. -->
+          <!-- rev-gudang: 1920x1080 CRF 30 tanpa audio, 8,5 MB (aslinya 17 MB).
+               Resolusinya sama dengan aslinya; yang dikecilkan hanya bitrate,
+               dan audionya dibuang karena videonya diputar muted. Posternya
+               frame pertama video. -->
           @if ($video['webm'])<source src="{{ $video['webm'] }}" type="video/webm">@endif
           <source src="{{ $video['mp4'] }}" type="video/mp4">
         </video>

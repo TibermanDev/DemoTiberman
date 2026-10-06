@@ -110,9 +110,9 @@ class ContentSeeder extends Seeder
             'why' => [
                 'kicker' => 'Dari sekian banyak supplier lain',
                 'title' => 'Kenapa Harus Tiberman ?',
-                'video' => $this->img('warehouse-loop-web.mp4'),
+                'video' => $this->img('rev-gudang.mp4'),
                 'video_webm' => null,
-                'poster' => $this->img('warehouse-dark.webp'),
+                'poster' => $this->img('rev-gudang-poster.webp'),
             ],
             'stock' => [
                 'title' => 'Stok Aman',
@@ -125,8 +125,8 @@ class ContentSeeder extends Seeder
                 'image' => $this->img('plb-stock.webp'),
                 'alt' => 'Gudang stok ban Pusat Logistik Berikat',
                 'warehouses' => [
-                    ['name' => 'Mojokerto', 'capacity' => '150 kontainer', 'image' => $this->img('plb-mojokerto.webp')],
-                    ['name' => 'Gresik', 'capacity' => '250 kontainer', 'image' => $this->img('plb-gresik.webp')],
+                    ['name' => 'Mojokerto', 'capacity' => '150+ kontainer', 'image' => $this->img('plb-mojokerto.webp')],
+                    ['name' => 'Gresik', 'capacity' => '250+ kontainer', 'image' => $this->img('plb-gresik.webp')],
                 ],
             ],
             'delivery' => [
