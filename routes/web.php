@@ -75,6 +75,8 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/cabang-tiberman', [PageController::class, 'superarea'])->name('superarea');
 
+Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
+
 Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [InquiryController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 

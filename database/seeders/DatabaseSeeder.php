@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             ContentSeeder::class,
+            AboutSeeder::class,
             BlogSeeder::class,
             CatalogSeeder::class,
             LocationSeeder::class,

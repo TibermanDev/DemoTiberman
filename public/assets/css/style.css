@@ -2175,3 +2175,100 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 .pdp-hero__title{font-size:clamp(28px,4.4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 18px}
 .pdp-info__name,.pmodal__name{font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.1;text-transform:uppercase;margin:0 0 12px}
 .product-card.is-loading{opacity:.6;cursor:progress}
+
+/* ==========================================================================
+   About Us (/tentang-kami) — isi dari CMS (menu Halaman > About Us)
+   ========================================================================== */
+.abt{background:#fff}
+
+/* ---------- Banner ----------
+   Latar gudang di belakang, foto tim (atasnya transparan) di depan, dan
+   judul terselip di antara keduanya supaya kepala tim menimpa hurufnya. */
+.abt-hero{position:relative;overflow:hidden;background:#15161a;color:#fff;aspect-ratio:1440/545;min-height:400px;isolation:isolate}
+.abt-hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%;filter:grayscale(.85) brightness(.55);z-index:-2}
+.abt-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 45%)}
+.abt-hero__head{position:absolute;left:0;right:0;top:clamp(14px,2.4vw,36px);text-align:center;padding-inline:24px}
+.abt-hero__eyebrow{font-size:clamp(14px,1.6vw,22px);font-weight:500;letter-spacing:-.01em}
+.abt-hero__head h1{margin-top:6px;font-size:clamp(36px,6.8vw,112px);font-weight:800;line-height:.98;letter-spacing:-.01em;text-transform:uppercase}
+.abt-hero__team{position:absolute;left:0;top:0;width:100%;height:auto}
+.abt-hero__btn{
+  position:absolute;left:50%;bottom:clamp(14px,2.6vw,36px);transform:translateX(-50%);
+  display:inline-flex;align-items:center;height:clamp(32px,2.8vw,40px);padding:0 clamp(20px,2.6vw,38px);
+  background:#fff;color:var(--ink);border-radius:8px;font-size:clamp(12px,1vw,14px);font-weight:600;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);transition:background .2s var(--ease),transform .2s var(--ease)
+}
+.abt-hero__btn:hover{background:var(--grey-100);transform:translateX(-50%) translateY(-2px)}
+
+/* ---------- Angka ---------- */
+.abt-stats{padding:clamp(40px,5vw,72px) 0 clamp(48px,7vw,110px)}
+.abt-stats__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.abt-stat{text-align:center;padding:4px clamp(12px,1.8vw,28px)}
+.abt-stat + .abt-stat{border-left:1px solid var(--line)}
+.abt-stat h2{font-size:clamp(22px,2.3vw,32px);font-weight:700;line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
+.abt-stat h2 strong,.abt-ms__head h2 strong{color:var(--red);font-weight:inherit}
+.abt-stat p{max-width:320px;margin:16px auto 0;font-size:13px;line-height:1.85;color:var(--body-text)}
+
+/* ---------- Visi & misi ----------
+   Dua kartu abu menyilang, maskot terbang menimpa keduanya di tengah. */
+.abt-vm{padding-bottom:clamp(56px,7vw,110px)}
+/* sedikit lebih lebar dari .container biasa supaya kartu & maskot lebih lega */
+.abt-vm > .container{max-width:1320px}
+.abt-vm__grid{position:relative}
+/* Lebar & padding kartu dalam persen lebar grid (proporsi dari desain):
+   teks misi mulai tepat di kanan kepalan tangan maskot (±61%), jadi lebar
+   kartu benar-benar terpakai untuk teks — ±4 baris di layar lebar. */
+.abt-vm__card{background:var(--grey-50);border-radius:var(--radius);padding:clamp(22px,2.6vw,36px) clamp(22px,3vw,44px)}
+.abt-vm__card h2{color:var(--red);font-size:clamp(24px,2.6vw,36px);font-weight:800;letter-spacing:-.02em}
+.abt-vm__card p{margin-top:10px;font-size:clamp(13px,1.1vw,15px);line-height:1.7;color:var(--body-text)}
+.abt-vm__card--vision{width:43%;text-align:right;padding-right:9%}
+.abt-vm__card--mission{width:48%;margin-left:52%;margin-top:clamp(-72px,-5vw,-24px);padding-left:8%;padding-right:2.5%}
+.abt-vm__mascot{position:absolute;z-index:2;left:21%;top:clamp(14px,2vw,30px);width:38%;max-width:520px;height:auto;pointer-events:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.12))}
+
+/* ---------- Milestone ---------- */
+.abt-ms{position:relative;padding-top:clamp(20px,3vw,40px);overflow:hidden}
+.abt-ms > .container{position:relative;z-index:1}
+.abt-ms__head{text-align:center}
+.abt-ms__head p{font-size:clamp(16px,1.7vw,24px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.abt-ms__head h2{margin-top:8px;font-size:clamp(36px,5.6vw,80px);font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.abt-ms__line{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px);margin:clamp(28px,3.4vw,48px) 0 0;padding:0;list-style:none}
+/* garis tipis penghubung di belakang pil tahun */
+.abt-ms__line::before{content:"";position:absolute;left:16%;right:16%;top:clamp(19px,1.9vw,26px);height:1px;background:var(--line);z-index:-1}
+.abt-ms__step{text-align:center}
+.abt-ms__pill{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(150px,15vw,220px);height:clamp(38px,3.8vw,52px);padding:0 24px;border-radius:999px;background:#979797;color:#fff;font-size:clamp(18px,2vw,28px);font-weight:700;letter-spacing:-.01em}
+.abt-ms__step:last-child .abt-ms__pill{background:var(--red)}
+.abt-ms__step p{margin-top:clamp(16px,2vw,28px);font-size:clamp(14px,1.1vw,16px);line-height:1.75;color:var(--body-text);text-align:justify;text-align-last:left}
+.abt-ms__img{position:relative;display:block;width:100%;height:auto;margin-top:clamp(-150px,-9vw,-40px)}
+
+/* ---------- Ajakan ---------- */
+.abt-cta{background:var(--red);color:#fff;padding:clamp(36px,4.4vw,64px) 0}
+.abt-cta__grid{display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.abt-cta__left{padding-right:clamp(24px,4vw,64px)}
+.abt-cta__left h2{font-size:clamp(22px,2.4vw,34px);font-weight:800;letter-spacing:-.02em}
+.abt-cta__left p{margin-top:10px;font-size:clamp(13px,1.1vw,16px);line-height:1.6;text-align:justify;opacity:.95}
+.abt-cta__right{text-align:center;padding-left:clamp(24px,4vw,64px);border-left:1px solid rgba(255,255,255,.55);align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.abt-cta__right h2{font-size:clamp(20px,2.1vw,30px);font-weight:800;line-height:1.2;letter-spacing:-.02em}
+.abt-cta__btn{display:flex;align-items:center;justify-content:center;width:100%;max-width:480px;height:clamp(44px,3.8vw,56px);margin-top:clamp(16px,1.8vw,26px);border-radius:999px;background:#fff;color:var(--red);font-size:clamp(16px,1.6vw,22px);font-weight:700;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.abt-cta__btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+@media (max-width:860px){
+  .abt-stats__grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-stat + .abt-stat{border-left:0;border-top:1px solid var(--line);padding-top:28px}
+
+  .abt-vm__grid{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .abt-vm__mascot{position:static;order:-1;width:min(70%,320px);margin-bottom:-8px}
+  .abt-vm__card{width:100%}
+  .abt-vm__card--vision,.abt-vm__card--mission{width:100%;margin:0;padding:22px;text-align:left}
+
+  .abt-ms__line{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-ms__line::before{display:none}
+  .abt-ms__img{margin-top:0}
+
+  .abt-cta__grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-cta__left{padding-right:0}
+  .abt-cta__right{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.55);padding-top:28px}
+}
+@media (max-width:620px){
+  .abt-hero{aspect-ratio:auto;min-height:420px}
+  .abt-hero__team{width:180%;max-width:none;left:-40%;top:14%}
+  .abt-hero__btn{bottom:18px}
+}

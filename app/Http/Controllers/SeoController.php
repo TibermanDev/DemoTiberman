@@ -26,6 +26,7 @@ class SeoController extends Controller
         if (Seo::indexable()) {
             foreach ([
                 [route('home'), 'home', '1.0'],
+                [route('about'), 'about', '0.8'],
                 [route('contact'), 'contact', '0.8'],
                 [route('superarea'), 'superarea', '0.8'],
                 [route('blog'), 'news', '0.7'],

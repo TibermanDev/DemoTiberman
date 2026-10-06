@@ -26,6 +26,11 @@ class PageController extends Controller
         ]);
     }
 
+    public function about(): View
+    {
+        return view('about', ['page' => cms('about', [])]);
+    }
+
     public function contact(): View
     {
         return view('contact', ['page' => cms('contact', [])]);

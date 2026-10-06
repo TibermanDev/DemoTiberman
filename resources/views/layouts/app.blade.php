@@ -36,6 +36,7 @@
       @endunless
       <a href="/blog" @class(['is-active' => request()->is('blog*')])>News</a>
       <a href="{{ route('superarea') }}" @class(['is-active' => request()->routeIs('superarea')])>SuperArea</a>
+      <a href="{{ route('about') }}" @class(['is-active' => request()->routeIs('about')])>About Us</a>
       <a href="{{ route('contact') }}" @class(['is-active' => request()->routeIs('contact')])>Contact Us</a>
     </nav>
     <div class="nav__tools">
