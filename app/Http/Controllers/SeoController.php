@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\CatalogUnit;
 use App\Models\Flipbook;
+use App\Models\LandingPage;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Product;
@@ -45,6 +46,8 @@ class SeoController extends Controller
             Post::query()->live()->where('noindex', false)->get()
                 ->each(fn ($p) => $add($p->url(), $p->updated_at ?? $p->published_at, '0.6'));
             Flipbook::query()->where('is_active', true)->get()->each(fn ($f) => $add(url($f->slug), $f->updated_at, '0.4'));
+            LandingPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($l) => $add(url($l->slug), $l->updated_at, '0.5'));
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"

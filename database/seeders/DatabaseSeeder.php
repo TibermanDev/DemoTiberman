@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             ContentSeeder::class,
             AboutSeeder::class,
             AfterSalesSeeder::class,
+            LandingPageSeeder::class,
             BlogSeeder::class,
             CatalogSeeder::class,
             LocationSeeder::class,

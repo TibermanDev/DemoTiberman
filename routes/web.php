@@ -3,11 +3,11 @@
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\FlipbookController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\SlugPageController;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -82,5 +82,6 @@ Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [InquiryController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 
-// Flipbook PDF (/katalog, /company-profile, /proposal, ...) — slug-nya dari CMS.
-Route::fallback(FlipbookController::class);
+// Landing page promo (/shopee-banjarbaru, ...) lalu flipbook PDF (/katalog,
+// /company-profile, ...) — slug keduanya dari CMS.
+Route::fallback(SlugPageController::class);
