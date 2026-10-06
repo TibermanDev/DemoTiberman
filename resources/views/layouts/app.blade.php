@@ -138,7 +138,7 @@
       </div>
 
     </div>
-    <p class="footer__note">{{ cms('site.copyright') }}</p>
+    @include('partials.footer-note')
   </div>
 </footer>
 @show

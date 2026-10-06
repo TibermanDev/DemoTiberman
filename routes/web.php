@@ -79,6 +79,9 @@ Route::get('/after-sales', [PageController::class, 'aftersales'])->name('aftersa
 
 Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
 
+Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/disclaimer', [PageController::class, 'disclaimer'])->name('disclaimer');
+
 Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [InquiryController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 

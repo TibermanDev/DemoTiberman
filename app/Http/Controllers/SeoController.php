@@ -29,6 +29,8 @@ class SeoController extends Controller
                 [route('home'), 'home', '1.0'],
                 [route('about'), 'about', '0.8'],
                 [route('aftersales'), 'aftersales', '0.8'],
+                [route('privacy'), 'privacy', '0.3'],
+                [route('disclaimer'), 'disclaimer', '0.3'],
                 [route('contact'), 'contact', '0.8'],
                 [route('superarea'), 'superarea', '0.8'],
                 [route('blog'), 'news', '0.7'],

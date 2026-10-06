@@ -58,7 +58,7 @@
          dijadikan flex kolom dan footer ini didorong ke dasarnya (CSS). -->
     <footer class="footer footer--slim">
       <div class="container">
-        <p class="footer__note">{{ cms('site.copyright') }}</p>
+        @include('partials.footer-note')
       </div>
     </footer>
   </main>
