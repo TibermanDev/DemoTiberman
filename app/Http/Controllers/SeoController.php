@@ -27,6 +27,7 @@ class SeoController extends Controller
             foreach ([
                 [route('home'), 'home', '1.0'],
                 [route('about'), 'about', '0.8'],
+                [route('aftersales'), 'aftersales', '0.8'],
                 [route('contact'), 'contact', '0.8'],
                 [route('superarea'), 'superarea', '0.8'],
                 [route('blog'), 'news', '0.7'],
