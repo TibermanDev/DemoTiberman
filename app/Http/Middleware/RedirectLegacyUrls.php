@@ -17,10 +17,18 @@ class RedirectLegacyUrls
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->isMethodSafe()) {
-            $target = Redirect::map()[trim($request->path(), '/')] ?? null;
+            $path = trim($request->path(), '/');
+            $target = Redirect::map()[$path] ?? null;
 
             if ($target !== null) {
                 return redirect($target[0], $target[1]);
+            }
+
+            // Paginasi WordPress lama (/produk/page/2/, /blog/category/x/page/3/)
+            // diarahkan ke halaman induknya. Tag produk dikecualikan karena
+            // nanti punya halaman sendiri.
+            if (preg_match('#^(?:(.+)/)?page/\d+$#', $path, $m) && ! str_starts_with($path, 'tag-produk/')) {
+                return redirect('/'.($m[1] ?? ''), 301);
             }
         }
 

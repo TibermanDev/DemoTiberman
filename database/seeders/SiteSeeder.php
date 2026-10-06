@@ -46,9 +46,21 @@ class SiteSeeder extends Seeder
             'kategori/uncategorized' => '/blog',
             'tag/semua-ban' => '/blog',
             'tag/tes' => '/blog',
+            'blog/tag/ban-truk' => '/blog',
+            'blog/tag/dump-truck' => '/blog',
+            'blog/tag/helmproyek' => '/blog',
+            'blog/tag/safetyhelmet' => '/blog',
+            'blog/tag/tambang' => '/blog',
+            'blog/tag/tiberman' => '/blog',
             'author/admintiberman' => '/blog',
             'author/fehabutar' => '/blog',
+            'author/alma-erin-mentari' => '/admin',
+            'blog/author/alma-mentari' => '/admin',
+            'blog/author/daliana-fehabutar' => '/admin',
+            'blog/author/tiberman' => '/admin',
             'tag-produk/tag-coba' => '/kategori-produk/semua-ban',
+            // URL produk contoh di toko lama (lihat CatalogSeeder).
+            'product/uninest-tibermax-851-12-00r20-20pr' => '/produk/uninest-tibermax-851-12-00r20-20pr',
             'katalog/katalogkomik_tbmaug_compressed.pdf' => '/files/katalog-komik.pdf',
         ];
         foreach ($redirects as $from => $to) {
