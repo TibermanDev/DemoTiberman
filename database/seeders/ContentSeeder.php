@@ -17,6 +17,9 @@ class ContentSeeder extends Seeder
     {
         Setting::put('site', [
             'logo' => $this->img('logo-white.png'),
+            // favicon default: logo merah di latar putih, dipotong bulat (App\Support\Favicon)
+            'favicon' => $this->img('logo-tiberman.png'),
+            'favicon_round' => true,
             'company_name' => 'PT. Tiga Berlian Mandiri',
             'about' => 'Kami adalah One Stop Supplier ban alat berat yang telah dipercaya oleh ribuan customer di seluruh Indonesia. Sejak berdiri pada tahun 2008, jaringan distribusi kami telah tersebar di berbagai titik Super Area yang dapat menjangkau hingga pelosok negeri.',
             'phone' => '+62 812 8325 8200',
@@ -44,8 +47,10 @@ class ContentSeeder extends Seeder
                     'region' => 'Jawa Timur',
                     'postal_code' => '60246',
                 ],
+                // sama dengan Google Business Profile (Minggu tutup)
                 'opening_hours' => [
                     ['days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '07:30', 'closes' => '16:00'],
+                    ['days' => ['Saturday'], 'opens' => '07:30', 'closes' => '12:30'],
                 ],
                 'indexable' => true,
             ],
@@ -79,7 +84,7 @@ class ContentSeeder extends Seeder
                 'eyebrow' => 'siap melayani Anda lebih dekat dengan',
                 'heading' => "15 SuperArea yang tersebar di\nseluruh Indonesia",
                 'button_label' => 'Check it !',
-                'button_url' => '/kontak',
+                'button_url' => '/cabang-tiberman',
             ],
             'importir' => [
                 'heading' => "Importir Ban Truk & Alat Berat\nTERPERCAYA",
@@ -89,8 +94,7 @@ class ContentSeeder extends Seeder
                 'pills' => [
                     ['label' => 'Truck & Bus', 'url' => '/kategori-produk/ban-truk'],
                     ['label' => 'Mining Truck', 'url' => '/kategori-produk/ban-truk/ban-truk-off-the-road'],
-                    ['label' => 'Loader', 'url' => '/kategori-produk/ban-loader'],
-                    ['label' => 'Grader', 'url' => '/kategori-produk/ban-grader'],
+                    ['label' => 'Loader-Grader', 'url' => '/kategori-produk/ban-loader'],
                     ['label' => 'Forklift', 'url' => '/kategori-produk/ban-forklift'],
                     ['label' => 'Tractor', 'url' => '/kategori-produk/ban-traktor'],
                 ],
@@ -110,9 +114,9 @@ class ContentSeeder extends Seeder
             'why' => [
                 'kicker' => 'Dari sekian banyak supplier lain',
                 'title' => 'Kenapa Harus Tiberman ?',
-                'video' => $this->img('warehouse-loop-web.mp4'),
+                'video' => $this->img('rev-gudang.mp4'),
                 'video_webm' => null,
-                'poster' => $this->img('warehouse-dark.webp'),
+                'poster' => $this->img('rev-gudang-poster.webp'),
             ],
             'stock' => [
                 'title' => 'Stok Aman',
@@ -125,8 +129,8 @@ class ContentSeeder extends Seeder
                 'image' => $this->img('plb-stock.webp'),
                 'alt' => 'Gudang stok ban Pusat Logistik Berikat',
                 'warehouses' => [
-                    ['name' => 'Mojokerto', 'capacity' => '150 kontainer', 'image' => $this->img('plb-mojokerto.webp')],
-                    ['name' => 'Gresik', 'capacity' => '250 kontainer', 'image' => $this->img('plb-gresik.webp')],
+                    ['name' => 'Mojokerto', 'capacity' => '150+ kontainer', 'image' => $this->img('plb-mojokerto.webp')],
+                    ['name' => 'Gresik', 'capacity' => '250+ kontainer', 'image' => $this->img('plb-gresik.webp')],
                 ],
             ],
             'delivery' => [

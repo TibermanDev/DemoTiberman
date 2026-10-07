@@ -1010,7 +1010,10 @@ ul{margin:0;padding:0;list-style:none}
 .market svg{width:24px;height:24px}
 .market--tokped{color:var(--tokped)}
 .market--shopee{color:var(--shopee)}
-.footer__note{text-align:center;font-size:15px;color:rgba(255,255,255,.45);border-top:1px solid rgba(255,255,255,.1);padding-top:24px;margin-top:48px}
+.footer__note{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 28px;text-align:center;font-size:15px;color:rgba(255,255,255,.45);border-top:1px solid rgba(255,255,255,.1);padding-top:24px;margin-top:48px}
+.footer__legal{display:flex;gap:20px}
+.footer__legal a{color:rgba(255,255,255,.6);transition:color .2s var(--ease)}
+.footer__legal a:hover{color:#fff}
 /* varian ringkas: cuma baris copyright (halaman katalog). warnanya sama dengan
    background halaman, jadi batasnya ditandai garis tipis */
 .footer--slim{padding:24px 0;border-top:1px solid rgba(255,255,255,.08)}
@@ -1318,6 +1321,11 @@ ul{margin:0;padding:0;list-style:none}
 .bento__cell--img img{width:100%;height:100%;object-fit:cover}
 /* foto produk (latar transparan) tidak dipenuhkan, tapi dimuat utuh & dikecilkan */
 .bento__cell--contain img{object-fit:contain;object-position:left bottom;padding:6.4% 3.2% 0 0}
+/* potongan ban (latar transparan): lebih kecil dari cover, menempel kanan-atas
+   dan hanya terpotong di BAWAH, jadi bannya seolah berlanjut keluar bingkai.
+   top negatif memakan bagian atas PNG yang transparan (~15% tinggi gambar). */
+.bento__cell--edge{position:relative}
+.bento__cell--edge img{position:absolute;right:0;top:-10%;width:auto;height:125%;max-width:none;object-fit:initial}
 .bento__cell h3{font-style:italic;font-size:clamp(30px,5vw,96px);letter-spacing:-.035em;line-height:1.18}
 .bento__cell p{margin-top:26px;font-size:19px;color:rgba(255,255,255,.7);line-height:1.75;max-width:500px}
 
@@ -1376,16 +1384,19 @@ ul{margin:0;padding:0;list-style:none}
    memang hitam akan lenyap di atas kain gelap. */
 .lbox__panel{
   position:relative;display:grid;place-items:center;
+  --lbox-pad:clamp(20px,3.4vw,40px);
   max-width:min(96vw,1140px);max-height:90vh;
-  padding:clamp(20px,3.4vw,40px);
+  padding:var(--lbox-pad);
   background:var(--grey-100);border-radius:var(--radius-xl);
   box-shadow:0 40px 90px rgba(0,0,0,.5);
   animation:lbox-in .22s var(--ease);
 }
 @keyframes lbox-in{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
 /* --lbox-max dipasang main.js dari lebar ASLI gambarnya (maks 1,5x) supaya
-   PNG kecil seperti tyre-preview.png (592px) tidak dipaksa melar jadi pecah. */
-.lbox__img{display:block;width:auto;height:auto;max-width:min(100%,var(--lbox-max,1040px));max-height:100%;object-fit:contain}
+   PNG kecil seperti tyre-preview.png (592px) tidak dipaksa melar jadi pecah.
+   Tingginya dibatasi dari viewport, bukan 100%: panel tidak punya tinggi pasti,
+   jadi persentase diabaikan dan gambar tinggi meluber keluar panel. */
+.lbox__img{display:block;width:auto;height:auto;max-width:min(100%,var(--lbox-max,1040px));max-height:calc(90vh - 2 * var(--lbox-pad));object-fit:contain}
 .lbox__close{
   position:absolute;top:10px;right:12px;z-index:1;
   width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
@@ -2175,3 +2186,379 @@ html[data-intro] .intro__bar{animation:intro-fade-in .3s var(--ease) .4s forward
 .pdp-hero__title{font-size:clamp(28px,4.4vw,56px);font-weight:900;line-height:1.05;letter-spacing:-.01em;text-transform:uppercase;margin:0 0 18px}
 .pdp-info__name,.pmodal__name{font-size:clamp(22px,2.6vw,34px);font-weight:900;line-height:1.1;text-transform:uppercase;margin:0 0 12px}
 .product-card.is-loading{opacity:.6;cursor:progress}
+
+/* ==========================================================================
+   About Us (/tentang-kami) — isi dari CMS (menu Halaman > About Us)
+   ========================================================================== */
+.abt{background:#fff}
+
+/* ---------- Banner ----------
+   Latar gudang di belakang, foto tim (atasnya transparan) di depan, dan
+   judul terselip di antara keduanya supaya kepala tim menimpa hurufnya. */
+.abt-hero{position:relative;overflow:hidden;background:#15161a;color:#fff;aspect-ratio:1440/545;min-height:400px;isolation:isolate}
+.abt-hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 12%;filter:grayscale(.85) brightness(.55);z-index:-2}
+.abt-hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 45%)}
+.abt-hero__head{position:absolute;left:0;right:0;top:clamp(14px,2.4vw,36px);text-align:center;padding-inline:24px}
+.abt-hero__eyebrow{font-size:clamp(14px,1.6vw,22px);font-weight:500;letter-spacing:-.01em}
+.abt-hero__head h1{margin-top:6px;font-size:clamp(36px,6.8vw,112px);font-weight:800;line-height:.98;letter-spacing:-.01em;text-transform:uppercase}
+.abt-hero__team{position:absolute;left:0;top:0;width:100%;height:auto}
+.abt-hero__btn{
+  position:absolute;left:50%;bottom:clamp(14px,2.6vw,36px);transform:translateX(-50%);
+  display:inline-flex;align-items:center;height:clamp(32px,2.8vw,40px);padding:0 clamp(20px,2.6vw,38px);
+  background:#fff;color:var(--ink);border-radius:8px;font-size:clamp(12px,1vw,14px);font-weight:600;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);transition:background .2s var(--ease),transform .2s var(--ease)
+}
+.abt-hero__btn:hover{background:var(--grey-100);transform:translateX(-50%) translateY(-2px)}
+
+/* ---------- Angka ---------- */
+.abt-stats{padding:clamp(40px,5vw,72px) 0 clamp(48px,7vw,110px)}
+.abt-stats__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.abt-stat{text-align:center;padding:4px clamp(12px,1.8vw,28px)}
+.abt-stat + .abt-stat{border-left:1px solid var(--line)}
+.abt-stat h2{font-size:clamp(22px,2.3vw,32px);font-weight:700;line-height:1.2;letter-spacing:-.02em;color:var(--ink)}
+.abt-stat h2 strong,.abt-ms__head h2 strong{color:var(--red);font-weight:inherit}
+.abt-stat p{max-width:320px;margin:16px auto 0;font-size:13px;line-height:1.85;color:var(--body-text)}
+
+/* ---------- Visi & misi ----------
+   Dua kartu abu menyilang, maskot terbang menimpa keduanya di tengah. */
+.abt-vm{padding-bottom:clamp(56px,7vw,110px)}
+/* sedikit lebih lebar dari .container biasa supaya kartu & maskot lebih lega */
+.abt-vm > .container{max-width:1320px}
+.abt-vm__grid{position:relative}
+/* Lebar & padding kartu dalam persen lebar grid (proporsi dari desain):
+   teks misi mulai tepat di kanan kepalan tangan maskot (±61%), jadi lebar
+   kartu benar-benar terpakai untuk teks — ±4 baris di layar lebar. */
+.abt-vm__card{background:var(--grey-50);border-radius:var(--radius);padding:clamp(22px,2.6vw,36px) clamp(22px,3vw,44px)}
+.abt-vm__card h2{color:var(--red);font-size:clamp(24px,2.6vw,36px);font-weight:800;letter-spacing:-.02em}
+.abt-vm__card p{margin-top:10px;font-size:clamp(13px,1.1vw,15px);line-height:1.7;color:var(--body-text)}
+.abt-vm__card--vision{width:43%;text-align:right;padding-right:9%}
+.abt-vm__card--mission{width:48%;margin-left:52%;margin-top:clamp(-72px,-5vw,-24px);padding-left:8%;padding-right:2.5%}
+.abt-vm__mascot{position:absolute;z-index:2;left:21%;top:clamp(14px,2vw,30px);width:38%;max-width:520px;height:auto;pointer-events:none;filter:drop-shadow(0 18px 30px rgba(0,0,0,.12))}
+
+/* ---------- Milestone ---------- */
+.abt-ms{position:relative;padding-top:clamp(20px,3vw,40px);overflow:hidden}
+.abt-ms > .container{position:relative;z-index:1}
+.abt-ms__head{text-align:center}
+.abt-ms__head p{font-size:clamp(16px,1.7vw,24px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.abt-ms__head h2{margin-top:8px;font-size:clamp(36px,5.6vw,80px);font-weight:800;letter-spacing:-.03em;color:var(--ink)}
+.abt-ms__line{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(24px,4vw,64px);margin:clamp(28px,3.4vw,48px) 0 0;padding:0;list-style:none}
+/* garis tipis penghubung di belakang pil tahun */
+.abt-ms__line::before{content:"";position:absolute;left:16%;right:16%;top:clamp(19px,1.9vw,26px);height:1px;background:var(--line);z-index:-1}
+.abt-ms__step{text-align:center}
+.abt-ms__pill{display:inline-flex;align-items:center;justify-content:center;min-width:clamp(150px,15vw,220px);height:clamp(38px,3.8vw,52px);padding:0 24px;border-radius:999px;background:#979797;color:#fff;font-size:clamp(18px,2vw,28px);font-weight:700;letter-spacing:-.01em}
+.abt-ms__step:last-child .abt-ms__pill{background:var(--red)}
+.abt-ms__step p{margin-top:clamp(16px,2vw,28px);font-size:clamp(14px,1.1vw,16px);line-height:1.75;color:var(--body-text);text-align:justify;text-align-last:left}
+.abt-ms__img{position:relative;display:block;width:100%;height:auto;margin-top:clamp(-150px,-9vw,-40px)}
+
+/* ---------- Ajakan ---------- */
+.abt-cta{background:var(--red);color:#fff;padding:clamp(36px,4.4vw,64px) 0}
+.abt-cta__grid{display:grid;grid-template-columns:1fr 1fr;align-items:center}
+.abt-cta__left{padding-right:clamp(24px,4vw,64px)}
+.abt-cta__left h2{font-size:clamp(22px,2.4vw,34px);font-weight:800;letter-spacing:-.02em}
+.abt-cta__left p{margin-top:10px;font-size:clamp(13px,1.1vw,16px);line-height:1.6;text-align:justify;opacity:.95}
+.abt-cta__right{text-align:center;padding-left:clamp(24px,4vw,64px);border-left:1px solid rgba(255,255,255,.55);align-self:stretch;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.abt-cta__right h2{font-size:clamp(20px,2.1vw,30px);font-weight:800;line-height:1.2;letter-spacing:-.02em}
+.abt-cta__btn{display:flex;align-items:center;justify-content:center;width:100%;max-width:480px;height:clamp(44px,3.8vw,56px);margin-top:clamp(16px,1.8vw,26px);border-radius:999px;background:#fff;color:var(--red);font-size:clamp(16px,1.6vw,22px);font-weight:700;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.abt-cta__btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+@media (max-width:860px){
+  .abt-stats__grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-stat + .abt-stat{border-left:0;border-top:1px solid var(--line);padding-top:28px}
+
+  .abt-vm__grid{display:flex;flex-direction:column;align-items:center;gap:16px}
+  .abt-vm__mascot{position:static;order:-1;width:min(70%,320px);margin-bottom:-8px}
+  .abt-vm__card{width:100%}
+  .abt-vm__card--vision,.abt-vm__card--mission{width:100%;margin:0;padding:22px;text-align:left}
+
+  .abt-ms__line{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-ms__line::before{display:none}
+  .abt-ms__img{margin-top:0}
+
+  .abt-cta__grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .abt-cta__left{padding-right:0}
+  .abt-cta__right{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.55);padding-top:28px}
+}
+@media (max-width:620px){
+  .abt-hero{aspect-ratio:auto;min-height:420px}
+  .abt-hero__team{width:180%;max-width:none;left:-40%;top:14%}
+  .abt-hero__btn{bottom:18px}
+}
+
+/* ==========================================================================
+   After Sales (/after-sales) — isi dari CMS (menu Halaman > After Sales)
+   ========================================================================== */
+.asl{--asl-dark:#141416;--asl-red:#e82927;background:#fff}
+
+/* ---------- Banner gelap ----------
+   Bagian bawahnya ditutup elips putih (::after) supaya tepinya melengkung. */
+.asl-hero{position:relative;background:var(--asl-dark);color:#fff;text-align:center;overflow:hidden;padding:clamp(36px,4.4vw,64px) 0 clamp(110px,13vw,200px)}
+.asl-hero::after{content:"";position:absolute;left:-15%;right:-15%;bottom:-1px;height:clamp(60px,8.5vw,130px);background:#fff;border-radius:50% 50% 0 0/100% 100% 0 0}
+.asl-hero__eyebrow{font-size:clamp(15px,1.6vw,22px);font-weight:500;letter-spacing:-.01em}
+.asl-hero__head h1{margin-top:6px;font-size:clamp(38px,6.6vw,96px);font-weight:800;line-height:1;letter-spacing:-.01em;text-transform:uppercase}
+
+/* Deretan foto melengkung: tiap foto ditempel di dinding silinder yang
+   dilihat dari dalam. Sudutnya (--a) diisi per foto dari view (foto tengah
+   0deg, makin ke tepi makin besar); kamera (perspective) berada di belakang
+   pusat silinder, jadi foto di tepi tampak lebih dekat = lebih besar. */
+.asl-curve{
+  --w:clamp(130px,16.5vw,480px);--g:clamp(6px,.8vw,24px);
+  --r:calc((var(--w) + var(--g)) / .42);   /* .42 rad = langkah 24deg */
+  position:relative;height:calc(var(--w) * 1.22 * 1.42);margin:clamp(18px,2.4vw,36px) 0 0;
+  perspective:calc(var(--r) * 1.5);
+}
+.asl-curve__item{
+  position:absolute;left:50%;top:50%;width:var(--w);height:calc(var(--w) * 1.22);overflow:hidden;background:#222;
+  transform:translate(-50%,-50%) translateZ(var(--r)) rotateY(var(--a,0deg)) translateZ(calc(-1 * var(--r)));
+  backface-visibility:hidden;
+}
+.asl-curve__item img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+
+.asl-hero__sub{margin-top:-1.4vw;font-size:clamp(16px,1.9vw,26px);font-weight:500;line-height:1.35}
+.asl-icons{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(18px,4vw,64px);margin-top:clamp(22px,2.6vw,38px)}
+.asl-icons a{display:flex;flex-direction:column;align-items:center;gap:12px;transition:transform .25s var(--ease)}
+.asl-icons a:hover{transform:translateY(-4px)}
+.asl-icons__img{display:block;width:clamp(64px,7.4vw,108px);aspect-ratio:1;border-radius:50%;overflow:hidden;background:#fff}
+.asl-icons__img img{width:100%;height:100%;object-fit:cover}
+.asl-icons__label{font-size:clamp(11px,.95vw,14px);font-weight:700;line-height:1.3}
+
+/* ---------- Kartu layanan & fasilitas ---------- */
+.asl-group{padding:clamp(28px,3.4vw,56px) 0 clamp(56px,7vw,110px)}
+.asl-group + .asl-group{padding-top:0}
+.asl-group__title{max-width:1000px;margin:0 auto clamp(26px,3vw,44px);text-align:center;font-size:clamp(19px,2vw,28px);font-weight:700;line-height:1.3;letter-spacing:-.02em;color:var(--ink)}
+.asl-group__title strong{color:var(--red);font-weight:inherit}
+.asl-group__grid{display:grid;gap:clamp(14px,1.6vw,24px);margin-inline:auto}
+.asl-group--3 .asl-group__grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1040px}
+.asl-group--2 .asl-group__grid{grid-template-columns:repeat(2,minmax(0,1fr));max-width:900px}
+.asl-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:var(--grey-100);border-radius:var(--radius-s);padding:clamp(10px,1vw,14px) clamp(10px,1vw,14px) clamp(18px,1.8vw,26px)}
+.asl-card__img{width:100%;border-radius:8px;overflow:hidden;aspect-ratio:4/5;background:#ddd}
+.asl-group--2 .asl-card__img{aspect-ratio:1/1}
+.asl-card__img img{width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.asl-card h3{margin-top:clamp(12px,1.3vw,18px);font-size:clamp(18px,1.8vw,26px);font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.asl-card h3 span{color:var(--red)}
+.asl-card p{max-width:300px;margin-top:6px;font-size:13px;line-height:1.55;color:var(--body-text);flex:1}
+.asl-card__btn{display:inline-flex;align-items:center;height:30px;margin-top:14px;padding:0 18px;border-radius:999px;background:#dcdcdf;color:#6b6b70;font-size:12px;font-weight:500;transition:background .2s var(--ease),color .2s var(--ease)}
+.asl-card__btn:hover{background:var(--red);color:#fff}
+
+/* ---------- FAQ ----------
+   Latar: lengkungan merah (elipse-after-sales.webp, 2880x330) lalu merah
+   polos di bawahnya. Kepala maskot sengaja menyembul di atas lengkungan. */
+.asl-faq{
+  position:relative;margin-top:clamp(60px,9vw,150px);padding:clamp(40px,5vw,80px) 0 clamp(40px,4.4vw,64px);
+  background:
+    url("../img/elipse-after-sales.webp") center top/100% auto no-repeat,
+    linear-gradient(var(--asl-red),var(--asl-red)) 0 calc(11.45vw - 2px)/100% 100% no-repeat;
+}
+.asl-faq > .container{max-width:1240px}
+.asl-faq__grid{display:grid;grid-template-columns:.8fr 1fr;gap:clamp(20px,3vw,48px);align-items:end}
+.asl-faq__art{align-self:stretch;position:relative}
+/* setinggi panel FAQ + sedikit lagi, jadi kepalanya menyembul di atas lengkungan */
+.asl-faq__art img{position:absolute;left:50%;bottom:0;transform:translateX(-50%);height:calc(100% + clamp(60px,9vw,150px));width:auto;max-width:none}
+.asl-faq__panel{margin-bottom:0;border-radius:var(--radius-l)}
+.asl-faq__panel .faq__foot{justify-content:center}
+
+@media (max-width:860px){
+  .asl-curve{--w:28vw}
+  .asl-group--3 .asl-group__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .asl-faq__grid{grid-template-columns:minmax(0,1fr)}
+  .asl-faq__art{margin-top:-60px}
+  .asl-faq__art img{position:static;transform:none;width:100%;height:auto;max-width:260px;margin-inline:auto}
+}
+@media (max-width:620px){
+  .asl-curve{--w:36vw}
+  .asl-icons{gap:16px 10px}
+  .asl-icons li{flex:0 0 30%}
+  .asl-group--3 .asl-group__grid,.asl-group--2 .asl-group__grid{grid-template-columns:minmax(0,1fr);max-width:360px}
+}
+
+/* ==========================================================================
+   Landing page promo (/{slug}, mis. /shopee-banjarbaru) — menu Landing
+   Page Promo di CMS. Latar oranye Shopee dengan pola ikon belanja tipis
+   (SVG inline) dan pita oranye tua melengkung di separuh bawah.
+   ========================================================================== */
+.lp{
+  --lp-orange:#ff5f2a;--lp-orange-dark:#ef4c25;
+  position:relative;overflow:hidden;color:#fff;padding:clamp(40px,5vw,72px) 0 clamp(48px,6vw,90px);
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260' fill='none' stroke='%23fff' stroke-opacity='.07' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M28 70h56l-6 64H34z'/%3E%3Cpath d='M42 70v-8a14 14 0 0 1 28 0v8'/%3E%3Cpath d='M160 30l50 0 20 20-50 50-40-40z'/%3E%3Ccircle cx='198' cy='46' r='6'/%3E%3Crect x='150' y='160' width='70' height='52' rx='6'/%3E%3Cpath d='M150 178h70M185 160v52M185 160c-8-18-26-14-22-2s22 2 22 2c8-18 26-14 22-2s-22 2-22 2'/%3E%3Cpath d='M40 190l40 40M44 196a6 6 0 1 0 0 .1M76 226a6 6 0 1 0 0 .1'/%3E%3C/svg%3E") 0 0/260px 260px,
+    var(--lp-orange);
+}
+/* separuh bawah: oranye lebih tua dengan tepi atas melengkung */
+.lp::before{content:"";position:absolute;left:-20%;right:-20%;top:58%;bottom:-2px;background:var(--lp-orange-dark);border-radius:50% 50% 0 0/clamp(60px,9vw,140px) clamp(60px,9vw,140px) 0 0}
+.lp > .container{position:relative;max-width:1080px}
+
+.lp__head{text-align:center}
+.lp__head h1{font-size:clamp(28px,4.4vw,62px);font-weight:800;line-height:1.25;letter-spacing:-.01em;text-transform:uppercase}
+.lp__logo{display:inline-flex;align-items:center;vertical-align:middle;margin-left:.35em;padding:.12em .3em;background:#fff;border-radius:6px}
+.lp__logo img{height:1em;width:auto}
+.lp__sub{margin-top:clamp(10px,1.4vw,20px);font-size:clamp(17px,1.9vw,26px);font-weight:600}
+
+.lp__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,28px);margin-top:clamp(28px,3.4vw,48px)}
+.lp__grid--few{grid-template-columns:repeat(auto-fit,minmax(240px,320px));justify-content:center}
+.lp-card{display:flex;flex-direction:column;align-items:center;text-align:center;background:#fff;color:var(--ink);border-radius:var(--radius);padding:clamp(10px,1vw,14px) clamp(10px,1vw,14px) clamp(18px,1.8vw,26px);box-shadow:0 12px 30px rgba(120,30,0,.18)}
+.lp-card__img{display:block;width:100%;aspect-ratio:230/292;border-radius:10px;overflow:hidden;background:var(--grey-50)}
+.lp-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease)}
+.lp-card:hover .lp-card__img img{transform:scale(1.04)}
+.lp-card h2{margin-top:clamp(12px,1.4vw,18px);font-size:clamp(19px,1.9vw,26px);font-weight:700;letter-spacing:-.01em}
+.lp-card p{margin-top:4px;font-size:clamp(13px,1.1vw,15px);color:var(--body-text);flex:1}
+.lp-card__btn{display:inline-flex;align-items:center;justify-content:center;min-width:60%;height:clamp(30px,2.6vw,36px);margin-top:clamp(12px,1.2vw,16px);padding:0 22px;border-radius:999px;background:var(--red);color:#fff;font-size:clamp(12px,1vw,14px);font-weight:500;transition:background .2s var(--ease),transform .2s var(--ease)}
+.lp-card__btn:hover{background:var(--red-dark);transform:translateY(-2px)}
+
+@media (max-width:860px){
+  .lp__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .lp::before{top:40%}
+}
+@media (max-width:560px){
+  .lp__grid,.lp__grid--few{grid-template-columns:minmax(0,1fr);max-width:340px;margin-inline:auto}
+  .lp::before{top:30%}
+}
+
+/* ==========================================================================
+   Halaman legal (/privacy-policy, /disclaimer) — isi dari CMS
+   ========================================================================== */
+.lgl{background:#f9fafd}
+/* Banner: gelap dengan sorot merah dari bawah tengah, ban kiri-kanan
+   (aset banner News) menempel ke tepi bawah. */
+.lgl-hero{
+  position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;
+  min-height:clamp(200px,25.5vw,420px);padding:32px 24px;color:#fff;text-align:center;
+  background:radial-gradient(ellipse 48% 95% at 50% 100%,#8a1d12 0%,#4a1712 45%,#1d1d1f 100%);
+}
+.lgl-hero__tyre{position:absolute;bottom:0;height:88%;width:auto;max-width:none;pointer-events:none}
+.lgl-hero__tyre--l{left:0}
+.lgl-hero__tyre--r{right:0}
+.lgl-hero__head{position:relative;z-index:1}
+.lgl-hero__head h1{font-size:clamp(34px,4.6vw,66px);font-weight:800;letter-spacing:-.02em}
+.lgl-hero__head p{margin-top:clamp(8px,1vw,16px);font-size:clamp(14px,1.3vw,18px);font-weight:400;opacity:.92}
+
+.lgl-body{padding:clamp(40px,5vw,72px) 0 clamp(64px,8vw,120px)}
+.lgl-body > .container{max-width:1240px}
+.lgl-section + .lgl-section{margin-top:clamp(28px,3.4vw,44px)}
+.lgl-section h2{font-size:clamp(20px,1.7vw,24px);font-weight:800;letter-spacing:-.01em;color:#000}
+.lgl-section p{margin-top:10px;font-size:clamp(13px,1vw,15px);line-height:1.6;color:#1d1d1f;text-align:justify;overflow-wrap:anywhere}
+.lgl-section a{text-decoration:underline;text-underline-offset:2px}
+.lgl-section a:hover{color:var(--red)}
+
+@media (max-width:720px){
+  .lgl-hero{min-height:200px}
+  .lgl-hero__tyre{height:auto;width:34%}
+  .lgl-section p{text-align:left}
+}
+
+/* ==========================================================================
+   Halaman promo (/{slug}, mis. /aeolus-tyre) — menu Halaman Promo di CMS.
+   Isinya blok Builder: .prm-text, .prm-split, .prm-cards, .prm-figure.
+   ========================================================================== */
+.prm{padding-top:clamp(24px,3vw,40px);background:#fff}
+.prm > .container{max-width:1180px}
+.prm__banner{display:block;width:100%;height:auto;margin-bottom:clamp(32px,4vw,56px)}
+.prm-block + .prm-block{margin-top:clamp(36px,4.6vw,72px)}
+.prm-text h1,.prm-text h2{margin-bottom:clamp(16px,2vw,28px);font-size:clamp(26px,2.6vw,38px);font-weight:800;letter-spacing:-.02em;color:#000}
+
+/* isi dari RichEditor */
+.prm-prose{font-size:clamp(14px,1.05vw,16px);line-height:1.7;color:#1d1d1f;text-align:justify}
+.prm-prose > * + *{margin-top:1em}
+.prm-prose a{text-decoration:underline;text-underline-offset:2px}
+.prm-prose a:hover{color:var(--red)}
+.prm-prose strong{font-weight:700}
+.prm-prose h3{font-size:clamp(18px,1.5vw,22px);font-weight:700;margin-top:1.4em}
+.prm-prose ul,.prm-prose ol{padding-left:22px}
+.prm-prose ul{list-style:disc}
+.prm-prose ol{list-style:decimal}
+.prm-prose blockquote{padding-left:16px;border-left:3px solid var(--red);color:var(--body-text)}
+
+.prm-split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
+.prm-split--right .prm-split__img{order:2}
+.prm-split__img img{display:block;width:100%;height:auto}
+
+.prm-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.2vw,18px)}
+.prm-card{display:flex;flex-direction:column;align-items:center;background:#fff;border-radius:10px;padding:clamp(8px,.8vw,12px) clamp(8px,.8vw,12px) clamp(14px,1.4vw,20px);box-shadow:0 2px 6px rgba(0,0,0,.08),0 8px 24px rgba(0,0,0,.08);transition:box-shadow .25s var(--ease),transform .25s var(--ease)}
+.prm-card:hover{transform:translateY(-3px);box-shadow:0 4px 10px rgba(0,0,0,.1),0 14px 34px rgba(0,0,0,.12)}
+/* kotak gambar seragam supaya tinggi kartu rata walau rasio gambarnya beda */
+.prm-card__img{display:block;width:100%;aspect-ratio:1/1;border-radius:6px;overflow:hidden}
+.prm-card__img img{display:block;width:100%;height:100%;object-fit:contain}
+.prm-card__btn{display:inline-flex;align-items:center;height:30px;margin-top:clamp(10px,1vw,14px);padding:0 clamp(16px,1.6vw,26px);border-radius:999px;background:var(--red);color:#fff;font-size:clamp(12px,1vw,14px);font-weight:500;transition:background .2s var(--ease)}
+.prm-card__btn:hover{background:var(--red-dark)}
+
+.prm-figure{margin:0}
+.prm-figure img{display:block;width:100%;height:auto;border-radius:8px}
+
+/* Pita ajakan: kepala maskot menyembul di atas pita merah */
+/* clip-path memotong apa pun di bawah pita (separuh bawah maskot) tapi
+   membiarkan kepalanya menyembul ke atas. */
+.prm-cta{margin-top:clamp(90px,12vw,170px);background:#e82927;color:#fff;clip-path:inset(-60vh 0 0 0)}
+.prm-cta__grid{display:grid;grid-template-columns:.85fr 1fr;align-items:center;gap:clamp(16px,3vw,48px)}
+/* Maskot setengah badan: --pw = lebarnya (rasio gambar 895:1467 = 1:1,639).
+   Naik 30% lebar di atas pita, dipotong di pinggang (±72% tinggi) lewat
+   margin bawah negatif. */
+.prm-cta__art{--pw:clamp(220px,26vw,380px);align-self:end;display:block;width:var(--pw);max-width:none;height:auto;margin:calc(var(--pw) * -.3) auto calc(var(--pw) * -.46)}
+.prm-cta__copy{padding:clamp(28px,3.4vw,52px) 0}
+.prm-cta__copy h2{font-size:clamp(22px,2.4vw,34px);font-weight:800;line-height:1.3;letter-spacing:-.01em}
+.prm-cta__btn{display:flex;align-items:center;justify-content:center;max-width:380px;height:clamp(44px,3.6vw,52px);margin-top:clamp(14px,1.6vw,22px);border-radius:999px;background:#fff;color:var(--red);font-size:clamp(17px,1.7vw,24px);font-weight:700;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.prm-cta__btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.18)}
+
+@media (max-width:860px){
+  .prm-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .prm-split{grid-template-columns:minmax(0,1fr)}
+  .prm-split--right .prm-split__img{order:0}
+  .prm-cta__grid{grid-template-columns:minmax(0,1fr);text-align:center}
+  /* bertumpuk: potong gambarnya sendiri (tinggi ±72%) supaya kaki tidak menimpa judul */
+  .prm-cta__art{--pw:220px;height:calc(var(--pw) * 1.18);object-fit:cover;object-position:top;margin-bottom:0}
+  .prm-cta__copy{padding-top:8px}
+  .prm-cta__btn{margin-inline:auto}
+}
+@media (max-width:560px){
+  .prm-prose{text-align:left}
+}
+
+/* ==========================================================================
+   Halaman tag produk (/tag-produk/{slug}) — pita putih "Showing all result
+   of" di bawah banner katalog. Menu Tag Produk di CMS.
+   ========================================================================== */
+.catalog__result{background:#fff;text-align:center;padding:clamp(20px,2.4vw,32px) 32px clamp(22px,2.6vw,34px)}
+.catalog__result p{font-size:clamp(13px,1.1vw,16px);color:var(--body-text)}
+.catalog__result h1{margin-top:6px;font-size:clamp(22px,2.4vw,34px);font-weight:700;letter-spacing:-.01em;color:var(--ink)}
+.catalog__result + .catalog__body{padding-top:clamp(22px,2.4vw,32px)}
+@media (max-width:620px){
+  .catalog__result{padding-inline:18px}
+}
+
+/* ==========================================================================
+   Linktree (/lp/, /lp/{slug}.html) — menu Linktree (/lp) di CMS. Satu kolom
+   gelap bersorot merah di atas, tombol putih membulat seperti linktree.
+   ========================================================================== */
+.lt-body{background:#121214}
+.lt{position:relative;min-height:100vh;overflow:hidden;color:#fff;background:radial-gradient(ellipse 80% 55% at 50% 0%,#3a1512 0%,#121214 70%)}
+.lt__glow{position:absolute;left:50%;top:0;width:min(1200px,160vw);max-width:none;transform:translateX(-50%);opacity:.55;pointer-events:none}
+.lt__inner{position:relative;width:100%;max-width:560px;margin:0 auto;padding:clamp(40px,8vh,72px) 20px 36px}
+.lt__head{text-align:center}
+.lt__avatar{display:inline-flex;align-items:center;justify-content:center;width:104px;height:104px;border-radius:50%;background:#1d1d1f;border:2px solid rgba(255,255,255,.14);overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.lt__avatar img{width:100%;height:100%;object-fit:cover}
+/* logo-tiberman.png berlatar putih dengan banyak ruang kosong di sekitar tulisan -> diperbesar */
+.lt__avatar .lt__logo{transform:scale(1.5)}
+.lt__head p{margin:18px auto 0;max-width:420px;font-size:15px;line-height:1.55;color:rgba(255,255,255,.72)}
+
+.lt__links{display:grid;gap:12px;margin-top:28px}
+.lt-link{display:flex;align-items:center;gap:14px;min-height:58px;padding:10px 18px 10px 12px;border-radius:16px;background:#fff;color:var(--ink);font-size:15.5px;font-weight:700;letter-spacing:-.01em;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:transform .2s var(--ease),box-shadow .2s var(--ease),background .2s var(--ease)}
+.lt-link:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.32)}
+.lt-link__icon{flex:0 0 38px;width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:var(--grey-100);color:var(--ink)}
+.lt-link__icon svg{width:21px;height:21px}
+.lt-link__label{flex:1;line-height:1.3}
+.lt-link__arrow{flex:0 0 16px;width:16px;height:16px;color:var(--muted-2)}
+/* warna ikon per kanal */
+.lt-link--whatsapp .lt-link__icon{background:#e7f9ee;color:var(--wa)}
+.lt-link--shopee .lt-link__icon{background:#fdece8;color:var(--shopee)}
+.lt-link--tokopedia .lt-link__icon{background:#e9f6e8;color:var(--tokped)}
+.lt-link--instagram .lt-link__icon{background:#fbe9f1;color:#d6297a}
+.lt-link--youtube .lt-link__icon{background:#fde8e8;color:#e62117}
+.lt-link--facebook .lt-link__icon{background:#e8effc;color:#1877f2}
+.lt-link--linkedin .lt-link__icon{background:#e6f0f8;color:#0a66c2}
+.lt-link--tiktok .lt-link__icon{background:#ececee;color:#111}
+/* tombol yang disorot: merah brand */
+.lt-link--hl{background:var(--red);color:#fff}
+.lt-link--hl .lt-link__icon{background:rgba(255,255,255,.18);color:#fff}
+.lt-link--hl .lt-link__arrow{color:rgba(255,255,255,.8)}
+.lt-link--hl:hover{background:var(--red-dark)}
+
+.lt__foot{display:flex;flex-direction:column;align-items:center;gap:6px;margin-top:36px;font-size:12.5px;color:rgba(255,255,255,.45);text-align:center}
+.lt__foot a{color:rgba(255,255,255,.75);font-weight:600}
+.lt__foot a:hover{color:#fff}

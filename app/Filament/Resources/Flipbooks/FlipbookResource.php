@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Flipbooks;
 
 use App\Filament\Resources\Flipbooks\Pages\ManageFlipbooks;
 use App\Models\Flipbook;
+use App\Support\PageSlug;
 use BackedEnum;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
@@ -17,7 +18,6 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Str;
 use UnitEnum;
 
@@ -46,13 +46,8 @@ class FlipbookResource extends Resource
                 ->live(onBlur: true)
                 ->afterStateUpdated(fn ($state, $set, $get) => blank($get('slug')) ? $set('slug', Str::slug($state)) : null),
             TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true)->prefix('/')
-                ->helperText('Alamat halamannya. Tidak bisa memakai alamat yang sudah dipakai halaman lain (blog, produk, kontak, ...).')
-                ->rule(fn () => function (string $attribute, $value, $fail) {
-                    $taken = collect(Route::getRoutes())->contains(fn ($r) => ! $r->isFallback && trim($r->uri(), '/') === $value);
-                    if ($taken) {
-                        $fail('Alamat ini sudah dipakai halaman lain.');
-                    }
-                }),
+                ->helperText('Alamat halamannya. Tidak bisa memakai alamat yang sudah dipakai halaman lain (blog, produk, kontak, landing/halaman promo, ...).')
+                ->rule(fn (?Flipbook $record) => PageSlug::rule($record)),
             FileUpload::make('pdf_file')->label('Unggah PDF')
                 ->acceptedFileTypes(['application/pdf'])
                 ->disk('public')->directory('flipbooks')->visibility('public')

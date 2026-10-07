@@ -26,7 +26,7 @@
     <nav class="nav__links">
       @unless(request()->routeIs('katalog*'))
       <div class="nav__item">
-        <a href="{{ $navUnits->first()?->url() ?? '/kategori-produk/semua-ban' }}" @class(['is-active' => request()->routeIs('katalog*')])>Products</a>
+        <a href="{{ $navUnits->first()?->url() ?? '/kategori-produk/semua-ban' }}" @class(['is-active' => request()->routeIs('katalog*', 'produk*')])>Products</a>
         <div class="nav__menu">
           @foreach ($navUnits as $unit)
           <a href="{{ $unit->url() }}">{{ $unit->label }}</a>
@@ -36,6 +36,8 @@
       @endunless
       <a href="/blog" @class(['is-active' => request()->is('blog*')])>News</a>
       <a href="{{ route('superarea') }}" @class(['is-active' => request()->routeIs('superarea')])>SuperArea</a>
+      <a href="{{ route('aftersales') }}" @class(['is-active' => request()->routeIs('aftersales')])>After Sales</a>
+      <a href="{{ route('about') }}" @class(['is-active' => request()->routeIs('about')])>About Us</a>
       <a href="{{ route('contact') }}" @class(['is-active' => request()->routeIs('contact')])>Contact Us</a>
     </nav>
     <div class="nav__tools">
@@ -136,7 +138,7 @@
       </div>
 
     </div>
-    <p class="footer__note">{{ cms('site.copyright') }}</p>
+    @include('partials.footer-note')
   </div>
 </footer>
 @show

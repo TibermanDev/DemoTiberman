@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Filament\Analytics\StatsOverview;
+use App\Filament\Auth\Login;
 use App\Support\Favicon;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -34,7 +35,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(Login::class) // username + password, bukan email
             ->brandName('Tiberman CMS')
             ->brandLogo(fn () => view('filament.brand-logo'))
             ->brandLogoHeight('1.75rem')
@@ -65,7 +66,7 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make('Halaman'),
                 NavigationGroup::make('Blog'),
-                NavigationGroup::make('Katalog'),
+                NavigationGroup::make('Produk'),
                 NavigationGroup::make('Pengaturan'),
             ])
             ->navigationItems([

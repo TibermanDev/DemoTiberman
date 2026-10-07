@@ -41,12 +41,11 @@ class CmsSiteTest extends TestCase
             ['/kategori-produk/ban-bus'],
             ['/kategori-produk/semua-ban'],
             ['/brand/uninest'],
-            ['/kategori-produk/merek-ban/aeolus'],
-            ['/kategori-produk/ukuran-ban/ban-11-00-20'],
+            ['/kategori-produk/merek-ban/uninest'],
+            ['/kategori-produk/ukuran-ban/ban-11-00r20'],
             ['/produk'],
-            ['/produk/uninest-tibermax-800-12-00-20'],
-            ['/produk/hengli-dr908-7-50-16'],
-            ['/produk/uninest-tibermax-800-12-00-20/modal'],
+            ['/produk/uninest-tibermax-554-11-00r20'],
+            ['/produk/uninest-tibermax-554-11-00r20/modal'],
             ['/company-profile'],
         ];
     }
@@ -93,12 +92,14 @@ class CmsSiteTest extends TestCase
 
     public function test_blog_only_lists_live_posts(): void
     {
-        $post = Post::query()->where('slug', 'motor-grader-penjaga-kelancaran-hauling-road')->firstOrFail();
+        $post = Post::query()->where('slug', 'fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk')->firstOrFail();
 
         $this->get('/blog')->assertSee($post->title);
 
+        // Diperiksa lewat tautannya, bukan judul: judulnya ada di kamus
+        // terjemahan (window.TIBERMAN_DICT) yang ikut tertanam di tiap halaman.
         $post->update(['is_published' => false]);
-        $this->get('/blog')->assertDontSee($post->title);
+        $this->get('/blog')->assertDontSee($post->url());
         $this->get($post->url())->assertNotFound();
 
         $post->update(['is_published' => true, 'published_at' => now()->addWeek()]);
@@ -124,11 +125,11 @@ class CmsSiteTest extends TestCase
 
     public function test_inactive_products_are_hidden(): void
     {
-        $product = Product::query()->where('slug', 'hengli-dr908-7-50-16')->firstOrFail();
+        $product = Product::query()->where('slug', 'uninest-tibermax-554-11-00r20')->firstOrFail();
         $product->update(['is_active' => false]);
 
-        $this->get('/kategori-produk/ban-truk')->assertDontSee('HENGLI - DR908');
-        $this->get('/produk/hengli-dr908-7-50-16')->assertNotFound();
+        $this->get('/kategori-produk/ban-truk')->assertDontSee('/produk/uninest-tibermax-554-11-00r20', false);
+        $this->get('/produk/uninest-tibermax-554-11-00r20')->assertNotFound();
     }
 
     public function test_redirects_are_managed_in_cms_and_win_over_routes(): void
@@ -138,6 +139,20 @@ class CmsSiteTest extends TestCase
         Redirect::query()->create(['from_path' => '/blog/artikel-lama/', 'to_path' => '/blog', 'status_code' => 302]);
 
         $this->get('/blog/artikel-lama')->assertRedirect('/blog')->assertStatus(302);
+    }
+
+    public function test_old_pagination_redirects_to_parent_page(): void
+    {
+        $this->get('/produk/page/2/')->assertRedirect('/produk')->assertStatus(301);
+        $this->get('/page/3')->assertRedirect('/')->assertStatus(301);
+        $this->get('/blog/page/2')->assertRedirect('/blog');
+        $this->get('/blog/category/alat-berat/page/4/')->assertRedirect('/blog/category/alat-berat');
+        $this->get('/kategori-produk/ban-truk/page/2/')->assertRedirect('/kategori-produk/ban-truk');
+        $this->get('/brand/uninest/page/2')->assertRedirect('/brand/uninest');
+        $this->get('/blog/author/alma-mentari/page/2/')->assertRedirect('/');
+        $this->get('/blog/author/alma-mentari')->assertRedirect('/');
+
+        $this->get('/tag-produk/ban-bias/page/2/')->assertRedirect('/tag-produk/ban-bias');
     }
 
     public function test_flipbooks_come_from_cms(): void

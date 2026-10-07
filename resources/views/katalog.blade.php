@@ -1,7 +1,20 @@
 @extends('layouts.app')
 
+{{-- $tag (opsional) = halaman tag SEO /tag-produk/{slug}: grid hanya berisi
+     produk pilihan tag, sidebar jadi tautan biasa, tanpa chip ukuran. --}}
+@php
+  $tag ??= null;
+  $tagProducts = $tag?->products()->active()->with('brand')->orderBy('sort_order')->orderBy('id')->get();
+@endphp
+
+@if ($tag)
+@section('title', $tag->meta_title ?: \Illuminate\Support\Str::ucfirst($tag->heading).' — Tiberman')
+@section('description', (string) ($tag->meta_description ?: 'Hasil untuk "'.$tag->heading.'": '.$tagProducts->pluck('name')->unique()->join(', ').' — tersedia di Tiberman.'))
+@section('noindex', $tag->noindex ? '1' : '')
+@else
 @section('title', \App\Support\Catalog::title($state).' — Tiberman')
 @section('description', (string) (cms('catalog.seo_description')))
+@endif
 @section('body-class', 'catalog')
 
 @section('footer')
@@ -11,7 +24,7 @@
 
 <!-- Keadaan awal filter datang dari URL (menu Katalog di CMS); JS memakainya
      sebagai titik mulai lalu mengganti URL tiap kali filter diklik. -->
-<div class="catalog__layout" data-catalog data-unit="{{ $state['unit'] }}" data-brand="{{ $state['brand'] }}" data-size="{{ $state['size'] }}">
+<div class="catalog__layout" data-catalog data-unit="{{ $state['unit'] }}" data-brand="{{ $state['brand'] }}" data-size="{{ $state['size'] }}" @if ($tag) data-flat @endif>
 
   <!-- ============================= SIDEBAR ============================= -->
   <aside class="catalog__sidebar">
@@ -27,7 +40,11 @@
          assets/js/main.js tanpa reload. -->
     <div class="unitlist">
       @foreach (\App\Support\Catalog::units() as $u)
+        @if ($tag)
+        <a href="{{ $u->url() }}">{{ $u->label }}</a>
+        @else
         <a @class(['is-active' => $state['unit'] === $u->key && $state['brand'] === 'all']) href="{{ $u->url() }}" data-unit="{{ $u->key }}">{{ $u->label }}</a>
+        @endif
       @endforeach
     </div>
 
@@ -37,7 +54,11 @@
          saringannya. -->
     <div class="unitlist">
       @foreach (\App\Support\Catalog::brands() as $b)
+        @if ($tag)
+        <a href="{{ route('katalog.brand', $b->slug) }}">{{ $b->name }}</a>
+        @else
         <a @class(['is-active' => $state['brand'] === $b->slug]) href="{{ route('katalog.brand', $b->slug) }}" data-brand="{{ $b->slug }}">{{ $b->name }}</a>
+        @endif
       @endforeach
     </div>
   </aside>
@@ -48,17 +69,44 @@
       <img src="{{ media(cms('catalog.banner')) }}" alt="{{ cms('catalog.banner_alt') }}" fetchpriority="high">
     </div>
 
+    @if ($tag)
+    <div class="catalog__result">
+      <p>Showing all result of :</p>
+      <h1>&ldquo;{{ $tag->heading }}&rdquo;</h1>
+    </div>
+
+    <!-- Dirender server supaya nama produk terbaca Google tanpa JS; main.js
+         menggambar ulang grid yang sama (data-flat) untuk pencarian sidebar. -->
+    <div class="catalog__body" data-catalog-body>
+      @if ($tagProducts->isEmpty())
+      <p class="empty">Produk tidak ditemukan. Coba kata kunci atau filter lain.</p>
+      @else
+      <div class="product-grid">
+        @foreach ($tagProducts as $p)
+        <a class="product-card" href="{{ $p->url() }}">
+          <span class="product-card__img"><img src="{{ $p->imageUrl() }}" alt="{{ $p->name.' '.$p->size }}" loading="lazy"></span>
+          <span class="product-card__body">
+            <strong>{{ $p->name }}</strong>
+            <span><span>compatible for :</span> {{ $p->compat }}</span>
+          </span>
+        </a>
+        @endforeach
+      </div>
+      @endif
+    </div>
+    @else
     <!-- chip ukuran dibangun otomatis dari unit yang aktif (assets/js/main.js) -->
     <div class="chips" data-chips></div>
 
     <div class="catalog__body" data-catalog-body></div>
+    @endif
 
     <!-- Footer tinggal di DALAM kolom isi supaya tidak menutupi sidebar.
          Supaya tidak menggantung waktu produknya sedikit, .catalog__main
          dijadikan flex kolom dan footer ini didorong ke dasarnya (CSS). -->
     <footer class="footer footer--slim">
       <div class="container">
-        <p class="footer__note">{{ cms('site.copyright') }}</p>
+        @include('partials.footer-note')
       </div>
     </footer>
   </main>
@@ -99,5 +147,5 @@
 
 @push('scripts')
 <script>window.TIBERMAN_CATALOG_URLS = @json(\App\Support\Catalog::forJs());</script>
-<script>window.TIBERMAN_PRODUCTS = @json(\App\Support\Catalog::products());</script>
+<script>window.TIBERMAN_PRODUCTS = @json(\App\Support\Catalog::products($tagProducts?->modelKeys()));</script>
 @endpush

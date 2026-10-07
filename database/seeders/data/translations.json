@@ -120,14 +120,14 @@
   "zh": "容量："
  },
  {
-  "source": "150 kontainer",
-  "en": "150 containers",
-  "zh": "150 个集装箱"
+  "source": "150+ kontainer",
+  "en": "150+ containers",
+  "zh": "150+ 个集装箱"
  },
  {
-  "source": "250 kontainer",
-  "en": "250 containers",
-  "zh": "250 个集装箱"
+  "source": "250+ kontainer",
+  "en": "250+ containers",
+  "zh": "250+ 个集装箱"
  },
  {
   "source": "Pengiriman Aman",
@@ -150,9 +150,9 @@
   "zh": "Tiberman Group 的配送服务由 PT Hantar Lintas Nusantara（Halilintar）运营，确保每一批货物安全送达您手中。"
  },
  {
-  "source": "Layanan jaminan perbaikan kerusakan ban, gratis sesuai dengan ketentuan yang berlaku.",
-  "en": "A tyre damage repair guarantee, free of charge subject to the applicable terms.",
-  "zh": "轮胎损坏维修保障服务，符合相关条款者免费。"
+  "source": "Layanan jaminan perbaikan kerusakan ban, sesuai dengan ketentuan yang berlaku.",
+  "en": "A tyre damage repair guarantee, subject to the applicable terms.",
+  "zh": "轮胎损伤修补保障服务，以适用条款为准。"
  },
  {
   "source": "Testimoni",
@@ -515,56 +515,6 @@
   "zh": "还有疑问吗？"
  },
  {
-  "source": "What is your return policy?",
-  "en": null,
-  "zh": "你们的退货政策是什么？"
- },
- {
-  "source": "We offer a 15-day return window for a full refund or exchange on unused items. Returns must include original packaging and proof of purchase for processing.",
-  "en": null,
-  "zh": "未使用的商品可在 15 天内退货，全额退款或换货。退货须包含原包装及购买凭证方可受理。"
- },
- {
-  "source": "Do you offer international shipping?",
-  "en": null,
-  "zh": "你们提供国际配送吗？"
- },
- {
-  "source": "Yes, we offer international shipping to select countries. Please refer to our shipping policies or contact customer support for specific details regarding international shipments.",
-  "en": null,
-  "zh": "是的，我们向部分国家提供国际配送。具体事宜请参阅配送政策或联系客服。"
- },
- {
-  "source": "What if I receive a damaged or defective product?",
-  "en": null,
-  "zh": "收到破损或有瑕疵的商品怎么办？"
- },
- {
-  "source": "If you receive a damaged or defective product, please contact our customer support team immediately for assistance with returns or exchanges.",
-  "en": null,
-  "zh": "若收到破损或有瑕疵的商品，请立即联系客服团队协助办理退换。"
- },
- {
-  "source": "Are the product colors on the website accurate?",
-  "en": null,
-  "zh": "网站上的产品颜色准确吗？"
- },
- {
-  "source": "Our website strives to accurately depict product colors, but slight variations may occur due to screen settings. We recommend referring to product descriptions for additional details.",
-  "en": null,
-  "zh": "我们力求准确呈现产品颜色，但因屏幕设置不同可能略有差异，建议同时参阅产品说明。"
- },
- {
-  "source": "How do I contact customer support?",
-  "en": null,
-  "zh": "如何联系客服？"
- },
- {
-  "source": "My question is not here.",
-  "en": null,
-  "zh": "这里没有我的问题。"
- },
- {
   "source": "Connect us",
   "en": null,
   "zh": "联系我们"
@@ -673,5 +623,1610 @@
   "source": "Search",
   "en": null,
   "zh": "搜索"
+ },
+ {
+  "source": "About Us",
+  "en": null,
+  "zh": "关于我们"
+ },
+ {
+  "source": "Kebijakan",
+  "en": "Policies",
+  "zh": "政策"
+ },
+ {
+  "source": "Privacy Policy",
+  "en": null,
+  "zh": "隐私政策"
+ },
+ {
+  "source": "Disclaimer",
+  "en": null,
+  "zh": "免责声明"
+ },
+ {
+  "source": "Copyright © 2021 PT. Tiga Berlian Mandiri",
+  "en": null,
+  "zh": "版权所有 © 2021 PT. Tiga Berlian Mandiri"
+ },
+ {
+  "source": "Tutup",
+  "en": "Close",
+  "zh": "关闭"
+ },
+ {
+  "source": "Sebelumnya",
+  "en": "Previous",
+  "zh": "上一个"
+ },
+ {
+  "source": "Berikutnya",
+  "en": "Next",
+  "zh": "下一个"
+ },
+ {
+  "source": "Jabodetabek",
+  "en": null,
+  "zh": "雅加达都市圈"
+ },
+ {
+  "source": "Surabaya",
+  "en": null,
+  "zh": "泗水"
+ },
+ {
+  "source": "Mojokerto",
+  "en": null,
+  "zh": "惹班"
+ },
+ {
+  "source": "Gresik",
+  "en": null,
+  "zh": "锦石"
+ },
+ {
+  "source": "Palembang",
+  "en": null,
+  "zh": "巨港"
+ },
+ {
+  "source": "Pontianak",
+  "en": null,
+  "zh": "坤甸"
+ },
+ {
+  "source": "Banjarbaru",
+  "en": null,
+  "zh": "班查巴鲁"
+ },
+ {
+  "source": "Balikpapan",
+  "en": null,
+  "zh": "巴厘巴板"
+ },
+ {
+  "source": "Manado",
+  "en": null,
+  "zh": "万鸦老"
+ },
+ {
+  "source": "Kendari",
+  "en": null,
+  "zh": "肯达里"
+ },
+ {
+  "source": "Morowali",
+  "en": null,
+  "zh": "莫罗瓦利"
+ },
+ {
+  "source": "Luwuk Banggai",
+  "en": null,
+  "zh": "卢武克邦盖"
+ },
+ {
+  "source": "Ternate",
+  "en": null,
+  "zh": "特尔纳特"
+ },
+ {
+  "source": "Sofifi",
+  "en": null,
+  "zh": "索菲菲"
+ },
+ {
+  "source": "Weda",
+  "en": null,
+  "zh": "韦达"
+ },
+ {
+  "source": "OTR TYRE",
+  "en": null,
+  "zh": "OTR 轮胎"
+ },
+ {
+  "source": "(Off The Road)",
+  "en": null,
+  "zh": "（工程机械）"
+ },
+ {
+  "source": "TBR TYRE",
+  "en": null,
+  "zh": "TBR 轮胎"
+ },
+ {
+  "source": "(Truck Bus)",
+  "en": null,
+  "zh": "（卡客车）"
+ },
+ {
+  "source": "Dari sekian banyak supplier lain",
+  "en": "Out of all the other suppliers",
+  "zh": "在众多供应商之中"
+ },
+ {
+  "source": "Site Visit",
+  "en": null,
+  "zh": "现场走访"
+ },
+ {
+  "source": "Kunjungan eksklusif tire engineer profesional ke site customer.",
+  "en": "Exclusive visits by professional tyre engineers to the customer's site.",
+  "zh": "专业轮胎工程师专程到访客户现场。"
+ },
+ {
+  "source": "Tim Tiberman di gudang ban",
+  "en": "The Tiberman team in the tyre warehouse",
+  "zh": "Tiberman 团队在轮胎仓库"
+ },
+ {
+  "source": "Peta sebaran SuperArea Tiberman di Indonesia",
+  "en": "Map of Tiberman SuperAreas across Indonesia",
+  "zh": "Tiberman 印尼服务网点分布图"
+ },
+ {
+  "source": "Ban, velg, dan aksesoris pendukung",
+  "en": "Tyres, rims and supporting accessories",
+  "zh": "轮胎、轮辋及配套配件"
+ },
+ {
+  "source": "Ban OTR untuk alat berat",
+  "en": "OTR tyres for heavy equipment",
+  "zh": "工程机械用 OTR 轮胎"
+ },
+ {
+  "source": "Ban TBR untuk truk dan bus",
+  "en": "TBR tyres for trucks and buses",
+  "zh": "卡客车用 TBR 轮胎"
+ },
+ {
+  "source": "Velg heavy duty",
+  "en": "Heavy-duty rims",
+  "zh": "重载型轮辋"
+ },
+ {
+  "source": "Velg light truck",
+  "en": "Light truck rims",
+  "zh": "轻型卡车轮辋"
+ },
+ {
+  "source": "Gudang stok ban Pusat Logistik Berikat",
+  "en": "Tyre stock warehouse at the Bonded Logistics Centre",
+  "zh": "保税物流中心轮胎库存仓库"
+ },
+ {
+  "source": "PLB Mojokerto",
+  "en": "Mojokerto PLB",
+  "zh": "惹班保税物流中心"
+ },
+ {
+  "source": "PLB Gresik",
+  "en": "Gresik PLB",
+  "zh": "锦石保税物流中心"
+ },
+ {
+  "source": "Ilustrasi truk pengiriman Tiberman bermuatan ban",
+  "en": "Illustration of a Tiberman delivery truck loaded with tyres",
+  "zh": "满载轮胎的 Tiberman 运输卡车插图"
+ },
+ {
+  "source": "Truk kontainer Tiberman di gudang",
+  "en": "Tiberman container truck at the warehouse",
+  "zh": "仓库中的 Tiberman 集装箱卡车"
+ },
+ {
+  "source": "Forklift memuat ban ke kontainer",
+  "en": "Forklift loading tyres into a container",
+  "zh": "叉车将轮胎装入集装箱"
+ },
+ {
+  "source": "Teknisi Tiberman memperbaiki tapak ban truk",
+  "en": "A Tiberman technician repairing a truck tyre tread",
+  "zh": "Tiberman 技师正在修补卡车轮胎胎面"
+ },
+ {
+  "source": "Staf Tiberman melayani konsultasi lewat ponsel di area tambang",
+  "en": "Tiberman staff giving a phone consultation at a mining site",
+  "zh": "Tiberman 员工在矿区通过手机提供咨询"
+ },
+ {
+  "source": "Dua tire engineer meninjau alat berat di site customer",
+  "en": "Two tyre engineers inspecting heavy equipment at a customer site",
+  "zh": "两名轮胎工程师在客户现场检查工程机械"
+ },
+ {
+  "source": "Peserta mengikuti kelas online Tiberman lewat laptop",
+  "en": "A participant attending a Tiberman online class on a laptop",
+  "zh": "学员通过笔记本电脑参加 Tiberman 在线课程"
+ },
+ {
+  "source": "Kartu Privilege Tiberman tingkat Silver sampai Platinum",
+  "en": "Tiberman Privilege Cards from Silver to Platinum",
+  "zh": "Tiberman 会员卡（银卡至白金卡）"
+ },
+ {
+  "source": "Become Our Partner!",
+  "en": null,
+  "zh": "成为我们的合作伙伴！"
+ },
+ {
+  "source": "Stronger Business Start",
+  "en": null,
+  "zh": "更强大的事业，"
+ },
+ {
+  "source": "with the Right Partner",
+  "en": null,
+  "zh": "始于正确的合作伙伴"
+ },
+ {
+  "source": "Nama",
+  "en": "Name",
+  "zh": "姓名"
+ },
+ {
+  "source": "Email",
+  "en": null,
+  "zh": "电子邮箱"
+ },
+ {
+  "source": "Nomor Telepon",
+  "en": "Phone Number",
+  "zh": "电话号码"
+ },
+ {
+  "source": "Kebutuhan Unit",
+  "en": "Unit Type",
+  "zh": "所需车型"
+ },
+ {
+  "source": "Pilih jenis unit…",
+  "en": "Choose a unit type…",
+  "zh": "请选择车型…"
+ },
+ {
+  "source": "Perkiraan Waktu Kebutuhan",
+  "en": "Estimated Time Needed",
+  "zh": "预计需求时间"
+ },
+ {
+  "source": "Perkiraan Jumlah",
+  "en": "Estimated Quantity",
+  "zh": "预计数量"
+ },
+ {
+  "source": "Pesan / Permintaan Khusus",
+  "en": "Message / Special Requests",
+  "zh": "留言 / 特殊需求"
+ },
+ {
+  "source": "Kirim Permintaan",
+  "en": "Send Request",
+  "zh": "提交需求"
+ },
+ {
+  "source": "Permintaan berhasil dikirim",
+  "en": "Request sent successfully",
+  "zh": "需求已成功提交"
+ },
+ {
+  "source": "Tim kami akan menghubungi Anda dalam 1x24 jam.",
+  "en": "Our team will contact you within 24 hours.",
+  "zh": "我们的团队将在 24 小时内与您联系。"
+ },
+ {
+  "source": "Nama lengkap Anda",
+  "en": "Your full name",
+  "zh": "您的全名"
+ },
+ {
+  "source": "anda@contoh.com",
+  "en": "you@example.com",
+  "zh": "you@example.com"
+ },
+ {
+  "source": "mis. 40 ban, 2 set velg",
+  "en": "e.g. 40 tyres, 2 sets of rims",
+  "zh": "例如：40 条轮胎、2 套轮辋"
+ },
+ {
+  "source": "Ada hal lain yang perlu kami tahu?",
+  "en": "Anything else we should know?",
+  "zh": "还有其他需要我们了解的吗？"
+ },
+ {
+  "source": "Maskot panda Tiberman siap membantu",
+  "en": "The Tiberman panda mascot, ready to help",
+  "zh": "随时为您服务的 Tiberman 熊猫吉祥物"
+ },
+ {
+  "source": "Pertanyaan saya tidak ada di sini.",
+  "en": "My question isn't listed here.",
+  "zh": "这里没有我的问题。"
+ },
+ {
+  "source": "Apakah Tiberman melayani pembelian dalam jumlah besar?",
+  "en": "Does Tiberman handle bulk purchases?",
+  "zh": "Tiberman 是否承接大批量采购？"
+ },
+ {
+  "source": "Ya. Sebagian besar pelanggan kami adalah perusahaan angkutan, kontraktor, dan perusahaan tambang dengan kebutuhan puluhan hingga ratusan ban per pengadaan. Tim kami akan membantu menyesuaikan spesifikasi dengan rute dan beban armada Anda.",
+  "en": "Yes. Most of our customers are transport companies, contractors and mining companies that need tens to hundreds of tyres per procurement. Our team will help match the specifications to your fleet's routes and loads.",
+  "zh": "是的。我们的大多数客户是运输公司、承包商和矿业公司，每次采购需要数十至数百条轮胎。我们的团队会协助您根据车队的路线和载重选择合适的规格。"
+ },
+ {
+  "source": "Berapa lama proses pengirimannya?",
+  "en": "How long does delivery take?",
+  "zh": "配送需要多长时间？"
+ },
+ {
+  "source": "Untuk stok yang tersedia di SuperArea terdekat, pengiriman umumnya dilakukan dalam 24 jam. Distribusi dikelola sendiri oleh PT Hantar Lintas Nusantara (Halilintar), jadi jadwalnya bisa kami pantau sampai barang diterima.",
+  "en": "For stock available at the nearest SuperArea, delivery usually takes place within 24 hours. Distribution is handled in-house by PT Hantar Lintas Nusantara (Halilintar), so we can track the schedule until the goods are received.",
+  "zh": "对于最近服务网点有现货的商品，通常在 24 小时内发货。配送由自有的 PT Hantar Lintas Nusantara（Halilintar）负责，因此我们可以全程跟踪直至货物签收。"
+ },
+ {
+  "source": "Bagaimana kalau ban yang saya terima cacat produksi?",
+  "en": "What if the tyre I receive has a manufacturing defect?",
+  "zh": "如果收到的轮胎存在生产缺陷怎么办？"
+ },
+ {
+  "source": "Hubungi SuperArea tempat Anda membeli beserta foto dan nomor seri bannya. Klaim garansi cacat produksi kami proses tanpa biaya, termasuk penggantian unit bila hasil pemeriksaan memenuhi syarat.",
+  "en": "Contact the SuperArea where you bought it, with photos and the tyre's serial number. We process manufacturing-defect warranty claims free of charge, including a replacement unit if the inspection results meet the requirements.",
+  "zh": "请联系您购买的服务网点，并提供轮胎照片和序列号。生产缺陷保修索赔我们免费处理，若检验结果符合条件，可更换新品。"
+ },
+ {
+  "source": "Apakah tersedia layanan konsultasi pemilihan ban?",
+  "en": "Is there a tyre selection consultation service?",
+  "zh": "是否提供轮胎选型咨询服务？"
+ },
+ {
+  "source": "Tersedia dan tanpa biaya. Sampaikan jenis unit, medan, dan beban rata-rata Anda — tim teknis kami akan merekomendasikan ukuran, pola telapak, dan konstruksi yang paling sesuai.",
+  "en": "Yes, free of charge. Tell us your unit type, terrain and average load — our technical team will recommend the most suitable size, tread pattern and construction.",
+  "zh": "提供，且免费。请告诉我们您的车型、路况和平均载重——我们的技术团队会推荐最合适的规格、花纹和结构。"
+ },
+ {
+  "source": "Di mana saja lokasi SuperArea Tiberman?",
+  "en": "Where are Tiberman's SuperAreas located?",
+  "zh": "Tiberman 的服务网点分布在哪里？"
+ },
+ {
+  "source": "Ada 15 SuperArea dari Sumatra sampai Maluku & Papua. Daftar lengkap beserta alamatnya bisa dilihat di halaman",
+  "en": "There are 15 SuperAreas from Sumatra to Maluku & Papua. See the full list with addresses on the page",
+  "zh": "我们在苏门答腊至马鲁古与巴布亚共有 15 个服务网点。完整名单及地址请查看页面："
+ },
+ {
+  "source": "Home",
+  "en": null,
+  "zh": "首页"
+ },
+ {
+  "source": "Alat Berat",
+  "en": "Heavy Equipment",
+  "zh": "工程机械"
+ },
+ {
+  "source": "Ban",
+  "en": "Tyres",
+  "zh": "轮胎"
+ },
+ {
+  "source": "Pertambangan",
+  "en": "Mining",
+  "zh": "矿业"
+ },
+ {
+  "source": "Tips",
+  "en": null,
+  "zh": "技巧"
+ },
+ {
+  "source": "Info Produk",
+  "en": "Product Info",
+  "zh": "产品资讯"
+ },
+ {
+  "source": "Info Lain",
+  "en": "Other News",
+  "zh": "其他资讯"
+ },
+ {
+  "source": "Dunia Alat Berat",
+  "en": "World of Heavy Equipment",
+  "zh": "工程机械世界"
+ },
+ {
+  "source": "Dunia Pertambangan",
+  "en": "World of Mining",
+  "zh": "矿业世界"
+ },
+ {
+  "source": "Pengetahuan Ban",
+  "en": "Tyre Knowledge",
+  "zh": "轮胎知识"
+ },
+ {
+  "source": "Tips & Panduan",
+  "en": "Tips & Guides",
+  "zh": "技巧与指南"
+ },
+ {
+  "source": "Latest Post",
+  "en": null,
+  "zh": "最新文章"
+ },
+ {
+  "source": "Selengkapnya →",
+  "en": "Read more →",
+  "zh": "阅读全文 →"
+ },
+ {
+  "source": "Belum ada artikel.",
+  "en": "No articles yet.",
+  "zh": "暂无文章。"
+ },
+ {
+  "source": "Tiberman News",
+  "en": null,
+  "zh": "Tiberman 资讯"
+ },
+ {
+  "source": "Kategori artikel",
+  "en": "Article categories",
+  "zh": "文章分类"
+ },
+ {
+  "source": "← Kembali ke News",
+  "en": "← Back to News",
+  "zh": "← 返回新闻"
+ },
+ {
+  "source": "Breadcrumb",
+  "en": null,
+  "zh": "导航路径"
+ },
+ {
+  "source": "3 menit baca",
+  "en": "3 min read",
+  "zh": "阅读约 3 分钟"
+ },
+ {
+  "source": "Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk",
+  "en": "Fleet Tire Management: How to Control Tyre Costs Across Dozens to Hundreds of Trucks",
+  "zh": "车队轮胎管理：如何控制数十至数百辆卡车的轮胎成本"
+ },
+ {
+  "source": "Mengelola lima hingga sepuluh unit truk mungkin masih bisa dilakukan dengan pengawasan kasat mata dan pencatatan sederhana. Namun bagaimana jika armadanya sudah ratusan unit?",
+  "en": "Managing five to ten trucks may still be possible with visual checks and simple record-keeping. But what if the fleet is already in the hundreds?",
+  "zh": "管理五到十辆卡车，或许靠肉眼检查和简单记录还能应付。但如果车队已达数百辆呢？"
+ },
+ {
+  "source": "Barisan truk pengangkut menunggu bongkar di area pergudangan",
+  "en": "A row of haul trucks waiting to unload at a warehouse area",
+  "zh": "一排运输卡车在仓储区等待卸货"
+ },
+ {
+  "source": "Semakin besar armada, semakin kecil peluang mengawasi kondisi ban satu per satu secara manual.",
+  "en": "The bigger the fleet, the smaller the chance of checking each tyre's condition by hand.",
+  "zh": "车队规模越大，逐条人工检查轮胎状况的可能性就越小。"
+ },
+ {
+  "source": "Mengelola lima hingga sepuluh unit truk mungkin masih bisa dilakukan dengan pengawasan kasat mata dan pencatatan sederhana. Namun begitu armada tumbuh menjadi puluhan bahkan ratusan unit, biaya ban berubah dari pengeluaran rutin menjadi pos yang diam-diam menggerus margin.",
+  "en": "Managing five to ten trucks may still be possible with visual checks and simple record-keeping. But once the fleet grows to dozens or even hundreds of units, tyre costs turn from a routine expense into a line item that quietly erodes margins.",
+  "zh": "管理五到十辆卡车，或许靠肉眼检查和简单记录还能应付。但当车队增长到数十甚至数百辆时，轮胎成本就会从日常开支变成悄悄侵蚀利润的科目。"
+ },
+ {
+  "source": "Di banyak perusahaan angkutan, ban adalah komponen biaya operasional terbesar kedua setelah bahan bakar. Bedanya, konsumsi bahan bakar biasanya sudah dicatat harian, sementara ban baru diperhatikan ketika sudah pecah atau botak. Padahal justru di antara dua titik itulah sebagian besar biaya terbuang.",
+  "en": "At many transport companies, tyres are the second-largest operating cost after fuel. The difference is that fuel consumption is usually recorded daily, while tyres only get attention once they have burst or gone bald. Yet it is precisely between those two points that most of the money is wasted.",
+  "zh": "在许多运输公司，轮胎是仅次于燃油的第二大运营成本。不同的是，燃油消耗通常每天都有记录，而轮胎往往要等到爆胎或磨光才会被注意。然而，大部分成本恰恰浪费在这两个时间点之间。"
+ },
+ {
+  "source": "Kenapa pencatatan manual berhenti bekerja",
+  "en": "Why manual record-keeping stops working",
+  "zh": "为什么人工记录不再奏效"
+ },
+ {
+  "source": "Selama armadanya kecil, kepala bengkel biasanya masih hafal unit mana yang bannya baru diganti. Begitu jumlah unit naik, tiga hal langsung terjadi sekaligus:",
+  "en": "As long as the fleet is small, the workshop head usually still remembers which units just had new tyres. Once the number of units goes up, three things happen at once:",
+  "zh": "车队规模小的时候，车间主管通常还记得哪些车刚换过轮胎。一旦车辆数量增加，三件事会同时发生："
+ },
+ {
+  "source": "Riwayat ban tercampur antar unit karena ban dipindah-pindah tanpa dicatat posisinya.",
+  "en": "Tyre histories get mixed up between units because tyres are moved around without recording their positions.",
+  "zh": "轮胎在车辆之间调换却不记录位置，导致轮胎履历混乱。"
+ },
+ {
+  "source": "Tekanan angin hanya diperiksa saat unit masuk bengkel, bukan secara berkala.",
+  "en": "Tyre pressure is only checked when a unit comes into the workshop, not on a regular schedule.",
+  "zh": "胎压只在车辆进厂时检查，而不是定期检查。"
+ },
+ {
+  "source": "Keputusan ganti ban diambil oleh masing-masing driver, bukan berdasarkan ambang batas yang sama.",
+  "en": "Tyre replacement decisions are made by each driver, not based on a common threshold.",
+  "zh": "换胎决定由各个司机自行做出，而不是依据统一的标准。"
+ },
+ {
+  "source": "Akibatnya biaya per kilometer tidak pernah benar-benar diketahui. Yang terlihat di laporan hanya total belanja ban per bulan — angka yang naik-turun tanpa bisa dijelaskan penyebabnya.",
+  "en": "As a result, the cost per kilometre is never really known. All the report shows is total tyre spend per month — a figure that goes up and down with no explanation of why.",
+  "zh": "结果，每公里成本始终无从得知。报表上只能看到每月轮胎总支出——一个忽高忽低却说不清原因的数字。"
+ },
+ {
+  "source": "Biaya ban yang tidak bisa diukur per unit tidak bisa ditekan. Yang bisa dilakukan hanya menunda pembeliannya, dan itu justru memperbesar risiko di jalan.",
+  "en": "Tyre costs that cannot be measured per unit cannot be reduced. All you can do is postpone purchases, and that only increases the risk on the road.",
+  "zh": "无法按车辆衡量的轮胎成本就无法降低。唯一能做的只是推迟采购，而这反而会加大行车风险。"
+ },
+ {
+  "source": "Empat angka yang wajib dicatat",
+  "en": "Four numbers you must record",
+  "zh": "必须记录的四项数据"
+ },
+ {
+  "source": "Fleet tire management tidak harus dimulai dengan perangkat mahal. Untuk armada di bawah 100 unit, empat angka berikut sudah cukup untuk membuat keputusan yang jauh lebih baik:",
+  "en": "Fleet tire management doesn't have to start with expensive equipment. For fleets under 100 units, the following four numbers are enough to make far better decisions:",
+  "zh": "车队轮胎管理不一定要从昂贵的设备开始。对于 100 辆以下的车队，以下四项数据就足以做出更好的决策："
+ },
+ {
+  "source": "Posisi ban.",
+  "en": "Tyre position.",
+  "zh": "轮胎位置。"
+ },
+ {
+  "source": "Tiap ban diberi nomor dan dicatat ada di unit mana, di posisi roda keberapa. Tanpa ini, angka lain kehilangan konteks.",
+  "en": "Each tyre is numbered and recorded by unit and wheel position. Without this, the other numbers lose their context.",
+  "zh": "每条轮胎都编号，并记录其所在车辆及轮位。没有这一项，其他数据就失去了意义。"
+ },
+ {
+  "source": "Kedalaman telapak.",
+  "en": "Tread depth.",
+  "zh": "胎面深度。"
+ },
+ {
+  "source": "Diukur rutin di titik yang sama. Laju keausan per bulan lebih berguna daripada nilai sesaat.",
+  "en": "Measured regularly at the same points. The monthly wear rate is more useful than a one-off reading.",
+  "zh": "定期在相同位置测量。每月磨损速度比单次读数更有参考价值。"
+ },
+ {
+  "source": "Tekanan angin.",
+  "en": "Tyre pressure.",
+  "zh": "胎压。"
+ },
+ {
+  "source": "Penyebab kerusakan ban terbesar yang paling murah dicegah. Selisih 10% saja sudah memperpendek umur pakai secara signifikan.",
+  "en": "The biggest cause of tyre damage, and the cheapest to prevent. A difference of just 10% already shortens service life significantly.",
+  "zh": "导致轮胎损坏的最大原因，也是最容易预防的。仅 10% 的偏差就会显著缩短使用寿命。"
+ },
+ {
+  "source": "Kilometer tempuh.",
+  "en": "Distance travelled.",
+  "zh": "行驶里程。"
+ },
+ {
+  "source": "Pembagi dari semuanya. Biaya ban per kilometer inilah angka yang akhirnya dipakai membandingkan merek, pola telapak, dan kebijakan rotasi.",
+  "en": "The divisor for everything. Tyre cost per kilometre is the figure ultimately used to compare brands, tread patterns and rotation policies.",
+  "zh": "这是所有数据的分母。每公里轮胎成本最终用于比较品牌、花纹和换位策略。"
+ },
+ {
+  "source": "Pengukuran kedalaman telapak ban truk",
+  "en": "Measuring truck tyre tread depth",
+  "zh": "测量卡车轮胎胎面深度"
+ },
+ {
+  "source": "Kedalaman telapak yang diukur di titik yang konsisten membuat laju keausan bisa dibandingkan antar unit.",
+  "en": "Measuring tread depth at consistent points makes wear rates comparable across units.",
+  "zh": "在固定位置测量胎面深度，才能在车辆之间比较磨损速度。"
+ },
+ {
+  "source": "Rotasi dan vulkanisir: dua penghematan yang sering dilewatkan",
+  "en": "Rotation and retreading: two savings that are often overlooked",
+  "zh": "换位与翻新：两项常被忽视的节省"
+ },
+ {
+  "source": "Ban pada posisi steer, drive, dan trailer mengalami beban yang berbeda, sehingga ausnya juga tidak sama. Rotasi yang terjadwal memindahkan ban ke posisi yang sesuai dengan sisa telapaknya, bukan membiarkannya aus habis di satu titik.",
+  "en": "Tyres in the steer, drive and trailer positions carry different loads, so they also wear differently. Scheduled rotation moves tyres to positions that suit their remaining tread, rather than letting them wear out in one spot.",
+  "zh": "转向轴、驱动轴和挂车轴上的轮胎承受的载荷不同，磨损也不一样。定期换位能把轮胎调到与剩余胎面相匹配的位置，而不是让它在一个位置磨到报废。"
+ },
+ {
+  "source": "Untuk ban radial dengan casing yang masih sehat, vulkanisir bisa menambah satu hingga dua siklus pakai dengan biaya jauh di bawah harga ban baru. Kuncinya adalah menarik ban dari operasi",
+  "en": "For radial tyres with a casing that is still sound, retreading can add one to two more service cycles at a cost far below that of a new tyre. The key is to pull the tyre out of service",
+  "zh": "对于胎体仍然完好的子午线轮胎，翻新可以再增加一到两个使用周期，成本远低于新胎。关键在于"
+ },
+ {
+  "source": "sebelum",
+  "en": "before",
+  "zh": "在"
+ },
+ {
+  "source": "casing-nya rusak — dan itu hanya mungkin kalau kedalaman telapaknya dipantau.",
+  "en": "its casing is damaged — and that is only possible if its tread depth is monitored.",
+  "zh": "胎体损坏之前将轮胎撤下——而这只有持续监测胎面深度才能做到。"
+ },
+ {
+  "source": "Mulai dari mana",
+  "en": "Where to start",
+  "zh": "从哪里开始"
+ },
+ {
+  "source": "Ambil satu rute dan sepuluh unit sebagai pilot. Catat empat angka di atas selama tiga bulan, lalu hitung biaya ban per kilometer untuk tiap unit. Selisih antar unit pada rute yang sama biasanya langsung menunjukkan di mana masalahnya: tekanan, gaya mengemudi, atau spesifikasi ban yang tidak cocok dengan medannya.",
+  "en": "Take one route and ten units as a pilot. Record the four numbers above for three months, then calculate the tyre cost per kilometre for each unit. Differences between units on the same route usually point straight to the problem: pressure, driving style, or tyre specifications that don't suit the terrain.",
+  "zh": "选择一条路线和十辆车作为试点。连续三个月记录上述四项数据，然后计算每辆车的每公里轮胎成本。同一路线上车辆之间的差异通常能直接指出问题所在：胎压、驾驶习惯，或是轮胎规格与路况不匹配。"
+ },
+ {
+  "source": "Tim Tiberman biasa membantu pelanggan menyusun tabel pemantauan seperti ini sekaligus menyesuaikan spesifikasi ban dengan rute dan beban armadanya. Silakan hubungi SuperArea terdekat untuk berdiskusi lebih lanjut.",
+  "en": "The Tiberman team regularly helps customers set up monitoring sheets like this while matching tyre specifications to their fleet's routes and loads. Contact your nearest SuperArea to discuss further.",
+  "zh": "Tiberman 团队经常协助客户建立此类监测表，并根据车队的路线和载重匹配轮胎规格。欢迎联系最近的服务网点进一步洽谈。"
+ },
+ {
+  "source": "SUPERAREA",
+  "en": null,
+  "zh": "服务网点"
+ },
+ {
+  "source": "Jawa",
+  "en": "Java",
+  "zh": "爪哇"
+ },
+ {
+  "source": "Sumatra",
+  "en": null,
+  "zh": "苏门答腊"
+ },
+ {
+  "source": "Kalimantan",
+  "en": null,
+  "zh": "加里曼丹"
+ },
+ {
+  "source": "Sulawesi",
+  "en": null,
+  "zh": "苏拉威西"
+ },
+ {
+  "source": "Maluku & Papua",
+  "en": null,
+  "zh": "马鲁古与巴布亚"
+ },
+ {
+  "source": "( Head Office )",
+  "en": null,
+  "zh": "（总部）"
+ },
+ {
+  "source": "Pilih pulau",
+  "en": "Choose an island",
+  "zh": "选择岛屿"
+ },
+ {
+  "source": "Buka di Google Maps",
+  "en": "Open in Google Maps",
+  "zh": "在 Google 地图中打开"
+ },
+ {
+  "source": "Layanan Purna Jual",
+  "en": "After-Sales Service",
+  "zh": "售后服务"
+ },
+ {
+  "source": "Solutions of",
+  "en": null,
+  "zh": "解决方案出自"
+ },
+ {
+  "source": "Solusi setiap permasalahan ban",
+  "en": "Solutions for every tyre problem",
+  "zh": "解决每一个轮胎问题，"
+ },
+ {
+  "source": "di operasional perusahaan Anda.",
+  "en": "in your company's operations.",
+  "zh": "为贵公司的运营保驾护航。"
+ },
+ {
+  "source": "Tyre Lab",
+  "en": null,
+  "zh": "轮胎实验室"
+ },
+ {
+  "source": "Tyre Repair",
+  "en": null,
+  "zh": "轮胎修补"
+ },
+ {
+  "source": "Learning Center",
+  "en": null,
+  "zh": "学习中心"
+ },
+ {
+  "source": "Privilege Card",
+  "en": null,
+  "zh": "会员卡"
+ },
+ {
+  "source": "Tak berhenti setelah pembelian.",
+  "en": "It doesn't stop after the purchase.",
+  "zh": "购买之后，服务不止。"
+ },
+ {
+  "source": "Dapatkan berbagai layanan",
+  "en": "Get a range of services",
+  "zh": "享受多种服务"
+ },
+ {
+  "source": "dan dukungan produk, bahkan setelah ban digunakan.",
+  "en": "and product support, even after the tyres are in use.",
+  "zh": "和产品支持，即使轮胎已投入使用。"
+ },
+ {
+  "source": "Konsultasi online segala permasalahan ban 24 jam.",
+  "en": "24-hour online consultation for all tyre problems.",
+  "zh": "24 小时在线咨询，解答一切轮胎问题。"
+ },
+ {
+  "source": "Konsultasi online segala permasalahan ban Anda selama 24 jam.",
+  "en": "24-hour online consultation for all your tyre problems.",
+  "zh": "24 小时在线咨询，解答您的一切轮胎问题。"
+ },
+ {
+  "source": "Konsultasikan sekarang",
+  "en": "Consult now",
+  "zh": "立即咨询"
+ },
+ {
+  "source": "Bukan sekadar produk,",
+  "en": "More than just a product,",
+  "zh": "不只是产品，"
+ },
+ {
+  "source": "dapatkan fasilitas yang",
+  "en": "enjoy facilities that",
+  "zh": "更有完善的配套服务"
+ },
+ {
+  "source": "mendukung operasional Anda.",
+  "en": "support your operations.",
+  "zh": "为您的运营提供支持。"
+ },
+ {
+  "source": "Layanan pembelajaran online seputar ban bersertifikat.",
+  "en": "Certified online learning on all things tyres.",
+  "zh": "提供认证的轮胎在线学习课程。"
+ },
+ {
+  "source": "Benefit lebih untuk customer loyal dengan persyaratan khusus.",
+  "en": "Extra benefits for loyal customers who meet special requirements.",
+  "zh": "为符合特定条件的忠实客户提供更多权益。"
+ },
+ {
+  "source": "Bagaimana cara menggunakan layanan Tiberman Tyre Lab?",
+  "en": "How do I use the Tiberman Tyre Lab service?",
+  "zh": "如何使用 Tiberman 轮胎实验室服务？"
+ },
+ {
+  "source": "Hubungi tim kami lewat WhatsApp kapan saja, lalu kirimkan foto ban, ukuran, serta kondisi pemakaiannya. Tire engineer kami akan menganalisis masalahnya dan memberikan rekomendasi penanganan.",
+  "en": "Contact our team on WhatsApp at any time, then send photos of the tyre, its size and how it is being used. Our tyre engineers will analyse the problem and recommend how to handle it.",
+  "zh": "随时通过 WhatsApp 联系我们的团队，并发送轮胎照片、规格及使用情况。我们的轮胎工程师会分析问题并给出处理建议。"
+ },
+ {
+  "source": "Bagaimana cara mengajukan Site Visit?",
+  "en": "How do I request a Site Visit?",
+  "zh": "如何申请现场走访？"
+ },
+ {
+  "source": "Sampaikan lokasi site, jenis unit, dan kendala ban yang dihadapi melalui tim kami. Jadwal kunjungan tire engineer akan disesuaikan dengan lokasi dan kebutuhan operasional Anda.",
+  "en": "Tell our team your site location, unit type and the tyre issues you are facing. The tyre engineer's visit will be scheduled around your location and operational needs.",
+  "zh": "请向我们的团队说明现场位置、车型以及遇到的轮胎问题。轮胎工程师的走访时间将根据您的位置和运营需求安排。"
+ },
+ {
+  "source": "Kerusakan apa saja yang ditanggung Tyre Repair?",
+  "en": "What damage does Tyre Repair cover?",
+  "zh": "轮胎修补涵盖哪些损伤？"
+ },
+ {
+  "source": "Tyre Repair mencakup perbaikan kerusakan ban sesuai ketentuan yang berlaku. Tim kami akan memeriksa kondisi ban terlebih dahulu untuk memastikan kerusakannya masih dapat diperbaiki.",
+  "en": "Tyre Repair covers tyre damage repairs subject to the applicable terms. Our team will first inspect the tyre to make sure the damage can still be repaired.",
+  "zh": "轮胎修补服务依据适用条款修复轮胎损伤。我们的团队会先检查轮胎状况，确认损伤仍可修复。"
+ },
+ {
+  "source": "Bagaimana cara mengikuti Tiberman Learning Center?",
+  "en": "How do I join the Tiberman Learning Center?",
+  "zh": "如何参加 Tiberman 学习中心？"
+ },
+ {
+  "source": "Kelas diselenggarakan secara online dan peserta mendapatkan sertifikat. Daftarkan diri atau tim Anda melalui WhatsApp kami untuk mendapatkan jadwal kelas terdekat.",
+  "en": "Classes are held online and participants receive a certificate. Register yourself or your team via our WhatsApp to get the next class schedule.",
+  "zh": "课程在线进行，学员可获得证书。请通过我们的 WhatsApp 为您本人或团队报名，获取最近的课程安排。"
+ },
+ {
+  "source": "Bagaimana cara mendapatkan Tiberman Privilege Card?",
+  "en": "How do I get a Tiberman Privilege Card?",
+  "zh": "如何获得 Tiberman 会员卡？"
+ },
+ {
+  "source": "Privilege Card tersedia dalam tingkat Silver, Gold, Diamond, dan Platinum untuk customer loyal dengan persyaratan khusus. Hubungi tim kami untuk mengetahui syarat dan benefit setiap tingkatan.",
+  "en": "The Privilege Card comes in Silver, Gold, Diamond and Platinum tiers for loyal customers who meet special requirements. Contact our team to find out the requirements and benefits of each tier.",
+  "zh": "会员卡分为银卡、金卡、钻石卡和白金卡四个等级，面向符合特定条件的忠实客户。请联系我们的团队了解各等级的条件和权益。"
+ },
+ {
+  "source": "Mari lebih mengenal kami",
+  "en": "Get to know us better",
+  "zh": "进一步了解我们"
+ },
+ {
+  "source": "Be Part of Our",
+  "en": null,
+  "zh": "携手同行，"
+ },
+ {
+  "source": "Journey",
+  "en": null,
+  "zh": "共创未来"
+ },
+ {
+  "source": "Download Company Profile",
+  "en": null,
+  "zh": "下载公司简介"
+ },
+ {
+  "source": "18 Tahun",
+  "en": "Over 18 Years",
+  "zh": "18 年"
+ },
+ {
+  "source": "Lebih",
+  "en": "of Service",
+  "zh": "多来"
+ },
+ {
+  "source": "Melayani Anda",
+  "en": "to You",
+  "zh": "用心为您服务"
+ },
+ {
+  "source": "Kami telah tumbuh, melayani, dan terus memberikan yang terbaik sejak 2008.",
+  "en": "We have grown, served and kept giving our best since 2008.",
+  "zh": "自 2008 年以来，我们不断成长、用心服务，始终全力以赴。"
+ },
+ {
+  "source": "Dipercaya Oleh",
+  "en": "Trusted By",
+  "zh": "深受信赖"
+ },
+ {
+  "source": "2.600+ Mitra",
+  "en": "2,600+ Partners",
+  "zh": "2,600+ 合作伙伴"
+ },
+ {
+  "source": "Dipercaya oleh lebih dari 2.600 pelanggan, baik individu maupun perusahaan, dan jumlahnya terus bertumbuh hingga hari ini.",
+  "en": "Trusted by more than 2,600 customers, both individuals and companies, and the number keeps growing to this day.",
+  "zh": "深受 2,600 多家客户的信赖，涵盖个人与企业，且数量至今仍在持续增长。"
+ },
+ {
+  "source": "Didukung Dengan",
+  "en": "Backed By",
+  "zh": "依托"
+ },
+ {
+  "source": "15 SUPER AREA",
+  "en": null,
+  "zh": "15 个服务网点"
+ },
+ {
+  "source": "Dengan 15 Super Area yang tersebar di berbagai kota di Indonesia, kami terus memperluas jangkauan untuk melayani lebih banyak pelanggan.",
+  "en": "With 15 Super Areas spread across cities in Indonesia, we keep expanding our reach to serve more customers.",
+  "zh": "凭借遍布印尼各城市的 15 个服务网点，我们不断扩大覆盖范围，服务更多客户。"
+ },
+ {
+  "source": "Our Vision",
+  "en": null,
+  "zh": "我们的愿景"
+ },
+ {
+  "source": "Menjadi one stop supplier terbesar dan terkemuka untuk kebutuhan ban industri maupun komersial di seluruh wilayah Indonesia.",
+  "en": "To be the largest and leading one stop supplier for industrial and commercial tyre needs throughout Indonesia.",
+  "zh": "成为印尼全境工业及商用轮胎需求规模最大、最具领先地位的一站式供应商。"
+ },
+ {
+  "source": "Our Mission",
+  "en": null,
+  "zh": "我们的使命"
+ },
+ {
+  "source": "Menyediakan beraneka ukuran ban berkualitas dengan pelayanan purna jual yang handal guna meningkatkan efisiensi dan efektivitas operasional para pelanggan dengan jaringan logistik yang tersebar di seluruh wilayah Indonesia.",
+  "en": "To provide a wide range of quality tyre sizes with reliable after-sales service that improves our customers' operational efficiency and effectiveness, backed by a logistics network spread throughout Indonesia.",
+  "zh": "依托遍布印尼全境的物流网络，提供多种规格的优质轮胎及可靠的售后服务，帮助客户提升运营效率与效益。"
+ },
+ {
+  "source": "Perjalanan bisnis kami dari awal",
+  "en": "Our business journey from the start",
+  "zh": "我们一路走来的发展历程"
+ },
+ {
+  "source": "Milestone of",
+  "en": null,
+  "zh": "里程碑见证"
+ },
+ {
+  "source": "Berawal dari Surabaya pada tahun 1997,",
+  "en": "Starting out in Surabaya in 1997,",
+  "zh": "1997 年，从泗水起步，"
+ },
+ {
+  "source": "TIBERMAN memulai perjalanan",
+  "en": "TIBERMAN began its journey",
+  "zh": "TIBERMAN 踏上征程，"
+ },
+ {
+  "source": "dengan mengimpor dan memasarkan ban truk.",
+  "en": "by importing and marketing truck tyres.",
+  "zh": "进口并销售卡车轮胎。"
+ },
+ {
+  "source": "Seiring perkembangan bisnis, pada tahun 2008",
+  "en": "As the business grew, in 2008",
+  "zh": "随着业务发展，2008 年"
+ },
+ {
+  "source": "kami resmi menjadi PT Tiga Berlian Mandiri",
+  "en": "we officially became PT Tiga Berlian Mandiri",
+  "zh": "我们正式成立 PT Tiga Berlian Mandiri"
+ },
+ {
+  "source": ", dengan komitmen \"WE PROVIDE SOLUTIONS\" dalam menghadirkan solusi ban yang terpercaya dan berkelanjutan.",
+  "en": ", with a commitment to \"WE PROVIDE SOLUTIONS\" by delivering reliable and sustainable tyre solutions.",
+  "zh": "，秉持\"WE PROVIDE SOLUTIONS\"的承诺，提供可靠且可持续的轮胎解决方案。"
+ },
+ {
+  "source": "Saat Ini",
+  "en": "Today",
+  "zh": "如今"
+ },
+ {
+  "source": "Kini, TIBERMAN hadir sebagai",
+  "en": "Today, TIBERMAN stands as",
+  "zh": "如今，TIBERMAN 已成为"
+ },
+ {
+  "source": "One Stop Tyre Solutions",
+  "en": null,
+  "zh": "一站式轮胎解决方案"
+ },
+ {
+  "source": "dengan jaringan di berbagai wilayah Indonesia, melayani kebutuhan industri logistik, pertambangan, perkebunan, pelabuhan, migas, manufaktur, dan konstruksi.",
+  "en": "with a network across Indonesia, serving the logistics, mining, plantation, port, oil & gas, manufacturing and construction industries.",
+  "zh": "，网络遍布印尼各地，服务于物流、矿业、种植园、港口、油气、制造及建筑等行业。"
+ },
+ {
+  "source": "Murah Belum Tentu Hemat",
+  "en": "Cheap Isn't Always Economical",
+  "zh": "便宜不等于省钱"
+ },
+ {
+  "source": "Jangan hanya lihat harga beli. Hitung juga biaya per kilometer. Ban yang tepat membantu menekan biaya operasional dan memaksimalkan setiap rupiah investasi Anda.",
+  "en": "Don't just look at the purchase price. Count the cost per kilometre too. The right tyre helps cut operating costs and makes every rupiah you invest count.",
+  "zh": "不要只看购买价格，也要计算每公里成本。合适的轮胎有助于降低运营成本，让您的每一分投资发挥最大价值。"
+ },
+ {
+  "source": "Dapatkan Ban Paling Hemat",
+  "en": "Get the Tyres with the Lowest",
+  "zh": "选购最省钱的轮胎，"
+ },
+ {
+  "source": "Biaya Per Kilometernya",
+  "en": "Cost Per Kilometre",
+  "zh": "按每公里成本计算"
+ },
+ {
+  "source": "Hubungi Sekarang",
+  "en": "Contact Us Now",
+  "zh": "立即联系"
+ },
+ {
+  "source": "Tim Tiberman",
+  "en": "The Tiberman team",
+  "zh": "Tiberman 团队"
+ },
+ {
+  "source": "Maskot panda Tiberman",
+  "en": "Tiberman panda mascot",
+  "zh": "Tiberman 熊猫吉祥物"
+ },
+ {
+  "source": "Tim Tiberman memeriksa ban OTR",
+  "en": "The Tiberman team inspecting an OTR tyre",
+  "zh": "Tiberman 团队正在检查 OTR 轮胎"
+ },
+ {
+  "source": "Lihat halaman produk",
+  "en": "View product page",
+  "zh": "查看产品页面"
+ },
+ {
+  "source": "Slide berikutnya",
+  "en": "Next slide",
+  "zh": "下一张"
+ },
+ {
+  "source": "Showing all result of :",
+  "en": null,
+  "zh": "以下是全部搜索结果："
+ },
+ {
+  "source": "Lihat gambar ukuran penuh",
+  "en": "View full-size image",
+  "zh": "查看大图"
+ },
+ {
+  "source": "Perfect pair for",
+  "en": null,
+  "zh": "最佳搭档"
+ },
+ {
+  "source": "Spesifikasi :",
+  "en": "Specifications :",
+  "zh": "规格参数："
+ },
+ {
+  "source": "UNINEST - TIBERMAX 554 ukuran 11.00R20",
+  "en": "UNINEST - TIBERMAX 554 size 11.00R20",
+  "zh": "UNINEST - TIBERMAX 554 规格 11.00R20"
+ },
+ {
+  "source": "Sidewall Kuat TIBERMAX 554",
+  "en": "Strong Sidewall TIBERMAX 554",
+  "zh": "TIBERMAX 554 坚固胎侧"
+ },
+ {
+  "source": "Telapak Tebal TIBERMAX 554",
+  "en": "Thick Tread TIBERMAX 554",
+  "zh": "TIBERMAX 554 加厚胎面"
+ },
+ {
+  "source": "UNINEST - TIBERMAX 554 — foto 1",
+  "en": "UNINEST - TIBERMAX 554 — photo 1",
+  "zh": "UNINEST - TIBERMAX 554 — 图片 1"
+ },
+ {
+  "source": "UNINEST - TIBERMAX 554 — foto 2",
+  "en": "UNINEST - TIBERMAX 554 — photo 2",
+  "zh": "UNINEST - TIBERMAX 554 — 图片 2"
+ },
+ {
+  "source": "UNINEST - TIBERMAX 554 — foto 3",
+  "en": "UNINEST - TIBERMAX 554 — photo 3",
+  "zh": "UNINEST - TIBERMAX 554 — 图片 3"
+ },
+ {
+  "source": "UNINEST - TIBERMAX 554 — foto 4",
+  "en": "UNINEST - TIBERMAX 554 — photo 4",
+  "zh": "UNINEST - TIBERMAX 554 — 图片 4"
+ },
+ {
+  "source": "Ban Produksi Aeolus Tyre Co., Ltd.",
+  "en": "Tyres Made by Aeolus Tyre Co., Ltd.",
+  "zh": "Aeolus Tyre Co., Ltd. 生产的轮胎"
+ },
+ {
+  "source": "AEOLUS adalah merek ban asal China yang telah dipasarkan secara global. Lebih dari sekadar merek, AEOLUS merupakan produsen ban yang beroperasi di bawah perusahaan",
+  "en": "AEOLUS is a Chinese tyre brand marketed worldwide. More than just a brand, AEOLUS is a tyre manufacturer operating under the company",
+  "zh": "AEOLUS（风神）是一家行销全球的中国轮胎品牌。它不仅是一个品牌，更是一家轮胎制造商，隶属于"
+ },
+ {
+  "source": "dan bahkan kini telah menjadi top 20 produsen ban di dunia. Aeolus Tyre sendiri sejak didirikan tahun 1965 dengan nama awal Henan Tyre juga telah mengakuisisi beberapa perusahaan produsen ban lainnya. Salah satunya adalah di tahun 2022, Aeolus Tyre Co., Ltd. dipercayai oleh perusahaan induknya, China National Tire & Rubber Co. untuk memegang 100% kepemilikan Prometeon Tyre Group, produsen ban Pirelli untuk sektor",
+  "en": "and has now even become one of the world's top 20 tyre manufacturers. Founded in 1965 under the name Henan Tyre, Aeolus Tyre has also acquired several other tyre manufacturers. One of these came in 2022, when Aeolus Tyre Co., Ltd. was entrusted by its parent company, China National Tire & Rubber Co., with 100% ownership of Prometeon Tyre Group, the maker of Pirelli tyres for the sectors of",
+  "zh": "，如今更已跻身全球前 20 大轮胎制造商。风神轮胎创立于 1965 年，原名河南轮胎，并先后收购了多家轮胎制造商。其中之一是在 2022 年，Aeolus Tyre Co., Ltd. 受母公司中国化工橡胶有限公司（China National Tire & Rubber Co.）委托，持有 Prometeon Tyre Group 100% 股权，该集团生产倍耐力（Pirelli）品牌的"
+ },
+ {
+  "source": "ban truk",
+  "en": "truck tyres",
+  "zh": "卡车轮胎"
+ },
+ {
+  "source": "ban bus",
+  "en": "bus tyres",
+  "zh": "客车轮胎"
+ },
+ {
+  "source": ", dan",
+  "en": ", and",
+  "zh": "及"
+ },
+ {
+  "source": "ban OTR",
+  "en": "OTR tyres",
+  "zh": "OTR 轮胎"
+ },
+ {
+  "source": ". Selain itu, di tahun 2016 Aeolus Tyre mengakuisisi Double Happiness tyre dan mengubahnya menjadi Aeolus Tyre (Taiyuan) Co., Ltd.",
+  "en": ". In addition, in 2016 Aeolus Tyre acquired Double Happiness tyre and turned it into Aeolus Tyre (Taiyuan) Co., Ltd.",
+  "zh": "。此外，2016 年风神轮胎收购了双喜轮胎，并将其更名为 Aeolus Tyre (Taiyuan) Co., Ltd.。"
+ },
+ {
+  "source": "Dari Aeolus Tyre (Taiyuan) Co., Ltd. inilah selain memproduksi",
+  "en": "At Aeolus Tyre (Taiyuan) Co., Ltd., besides producing",
+  "zh": "Aeolus Tyre (Taiyuan) Co., Ltd. 除了生产"
+ },
+ {
+  "source": "ban AEOLUS",
+  "en": "AEOLUS tyres",
+  "zh": "AEOLUS 轮胎"
+ },
+ {
+  "source": "juga memproduksi ban dari asal Double Happiness yang direbranding dengan nama",
+  "en": "the company also produces the former Double Happiness tyres, rebranded under the name",
+  "zh": "外，也生产原双喜品牌的轮胎，并更名为"
+ },
+ {
+  "source": ". Tipe-tipenya masih sama, namun disempurnakan dengan teknologi Aeolus sendiri dan memiliki kualitas yang sama dengan ban AEOLUS, tetapi dengan harga yang lebih ekonomis karena merupakan merek yang masih baru dikembangkan.",
+  "en": ". The types are still the same, but refined with Aeolus's own technology and of the same quality as AEOLUS tyres, at a more economical price because it is a newly developed brand.",
+  "zh": "。型号保持不变，但融入了风神自有技术，品质与 AEOLUS 轮胎相同，而由于是新发展的品牌，价格更为实惠。"
+ },
+ {
+  "source": "Ban AEOLUS telah lama hadir dan dikenal di pasar Indonesia, sementara HENGLI kini memasuki pasar Indonesia melalui distribusi eksklusif oleh",
+  "en": "AEOLUS tyres have long been present and well known in the Indonesian market, while HENGLI is now entering the Indonesian market through exclusive distribution by",
+  "zh": "AEOLUS 轮胎早已进入印尼市场并广为人知，而 HENGLI 如今则通过以下公司的独家分销进入印尼市场："
+ },
+ {
+  "source": "supplier ban truk",
+  "en": "the supplier of truck tyres",
+  "zh": "品类最齐全的卡车轮胎"
+ },
+ {
+  "source": "ban alat berat",
+  "en": "heavy equipment tyres",
+  "zh": "工程机械轮胎"
+ },
+ {
+  "source": "terlengkap.",
+  "en": "with the widest range.",
+  "zh": "供应商。"
+ },
+ {
+  "source": "Diluncurkan secara besar-besaran dan diperkenalkan pada Pameran Mining Indonesia 2022 di JIEXPO, HENGLI diharapkan mampu meraih kesuksesan seperti pendahulunya dan bersaing kuat di pasar Indonesia.",
+  "en": "Launched on a large scale and introduced at the Mining Indonesia 2022 exhibition at JIEXPO, HENGLI is expected to match the success of its predecessor and compete strongly in the Indonesian market.",
+  "zh": "HENGLI 在 JIEXPO 举办的 2022 年印尼矿业展（Mining Indonesia 2022）上隆重发布，有望延续前辈的成功，在印尼市场展开有力竞争。"
+ },
+ {
+  "source": "Dapatkan Ban HENGLI hanya di Tiberman",
+  "en": "Get HENGLI Tyres Only at Tiberman",
+  "zh": "HENGLI 轮胎仅在 Tiberman 有售"
+ },
+ {
+  "source": "Tiberman adalah satu-satunya importir resmi",
+  "en": "Tiberman is the only official importer of",
+  "zh": "Tiberman 是印尼唯一的官方进口商，代理"
+ },
+ {
+  "source": "ban HENGLI",
+  "en": "HENGLI tyres",
+  "zh": "HENGLI 轮胎"
+ },
+ {
+  "source": "di Indonesia, sehingga Anda bisa mendapatkan harga terbaik langsung dari kami. Dapatkan ban berkualitas tinggi yang diproduksi di pabrik yang sama dengan AEOLUS, dengan harga yang lebih terjangkau.",
+  "en": "in Indonesia, so you can get the best price directly from us. Get high-quality tyres made in the same factory as AEOLUS, at a more affordable price.",
+  "zh": "，因此您可以直接从我们这里获得最优价格。选购与 AEOLUS 同厂生产的高品质轮胎，价格更加实惠。"
+ },
+ {
+  "source": "Saat ini, Tiberman juga ada",
+  "en": "Tiberman is also currently running a",
+  "zh": "目前，Tiberman 还推出了"
+ },
+ {
+  "source": "promo ban 750R16",
+  "en": "750R16 tyre promo",
+  "zh": "750R16 轮胎促销"
+ },
+ {
+  "source": "untuk truk engkel. Jelas kualitasnya sama dengan merek Aeolus, tetapi harga lebih murah, lebih terjangkau, lebih nyaman di kantong.",
+  "en": "for light trucks. Clearly the same quality as the Aeolus brand, but cheaper, more affordable and easier on the wallet.",
+  "zh": "，适用于单桥卡车。品质与 Aeolus 品牌相同，但价格更低、更实惠、更省钱。"
+ },
+ {
+  "source": "Lihat Produk >>",
+  "en": "View Products >>",
+  "zh": "查看产品 >>"
+ },
+ {
+  "source": "Hubungi kami sekarang dan dapatkan penawaran terbaik!",
+  "en": "Contact us now and get the best offer!",
+  "zh": "立即联系我们，获取最优报价！"
+ },
+ {
+  "source": "Ban produksi Aeolus Tyre Co., Ltd: Aeolus, Hengli, dan Pirelli",
+  "en": "Tyres made by Aeolus Tyre Co., Ltd: Aeolus, Hengli and Pirelli",
+  "zh": "Aeolus Tyre Co., Ltd 生产的轮胎：Aeolus、Hengli 和 Pirelli"
+ },
+ {
+  "source": "Bagan Aeolus Tyre Co., Ltd.: Prometeon Tyre Group (Pirelli) dan Aeolus Tyre (Taiyuan) Co., Ltd. (Aeolus, Hengli)",
+  "en": "Aeolus Tyre Co., Ltd. chart: Prometeon Tyre Group (Pirelli) and Aeolus Tyre (Taiyuan) Co., Ltd. (Aeolus, Hengli)",
+  "zh": "Aeolus Tyre Co., Ltd. 架构图：Prometeon Tyre Group（Pirelli）与 Aeolus Tyre (Taiyuan) Co., Ltd.（Aeolus、Hengli）"
+ },
+ {
+  "source": "Ban truk Canter 7.50R16 Hengli Tibermax DR930",
+  "en": "Hengli Tibermax DR930 7.50R16 Canter truck tyre",
+  "zh": "Hengli Tibermax DR930 7.50R16 Canter 卡车轮胎"
+ },
+ {
+  "source": "Yuk beli ban dan velg",
+  "en": "Shop for tyres and rims",
+  "zh": "快来选购轮胎和轮辋，"
+ },
+ {
+  "source": "Tiberman di",
+  "en": "from Tiberman on",
+  "zh": "Tiberman 官方店就在"
+ },
+ {
+  "source": "Nikmati Voucher, Promo dan cashbacknya",
+  "en": "Enjoy the vouchers, promos and cashback",
+  "zh": "尽享优惠券、促销和返现"
+ },
+ {
+  "source": "Ban truk Canter",
+  "en": "Canter truck tyre",
+  "zh": "Canter 卡车轮胎"
+ },
+ {
+  "source": "Ukuran 7.50R16",
+  "en": "Size 7.50R16",
+  "zh": "规格 7.50R16"
+ },
+ {
+  "source": "Ban truk",
+  "en": "Truck tyre",
+  "zh": "卡车轮胎"
+ },
+ {
+  "source": "Ukuran 10.00R20",
+  "en": "Size 10.00R20",
+  "zh": "规格 10.00R20"
+ },
+ {
+  "source": "Velg truk Canter",
+  "en": "Canter truck rim",
+  "zh": "Canter 卡车轮辋"
+ },
+ {
+  "source": "Ukuran 12mm Oval Ventilation",
+  "en": "Size 12mm Oval Ventilation",
+  "zh": "规格 12mm 椭圆通风孔"
+ },
+ {
+  "source": "One Stop Tyre Solutions — ban truk, ban alat berat, velg & tube. Dikirim dari 15 SuperArea di seluruh Indonesia.",
+  "en": "One Stop Tyre Solutions — truck tyres, heavy equipment tyres, rims & tubes. Shipped from 15 SuperAreas across Indonesia.",
+  "zh": "一站式轮胎解决方案——卡车轮胎、工程机械轮胎、轮辋与内胎。从遍布印尼的 15 个服务网点发货。"
+ },
+ {
+  "source": "Chat WhatsApp Tiberman",
+  "en": "Chat with Tiberman on WhatsApp",
+  "zh": "通过 WhatsApp 联系 Tiberman"
+ },
+ {
+  "source": "Lihat Semua Produk",
+  "en": "View All Products",
+  "zh": "查看全部产品"
+ },
+ {
+  "source": "Katalog Produk (PDF)",
+  "en": "Product Catalogue (PDF)",
+  "zh": "产品目录（PDF）"
+ },
+ {
+  "source": "SuperArea Terdekat",
+  "en": "Nearest SuperArea",
+  "zh": "最近的服务网点"
+ },
+ {
+  "source": "Katalog Komik",
+  "en": "Comic Catalogue",
+  "zh": "漫画产品目录"
+ },
+ {
+  "source": "Memuat Katalog Komik…",
+  "en": "Loading Comic Catalogue…",
+  "zh": "正在加载漫画产品目录…"
+ },
+ {
+  "source": "Company Profile",
+  "en": null,
+  "zh": "公司简介"
+ },
+ {
+  "source": "Memuat Company Profile…",
+  "en": "Loading Company Profile…",
+  "zh": "正在加载公司简介…"
+ },
+ {
+  "source": "Proposal Bisnis",
+  "en": "Business Proposal",
+  "zh": "商业计划书"
+ },
+ {
+  "source": "Memuat Proposal Bisnis…",
+  "en": "Loading Business Proposal…",
+  "zh": "正在加载商业计划书…"
+ },
+ {
+  "source": "Halaman sebelumnya",
+  "en": "Previous page",
+  "zh": "上一页"
+ },
+ {
+  "source": "Halaman berikutnya",
+  "en": "Next page",
+  "zh": "下一页"
+ },
+ {
+  "source": "How we collect, use and protect your data",
+  "en": null,
+  "zh": "我们如何收集、使用和保护您的数据"
+ },
+ {
+  "source": "Who we are ?",
+  "en": null,
+  "zh": "我们是谁？"
+ },
+ {
+  "source": "Our website address is: https://tiberman.com.",
+  "en": null,
+  "zh": "我们的网址是：https://tiberman.com。"
+ },
+ {
+  "source": "Comments",
+  "en": null,
+  "zh": "评论"
+ },
+ {
+  "source": "When visitors leave comments on the site we collect the data shown in the comments form, and also the visitor’s IP address and browser user agent string to help spam detection.",
+  "en": null,
+  "zh": "访客在本站发表评论时，我们会收集评论表单中显示的数据，以及访客的 IP 地址和浏览器用户代理字符串，以协助识别垃圾评论。"
+ },
+ {
+  "source": "An anonymized string created from your email address (also called a hash) may be provided to the Gravatar service to see if you are using it. The Gravatar service privacy policy is available here: https://automattic.com/privacy/. After approval of your comment, your profile picture is visible to the public in the context of your comment.",
+  "en": null,
+  "zh": "由您的电子邮箱地址生成的匿名字符串（也称为哈希值）可能会提供给 Gravatar 服务，以确认您是否在使用该服务。Gravatar 服务的隐私政策请见：https://automattic.com/privacy/。您的评论通过审核后，您的头像将随评论公开显示。"
+ },
+ {
+  "source": "Images",
+  "en": null,
+  "zh": "图片"
+ },
+ {
+  "source": "If you upload images to the website, you should avoid uploading images with embedded location data (EXIF GPS) included. Visitors to the website can download and extract any location data from images on the website.",
+  "en": null,
+  "zh": "如果您向本网站上传图片，请避免上传包含嵌入式位置数据（EXIF GPS）的图片。网站访客可以下载并提取网站图片中的任何位置数据。"
+ },
+ {
+  "source": "Cookies",
+  "en": null,
+  "zh": "Cookie"
+ },
+ {
+  "source": "If you leave a comment on our site you may opt-in to saving your name, email address and website in cookies. These are for your convenience so that you do not have to fill in your details again when you leave another comment. These cookies will last for one year.",
+  "en": null,
+  "zh": "如果您在本站发表评论，可以选择将您的姓名、电子邮箱和网站保存在 Cookie 中。这是为了方便您再次评论时无需重新填写信息。这些 Cookie 的有效期为一年。"
+ },
+ {
+  "source": "If you visit our login page, we will set a temporary cookie to determine if your browser accepts cookies. This cookie contains no personal data and is discarded when you close your browser.",
+  "en": null,
+  "zh": "如果您访问我们的登录页面，我们会设置一个临时 Cookie，以确定您的浏览器是否接受 Cookie。该 Cookie 不包含任何个人数据，并会在您关闭浏览器时被删除。"
+ },
+ {
+  "source": "When you log in, we will also set up several cookies to save your login information and your screen display choices. Login cookies last for two days, and screen options cookies last for a year. If you select “Remember Me”, your login will persist for two weeks. If you log out of your account, the login cookies will be removed.",
+  "en": null,
+  "zh": "您登录时，我们还会设置多个 Cookie 来保存您的登录信息和屏幕显示选项。登录 Cookie 有效期为两天，屏幕选项 Cookie 有效期为一年。如果您选择\"记住我\"，登录状态将保持两周。如果您退出账户，登录 Cookie 将被删除。"
+ },
+ {
+  "source": "If you edit or publish an article, an additional cookie will be saved in your browser. This cookie includes no personal data and simply indicates the post ID of the article you just edited. It expires after 1 day.",
+  "en": null,
+  "zh": "如果您编辑或发布文章，浏览器中会额外保存一个 Cookie。该 Cookie 不包含任何个人数据，仅记录您刚编辑文章的 ID，1 天后失效。"
+ },
+ {
+  "source": "Embedded content from other websites",
+  "en": null,
+  "zh": "来自其他网站的嵌入内容"
+ },
+ {
+  "source": "Articles on this site may include embedded content (e.g. videos, images, articles, etc.). Embedded content from other websites behaves in the exact same way as if the visitor has visited the other website.",
+  "en": null,
+  "zh": "本站文章可能包含嵌入内容（如视频、图片、文章等）。来自其他网站的嵌入内容，其行为与访客直接访问该网站完全相同。"
+ },
+ {
+  "source": "These websites may collect data about you, use cookies, embed additional third-party tracking, and monitor your interaction with that embedded content, including tracking your interaction with the embedded content if you have an account and are logged in to that website.",
+  "en": null,
+  "zh": "这些网站可能会收集您的数据、使用 Cookie、嵌入额外的第三方跟踪，并监控您与嵌入内容的互动；如果您在该网站拥有账户并已登录，还可能跟踪您与嵌入内容的互动。"
+ },
+ {
+  "source": "Who we share your data with",
+  "en": null,
+  "zh": "我们与谁共享您的数据"
+ },
+ {
+  "source": "If you request a password reset, your IP address will be included in the reset email.",
+  "en": null,
+  "zh": "如果您申请重置密码，您的 IP 地址将包含在重置邮件中。"
+ },
+ {
+  "source": "How long we retain your data",
+  "en": null,
+  "zh": "我们保留您的数据多长时间"
+ },
+ {
+  "source": "If you leave a comment, the comment and its metadata are retained indefinitely. This is so we can recognize and approve any follow-up comments automatically instead of holding them in a moderation queue.",
+  "en": null,
+  "zh": "如果您发表评论，该评论及其元数据将被无限期保留。这样我们就能自动识别并批准后续评论，而无需将其放入审核队列。"
+ },
+ {
+  "source": "For users that register on our website (if any), we also store the personal information they provide in their user profile. All users can see, edit, or delete their personal information at any time (except they cannot change their username). Website administrators can also see and edit that information.",
+  "en": null,
+  "zh": "对于在本网站注册的用户（如有），我们还会存储其在个人资料中提供的个人信息。所有用户都可以随时查看、编辑或删除自己的个人信息（用户名除外）。网站管理员也可以查看和编辑这些信息。"
+ },
+ {
+  "source": "What rights you have over your data",
+  "en": null,
+  "zh": "您对自己的数据享有哪些权利"
+ },
+ {
+  "source": "If you have an account on this site, or have left comments, you can request to receive an exported file of the personal data we hold about you, including any data you have provided to us. You can also request that we erase any personal data we hold about you. This does not include any data we are obliged to keep for administrative, legal, or security purposes.",
+  "en": null,
+  "zh": "如果您在本站拥有账户或曾发表评论，您可以申请获取我们所持有的您的个人数据导出文件，包括您提供给我们的任何数据。您也可以要求我们删除所持有的您的任何个人数据，但不包括我们因行政、法律或安全目的而必须保留的数据。"
+ },
+ {
+  "source": "Where we send your data",
+  "en": null,
+  "zh": "我们将您的数据发送至何处"
+ },
+ {
+  "source": "Visitor comments may be checked through an automated spam detection service.",
+  "en": null,
+  "zh": "访客评论可能会通过自动垃圾评论检测服务进行检查。"
+ },
+ {
+  "source": "Disclaimer for Tiberman",
+  "en": null,
+  "zh": "Tiberman 免责声明"
+ },
+ {
+  "source": "If you require any more information or have any questions about our site’s disclaimer, please feel free to contact us by email at tigaberlianmandiri.online@gmail.com",
+  "en": null,
+  "zh": "如需更多信息或对本站免责声明有任何疑问，欢迎发送电子邮件至 tigaberlianmandiri.online@gmail.com 与我们联系"
+ },
+ {
+  "source": "Disclaimers for Tiberman",
+  "en": null,
+  "zh": "Tiberman 免责声明"
+ },
+ {
+  "source": "All the information on this website – https://tiberman.com/ – is published in good faith and for general information purpose only. Tiberman does not make any warranties about the completeness, reliability and accuracy of this information. Any action you take upon the information you find on this website (Tiberman), is strictly at your own risk. Tiberman will not be liable for any losses and/or damages in connection with the use of our website. Our Disclaimer was generated with the help of the",
+  "en": null,
+  "zh": "本网站（https://tiberman.com/）上的所有信息均出于善意发布，仅供一般参考。Tiberman 不对这些信息的完整性、可靠性和准确性作任何保证。您根据本网站（Tiberman）上的信息采取的任何行动，风险完全由您自行承担。对于因使用本网站而产生的任何损失和/或损害，Tiberman 概不负责。本免责声明借助以下工具生成："
+ },
+ {
+  "source": "Disclaimer Generator",
+  "en": null,
+  "zh": "免责声明生成器"
+ },
+ {
+  "source": "From our website, you can visit other websites by following hyperlinks to such external sites. While we strive to provide only quality links to useful and ethical websites, we have no control over the content and nature of these sites. These links to other websites do not imply a recommendation for all the content found on these sites. Site owners and content may change without notice and may occur before we have the opportunity to remove a link which may have gone ‘bad’.",
+  "en": null,
+  "zh": "您可以通过本网站的超链接访问其他外部网站。尽管我们努力只提供指向有用且合规网站的优质链接，但我们无法控制这些网站的内容和性质。指向其他网站的链接并不代表我们推荐其中的全部内容。网站所有者和内容可能随时变更，恕不另行通知，且可能在我们来得及删除失效链接之前就已发生。"
+ },
+ {
+  "source": "Please be also aware that when you leave our website, other sites may have different privacy policies and terms which are beyond our control. Please be sure to check the Privacy Policies of these sites as well as their “Terms of Service” before engaging in any business or uploading any information.",
+  "en": null,
+  "zh": "另请注意，当您离开本网站后，其他网站可能有不同的隐私政策和条款，这些均不在我们的控制范围内。在进行任何交易或上传任何信息之前，请务必查阅这些网站的隐私政策及\"服务条款\"。"
+ },
+ {
+  "source": "Consent",
+  "en": null,
+  "zh": "同意"
+ },
+ {
+  "source": "By using our website, you hereby consent to our disclaimer and agree to its terms.",
+  "en": null,
+  "zh": "使用本网站即表示您同意本免责声明及其条款。"
+ },
+ {
+  "source": "Update",
+  "en": null,
+  "zh": "更新"
+ },
+ {
+  "source": "Should we update, amend or make any changes to this document, those changes will be prominently posted here.",
+  "en": null,
+  "zh": "如我们对本文件进行任何更新、修订或更改，相关变更将在此处显著公布。"
+ },
+ {
+  "source": "SuperArea Jabodetabek",
+  "en": null,
+  "zh": "雅加达都市圈服务网点"
+ },
+ {
+  "source": "SuperArea Surabaya",
+  "en": null,
+  "zh": "泗水服务网点"
+ },
+ {
+  "source": "SuperArea Mojokerto",
+  "en": null,
+  "zh": "惹班服务网点"
+ },
+ {
+  "source": "SuperArea Gresik",
+  "en": null,
+  "zh": "锦石服务网点"
+ },
+ {
+  "source": "SuperArea Palembang",
+  "en": null,
+  "zh": "巨港服务网点"
+ },
+ {
+  "source": "SuperArea Pontianak",
+  "en": null,
+  "zh": "坤甸服务网点"
+ },
+ {
+  "source": "SuperArea Banjarbaru",
+  "en": null,
+  "zh": "班查巴鲁服务网点"
+ },
+ {
+  "source": "SuperArea Balikpapan",
+  "en": null,
+  "zh": "巴厘巴板服务网点"
+ },
+ {
+  "source": "SuperArea Manado",
+  "en": null,
+  "zh": "万鸦老服务网点"
+ },
+ {
+  "source": "SuperArea Kendari",
+  "en": null,
+  "zh": "肯达里服务网点"
+ },
+ {
+  "source": "SuperArea Morowali",
+  "en": null,
+  "zh": "莫罗瓦利服务网点"
+ },
+ {
+  "source": "SuperArea Luwuk Banggai",
+  "en": null,
+  "zh": "卢武克邦盖服务网点"
+ },
+ {
+  "source": "SuperArea Ternate",
+  "en": null,
+  "zh": "特尔纳特服务网点"
+ },
+ {
+  "source": "SuperArea Sofifi",
+  "en": null,
+  "zh": "索菲菲服务网点"
+ },
+ {
+  "source": "SuperArea Weda",
+  "en": null,
+  "zh": "韦达服务网点"
  }
 ]

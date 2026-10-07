@@ -77,12 +77,16 @@ class Catalog
     /**
      * Data produk untuk assets/js/main.js: unit => [{size, items: [...]}],
      * dikelompokkan per ukuran dengan urutan kemunculan pertamanya.
+     * $only membatasi ke produk tertentu (halaman tag produk).
+     *
+     * @param  array<int, int>|null  $only
      */
-    public static function products(): array
+    public static function products(?array $only = null): array
     {
         $out = [];
 
         $products = Product::query()->active()->with(['unit', 'brand'])
+            ->when($only !== null, fn ($q) => $q->whereIn('id', $only))
             ->orderBy('sort_order')->orderBy('id')->get();
 
         foreach ($products->groupBy(fn (Product $p) => $p->unit->key) as $unit => $items) {

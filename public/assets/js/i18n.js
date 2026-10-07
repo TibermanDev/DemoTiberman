@@ -140,12 +140,30 @@ window.TIBERMAN_I18N = (function () {
     syncControls();
   }
 
+  /* Untuk teks yang DIGANTI JS (mis. caption coverflow beranda): isi elemen
+     diganti satu node teks yang mengingat teks Indonesia aslinya, jadi
+     langsung diterjemahkan dan ikut berganti saat bahasa diganti. Kalau
+     cuma textContent = '...', teks Indonesia-nya tampil apa adanya dan node
+     lama yang sudah terdaftar ikut hilang. Node yang sudah lepas dari
+     halaman dibuang dari daftar supaya tidak menumpuk tiap ganti slide. */
+  function setText(el, raw) {
+    textNodes = textNodes.filter(function (n) { return n.isConnected; });
+    var n = document.createTextNode('');
+    n.__i18nSrc = raw;
+    var t = pick(DICT[lang] || {}, raw);
+    n.nodeValue = t == null ? raw : t;
+    el.textContent = '';
+    el.appendChild(n);
+    textNodes.push(n);
+  }
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 
   return {
     apply: apply,
     refresh: refresh,
+    setText: setText,
     setLang: setLang,
     getLang: function () { return lang; }
   };

@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\CatalogUnit;
 use App\Models\Flipbook;
+use App\Models\LandingPage;
+use App\Models\LinkPage;
 use App\Models\Post;
 use App\Models\PostCategory;
 use App\Models\Product;
+use App\Models\ProductTag;
+use App\Models\PromoPage;
 use App\Support\Seo;
 use Illuminate\Http\Response;
 
@@ -26,6 +30,10 @@ class SeoController extends Controller
         if (Seo::indexable()) {
             foreach ([
                 [route('home'), 'home', '1.0'],
+                [route('about'), 'about', '0.8'],
+                [route('aftersales'), 'aftersales', '0.8'],
+                [route('privacy'), 'privacy', '0.3'],
+                [route('disclaimer'), 'disclaimer', '0.3'],
                 [route('contact'), 'contact', '0.8'],
                 [route('superarea'), 'superarea', '0.8'],
                 [route('blog'), 'news', '0.7'],
@@ -43,6 +51,14 @@ class SeoController extends Controller
             Post::query()->live()->where('noindex', false)->get()
                 ->each(fn ($p) => $add($p->url(), $p->updated_at ?? $p->published_at, '0.6'));
             Flipbook::query()->where('is_active', true)->get()->each(fn ($f) => $add(url($f->slug), $f->updated_at, '0.4'));
+            LandingPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($l) => $add(url($l->slug), $l->updated_at, '0.5'));
+            PromoPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($p) => $add(url($p->slug), $p->updated_at, '0.6'));
+            ProductTag::query()->where('is_active', true)->where('noindex', false)->has('products')->get()
+                ->each(fn ($t) => $add($t->url(), $t->updated_at, '0.5'));
+            LinkPage::query()->where('is_active', true)->where('noindex', false)->get()
+                ->each(fn ($l) => $add($l->url(), $l->updated_at, '0.3'));
         }
 
         $xml = '<?xml version="1.0" encoding="UTF-8"?>'."\n"

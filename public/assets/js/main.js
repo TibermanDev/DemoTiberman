@@ -132,8 +132,13 @@
         });
       }
       var src = items[current];
-      if (capTitle && src.dataset.title) capTitle.textContent = src.dataset.title;
-      if (capDesc && src.dataset.desc) capDesc.textContent = src.dataset.desc;
+      /* Lewat i18n.js supaya caption ikut bahasa yang dipilih. */
+      var tulis = function (el, teks) {
+        if (window.TIBERMAN_I18N && window.TIBERMAN_I18N.setText) window.TIBERMAN_I18N.setText(el, teks);
+        else el.textContent = teks;
+      };
+      if (capTitle && src.dataset.title) tulis(capTitle, src.dataset.title);
+      if (capDesc && src.dataset.desc) tulis(capDesc, src.dataset.desc);
     };
 
     var go = function (n) {
@@ -298,21 +303,32 @@
         return;
       }
 
+      var card = function (p, size) {
+        return '' +
+          '<a class="product-card" href="' + esc(p.url || '/produk') + '">' +
+            '<span class="product-card__img"><img src="' + esc(p.img) + '" alt="' + esc(p.name + ' ' + size) + '" loading="lazy"></span>' +
+            '<span class="product-card__body">' +
+              '<strong>' + esc(p.name) + '</strong>' +
+              '<span><span>compatible for :</span> ' + esc(p.compat) + '</span>' +
+            '</span>' +
+          '</a>';
+      };
+
+      /* Halaman tag produk (data-flat): satu grid tanpa judul ukuran, sama
+         dengan versi yang dirender server. */
+      if ('flat' in catalog.dataset) {
+        grid.innerHTML = '<div class="product-grid">' + groups.map(function (g) {
+          return g.items.map(function (p) { return card(p, g.size); }).join('');
+        }).join('') + '</div>';
+        return;
+      }
+
       grid.innerHTML = groups.map(function (g) {
         return '' +
           '<section class="size-group">' +
             '<h2><span>Ukuran</span> ' + esc(g.size) + '</h2>' +
             '<div class="product-grid">' +
-              g.items.map(function (p) {
-                return '' +
-                  '<a class="product-card" href="' + esc(p.url || '/produk') + '">' +
-                    '<span class="product-card__img"><img src="' + esc(p.img) + '" alt="' + esc(p.name + ' ' + g.size) + '" loading="lazy"></span>' +
-                    '<span class="product-card__body">' +
-                      '<strong>' + esc(p.name) + '</strong>' +
-                      '<span><span>compatible for :</span> ' + esc(p.compat) + '</span>' +
-                    '</span>' +
-                  '</a>';
-              }).join('') +
+              g.items.map(function (p) { return card(p, g.size); }).join('') +
             '</div>' +
           '</section>';
       }).join('');
@@ -399,6 +415,7 @@
     }
 
     window.addEventListener('popstate', function () {
+      if ('flat' in catalog.dataset) return; // halaman tag tidak pernah pushState
       var path = location.pathname.replace(/\/+$/, '');
       apply(URLS.paths[path] || DEFAULT, false);
       document.title = titleFor();
@@ -1085,7 +1102,22 @@
       return best;
     };
 
-    /* Titik pusat zoom diukur dari posisi huruf "a" TERAKHIR pada "Kenapa".
+    /* Huruf jangkar zoom. Judulnya ikut diterjemahkan i18n.js ("Why Tiberman?",
+       "为什么选择 Tiberman？") dan bisa diganti dari CMS, jadi "Kenapa" tidak selalu
+       ada — kalau jangkarnya tidak ketemu, titik pusat lama dari teks Indonesia
+       tetap terpakai dan awal videonya tampak terpotong. Urutannya: "a" terakhir
+       "Kenapa", lalu "T" pada "Tiberman" (batangnya tebal, ada di semua bahasa),
+       terakhir huruf pertama yang bukan spasi. */
+    var whyAnchorAt = function (text) {
+      var i = text.indexOf('Kenapa');
+      if (i >= 0) return i + 5;      /* K-e-n-a-p-a */
+      i = text.indexOf('Tiberman');
+      if (i >= 0) return i;
+      var m = /\S/.exec(text);
+      return m ? m.index : -1;
+    };
+
+    /* Titik pusat zoom diukur dari posisi huruf jangkar (lihat whyAnchorAt).
        Range dipakai karena itu satu-satunya cara mengukur letak satu glyph di
        dalam teks yang mengalir — ukurannya ikut clamp() dan wrap-nya beda per
        lebar layar.
@@ -1096,10 +1128,8 @@
     var whyAnchor = function () {
       var node = whySpan.firstChild;
       if (!node) return;
-      /* +5 = huruf "a" terakhir pada "Kenapa" (K-e-n-a-p-a). */
-      var i = whySpan.textContent.indexOf('Kenapa');
+      var i = whyAnchorAt(whySpan.textContent);
       if (i < 0) return;
-      i += 5;
       var keep = why.style.getPropertyValue('--why-ts');
       why.style.setProperty('--why-ts', '1');
 
@@ -1175,6 +1205,12 @@
       /* Font web baru mengubah lebar glyph setelah dimuat — titik pusatnya
          diukur ulang begitu font siap. */
       if (document.fonts && document.fonts.ready) { document.fonts.ready.then(whyAnchor); }
+      /* Ganti bahasa = teks judul berganti -> jangkar & skalanya diukur ulang.
+         Terjemahan awal dipasang i18n.js saat DOMContentLoaded (setelah skrip
+         ini jalan), jadi ukur ulang juga di situ. */
+      var whyRemeasure = function () { whyAnchor(); whyP = -1; whyApply(); };
+      document.addEventListener('tiberman:lang', whyRemeasure);
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', whyRemeasure);
       whyApply();
     }
   }

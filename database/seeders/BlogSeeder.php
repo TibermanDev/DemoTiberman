@@ -5,12 +5,10 @@ namespace Database\Seeders;
 use App\Models\Post;
 use App\Models\PostCategory;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 /**
- * Kategori dan artikel yang dulu ditulis langsung di news.blade.php. Hanya
- * "Fleet Tire Management" yang punya isi artikel lengkap; artikel lain baru
- * berisi ringkasannya dan tinggal dilengkapi dari CMS.
+ * Kategori blog (slug mengikuti tiberman.com/blog/category/) dan satu artikel
+ * contoh yang lengkap, "Fleet Tire Management".
  */
 class BlogSeeder extends Seeder
 {
@@ -34,43 +32,8 @@ class BlogSeeder extends Seeder
             ]);
         }
 
-        // [kategori, judul, tanggal, gambar, alt, ringkasan, flag]
-        $posts = [
-            ['alat-berat', 'Perbedaan Ban Truk dan Ban Mobil dari Konstruksi hingga Penggunaannya', '2026-09-02', 'tire-554.webp', 'Ban truk Uninest TiberMAX', 'Ban adalah penghubung antara kendaraan dan permukaan jalan. Konstruksi ban truk dan ban mobil dirancang untuk beban dan medan yang sama sekali berbeda.'],
-            ['alat-berat', 'Dump Truck: Fungsi, Jenis, Komponen, dan Tips Memilih Ban yang Tepat untuk Operasional', '2026-08-13', 'news-3.webp', 'Dump truck di lokasi proyek', 'Dump truck dirancang untuk mengangkut sekaligus menurunkan material dalam jumlah besar. Simak jenis, komponen, dan cara memilih bannya.'],
-            ['pengetahuan-ban', 'Ban Tubeless atau Tube Type? Ban Radial atau Bias?', '2026-08-28', 'tires-strip.webp', 'Deretan ban siap kirim', 'Empat istilah yang paling sering tertukar waktu memilih ban. Perbedaannya bukan sekadar nama, tapi menentukan daya angkut, umur pakai, dan biaya perawatan.'],
-            ['pengetahuan-ban', 'Dump Truck di Tambang: Lebih Baik Pakai Ban Bias atau Radial?', '2025-10-07', 'banner-tyre.webp', 'Ban OTR untuk dump truck tambang', 'Di tengah deru mesin dan debu yang mengepul, pilihan konstruksi ban menentukan berapa rit yang sanggup ditempuh sebelum unit harus masuk bengkel.'],
-            ['pertambangan', 'Dampak Naiknya Harga Emas pada Industri Ban Alat Berat', '2025-09-04', 'news-2.webp', 'Pemandangan udara area tambang', 'Dari pasar global ke ban alat berat di tambang: kenaikan harga emas mendorong produksi, dan produksi yang naik langsung terasa pada kebutuhan ban OTR.', 'featured'],
-            ['pertambangan', 'Inilah 10 Perusahaan Tambang Terbesar di Indonesia', '2026-08-21', 'warehouse-dark.webp', 'Stok ban di gudang Tiberman', 'Dari batu bara di Kalimantan sampai nikel di Sulawesi, sepuluh nama ini menggerakkan sebagian besar aktivitas pertambangan nasional.', 'popular'],
-            ['pertambangan', 'Daftar Pertambangan di Kalimantan: Emas, Batu Bara, dan Nikel', '2026-08-14', 'plb-stock.webp', 'Gudang stok ban alat berat', 'Kalimantan menyimpan tiga komoditas sekaligus, dan tiap komoditas menuntut spesifikasi armada serta ban yang berbeda.', 'popular'],
-            ['tips-dan-trik', 'Mengenal Arti Warna Baju Proyek dan Helm Proyek di Lapangan', '2026-09-10', 'after-sales-4.webp', 'Pekerja dengan atribut keselamatan di lapangan', 'Warna helm dan rompi di area proyek bukan soal selera. Tiap warna menandai peran, dan salah baca bisa berakibat fatal saat keadaan darurat.'],
-            ['tips-dan-trik', 'Di Balik Jalan Kokoh & Rahasia Pemilihan Ban Alat Berat Compactor', '2026-08-29', 'delivery-forklift.webp', 'Alat berat compactor di proyek jalan', 'Jalan yang padat dan rata berawal dari compactor. Ban yang dipakainya menentukan kerataan hasil pemadatan sekaligus kenyamanan operator.'],
-            ['tips-dan-trik', '11 Macam Alat Berat Tambang dan Kegunaannya', '2026-08-05', 'after-sales-3.webp', 'Alat berat di medan berbatu', 'Excavator, bulldozer, wheel loader, sampai articulated dump truck — kenali fungsi tiap unit sebelum menentukan ban yang dipasang.', 'popular'],
-            ['info-produk', 'Motor Grader, Penjaga Kelancaran Hauling Road', '2026-08-28', 'dumptruck.webp', 'Motor grader di hauling road', 'Hauling road yang mulus memangkas waktu siklus angkut. Di sinilah motor grader dan ban yang tepat memegang peran.'],
-            ['info-produk', '7 Truk Tambang Terbesar di Dunia, Jangan Ngeri Lihat Ukurannya!', '2026-08-18', 'truck-tiberman.webp', 'Truk tambang berukuran besar', 'Tujuh raksasa pengangkut material ini punya ban setinggi orang dewasa — dan tiap satu bannya seharga sebuah mobil.', 'popular'],
-            ['info-produk', 'Memilih Velg & Tube yang Sepadan dengan Ban Alat Berat Anda', '2026-08-02', 'velg-heavy.webp', 'Velg untuk alat berat', 'Ban yang benar tapi velg yang tidak sepadan tetap berujung pada umur pakai yang pendek. Ini patokan memilih pasangannya.'],
-            ['informasi-umum', 'Tiberman Sabet Dua Rekor MURI di Tiberman Expo 2026', '2026-07-31', 'news-1.webp', 'Penyerahan dua Rekor MURI di Tiberman Expo 2026', 'PT Tiga Berlian Mandiri menorehkan prestasi tingkat nasional dengan memecahkan dua Rekor MURI sekaligus di ajang Tiberman Expo 2026.', 'featured'],
-            ['informasi-umum', 'Perbedaan Geografis Tambang di Indonesia dan Strategi Pemilihan Ban Alat Berat', '2026-08-08', 'news-2.webp', 'Pemandangan udara area tambang di Indonesia', 'Kondisi geografis tiap lokasi tambang menentukan spesifikasi ban OTR yang dipakai — dari rawa Kalimantan sampai bukit berbatu Sulawesi.'],
-            ['informasi-umum', 'Jenis Bahan Galian Tambang (Golongan A, B, dan C) di Indonesia', '2026-07-24', 'plb-gresik.webp', 'Pusat Logistik Berikat Tiberman', 'Golongan A, B, dan C membedakan bahan galian menurut kepentingannya bagi negara. Ini yang membedakan ketiganya di lapangan.', 'popular'],
-        ];
-
-        foreach ($posts as $p) {
-            [$slug, $title, $date, $image, $alt, $excerpt] = $p;
-            $flag = $p[6] ?? null;
-
-            Post::query()->updateOrCreate(['slug' => Str::slug($title)], [
-                'post_category_id' => $cat[$slug]->id,
-                'title' => $title,
-                'excerpt' => $excerpt,
-                'cover_image' => $this->img($image),
-                'cover_alt' => $alt,
-                'body' => '<p>'.e($excerpt).'</p>',
-                'published_at' => $date.' 08:00:00',
-                'is_featured' => $flag === 'featured',
-                'is_popular' => $flag === 'popular',
-            ]);
-        }
-
+        // Satu artikel contoh yang lengkap; artikel lain diinput lewat CMS dengan
+        // slug artikel tiberman.com (lihat rekap slug).
         $fleet = Post::query()->updateOrCreate(['slug' => 'fleet-tire-management-cara-mengontrol-biaya-ban-puluhan-hingga-ratusan-truk'], [
             'post_category_id' => $cat['alat-berat']->id,
             'title' => 'Fleet Tire Management: Cara Mengontrol Biaya Ban Puluhan hingga Ratusan Truk',

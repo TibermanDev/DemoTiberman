@@ -12,9 +12,9 @@ class CatalogContent extends ContentPage
 {
     protected static string $settingKey = 'catalog';
 
-    protected static ?string $navigationLabel = 'Katalog';
+    protected static ?string $navigationLabel = 'Produk';
 
-    protected static ?string $title = 'Konten Halaman Katalog';
+    protected static ?string $title = 'Konten Halaman Produk';
 
     protected static ?int $navigationSort = 5;
 
@@ -28,8 +28,8 @@ class CatalogContent extends ContentPage
     public function form(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Halaman katalog')
-                ->description('Produk, unit, merk, dan ukuran diatur di grup menu Katalog.')
+            Section::make('Halaman produk')
+                ->description('Produk, unit, merk, dan ukuran diatur di grup menu Produk.')
                 ->columns(2)->schema([
                     Fields::image('banner', 'Banner atas'),
                     Fields::alt('banner_alt'),

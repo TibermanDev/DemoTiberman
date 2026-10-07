@@ -26,6 +26,26 @@ class PageController extends Controller
         ]);
     }
 
+    public function privacy(): View
+    {
+        return view('legal', ['page' => cms('privacy', []), 'fallbackTitle' => 'Privacy Policy']);
+    }
+
+    public function disclaimer(): View
+    {
+        return view('legal', ['page' => cms('disclaimer', []), 'fallbackTitle' => 'Disclaimer']);
+    }
+
+    public function about(): View
+    {
+        return view('about', ['page' => cms('about', [])]);
+    }
+
+    public function aftersales(): View
+    {
+        return view('aftersales', ['page' => cms('aftersales', [])]);
+    }
+
     public function contact(): View
     {
         return view('contact', ['page' => cms('contact', [])]);

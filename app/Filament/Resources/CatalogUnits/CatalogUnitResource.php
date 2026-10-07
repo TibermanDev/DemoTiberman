@@ -22,7 +22,7 @@ class CatalogUnitResource extends Resource
 {
     protected static ?string $model = CatalogUnit::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Katalog';
+    protected static string|UnitEnum|null $navigationGroup = 'Produk';
 
     protected static ?string $navigationLabel = 'Unit / Kategori';
 

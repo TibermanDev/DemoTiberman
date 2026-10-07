@@ -3,11 +3,12 @@
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\FlipbookController;
 use App\Http\Controllers\InquiryController;
+use App\Http\Controllers\LinkPageController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SeoController;
+use App\Http\Controllers\SlugPageController;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -63,6 +64,8 @@ Route::get('/files/katalog-komik.pdf', function (Request $request) {
 // URL kategori & merk mengikuti toko lama (tiberman.com) — petanya di CMS (Katalog).
 Route::get('/kategori-produk/{path}', [CatalogController::class, 'category'])->where('path', '.*')->name('katalog.kategori');
 Route::get('/brand/{brand}', [CatalogController::class, 'brand'])->name('katalog.brand');
+// Tag SEO toko lama: halaman katalog berisi produk pilihan (menu Tag Produk di CMS).
+Route::get('/tag-produk/{slug}', [CatalogController::class, 'tag'])->name('katalog.tag');
 
 Route::get('/produk', [ProductController::class, 'index'])->name('produk');
 Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('produk.show');
@@ -75,8 +78,22 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/cabang-tiberman', [PageController::class, 'superarea'])->name('superarea');
 
+// Alamat mengikuti situs lama (tiberman.com/after-sales-service/); /after-sales
+// hanya pintasan yang diarahkan ke sana.
+Route::get('/after-sales-service', [PageController::class, 'aftersales'])->name('aftersales');
+Route::permanentRedirect('/after-sales', '/after-sales-service');
+
+Route::get('/tentang-kami', [PageController::class, 'about'])->name('about');
+
+// Linktree bio media sosial: /lp/ dan /lp/{slug}.html (URL lama) — menu Linktree (/lp) di CMS.
+Route::get('/lp/{page?}', LinkPageController::class)->where('page', '[A-Za-z0-9_-]+\.html')->name('linktree');
+
+Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/disclaimer', [PageController::class, 'disclaimer'])->name('disclaimer');
+
 Route::get('/kontak', [PageController::class, 'contact'])->name('contact');
 Route::post('/kontak', [InquiryController::class, 'store'])->middleware('throttle:5,1')->name('contact.store');
 
-// Flipbook PDF (/katalog, /company-profile, /proposal, ...) — slug-nya dari CMS.
-Route::fallback(FlipbookController::class);
+// Landing page promo (/shopee-banjarbaru, ...) lalu flipbook PDF (/katalog,
+// /company-profile, ...) — slug keduanya dari CMS.
+Route::fallback(SlugPageController::class);

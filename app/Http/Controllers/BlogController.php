@@ -13,12 +13,28 @@ class BlogController extends Controller
     /** Kartu per section kategori. */
     private const PER_SECTION = 3;
 
+    /**
+     * Kategori blog lama yang tidak jadi tab di News baru: alamatnya tetap
+     * hidup dan membuka tab terdekat (null = semua artikel). Kalau admin
+     * membuat kategori dengan slug yang sama, kategori itu yang dipakai.
+     */
+    private const LEGACY_CATEGORIES = [
+        'perkebunan' => 'informasi-umum',
+        'info-brand' => 'info-produk',
+        'blog' => null,
+        'artikel-form' => null,
+    ];
+
     public function index(?string $category = null): View
     {
         $categories = PostCategory::query()->ordered()->get();
 
-        if ($category !== null) {
-            abort_unless($categories->contains('slug', $category), 404);
+        if ($category !== null && ! $categories->contains('slug', $category)) {
+            abort_unless(array_key_exists($category, self::LEGACY_CATEGORIES), 404);
+            $category = self::LEGACY_CATEGORIES[$category];
+            if ($category !== null && ! $categories->contains('slug', $category)) {
+                $category = null;
+            }
         }
 
         $posts = Post::query()->live()->with('category')->get();
