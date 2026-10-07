@@ -96,8 +96,8 @@ class CatalogSeeder extends Seeder
             'image' => $this->img('tire-554.webp'),
             'description' => '<b>Uninest Tibermax 554</b> Dirancang khusus untuk memberikan cengkraman maksimal tanpa kompromi. Dengan telapak yang lebih tebal, ban ini nggak cuma tangguh, tapi juga punya umur pakai yang lebih panjang.',
             'features' => [
-                ['title' => "Sidewall\nKuat", 'body' => 'Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.', 'image' => $this->img('tyre-slice-left.png'), 'contain' => true],
-                ['title' => "Telapak\nTebal", 'body' => 'Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.', 'image' => $this->img('tire-tread.webp'), 'contain' => false],
+                ['title' => "Sidewall\nKuat", 'body' => 'Konstruksi all-steel radial dengan bahu ban lebih tebal, tahan benturan batu dan beban lateral di jalur tambang.', 'image' => $this->img('tyre-slice-left.png'), 'fit' => 'edge'],
+                ['title' => "Telapak\nTebal", 'body' => 'Kedalaman tapak 25.5 mm dengan blok besar memberi traksi maksimal dan umur pakai yang jauh lebih panjang.', 'image' => $this->img('tire-tread.webp'), 'fit' => 'cover'],
             ],
             'pairs' => [
                 ['title' => 'Dump Truck', 'image' => $this->img('dumptruck.webp')],
@@ -121,6 +121,7 @@ class CatalogSeeder extends Seeder
                 ['label' => 'Pressure', 'value' => '38 Psi'],
             ],
             'available_sizes' => ['11.00R20', '11.00R24'],
+            'flashcard_image' => $this->img('gambar-konten.webp'),
             'meta_description' => 'Uninest Tibermax 554: ban radial all-steel dengan telapak lebih tebal, sidewall kuat, dan umur pakai lebih panjang untuk dump truck, off-road, dan muatan berat.',
         ]);
     }

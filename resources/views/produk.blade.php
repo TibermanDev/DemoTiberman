@@ -5,34 +5,6 @@
 @section('noindex', $product->noindex ? '1' : '')
 @section('description', (string) ($product->meta_description ?: strip_tags((string) $product->description) ?: $product->name.' '.$product->size.' — '.$product->compat))
 
-@section('nav')
-<!-- ============================= NAVBAR KATEGORI ============================= -->
-<header class="nav nav--center nav--grouped">
-  <div class="nav__inner">
-    <a class="nav__logo" href="{{ route('home') }}"><img src="{{ media(cms('site.logo')) ?? asset('assets/img/logo-white.png') }}" alt="Tiberman"></a>
-    <button class="nav__burger" data-burger aria-label="Buka menu"><span></span></button>
-    <nav class="nav__links">
-      @foreach ($navUnits as $unit)
-      <a href="{{ $unit->url() }}" @class(['is-active' => $unit->id === $product->catalog_unit_id])>{{ $unit->label }}</a>
-      @endforeach
-    </nav>
-    <div class="nav__tools">
-      <div class="lang">
-        <button class="tool-btn" type="button" data-lang-btn aria-haspopup="true" aria-expanded="false">
-          <span data-lang-label>ID</span>
-          <svg class="lang__caret" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 4l4 4 4-4"/></svg>
-        </button>
-        <div class="lang__menu" data-lang-menu>
-          <button type="button" data-lang="id">Indonesia</button>
-          <button type="button" data-lang="en">English</button>
-          <button type="button" data-lang="zh">中文</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</header>
-@endsection
-
 @section('content')
 
 @php($description = $product->description ? rich($product->description) : e($product->name.' — ukuran '.$product->size.', cocok untuk '.$product->compat.'.'))
@@ -66,7 +38,8 @@
     <div class="bento">
       @if ($loop->odd){!! $text !!}@endif
       @if (filled($feature['image'] ?? null))
-      <div @class(['bento__cell', 'bento__cell--img', 'bento__cell--contain' => ! empty($feature['contain']), 'reveal']) @if ($loop->odd) data-delay="100" @endif>
+      @php($fit = ($feature['fit'] ?? null) ?: (! empty($feature['contain']) ? 'contain' : 'cover'))
+      <div @class(['bento__cell', 'bento__cell--img', 'bento__cell--contain' => $fit === 'contain', 'bento__cell--edge' => $fit === 'edge', 'reveal']) @if ($loop->odd) data-delay="100" @endif>
         <img src="{{ media($feature['image']) }}" alt="{{ strip_tags(str_replace("\n", ' ', $feature['title'] ?? '')) }} {{ $product->shortName() }}" loading="lazy">
       </div>
       @endif

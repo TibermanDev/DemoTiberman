@@ -65,7 +65,15 @@ class ProductForm
                                     Fields::richText('title', 'Judul', 2)->required(),
                                     Textarea::make('body')->label('Penjelasan')->rows(3),
                                     Fields::image('image'),
-                                    Toggle::make('contain')->label('Gambar utuh (tanpa dipotong)'),
+                                    Select::make('fit')->label('Tampilan gambar')
+                                        ->options([
+                                            'cover' => 'Penuh (dipotong memenuhi kotak)',
+                                            'edge' => 'Dipotong di bawah (lebih kecil, menempel kanan-atas)',
+                                            'contain' => 'Utuh (tanpa dipotong)',
+                                        ])
+                                        ->default('cover')->selectablePlaceholder(false)
+                                        // data lama hanya punya toggle "contain"
+                                        ->afterStateHydrated(fn (Select $component, $state, $get) => $state ?: $component->state($get('contain') ? 'contain' : 'cover')),
                                 ])
                                 ->columns(2)->reorderable()->collapsible()
                                 ->itemLabel(fn (array $state) => str_replace("\n", ' ', $state['title'] ?? '')),

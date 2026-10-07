@@ -26,7 +26,7 @@
     <nav class="nav__links">
       @unless(request()->routeIs('katalog*'))
       <div class="nav__item">
-        <a href="{{ $navUnits->first()?->url() ?? '/kategori-produk/semua-ban' }}" @class(['is-active' => request()->routeIs('katalog*')])>Products</a>
+        <a href="{{ $navUnits->first()?->url() ?? '/kategori-produk/semua-ban' }}" @class(['is-active' => request()->routeIs('katalog*', 'produk*')])>Products</a>
         <div class="nav__menu">
           @foreach ($navUnits as $unit)
           <a href="{{ $unit->url() }}">{{ $unit->label }}</a>

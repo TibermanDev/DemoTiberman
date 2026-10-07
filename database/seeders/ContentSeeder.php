@@ -79,7 +79,7 @@ class ContentSeeder extends Seeder
                 'eyebrow' => 'siap melayani Anda lebih dekat dengan',
                 'heading' => "15 SuperArea yang tersebar di\nseluruh Indonesia",
                 'button_label' => 'Check it !',
-                'button_url' => '/kontak',
+                'button_url' => '/cabang-tiberman',
             ],
             'importir' => [
                 'heading' => "Importir Ban Truk & Alat Berat\nTERPERCAYA",
@@ -89,8 +89,7 @@ class ContentSeeder extends Seeder
                 'pills' => [
                     ['label' => 'Truck & Bus', 'url' => '/kategori-produk/ban-truk'],
                     ['label' => 'Mining Truck', 'url' => '/kategori-produk/ban-truk/ban-truk-off-the-road'],
-                    ['label' => 'Loader', 'url' => '/kategori-produk/ban-loader'],
-                    ['label' => 'Grader', 'url' => '/kategori-produk/ban-grader'],
+                    ['label' => 'Loader-Grader', 'url' => '/kategori-produk/ban-loader'],
                     ['label' => 'Forklift', 'url' => '/kategori-produk/ban-forklift'],
                     ['label' => 'Tractor', 'url' => '/kategori-produk/ban-traktor'],
                 ],
