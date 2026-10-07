@@ -38,7 +38,9 @@ class UserResource extends Resource
     {
         return $schema->components([
             TextInput::make('name')->label('Nama')->required(),
-            TextInput::make('email')->email()->required()->unique(ignoreRecord: true),
+            TextInput::make('username')->label('Username')->required()->alphaDash()->maxLength(50)
+                ->unique(ignoreRecord: true)->helperText('Dipakai untuk login.'),
+            TextInput::make('email')->email()->nullable()->unique(ignoreRecord: true),
             TextInput::make('password')->label('Password')->password()->revealable()
                 ->minLength(8)
                 ->required(fn (string $operation) => $operation === 'create')
@@ -52,7 +54,8 @@ class UserResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')->label('Nama')->searchable(),
-                TextColumn::make('email')->searchable(),
+                TextColumn::make('username')->label('Username')->searchable(),
+                TextColumn::make('email')->searchable()->placeholder('—'),
                 TextColumn::make('created_at')->label('Dibuat')->date('j M Y'),
             ])
             ->recordActions([

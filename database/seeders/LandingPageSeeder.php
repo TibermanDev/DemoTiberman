@@ -6,8 +6,10 @@ use App\Models\LandingPage;
 use Illuminate\Database\Seeder;
 
 /**
- * Landing page promo Shopee dari situs lama. Hanya dibuat kalau slug-nya
- * belum ada, jadi isian dari CMS tidak tertimpa saat seeder dijalankan ulang.
+ * Satu contoh landing page promo Shopee (/shortlink-shopee); landing page lain
+ * (mis. /shopee-banjarbaru, /shopee-jabodetabek dari situs lama) dibuat admin
+ * lewat CMS. Hanya dibuat kalau slug-nya belum ada, jadi isian dari CMS tidak
+ * tertimpa. Halaman ini juga tujuan /lp/{slug}.html (lihat LinkPageController).
  * Foto kartu masih gambar produk bawaan — ganti dengan foto asli di CMS.
  */
 class LandingPageSeeder extends Seeder
@@ -23,8 +25,6 @@ class LandingPageSeeder extends Seeder
         ];
 
         $pages = [
-            'shopee-banjarbaru' => ['Shopee Tiberman Banjarbaru', 'Beli ban dan velg truk Tiberman di Shopee untuk wilayah Banjarbaru. Nikmati voucher, promo, dan cashback-nya.'],
-            'shopee-jabodetabek' => ['Shopee Tiberman Jabodetabek', 'Beli ban dan velg truk Tiberman di Shopee untuk wilayah Jabodetabek. Nikmati voucher, promo, dan cashback-nya.'],
             'shortlink-shopee' => ['Shopee Tiberman', 'Beli ban dan velg truk Tiberman di Shopee. Nikmati voucher, promo, dan cashback-nya.'],
         ];
 

@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Halaman linktree untuk bio media sosial: /lp/ (slug "index") dan
- * /lp/{slug}.html (URL lama, mis. /lp/bus.html). Tombolnya di kolom JSON
- * links: [{label, url, icon, highlight}].
+ * Halaman linktree untuk bio media sosial — hanya satu, di /lp/ (slug
+ * "index"). /lp/{slug}.html diarahkan ke landing page promo oleh
+ * LinkPageController. Tombolnya di kolom JSON links: [{label, url, icon, highlight}].
  */
 #[Fillable(['slug', 'title', 'subtitle', 'avatar', 'links', 'meta_title', 'meta_description', 'noindex', 'is_active'])]
 class LinkPage extends Model
@@ -44,11 +44,11 @@ class LinkPage extends Model
 
     public function url(): string
     {
-        return $this->slug === self::INDEX ? url('/lp/') : url('/lp/'.$this->slug.'.html');
+        return url('/lp/');
     }
 
     public function path(): string
     {
-        return $this->slug === self::INDEX ? '/lp/' : '/lp/'.$this->slug.'.html';
+        return '/lp/';
     }
 }

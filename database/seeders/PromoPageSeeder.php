@@ -9,9 +9,9 @@ use Illuminate\Database\Seeder;
  * Halaman promo/SEO dari situs lama. Hanya dibuat kalau slug-nya belum ada,
  * jadi isian dari CMS tidak tertimpa saat seeder dijalankan ulang.
  *
- * /aeolus-tyre berisi teks & gambar dari desain (banner, bagan perusahaan,
- * flashcard 7.50R16). Tiga slug promo lain dibuat sebagai draf nonaktif:
- * isinya belum ada, jadi baru diaktifkan setelah diisi.
+ * Hanya satu contoh: /aeolus-tyre, berisi teks & gambar dari desain (banner,
+ * bagan perusahaan, flashcard 7.50R16). Halaman promo lain dibuat admin lewat
+ * CMS (Halaman Promo).
  */
 class PromoPageSeeder extends Seeder
 {
@@ -60,20 +60,5 @@ class PromoPageSeeder extends Seeder
             ],
             ...$cta,
         ]);
-
-        foreach ([
-            'promo-tiberman' => 'Promo Tiberman',
-            'beli-ban-dapat-motor' => 'Beli Ban Dapat Motor',
-            'diskon-brutal' => 'Diskon Brutal',
-        ] as $slug => $title) {
-            PromoPage::query()->firstOrCreate(['slug' => $slug], [
-                'title' => $title,
-                'is_active' => false,
-                'blocks' => [
-                    ['type' => 'text', 'data' => ['heading' => $title, 'body' => '<p>Isi halaman promo ini dari CMS.</p>']],
-                ],
-                ...$cta,
-            ]);
-        }
     }
 }

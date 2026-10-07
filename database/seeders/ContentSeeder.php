@@ -17,6 +17,9 @@ class ContentSeeder extends Seeder
     {
         Setting::put('site', [
             'logo' => $this->img('logo-white.png'),
+            // favicon default: logo merah di latar putih, dipotong bulat (App\Support\Favicon)
+            'favicon' => $this->img('logo-tiberman.png'),
+            'favicon_round' => true,
             'company_name' => 'PT. Tiga Berlian Mandiri',
             'about' => 'Kami adalah One Stop Supplier ban alat berat yang telah dipercaya oleh ribuan customer di seluruh Indonesia. Sejak berdiri pada tahun 2008, jaringan distribusi kami telah tersebar di berbagai titik Super Area yang dapat menjangkau hingga pelosok negeri.',
             'phone' => '+62 812 8325 8200',
@@ -44,8 +47,10 @@ class ContentSeeder extends Seeder
                     'region' => 'Jawa Timur',
                     'postal_code' => '60246',
                 ],
+                // sama dengan Google Business Profile (Minggu tutup)
                 'opening_hours' => [
                     ['days' => ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'], 'opens' => '07:30', 'closes' => '16:00'],
+                    ['days' => ['Saturday'], 'opens' => '07:30', 'closes' => '12:30'],
                 ],
                 'indexable' => true,
             ],

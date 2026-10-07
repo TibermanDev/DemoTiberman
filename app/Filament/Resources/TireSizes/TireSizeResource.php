@@ -22,7 +22,7 @@ class TireSizeResource extends Resource
 {
     protected static ?string $model = TireSize::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Katalog';
+    protected static string|UnitEnum|null $navigationGroup = 'Produk';
 
     protected static ?string $navigationLabel = 'URL Ukuran';
 

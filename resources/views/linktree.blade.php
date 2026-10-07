@@ -25,10 +25,11 @@
         @if ($avatar = media($page->avatar))
         <img src="{{ $avatar }}" alt="{{ $page->title }}">
         @else
-        <img class="lt__logo" src="{{ media(cms('site.logo')) ?? asset('assets/img/logo-white.png') }}" alt="Tiberman">
+        <img class="lt__logo" src="{{ asset('assets/img/logo-tiberman.png') }}" alt="Tiberman">
         @endif
       </a>
-      <h1>{{ $page->title }}</h1>
+      {{-- judul cukup untuk pembaca layar & Google; yang terlihat logonya saja --}}
+      <h1 class="sr-only">{{ $page->title }}</h1>
       @if (filled($page->subtitle))
       <p>{{ $page->subtitle }}</p>
       @endif

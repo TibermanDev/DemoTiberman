@@ -34,7 +34,7 @@ class ProductTagResource extends Resource
 {
     protected static ?string $model = ProductTag::class;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Katalog';
+    protected static string|UnitEnum|null $navigationGroup = 'Produk';
 
     protected static ?string $navigationLabel = 'Tag Produk (SEO)';
 

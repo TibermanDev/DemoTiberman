@@ -19,10 +19,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Akun admin CMS awal — WAJIB ganti password setelah login pertama.
-        User::query()->firstOrCreate(['email' => 'admin@tiberman.com'], [
-            'name' => 'Admin Tiberman',
-            'password' => 'password',
+        // Akun admin CMS awal (login /admin pakai username). firstOrCreate:
+        // password yang sudah diganti dari CMS tidak ditimpa saat seed ulang.
+        User::query()->firstOrCreate(['username' => 'developer'], [
+            'name' => 'Developer',
+            'password' => 'Tib3rm4N2026#',
         ]);
 
         $this->call([

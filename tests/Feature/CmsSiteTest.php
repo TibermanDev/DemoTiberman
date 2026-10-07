@@ -41,11 +41,11 @@ class CmsSiteTest extends TestCase
             ['/kategori-produk/ban-bus'],
             ['/kategori-produk/semua-ban'],
             ['/brand/uninest'],
-            ['/kategori-produk/merek-ban/aeolus'],
-            ['/kategori-produk/ukuran-ban/ban-11-00-20'],
+            ['/kategori-produk/merek-ban/uninest'],
+            ['/kategori-produk/ukuran-ban/ban-11-00r20'],
             ['/produk'],
-            ['/produk/uninest-tibermax-851-12-00r20-20pr'],
-            ['/produk/uninest-tibermax-851-12-00r20-20pr/modal'],
+            ['/produk/uninest-tibermax-554-11-00r20'],
+            ['/produk/uninest-tibermax-554-11-00r20/modal'],
             ['/company-profile'],
         ];
     }
@@ -96,8 +96,10 @@ class CmsSiteTest extends TestCase
 
         $this->get('/blog')->assertSee($post->title);
 
+        // Diperiksa lewat tautannya, bukan judul: judulnya ada di kamus
+        // terjemahan (window.TIBERMAN_DICT) yang ikut tertanam di tiap halaman.
         $post->update(['is_published' => false]);
-        $this->get('/blog')->assertDontSee($post->title);
+        $this->get('/blog')->assertDontSee($post->url());
         $this->get($post->url())->assertNotFound();
 
         $post->update(['is_published' => true, 'published_at' => now()->addWeek()]);
@@ -123,11 +125,11 @@ class CmsSiteTest extends TestCase
 
     public function test_inactive_products_are_hidden(): void
     {
-        $product = Product::query()->where('slug', 'uninest-tibermax-851-12-00r20-20pr')->firstOrFail();
+        $product = Product::query()->where('slug', 'uninest-tibermax-554-11-00r20')->firstOrFail();
         $product->update(['is_active' => false]);
 
-        $this->get('/kategori-produk/ban-truk')->assertDontSee('UNINEST - TIBERMAX 851');
-        $this->get('/produk/uninest-tibermax-851-12-00r20-20pr')->assertNotFound();
+        $this->get('/kategori-produk/ban-truk')->assertDontSee('/produk/uninest-tibermax-554-11-00r20', false);
+        $this->get('/produk/uninest-tibermax-554-11-00r20')->assertNotFound();
     }
 
     public function test_redirects_are_managed_in_cms_and_win_over_routes(): void
@@ -146,12 +148,11 @@ class CmsSiteTest extends TestCase
         $this->get('/blog/page/2')->assertRedirect('/blog');
         $this->get('/blog/category/alat-berat/page/4/')->assertRedirect('/blog/category/alat-berat');
         $this->get('/kategori-produk/ban-truk/page/2/')->assertRedirect('/kategori-produk/ban-truk');
-        $this->get('/brand/aeolus/page/2')->assertRedirect('/brand/aeolus');
-        $this->get('/blog/author/alma-mentari/page/2/')->assertRedirect('/blog/author/alma-mentari');
-        $this->get('/blog/author/alma-mentari')->assertRedirect('/admin');
+        $this->get('/brand/uninest/page/2')->assertRedirect('/brand/uninest');
+        $this->get('/blog/author/alma-mentari/page/2/')->assertRedirect('/');
+        $this->get('/blog/author/alma-mentari')->assertRedirect('/');
 
-        // Tag produk nanti punya halaman sendiri, paginasinya tidak diarahkan.
-        $this->get('/tag-produk/ban-bias/page/2/')->assertNotFound();
+        $this->get('/tag-produk/ban-bias/page/2/')->assertRedirect('/tag-produk/ban-bias');
     }
 
     public function test_flipbooks_come_from_cms(): void

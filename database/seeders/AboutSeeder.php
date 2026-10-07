@@ -21,7 +21,7 @@ class AboutSeeder extends Seeder
 
             'hero_eyebrow' => 'Mari lebih mengenal kami',
             'hero_heading' => "Be Part of Our\nJourney",
-            'hero_background' => $this->img('hero-warehouse-2.webp'),
+            'hero_background' => $this->img('warehouse-bw.webp'),
             'hero_image' => $this->img('about-us-banner.webp'),
             'hero_button_label' => 'Download Company Profile',
             'hero_button_url' => '/company-profile',

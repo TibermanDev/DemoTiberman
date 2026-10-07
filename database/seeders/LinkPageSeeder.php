@@ -7,10 +7,11 @@ use App\Models\Setting;
 use Illuminate\Database\Seeder;
 
 /**
- * Linktree /lp/ dan /lp/{slug}.html dari situs lama (bio media sosial).
- * Isi aslinya tidak diketahui, jadi tombolnya diambil dari kontak &
- * marketplace di Pengaturan Situs plus satu tombol sesuai topik slug —
- * silakan disesuaikan di CMS. Hanya dibuat kalau slug-nya belum ada.
+ * Linktree /lp/ (bio media sosial). Isi aslinya tidak diketahui, jadi
+ * tombolnya diambil dari kontak & marketplace di Pengaturan Situs — silakan
+ * disesuaikan di CMS. Hanya dibuat kalau belum ada. Alamat lama
+ * /lp/{slug}.html tidak punya halaman sendiri: diarahkan ke landing page
+ * promo (lihat LinkPageController).
  */
 class LinkPageSeeder extends Seeder
 {
@@ -31,24 +32,11 @@ class LinkPageSeeder extends Seeder
             ['label' => 'YouTube', 'url' => data_get($site, 'social.youtube'), 'icon' => 'youtube', 'highlight' => false],
         ], fn ($l) => filled($l['url']) && $l['url'] !== '#')); // tautan '#' = belum diisi di Pengaturan Situs
 
-        $topik = [
-            LinkPage::INDEX => null,
-            '1' => null,
-            'bus' => ['label' => 'Ban Truk & Bus', 'url' => '/kategori-produk/ban-truk', 'icon' => 'web', 'highlight' => false],
-            'velg' => ['label' => 'Velg & Tube Truk', 'url' => '/kategori-produk/velg-truk', 'icon' => 'web', 'highlight' => false],
-            't318' => ['label' => 'Ban Truk (T318)', 'url' => '/kategori-produk/ban-truk', 'icon' => 'web', 'highlight' => false],
-        ];
-
-        foreach ($topik as $slug => $extra) {
-            // tombol topik ditaruh tepat setelah WhatsApp
-            $links = $extra ? [$umum[0], $extra, ...array_slice($umum, 1)] : $umum;
-
-            LinkPage::query()->firstOrCreate(['slug' => (string) $slug], [
-                'title' => 'Tiberman',
-                'subtitle' => 'One Stop Tyre Solutions — ban truk, ban alat berat, velg & tube. Dikirim dari 15 SuperArea di seluruh Indonesia.',
-                'links' => $links,
-                'is_active' => true,
-            ]);
-        }
+        LinkPage::query()->firstOrCreate(['slug' => LinkPage::INDEX], [
+            'title' => 'Tiberman',
+            'subtitle' => 'One Stop Tyre Solutions — ban truk, ban alat berat, velg & tube. Dikirim dari 15 SuperArea di seluruh Indonesia.',
+            'links' => $umum,
+            'is_active' => true,
+        ]);
     }
 }

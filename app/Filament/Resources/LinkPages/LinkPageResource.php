@@ -9,9 +9,8 @@ use App\Filament\Support\Fields;
 use App\Models\LinkPage;
 use BackedEnum;
 use Filament\Actions\Action;
-use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ReplicateAction;
+use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -27,8 +26,9 @@ use Filament\Tables\Table;
 use UnitEnum;
 
 /**
- * Linktree untuk bio media sosial: /lp/ (slug "index") dan /lp/{slug}.html
- * (URL lama, mis. /lp/bus.html).
+ * Linktree untuk bio media sosial — hanya satu halaman, /lp/ (slug "index").
+ * Tidak bisa menambah/duplikat/hapus: /lp/{slug}.html diarahkan ke landing
+ * page promo oleh LinkPageController.
  */
 class LinkPageResource extends Resource
 {
@@ -48,18 +48,11 @@ class LinkPageResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'title';
 
-    private static function pathFor(?string $slug): string
-    {
-        return $slug === LinkPage::INDEX ? '/lp/' : '/lp/'.$slug.'.html';
-    }
-
     public static function form(Schema $schema): Schema
     {
         return $schema->components([
             Section::make('Halaman')->columns(2)->columnSpanFull()->schema([
-                TextInput::make('slug')->label('Slug')->required()->alphaDash()->unique(ignoreRecord: true)
-                    ->prefix('/lp/')->suffix('.html')
-                    ->helperText('Isi "index" untuk alamat /lp/. Selain itu jadi /lp/{slug}.html, mis. bus → /lp/bus.html.'),
+                Hidden::make('slug')->default(LinkPage::INDEX),
                 TextInput::make('title')->label('Judul')->required()->default('Tiberman'),
                 TextInput::make('subtitle')->label('Teks di bawah judul')->columnSpanFull(),
                 Fields::image('avatar', 'Foto profil (bulat)')
@@ -85,7 +78,7 @@ class LinkPageResource extends Resource
                 Fields::seoDescription('meta_description', 'Kosong = teks di bawah judul.'),
                 Toggle::make('noindex')->label('Sembunyikan halaman ini dari Google (noindex)')->columnSpanFull(),
                 Fields::seoPreview('meta_title', 'meta_description',
-                    fn (Get $get) => self::pathFor($get('slug')),
+                    fn () => '/lp/',
                     fn (Get $get) => $get('title').' — Tiberman'),
             ]),
         ]);
@@ -94,24 +87,17 @@ class LinkPageResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
-            ->defaultSort('slug')
+            ->paginated(false)
             ->columns([
-                TextColumn::make('title')->label('Judul')->searchable(),
-                TextColumn::make('slug')->label('Alamat')->formatStateUsing(fn ($state) => self::pathFor($state))
-                    ->color('gray')->searchable()->sortable(),
+                TextColumn::make('title')->label('Judul'),
+                TextColumn::make('slug')->label('Alamat')->formatStateUsing(fn () => '/lp/')->color('gray'),
                 TextColumn::make('links_count')->label('Tombol')->state(fn (LinkPage $r) => count($r->links ?? []))->badge(),
                 ToggleColumn::make('is_active')->label('Aktif'),
             ])
             ->recordActions([
                 Action::make('open')->label('Buka')->icon(Heroicon::OutlinedArrowTopRightOnSquare)->color('gray')
                     ->url(fn (LinkPage $r) => $r->url(), shouldOpenInNewTab: true),
-                ReplicateAction::make()->label('Duplikat')
-                    ->beforeReplicaSaved(function (LinkPage $replica) {
-                        $replica->slug .= '-salinan';
-                        $replica->is_active = false;
-                    }),
                 EditAction::make(),
-                DeleteAction::make(),
             ]);
     }
 
