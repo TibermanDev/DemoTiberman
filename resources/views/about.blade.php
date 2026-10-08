@@ -22,7 +22,7 @@
       <h1>{!! rich(data_get($page, 'hero_heading')) !!}</h1>
     </div>
     @if ($team = media(data_get($page, 'hero_image')))
-    <img class="abt-hero__team" src="{{ $team }}" alt="Tim Tiberman" width="2880" height="1626" fetchpriority="high">
+    <img class="abt-hero__team" src="{{ $team }}" alt="Tim Tiberman" width="2062" height="763" fetchpriority="high">
     @endif
     @if (filled(data_get($page, 'hero_button_label')))
     <a class="abt-hero__btn" href="{{ data_get($page, 'hero_button_url') ?: '/company-profile' }}">{{ data_get($page, 'hero_button_label') }}</a>
