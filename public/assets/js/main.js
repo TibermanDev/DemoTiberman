@@ -1215,6 +1215,66 @@
     }
   }
 
+  /* ---------- 12. After Sales: foto melengkung bergeser tiap 3 detik ----------
+     Posisi tiap foto di lengkungan = "slot" (0 = tengah, ±1, ±2 = sisi), dan
+     sudutnya --a = -slot × 24deg — sama dengan susunan awal dari Blade, jadi
+     tanpa JS tampilannya tetap. Tiap 3 detik semua slot turun satu: foto
+     bergeser ke kiri, yang paling kiri memudar keluar dan foto baru memudar
+     masuk dari kanan.
+
+     Kalau fotonya cuma pas untuk 5 slot terlihat, foto paling kiri harus
+     langsung muncul lagi di paling kanan pada geseran yang sama — itu terlihat
+     meloncat. Karena itu fotonya digandakan (klon aria-hidden) sampai ada
+     cadangan tak terlihat di kedua ujung; foto yang pindah dari ujung ke ujung
+     selalu sedang tak terlihat, dan transisinya dimatikan supaya tidak
+     menyapu lengkungan. */
+  var curve = document.querySelector('.asl-curve');
+  var curveCalm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (curve && !curveCalm) {
+    var VISIBLE = 2;        /* slot -2..2 terlihat */
+    var STEP_DEG = 24;
+    var orig = Array.prototype.slice.call(curve.querySelectorAll('.asl-curve__item'));
+    if (orig.length > 1) {
+      var cItems = orig.slice();
+      while (cItems.length < 2 * VISIBLE + 3) {
+        orig.forEach(function (it) {
+          var c = it.cloneNode(true);
+          curve.appendChild(c);
+          cItems.push(c);
+        });
+      }
+      var cN = cItems.length;
+      var half = Math.floor(cN / 2);
+      /* susunan awal Blade: foto pertama di slot -(jumlah asli - 1) / 2 */
+      var cOffset = Math.floor((orig.length - 1) / 2);
+      var lastSlot = [];
+
+      var curveLayout = function (animate) {
+        cItems.forEach(function (it, i) {
+          var slot = ((i - cOffset + half) % cN + cN) % cN - half;
+          var jump = lastSlot[i] !== undefined && Math.abs(slot - lastSlot[i]) > 1;
+          it.style.transition = (!animate || jump) ? 'none' : '';
+          it.style.setProperty('--a', (-slot * STEP_DEG) + 'deg');
+          it.classList.toggle('is-off', Math.abs(slot) > VISIBLE);
+          lastSlot[i] = slot;
+        });
+      };
+      curveLayout(false);
+
+      var curveTimer = null;
+      var curveStop = function () { if (curveTimer) { clearInterval(curveTimer); curveTimer = null; } };
+      var curvePlay = function () {
+        curveStop();
+        curveTimer = setInterval(function () { cOffset++; curveLayout(true); }, 3000);
+      };
+      /* tab tidak terlihat = berhenti, supaya tidak "mengejar" waktu yang lewat */
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) curveStop(); else curvePlay();
+      });
+      curvePlay();
+    }
+  }
+
   /* ---------- 11. Intro: video pembuka + serah-terima ke hero ----------
      data-intro di <html> sudah dipasang script inline di <head>.
 

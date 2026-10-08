@@ -22,9 +22,13 @@ trait CopiesImages
             return null;
         }
 
+        // Ditimpa juga kalau isinya beda: storage/app/public tidak ikut di-deploy
+        // ulang, jadi kalau aset di public/assets/img diganti dengan nama yang
+        // sama, salinan lama di seed/ bakal terus dipakai tanpa pengecekan ini.
         $target = 'seed/'.$file;
-        if (! Storage::disk('public')->exists($target)) {
-            Storage::disk('public')->put($target, file_get_contents($source));
+        $disk = Storage::disk('public');
+        if (! $disk->exists($target) || md5_file($disk->path($target)) !== md5_file($source)) {
+            $disk->put($target, file_get_contents($source));
         }
 
         return $target;

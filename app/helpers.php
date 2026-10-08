@@ -28,7 +28,11 @@ if (! function_exists('media')) {
             return $path;
         }
 
-        return asset('storage/'.$path);
+        // ?v= ikut waktu ubah file, jadi gambar yang diganti dengan nama sama
+        // (mis. aset seed) tidak tertahan cache browser/CDN versi lamanya.
+        $file = storage_path('app/public/'.$path);
+
+        return asset('storage/'.$path).(is_file($file) ? '?v='.filemtime($file) : '');
     }
 }
 
