@@ -1192,6 +1192,8 @@ ul{margin:0;padding:0;list-style:none}
 .pmodal__art--feature img{width:100%;height:auto;max-height:100%;object-fit:contain;object-position:center bottom}
 /* rata bawah: menembus padding bawah slide sampai menempel dasar modal */
 .pmodal__art--bottom{align-items:flex-end;margin-bottom:-40px}
+/* gambar potret yang tingginya mentok tidak selebar areanya -> rapatkan ke pojok kanan bawah */
+.pmodal__art--bottom img{object-position:right bottom}
 .pmodal__art--center{align-items:center}
 
 /* --- slide 3: tiga kartu potret --- */
