@@ -17,6 +17,12 @@ class Product extends Model
     /** Gambar kartu kalau produk belum punya foto sendiri. */
     public const FALLBACK_IMAGE = '/assets/img/tire-transparent-soft.png';
 
+    /** Letak gambar keunggulan sorotan di popup katalog; yang pertama = bawaan. */
+    public const POPUP_POSITIONS = [
+        'bottom' => 'Rata bawah',
+        'center' => 'Rata tengah',
+    ];
+
     protected function casts(): array
     {
         return [
@@ -59,6 +65,14 @@ class Product extends Model
     public function imageUrl(): string
     {
         return media($this->image) ?? self::FALLBACK_IMAGE;
+    }
+
+    /** Keunggulan yang disorot di slide ke-2 popup katalog; tidak ada yang ditandai = yang pertama. */
+    public function popupFeature(): ?array
+    {
+        $features = collect($this->features ?? []);
+
+        return $features->firstWhere('popup', true) ?? $features->first();
     }
 
     /** Nama tanpa awalan merk: "UNINEST - TIBERMAX 800" -> "TIBERMAX 800". */

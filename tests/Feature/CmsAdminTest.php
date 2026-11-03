@@ -8,10 +8,12 @@ use App\Filament\Pages\SiteSettings;
 use App\Filament\Resources\Inquiries\Pages\ManageInquiries;
 use App\Filament\Resources\Locations\Pages\ManageLocations;
 use App\Filament\Resources\Posts\Pages\CreatePost;
+use App\Filament\Resources\Products\Pages\EditProduct;
 use App\Models\Inquiry;
 use App\Models\Location;
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Models\Product;
 use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -95,6 +97,56 @@ class CmsAdminTest extends TestCase
     public function test_image_lightbox_is_on_admin_pages(): void
     {
         $this->get('/admin/home-content')->assertOk()->assertSee('data-tbm-lightbox', false);
+    }
+
+    public function test_only_one_feature_is_highlighted_in_catalog_popup(): void
+    {
+        $product = Product::query()->firstOrFail();
+        Storage::disk('public')->put('cms/satu.jpg', 'x');
+        Storage::disk('public')->put('cms/dua.jpg', 'x');
+        $product->update(['features' => [
+            ['title' => 'Satu', 'image' => 'cms/satu.jpg', 'popup' => true],
+            ['title' => 'Dua', 'image' => 'cms/dua.jpg'],
+        ]]);
+
+        $page = Livewire::test(EditProduct::class, ['record' => $product->getRouteKey()]);
+        $keys = array_keys($page->get('data.features'));
+        $page->set("data.features.{$keys[1]}.popup", true)
+            ->set("data.features.{$keys[1]}.popup_position", 'center')
+            ->call('save')
+            ->assertHasNoErrors();
+
+        $features = $product->fresh()->features;
+        $this->assertFalse($features[0]['popup']);
+        $this->assertTrue($features[1]['popup']);
+        $this->assertSame('Dua', $product->fresh()->popupFeature()['title']);
+
+        $this->get('/produk/'.$product->slug.'/modal')->assertOk()
+            ->assertSee('<h3>Dua</h3>', false)
+            ->assertSee('cms/dua.jpg', false)
+            ->assertSee('pmodal__art--feature pmodal__art--center', false)
+            ->assertDontSee('cms/satu.jpg', false);
+    }
+
+    public function test_highlighted_feature_image_defaults_to_bottom_in_catalog_popup(): void
+    {
+        $product = Product::query()->firstOrFail();
+        Storage::disk('public')->put('cms/satu.jpg', 'x');
+        $product->update(['features' => [['title' => 'Satu', 'image' => 'cms/satu.jpg']]]);
+
+        $this->get('/produk/'.$product->slug.'/modal')->assertOk()
+            ->assertSee('pmodal__art--feature pmodal__art--bottom', false);
+    }
+
+    public function test_image_fields_show_ratio_and_min_resolution(): void
+    {
+        $this->get('/admin/home-content')->assertOk()
+            ->assertSee('Rasio 7:3 · min. 1920×823 px')
+            ->assertSee('Rasio bebas · tinggi min. 110 px');
+        $this->get('/admin/products/create')->assertOk()
+            ->assertSee('Rasio 2:3 · min. 800×1200 px')
+            ->assertSee('Rasio 1:1 · min. 1200×1200 px');
+        $this->get('/admin/seo-settings')->assertOk()->assertSee('Rasio 1,91:1 · min. 1200×630 px');
     }
 
     public function test_guests_are_sent_to_login(): void

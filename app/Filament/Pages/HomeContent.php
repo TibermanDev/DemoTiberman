@@ -38,7 +38,7 @@ class HomeContent extends ContentPage
             Tabs::make()->persistTabInQueryString()->columnSpanFull()->tabs([
                 Tab::make('Hero & SuperArea')->schema([
                     Section::make('Hero')->columns(2)->schema([
-                        Fields::image('hero.image', 'Foto hero')->columnSpanFull(),
+                        Fields::image('hero.image', 'Foto hero')->hint(Fields::size('7:3', 1920))->columnSpanFull(),
                         Fields::alt('hero.alt'),
                     ]),
                     Section::make('Blok "15 SuperArea"')
@@ -66,7 +66,7 @@ class HomeContent extends ContentPage
                     Section::make('Aksesoris')->columns(2)->schema([
                         Fields::richText('accessories.heading', 'Judul', 2),
                         Fields::richText('accessories.lead', 'Paragraf', 3),
-                        Fields::image('accessories.image'),
+                        Fields::image('accessories.image')->hint(Fields::size('8:5', 1200)),
                         Fields::alt('accessories.alt'),
                     ]),
                     Section::make('Kartu kategori (bergeser otomatis)')->schema([
@@ -74,7 +74,7 @@ class HomeContent extends ContentPage
                             ->schema([
                                 TextInput::make('title')->label('Judul')->required(),
                                 TextInput::make('subtitle')->label('Sub judul'),
-                                Fields::image('image')->required(),
+                                Fields::image('image')->hint(Fields::size('4:3', 1200))->required(),
                                 Fields::alt(),
                                 Fields::url('url'),
                                 TextInput::make('button_label')->label('Label tombol')->placeholder('Check it !'),
@@ -94,8 +94,8 @@ class HomeContent extends ContentPage
                     Section::make('Stok Aman')->columns(2)->schema([
                         TextInput::make('stock.title')->label('Judul section'),
                         TextInput::make('stock.brand_name')->label('Nama perusahaan'),
-                        Fields::image('stock.brand_logo', 'Logo perusahaan'),
-                        Fields::image('stock.image', 'Foto'),
+                        Fields::image('stock.brand_logo', 'Logo perusahaan')->hint(Fields::logoSize(110)),
+                        Fields::image('stock.image', 'Foto')->hint(Fields::size('16:9', 1400)),
                         Fields::richText('stock.heading', 'Judul kartu', 2),
                         Fields::richText('stock.body', 'Paragraf', 3),
                         TextInput::make('stock.button_label')->label('Label tombol'),
@@ -105,7 +105,7 @@ class HomeContent extends ContentPage
                             ->schema([
                                 TextInput::make('name')->label('Nama')->required(),
                                 TextInput::make('capacity')->label('Kapasitas')->placeholder('150 kontainer'),
-                                Fields::image('image')->columnSpanFull(),
+                                Fields::image('image')->hint(Fields::size('16:9', 1200))->columnSpanFull(),
                             ])
                             ->columns(2)->reorderable()->collapsible()->columnSpanFull()
                             ->itemLabel(fn (array $state) => $state['name'] ?? null),
@@ -113,15 +113,15 @@ class HomeContent extends ContentPage
                     Section::make('Pengiriman Aman')->columns(2)->schema([
                         TextInput::make('delivery.title')->label('Judul section'),
                         TextInput::make('delivery.brand_name')->label('Nama perusahaan'),
-                        Fields::image('delivery.brand_logo', 'Logo perusahaan'),
-                        Fields::image('delivery.image', 'Ilustrasi'),
+                        Fields::image('delivery.brand_logo', 'Logo perusahaan')->hint(Fields::logoSize(110)),
+                        Fields::image('delivery.image', 'Ilustrasi')->hint(Fields::size('8:5', 1600)),
                         Fields::richText('delivery.heading', 'Judul kartu', 2),
                         Fields::richText('delivery.body', 'Paragraf', 3),
                         TextInput::make('delivery.button_label')->label('Label tombol'),
                         Fields::url('delivery.button_url', 'Tautan tombol'),
                         Fields::alt('delivery.alt'),
                         Repeater::make('delivery.photos')->label('Dua foto di bawah kartu')
-                            ->schema([Fields::image('image')->required(), Fields::alt()])
+                            ->schema([Fields::image('image')->hint(Fields::size('2:1', 1400))->required(), Fields::alt()])
                             ->columns(2)->reorderable()->maxItems(2)->columnSpanFull(),
                     ]),
                 ]),
@@ -133,7 +133,7 @@ class HomeContent extends ContentPage
                         ->schema([
                             TextInput::make('title')->label('Nama layanan')->required(),
                             TextInput::make('desc')->label('Deskripsi')->required(),
-                            Fields::image('image')->required(),
+                            Fields::image('image')->hint(Fields::size('7:12', 630))->required(),
                             Fields::alt(),
                         ])
                         ->columns(2)->reorderable()->collapsible()

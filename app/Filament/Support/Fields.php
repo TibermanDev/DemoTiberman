@@ -29,6 +29,33 @@ class Fields
     }
 
     /**
+     * Keterangan ukuran di samping label gambar, sesuai kotak tampilnya di situs.
+     * Tinggi dihitung dari rasio kalau tidak diisi: size('16:9', 1920) →
+     * "Rasio 16:9 · min. 1920×1080 px".
+     */
+    public static function size(string $ratio, int $minWidth, ?int $minHeight = null): string
+    {
+        if ($minHeight === null) {
+            [$w, $h] = array_map('floatval', explode(':', $ratio));
+            $minHeight = (int) round($minWidth * $h / $w);
+        }
+
+        return "Rasio {$ratio} · min. {$minWidth}×{$minHeight} px";
+    }
+
+    /** Logo merek: lebarnya mengikuti bentuk logo, yang dikunci hanya tingginya. */
+    public static function logoSize(int $minHeight): string
+    {
+        return "Rasio bebas · tinggi min. {$minHeight} px";
+    }
+
+    /** Gambar saat link dibagikan (Open Graph). */
+    public static function ogSize(): string
+    {
+        return static::size('1,91:1', 1200, 630);
+    }
+
+    /**
      * Video latar di disk public. Satu sumber MP4 (H.264) wajib karena hanya
      * format itu yang pasti jalan di semua browser, termasuk Safari/iPhone.
      */
@@ -72,6 +99,7 @@ class Fields
                 ->afterStateUpdated(fn (Set $set) => $set($prefix.'.video_webm', null)),
             static::webm($prefix.'.video_webm'),
             static::image($prefix.'.poster', 'Gambar sampul video')
+                ->hint(static::size('16:9', 1920))
                 ->helperText('Tampil selama video dimuat. Ambil satu frame dari videonya.'),
         ];
     }
@@ -119,7 +147,8 @@ class Fields
             static::seoDescription('seo_description'),
             static::image('seo_image', 'Gambar saat link dibagikan (WhatsApp, Facebook, LinkedIn)')
                 ->columnSpanFull()
-                ->helperText('Ideal 1200×630 px. Kosongkan untuk memakai gambar bawaan di menu SEO.'),
+                ->hint(static::ogSize())
+                ->helperText('Kosongkan untuk memakai gambar bawaan di menu SEO.'),
             Toggle::make('seo_noindex')->label('Sembunyikan halaman ini dari Google (noindex)')
                 ->columnSpanFull()
                 ->helperText('Halaman tetap bisa dibuka, hanya tidak dimunculkan di hasil pencarian.'),

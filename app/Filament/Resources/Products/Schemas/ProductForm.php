@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Products\Schemas;
 
 use App\Filament\Support\Fields;
 use App\Models\CatalogUnit;
+use App\Models\Product;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -14,6 +15,8 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Str;
 
@@ -45,35 +48,45 @@ class ProductForm
                         ->helperText('Untuk filter "Telusuri berdasarkan Merk".'),
                     TextInput::make('compat')->label('Cocok untuk')->placeholder('Dump Truck'),
                     TextInput::make('slug')->required()->alphaDash()->unique(ignoreRecord: true)->prefix('/produk/'),
-                    Fields::image('image', 'Foto kartu (PNG transparan)')
+                    Fields::image('image', 'Foto kartu (PNG transparan)')->hint(Fields::size('2:3', 800))
                         ->helperText('Kosong = gambar ban bawaan.'),
                     Toggle::make('is_active')->label('Tampil di katalog')->default(true),
                 ]),
 
                 Tab::make('Halaman detail')->schema([
                     Section::make('Hero')->columns(2)->schema([
-                        Fields::image('hero_image', 'Foto hero (latar gelap)'),
-                        Fields::image('logo_light', 'Logo untuk latar gelap'),
-                        Fields::image('logo', 'Logo untuk latar terang'),
+                        Fields::image('hero_image', 'Foto hero (latar gelap)')->hint(Fields::size('3:2', 1400)),
+                        Fields::image('logo_light', 'Logo untuk latar gelap')->hint(Fields::size('6:1', 1340)),
+                        Fields::image('logo', 'Logo untuk latar terang')->hint(Fields::size('6:1', 1000)),
                         Fields::richText('description', 'Deskripsi', 4),
                     ]),
                     Section::make('Kenapa Harus Ban Ini ?')
-                        ->description('Keunggulan pertama juga tampil di slide ke-2 modal katalog.')
+                        ->description('Satu keunggulan yang disorot juga tampil di slide ke-2 popup katalog.')
                         ->schema([
                             Repeater::make('features')->hiddenLabel()
                                 ->schema([
                                     Fields::richText('title', 'Judul', 2)->required(),
                                     Textarea::make('body')->label('Penjelasan')->rows(3),
-                                    Fields::image('image'),
-                                    Select::make('fit')->label('Tampilan gambar')
-                                        ->options([
-                                            'cover' => 'Penuh (dipotong memenuhi kotak)',
-                                            'edge' => 'Dipotong di bawah (lebih kecil, menempel kanan-atas)',
-                                            'contain' => 'Utuh (tanpa dipotong)',
-                                        ])
-                                        ->default('cover')->selectablePlaceholder(false)
-                                        // data lama hanya punya toggle "contain"
-                                        ->afterStateHydrated(fn (Select $component, $state, $get) => $state ?: $component->state($get('contain') ? 'contain' : 'cover')),
+                                    Fields::image('image')->hint(Fields::size('16:10', 1400)),
+                                    Toggle::make('popup')->label('Sorot di popup katalog')
+                                        ->helperText('Tampil di slide ke-2 popup. Tidak ada yang ditandai = keunggulan paling atas.')
+                                        ->live()
+                                        // hanya satu yang disorot: menandai item ini melepas tanda di item lain
+                                        ->afterStateUpdated(function (?bool $state, Toggle $component, Get $get, Set $set) {
+                                            if (! $state) {
+                                                return;
+                                            }
+                                            $key = Str::of($component->getStatePath())->beforeLast('.')->afterLast('.')->toString();
+                                            $items = $get('../../features') ?? [];
+                                            foreach ($items as $k => $item) {
+                                                $items[$k]['popup'] = (string) $k === $key;
+                                            }
+                                            $set('../../features', $items);
+                                        }),
+                                    Select::make('popup_position')->label('Letak gambar di popup')
+                                        ->options(Product::POPUP_POSITIONS)
+                                        ->default('bottom')->selectablePlaceholder(false)
+                                        ->visible(fn (Get $get) => (bool) $get('popup')),
                                 ])
                                 ->columns(2)->reorderable()->collapsible()
                                 ->itemLabel(fn (array $state) => str_replace("\n", ' ', $state['title'] ?? '')),
@@ -82,7 +95,7 @@ class ProductForm
                         Repeater::make('pairs')->hiddenLabel()
                             ->schema([
                                 TextInput::make('title')->label('Unit / medan')->required(),
-                                Fields::image('image')->required(),
+                                Fields::image('image')->hint(Fields::size('4:3', 1200))->required(),
                             ])
                             ->columns(2)->reorderable()->grid(3)
                             ->itemLabel(fn (array $state) => $state['title'] ?? null),
@@ -90,7 +103,7 @@ class ProductForm
                 ]),
 
                 Tab::make('Spesifikasi')->schema([
-                    FileUpload::make('gallery')->label('Galeri foto')
+                    FileUpload::make('gallery')->label('Galeri foto')->hint(Fields::size('1:1', 1200))
                         ->image()->multiple()->reorderable()->appendFiles()
                         ->disk('public')->directory('cms')->visibility('public')
                         ->panelLayout('grid')->openable()
@@ -108,7 +121,7 @@ class ProductForm
                 Tab::make('Tautan')->columns(2)->schema([
                     TextInput::make('ecatalog_url')->label('E-Katalog')->placeholder('https://…')
                         ->helperText('Kosong = flipbook katalog di /katalog.'),
-                    Fields::image('flashcard_image', 'Flash Card (JPG)')
+                    Fields::image('flashcard_image', 'Flash Card (JPG)')->hint(Fields::size('1:1', 1080))
                         ->helperText('Tampil di popup saat tombol Flash Card diklik. Kosong = tombolnya disembunyikan.'),
                     TextInput::make('whatsapp_url')->label('WhatsApp')
                         ->helperText('Kosong = nomor WhatsApp di Pengaturan Situs, dengan pesan berisi nama produk.'),

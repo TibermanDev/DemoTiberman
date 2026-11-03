@@ -57,7 +57,7 @@ class PostForm
                             ->helperText('Tampil di "Populer Bulan Ini" di samping artikel.'),
                     ]),
                     Section::make('Gambar sampul')->schema([
-                        Fields::image('cover_image', 'Gambar'),
+                        Fields::image('cover_image', 'Gambar')->hint(Fields::size('16:9', 1600)),
                         Fields::alt('cover_alt'),
                         TextInput::make('cover_caption')->label('Keterangan di bawah gambar'),
                     ]),

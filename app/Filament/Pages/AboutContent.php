@@ -33,8 +33,8 @@ class AboutContent extends ContentPage
             Section::make('Banner')->columns(2)->schema([
                 TextInput::make('hero_eyebrow')->label('Baris kecil di atas judul'),
                 Fields::richText('hero_heading', 'Judul', 2),
-                Fields::image('hero_background', 'Gambar latar (langit-langit gudang)'),
-                Fields::image('hero_image', 'Foto tim (PNG/WebP transparan)')
+                Fields::image('hero_background', 'Gambar latar (langit-langit gudang)')->hint(Fields::size('8:3', 2000)),
+                Fields::image('hero_image', 'Foto tim (PNG/WebP transparan)')->hint(Fields::size('8:3', 2000))
                     ->helperText('Bagian atas gambar harus transparan supaya latar di belakangnya terlihat.'),
                 TextInput::make('hero_button_label')->label('Label tombol'),
                 Fields::url('hero_button_url', 'Tautan tombol')
@@ -55,7 +55,7 @@ class AboutContent extends ContentPage
                 TextInput::make('mission_heading')->label('Judul misi'),
                 Fields::richText('vision_text', 'Visi', 3),
                 Fields::richText('mission_text', 'Misi', 3),
-                Fields::image('mascot_image', 'Gambar maskot'),
+                Fields::image('mascot_image', 'Gambar maskot')->hint(Fields::size('7:6', 1050)),
             ]),
             Section::make('Milestone')->columns(2)->schema([
                 TextInput::make('milestone_eyebrow')->label('Baris kecil di atas judul'),
@@ -69,7 +69,7 @@ class AboutContent extends ContentPage
                     ])
                     ->reorderable()->collapsible()->columnSpanFull()
                     ->itemLabel(fn (array $state) => $state['label'] ?? null),
-                Fields::image('milestone_image', 'Gambar di bawah milestone (PNG/WebP transparan)'),
+                Fields::image('milestone_image', 'Gambar di bawah milestone (PNG/WebP transparan)')->hint(Fields::size('5:2', 2400)),
             ]),
             Section::make('Ajakan di bawah')->columns(2)->schema([
                 TextInput::make('cta_heading')->label('Judul kiri'),
