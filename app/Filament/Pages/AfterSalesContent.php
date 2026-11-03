@@ -55,7 +55,7 @@ class AfterSalesContent extends ContentPage
                 ->description('Terpisah dari FAQ di halaman Contact Us.')
                 ->columns(2)->schema([
                     TextInput::make('faq_heading')->label('Judul'),
-                    Fields::image('faq_image', 'Gambar maskot'),
+                    Fields::image('faq_image', 'Gambar maskot')->hint(Fields::size('3:5', 840)),
                     Repeater::make('faq')->label('Pertanyaan')
                         ->schema([
                             TextInput::make('question')->label('Pertanyaan')->required(),
@@ -80,8 +80,8 @@ class AfterSalesContent extends ContentPage
                 TextInput::make('name')->label('Nama layanan')->required()
                     ->helperText('Ditampilkan setelah kata "Tiberman", mis. "Tyre Lab".'),
                 Fields::richText('desc', 'Deskripsi', 2),
-                Fields::image('image', 'Foto'),
-                Fields::image('icon', 'Ikon bulat (banner)'),
+                Fields::image('image', 'Foto')->hint(Fields::size('9:16', 720)),
+                Fields::image('icon', 'Ikon bulat (banner)')->hint(Fields::size('1:1', 216)),
                 TextInput::make('alt')->label('Teks alternatif foto'),
                 Fields::url('button_url', 'Tautan tombol')
                     ->helperText('Kosongkan untuk WhatsApp dengan pesan otomatis.'),

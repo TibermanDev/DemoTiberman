@@ -2,7 +2,7 @@
      spesifikasi) supaya titik navigasinya tetap sama untuk semua produk; slide
      yang datanya belum diisi di CMS menampilkan info dasar produknya. --}}
 @php($description = $product->description ? rich($product->description) : e($product->name.' — ukuran '.$product->size.', cocok untuk '.$product->compat.'.'))
-@php($feature = $product->features[0] ?? null)
+@php($feature = $product->popupFeature())
 
         <!-- 1. Hero -->
         <section class="pmodal__slide pmodal__slide--hero">
@@ -29,7 +29,13 @@
             <p>Cocok untuk {{ $product->compat }}. Hubungi tim kami untuk rekomendasi spesifikasi yang paling sesuai dengan unit dan medan Anda.</p>
             @endif
           </div>
-          <div class="pmodal__art pmodal__art--bleed"><img src="{{ media($feature['image'] ?? null) ?? $product->imageUrl() }}" alt="{{ $product->name }}" loading="lazy"></div>
+          @if ($featureImage = media($feature['image'] ?? null))
+          {{-- Tampil apa adanya (tidak dipotong), rata bawah atau rata tengah sesuai pilihan di CMS. --}}
+          @php($position = array_key_exists($feature['popup_position'] ?? '', \App\Models\Product::POPUP_POSITIONS) ? $feature['popup_position'] : array_key_first(\App\Models\Product::POPUP_POSITIONS))
+          <div class="pmodal__art pmodal__art--feature pmodal__art--{{ $position }}"><img src="{{ $featureImage }}" alt="{{ $product->name }}" loading="lazy"></div>
+          @else
+          <div class="pmodal__art pmodal__art--bleed"><img src="{{ $product->imageUrl() }}" alt="{{ $product->name }}" loading="lazy"></div>
+          @endif
         </section>
 
         <!-- 3. Perfect pair for -->

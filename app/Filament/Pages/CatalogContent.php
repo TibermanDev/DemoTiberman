@@ -31,7 +31,7 @@ class CatalogContent extends ContentPage
             Section::make('Halaman produk')
                 ->description('Produk, unit, merk, dan ukuran diatur di grup menu Produk.')
                 ->columns(2)->schema([
-                    Fields::image('banner', 'Banner atas'),
+                    Fields::image('banner', 'Banner atas')->hint(Fields::size('6:1', 1920)),
                     Fields::alt('banner_alt'),
                     Fields::seoDescription('seo_description'),
                 ]),

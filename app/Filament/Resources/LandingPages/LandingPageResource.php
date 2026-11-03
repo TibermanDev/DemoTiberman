@@ -63,7 +63,7 @@ class LandingPageResource extends Resource
                     ->rule(fn (?LandingPage $record) => PageSlug::rule($record)),
                 Fields::richText('heading', 'Judul besar', 2)
                     ->helperText('Logo marketplace ditaruh di akhir baris terakhir.'),
-                Fields::image('logo', 'Logo marketplace')
+                Fields::image('logo', 'Logo marketplace')->hint(Fields::size('3:1', 360))
                     ->helperText('Kosongkan untuk logo Shopee bawaan.'),
                 TextInput::make('subheading')->label('Teks di bawah judul')->columnSpanFull(),
                 Toggle::make('is_active')->label('Aktif')->default(true),
@@ -74,7 +74,7 @@ class LandingPageResource extends Resource
                         TextInput::make('title')->label('Nama produk')->required(),
                         TextInput::make('subtitle')->label('Keterangan')
                             ->helperText('Mis. "Ukuran 7.50R16".'),
-                        Fields::image('image', 'Foto'),
+                        Fields::image('image', 'Foto')->hint(Fields::size('4:5', 800)),
                         Fields::url('url', 'Tautan produk di marketplace')
                             ->helperText('Kosongkan untuk tautan toko Shopee di Pengaturan Situs.'),
                         TextInput::make('button_label')->label('Label tombol')->placeholder('Lihat Produk >>'),
@@ -86,7 +86,7 @@ class LandingPageResource extends Resource
             Section::make('SEO')->columns(2)->columnSpanFull()->schema([
                 Fields::seoTitle('meta_title'),
                 Fields::seoDescription('meta_description'),
-                Fields::image('meta_image', 'Gambar saat link dibagikan')->columnSpanFull()
+                Fields::image('meta_image', 'Gambar saat link dibagikan')->hint(Fields::ogSize())->columnSpanFull()
                     ->helperText('Kosongkan untuk memakai foto kartu pertama.'),
                 Toggle::make('noindex')->label('Sembunyikan halaman ini dari Google (noindex)')->columnSpanFull(),
                 Fields::seoPreview('meta_title', 'meta_description', fn (Get $get) => '/'.$get('slug'), fn (Get $get) => $get('title')),

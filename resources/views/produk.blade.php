@@ -38,8 +38,7 @@
     <div class="bento">
       @if ($loop->odd){!! $text !!}@endif
       @if (filled($feature['image'] ?? null))
-      @php($fit = ($feature['fit'] ?? null) ?: (! empty($feature['contain']) ? 'contain' : 'cover'))
-      <div @class(['bento__cell', 'bento__cell--img', 'bento__cell--contain' => $fit === 'contain', 'bento__cell--edge' => $fit === 'edge', 'reveal']) @if ($loop->odd) data-delay="100" @endif>
+      <div class="bento__cell bento__cell--img reveal" @if ($loop->odd) data-delay="100" @endif>
         <img src="{{ media($feature['image']) }}" alt="{{ strip_tags(str_replace("\n", ' ', $feature['title'] ?? '')) }} {{ $product->shortName() }}" loading="lazy">
       </div>
       @endif

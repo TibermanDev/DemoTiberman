@@ -68,8 +68,8 @@ class PromoPageResource extends Resource
                     ->unique(ignoreRecord: true)
                     ->rule(fn (?PromoPage $record) => PageSlug::rule($record))
                     ->helperText('Tidak bisa memakai alamat halaman lain, flipbook PDF, atau landing page.'),
-                Fields::image('banner_image', 'Banner atas')
-                    ->helperText('Ditampilkan utuh (tidak dipotong). Disarankan lebar ±1600 px.'),
+                Fields::image('banner_image', 'Banner atas')->hint(Fields::size('2:1', 1600))
+                    ->helperText('Ditampilkan utuh (tidak dipotong).'),
                 TextInput::make('banner_alt')->label('Teks alternatif banner'),
                 Toggle::make('is_active')->label('Aktif')->default(true)
                     ->helperText('Nonaktif = alamatnya 404.'),
@@ -85,7 +85,7 @@ class PromoPageResource extends Resource
                                 static::editor('body'),
                             ]),
                             Block::make('image_text')->label('Gambar + teks')->icon(Heroicon::OutlinedPhoto)->columns(2)->schema([
-                                Fields::image('image', 'Gambar')->required(),
+                                Fields::image('image', 'Gambar')->hint(Fields::size('16:9', 1200))->required(),
                                 Radio::make('image_side')->label('Posisi gambar')->inline()
                                     ->options(['left' => 'Kiri', 'right' => 'Kanan'])->default('left'),
                                 TextInput::make('alt')->label('Teks alternatif gambar')->columnSpanFull(),
@@ -99,7 +99,7 @@ class PromoPageResource extends Resource
                                             ->options(fn () => Product::query()->orderBy('name')->pluck('name', 'id'))
                                             ->searchable()
                                             ->helperText('Opsional. Gambar & tautan kosong = flashcard/foto & halaman produk ini.'),
-                                        Fields::image('image', 'Gambar kartu')
+                                        Fields::image('image', 'Gambar kartu')->hint(Fields::size('1:1', 1080))
                                             ->required(fn (Get $get) => blank($get('product_id'))),
                                         Fields::url('url', 'Tautan tombol'),
                                         TextInput::make('label')->label('Label tombol khusus'),
@@ -112,7 +112,7 @@ class PromoPageResource extends Resource
                                         : ($state['url'] ?? null)),
                             ]),
                             Block::make('image')->label('Gambar penuh')->icon(Heroicon::OutlinedPhoto)->columns(2)->schema([
-                                Fields::image('image', 'Gambar')->required(),
+                                Fields::image('image', 'Gambar')->hint(Fields::size('16:9', 1600))->required(),
                                 TextInput::make('alt')->label('Teks alternatif'),
                                 Fields::url('url', 'Tautan (opsional)'),
                             ]),
@@ -125,7 +125,7 @@ class PromoPageResource extends Resource
                 ->description('Pita merah dengan maskot dan tombol di akhir halaman. Kosongkan judul untuk menyembunyikannya.')
                 ->columns(2)->columnSpanFull()->schema([
                     TextInput::make('cta_heading')->label('Judul'),
-                    Fields::image('cta_image', 'Maskot')->helperText('Kosongkan untuk panda bawaan.'),
+                    Fields::image('cta_image', 'Maskot')->hint(Fields::size('3:5', 840))->helperText('Kosongkan untuk panda bawaan.'),
                     TextInput::make('cta_label')->label('Label tombol')
                         ->helperText('Kosongkan untuk nomor telepon di Pengaturan Situs.'),
                     Fields::url('cta_url', 'Tautan tombol')
@@ -135,7 +135,7 @@ class PromoPageResource extends Resource
             Section::make('SEO')->columns(2)->columnSpanFull()->schema([
                 Fields::seoTitle('meta_title'),
                 Fields::seoDescription('meta_description'),
-                Fields::image('meta_image', 'Gambar saat link dibagikan')->columnSpanFull()
+                Fields::image('meta_image', 'Gambar saat link dibagikan')->hint(Fields::ogSize())->columnSpanFull()
                     ->helperText('Kosongkan untuk memakai banner atas.'),
                 Toggle::make('noindex')->label('Sembunyikan halaman ini dari Google (noindex)')->columnSpanFull(),
                 Fields::seoPreview('meta_title', 'meta_description', fn (Get $get) => '/'.$get('slug'), fn (Get $get) => $get('title')),

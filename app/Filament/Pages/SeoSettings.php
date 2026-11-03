@@ -58,9 +58,9 @@ class SeoSettings extends ContentPage
                     Fields::seoTitle('seo_title', 'Tiberman'),
                     Fields::seoDescription('seo_description'),
                     Fields::seoPreview('seo_title', 'seo_description', '/', 'Tiberman'),
-                    Fields::image('seo_image', 'Gambar bawaan saat link dibagikan')
+                    Fields::image('seo_image', 'Gambar bawaan saat link dibagikan')->hint(Fields::ogSize())
                         ->columnSpanFull()
-                        ->helperText('Tampil di WhatsApp, Facebook, LinkedIn, dll. untuk halaman yang tidak punya gambar sendiri. Ideal 1200×630 px.'),
+                        ->helperText('Tampil di WhatsApp, Facebook, LinkedIn, dll. untuk halaman yang tidak punya gambar sendiri.'),
                 ]),
 
             Section::make('Profil bisnis (structured data)')
@@ -70,9 +70,9 @@ class SeoSettings extends ContentPage
                         ->options(Seo::TYPES)->default('Organization')->native(false)
                         ->helperText('Pilih "Toko ban" supaya alamat & jam buka ikut terbaca.'),
                     TextInput::make('seo.founding_year')->label('Tahun berdiri')->numeric()->minValue(1900)->maxValue(2100)->placeholder('2008'),
-                    Fields::image('seo.logo', 'Logo untuk Google')
+                    Fields::image('seo.logo', 'Logo untuk Google')->hint(Fields::size('1:1', 112))
                         ->columnSpanFull()
-                        ->helperText('Logo berwarna di atas latar putih/transparan, persegi, minimal 112×112 px. Logo putih navbar tidak cocok di sini. Kosong = pakai favicon.'),
+                        ->helperText('Logo berwarna di atas latar putih/transparan. Logo putih navbar tidak cocok di sini. Kosong = pakai favicon.'),
                     TextInput::make('seo.address.street')->label('Alamat jalan')->placeholder('Jl. Mustika No.10, Ngagel, Kec. Wonokromo')->columnSpanFull(),
                     TextInput::make('seo.address.city')->label('Kota')->placeholder('Surabaya'),
                     TextInput::make('seo.address.region')->label('Provinsi')->placeholder('Jawa Timur'),

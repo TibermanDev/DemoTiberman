@@ -53,7 +53,7 @@ class LocationResource extends Resource
             TextInput::make('name')->label('Nama kota')->required(),
             TextInput::make('note')->label('Keterangan')->placeholder('Head Office'),
             Select::make('region')->label('Pulau')->options(fn () => static::regions())->required(),
-            Fields::image('image', 'Foto'),
+            Fields::image('image', 'Foto')->hint(Fields::size('16:9', 1200)),
             Textarea::make('address')->label('Alamat')->rows(2)->required()->columnSpanFull(),
             TextInput::make('maps_url')->label('Link Google Maps')->url()->maxLength(1000)->columnSpanFull()
                 ->placeholder('https://maps.app.goo.gl/...')

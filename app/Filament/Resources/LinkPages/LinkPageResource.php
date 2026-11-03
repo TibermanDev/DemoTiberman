@@ -55,7 +55,7 @@ class LinkPageResource extends Resource
                 Hidden::make('slug')->default(LinkPage::INDEX),
                 TextInput::make('title')->label('Judul')->required()->default('Tiberman'),
                 TextInput::make('subtitle')->label('Teks di bawah judul')->columnSpanFull(),
-                Fields::image('avatar', 'Foto profil (bulat)')
+                Fields::image('avatar', 'Foto profil (bulat)')->hint(Fields::size('1:1', 400))
                     ->helperText('Kosongkan untuk logo Tiberman.'),
                 Toggle::make('is_active')->label('Aktif')->default(true)
                     ->helperText('Nonaktif = alamatnya 404.'),

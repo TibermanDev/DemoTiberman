@@ -38,11 +38,11 @@ class ContactContent extends ContentPage
                     Fields::richText('heading', 'Judul', 2),
                     TagsInput::make('unit_options')->label('Pilihan "Kebutuhan Unit"')->reorderable()->columnSpanFull(),
                     TextInput::make('submit_label')->label('Label tombol kirim'),
-                    Fields::image('form_image', 'Gambar di samping form'),
+                    Fields::image('form_image', 'Gambar di samping form')->hint(Fields::size('3:2', 1200)),
                 ]),
             Section::make('FAQ')->columns(2)->schema([
                 TextInput::make('faq_heading')->label('Judul'),
-                Fields::image('faq_image', 'Gambar maskot'),
+                Fields::image('faq_image', 'Gambar maskot')->hint(Fields::size('3:5', 840)),
                 Repeater::make('faq')->label('Pertanyaan')
                     ->schema([
                         TextInput::make('question')->label('Pertanyaan')->required(),

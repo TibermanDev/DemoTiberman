@@ -35,11 +35,11 @@ class SiteSettings extends ContentPage
         return $schema->components([
             Section::make('Identitas')->columns(2)->schema([
                 TextInput::make('company_name')->label('Nama perusahaan')->required(),
-                Fields::image('logo', 'Logo putih (navbar, hero, footer)')
+                Fields::image('logo', 'Logo putih (navbar, hero, footer)')->hint(Fields::size('6:1', 1040))
                     ->helperText('PNG/WebP berlatar transparan; tampil di atas latar gelap.'),
-                Fields::image('favicon', 'Ikon tab browser (favicon)')
+                Fields::image('favicon', 'Ikon tab browser (favicon)')->hint(Fields::size('1:1', 192))
                     ->acceptedFileTypes(['image/png', 'image/x-icon', 'image/vnd.microsoft.icon', 'image/svg+xml', 'image/webp'])
-                    ->helperText('Gambar persegi minimal 192×192 px (mis. 512×512 PNG). Tampil di tab browser, di samping nama situs pada hasil Google, dan di panel admin.'),
+                    ->helperText('Disarankan 512×512 PNG. Tampil di tab browser, di samping nama situs pada hasil Google, dan di panel admin.'),
                 Toggle::make('favicon_round')->label('Potong favicon jadi lingkaran')->default(true)
                     ->helperText('Sudut di luar lingkaran dibuat transparan.'),
             ]),
