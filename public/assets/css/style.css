@@ -1140,14 +1140,9 @@ ul{margin:0;padding:0;list-style:none}
 .pmodal__slide--hero{display:grid;grid-template-columns:.92fr 1fr;gap:50px;align-items:center;padding-top:30px;padding-bottom:65px}
 .pmodal__art{height:100%;display:flex;align-items:center;justify-content:center;min-height:0}
 .pmodal__art img{width:100%;height:100%;object-fit:contain}
-.pmodal__logo{width:100%;height:auto;display:block}
-/* Logo hero dibesarkan melewati kolomnya dengan menjorok ke separuh padding
-   kanan slide (80px), jadi masih tersisa 40px ke tepi modal. Pola margin
-   negatif yang sama dipakai foto sidewall di slide 2. */
-/* Logonya memakai file -trim, jadi width:100% membuat TULISANNYA rata kanan
-   dengan paragraf di bawahnya — bukan kanvas transparannya. Tidak perlu lagi
-   margin negatif untuk menambal selisih itu. */
-.pmodal__slide--hero .pmodal__logo{width:100%}
+/* Logo tanpa ruang kosong di kanan; 70,7% = lebar tulisan TiberMAX di file
+   lama (413 dari 584px) supaya ukurannya tetap sama. */
+.pmodal__logo{width:70.7%;height:auto;display:block}
 .pmodal__copy p{margin-top:24px;font-size:18px;line-height:1.7;color:var(--muted);text-align:justify}
 .pmodal__copy p b{color:var(--text);font-weight:700}
 /* nama produk di awal paragraf miring, mengikuti gaya yang sama di produk.html */
@@ -1228,7 +1223,7 @@ ul{margin:0;padding:0;list-style:none}
    bersebelahan di bawah thumbnail. */
 .pmodal__slide--spec .doc-btns{grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 .pmodal__slide--spec .doc-btns a,.pmodal__slide--spec .doc-btns button{height:48px;font-size:14.5px;border-radius:10px}
-.pmodal__info .pmodal__logo{max-width:400px}
+.pmodal__info .pmodal__logo{max-width:283px}
 /* Subjudulnya samakan dengan produk.html: abu gelap (--spec), bukan merah. */
 .pmodal__info .subhead{margin:22px 0 15px;font-size:17px;color:var(--spec)}
 .pmodal__info .spec-table{font-size:14px;width:100%}
@@ -1436,7 +1431,7 @@ ul{margin:0;padding:0;list-style:none}
 
 /* lockup TiberMAX dipakai sebagai gambar (assets/img/tibermax-logo.png) */
 /* kanvas PNG-nya 584x97 tapi tulisannya cuma 414px -> max-width dilebihkan ~1,41x. */
-.pdp-logo{display:block;width:100%;max-width:520px}
+.pdp-logo{display:block;width:70.7%;max-width:368px}
 .pdp-logo img{display:block;width:100%;height:auto}
 .pdp-info>p{margin-top:18px;font-size:15px;line-height:1.75;color:var(--body-text)}
 .pdp-info>p b{color:var(--text);font-style:italic}
